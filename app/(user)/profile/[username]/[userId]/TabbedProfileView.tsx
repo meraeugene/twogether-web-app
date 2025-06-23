@@ -1,0 +1,332 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FaHeart,
+  FaFilm,
+  FaSmile,
+  FaUserSecret,
+  FaFileAlt,
+  FaUserPlus,
+  FaEnvelope,
+  FaTimes,
+  FaUserFriends,
+  FaUser,
+} from "react-icons/fa";
+import Image from "next/image";
+import { CurrentUser, User } from "@/types/user";
+import { InfoCard } from "./InfoCard";
+import { Recommendation } from "@/types/recommendation";
+import FilmCard from "@/components/FilmCard";
+import { FollowStats } from "@/types/follows";
+import { toggleFollow } from "@/actions/followActions";
+import {
+  cancelFriendRequest,
+  getFriendsOfUser,
+  getFriendStats,
+  sendFriendRequest,
+} from "@/actions/friendActions";
+import { FriendRequestStatus, UserPreview } from "@/types/friends";
+import { IoPersonAdd, IoPersonRemove } from "react-icons/io5";
+import useSWR from "swr";
+import Link from "next/link";
+
+const tabs = ["Profile", "Recommendations", "Watchlist", "Friends"];
+
+export default function TabbedProfileView({
+  user,
+  currentUser,
+  userRecommendations,
+  userWatchList,
+  followStats,
+}: {
+  user: User;
+  currentUser: CurrentUser;
+  userRecommendations: Recommendation[];
+  userWatchList: Recommendation[];
+  followStats: FollowStats;
+}) {
+  const [activeTab, setActiveTab] = useState("Profile");
+  const [pending, startTransition] = useTransition();
+
+  // FOLLOWING STATE
+  const [isFollowing, setIsFollowing] = useState<boolean>(
+    followStats.isFollowing
+  );
+  const [followers, setFollowers] = useState<number>(followStats.followers);
+
+  // FRIENDS STATE
+  const [requestPending, startRequestTransition] = useTransition();
+
+  const {
+    data: friendStatus,
+    isLoading: loadingFriendStatus,
+    mutate: refetchFriendStatus,
+  } = useSWR<FriendRequestStatus>(
+    ["friend-status", currentUser.id, user.id],
+    () => getFriendStats(currentUser.id, user.id),
+    {
+      refreshInterval: 5000, // re-fetch every 5 seconds
+      refreshWhenHidden: false,
+    }
+  );
+
+  const {
+    data: userFriends,
+    // isLoading: loadingUserFriends,
+    // mutate: refetchUserFriends,
+  } = useSWR<UserPreview[]>(
+    ["friends", user.id],
+    () => getFriendsOfUser(user.id),
+    {
+      refreshInterval: 5000, // re-fetch every 5 seconds
+      refreshWhenHidden: false,
+    }
+  );
+
+  const handleFollowToggle = () => {
+    setIsFollowing((prev) => !prev);
+    setFollowers((prev) => (isFollowing ? prev - 1 : prev + 1));
+
+    startTransition(() => {
+      toggleFollow(currentUser.id, user.id);
+    });
+  };
+
+  const handleAddFriendToggle = async () => {
+    startRequestTransition(async () => {
+      if (friendStatus === "none") {
+        await sendFriendRequest(currentUser.id, user.id);
+      } else if (friendStatus === "pending") {
+        await cancelFriendRequest(currentUser.id, user.id);
+      }
+      await refetchFriendStatus(); // re-fetch updated status
+    });
+  };
+
+  return (
+    <div
+      className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-15 pt-28 pb-16 text-white
+"
+    >
+      {/* Banner */}
+      <div
+        className="relative w-full h-74 bg-cover bg-center "
+        style={{ backgroundImage: `url('/hero.png')` }}
+      >
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm " />
+        {!loadingFriendStatus && (
+          <motion.div
+            className="relative z-10 flex flex-col items-center  justify-center h-full text-center"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Image
+              src={user.avatar_url || "/default-avatar.png"}
+              alt="avatar"
+              width={96}
+              height={96}
+              className="rounded-full border-4 border-white shadow-lg object-cover w-21 h-21"
+            />
+
+            <h1 className="mt-4 text-2xl font-bold">{user.display_name}</h1>
+            <p className="text-white/70">@{user.username}</p>
+
+            <p className="text-white/60 text-sm mt-1">
+              {followers} follower{followers !== 1 ? "s" : ""}
+            </p>
+
+            {/* Action buttons */}
+            {currentUser?.id !== user.id && (
+              <div className="mt-4 flex gap-3">
+                {/* Add Friend */}
+                <button
+                  onClick={handleAddFriendToggle}
+                  disabled={requestPending}
+                  className={`cursor-pointer transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white ${
+                    friendStatus === "pending"
+                      ? "bg-red-600 hover:bg-red-700"
+                      : friendStatus === "accepted"
+                      ? "bg-green-600 hover:bg-green-700"
+                      : "bg-white/10 hover:bg-white/20"
+                  }`}
+                >
+                  {friendStatus === "pending" ? (
+                    <FaTimes className="text-white" />
+                  ) : friendStatus === "accepted" ? (
+                    <FaUserFriends className="text-white" />
+                  ) : (
+                    <FaUserPlus className="text-white" />
+                  )}
+
+                  {friendStatus === "pending"
+                    ? "Cancel Request"
+                    : friendStatus === "accepted"
+                    ? "Friends"
+                    : "Add Friend"}
+                </button>
+
+                {/* Follow */}
+                <button
+                  onClick={handleFollowToggle}
+                  disabled={pending}
+                  className={`transition cursor-pointer text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white ${
+                    isFollowing
+                      ? "bg-red-600 hover:bg-red-700"
+                      : "bg-white/10 hover:bg-white/20"
+                  }`}
+                >
+                  {isFollowing ? <IoPersonRemove /> : <IoPersonAdd />}
+                  {isFollowing ? "Unfollow" : "Follow"}
+                </button>
+
+                {/* Message */}
+                <button className="bg-white/10 cursor-pointer hover:bg-white/20 transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white">
+                  <FaEnvelope className="text-white" />
+                  Message
+                </button>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </div>
+
+      {/* Tabs */}
+      <div className="flex justify-center border-b border-white/10 bg-black/90 sticky top-0 z-20">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-6 cursor-pointer py-3 text-sm font-medium transition-all ${
+              activeTab === tab
+                ? "border-b-2 border-red-500 text-white"
+                : "text-white/60 hover:text-white"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* Animated Tab Content */}
+      {!loadingFriendStatus && (
+        <div className=" py-8 ">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              {activeTab === "Profile" && (
+                <div className="max-w-4xl mx-auto">
+                  <motion.div
+                    className="flex items-start justify-center gap-3 p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 mb-6"
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div>
+                      <div className="text-red-400 mt-1 flex items-center justify-center mb-2 gap-2">
+                        <FaFileAlt />
+                        <p className="text-white/70 text-sm text-center">
+                          About me
+                        </p>
+                      </div>
+
+                      <p className="text-white text-sm font-medium text-justify">
+                        {/* {user.bio || "No bio added."} */}
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit. Quod accusantium ab hic quibusdam ipsum placeat, a
+                        maxime in pariatur nihil, quo temporibus asperiores et
+                        facilis voluptas repudiandae eius sapiente ut.
+                      </p>
+                    </div>
+                  </motion.div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <InfoCard
+                      icon={<FaFilm />}
+                      title="Favorite Genres"
+                      value={user.favorite_genres?.join(", ")}
+                    />
+                    <InfoCard
+                      icon={<FaSmile />}
+                      title="Favorite Moods"
+                      value={user.favorite_moods?.join(", ")}
+                    />
+                    <InfoCard
+                      icon={<FaHeart />}
+                      title="Relationship Status"
+                      value={user.relationship_status || "Alien"}
+                    />
+                    <InfoCard
+                      icon={<FaUserSecret />}
+                      title="Social Intent"
+                      value={user.social_intent?.join(", ")}
+                    />
+                  </div>
+                </div>
+              )}
+              {activeTab === "Recommendations" && (
+                <div className="grid max-w-4xl mx-auto  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 ">
+                  {userRecommendations.map((item) => (
+                    <FilmCard key={item.recommendation_id} item={item} />
+                  ))}
+                </div>
+              )}
+              {activeTab === "Watchlist" && (
+                <div className="grid max-w-4xl mx-auto  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 ">
+                  {userWatchList.map((item) => (
+                    <FilmCard key={item.recommendation_id} item={item} />
+                  ))}
+                </div>
+              )}
+              {activeTab === "Friends" && (
+                <div className="text-white/80">
+                  <div className="grid max-w-4xl mx-auto grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
+                    {userFriends?.map((friend) => (
+                      <motion.div
+                        key={friend.id}
+                        className="flex flex-col items-start p-4 bg-white/5 rounded-xl border border-white/10 gap-4"
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        <div className="flex items-center gap-4 w-full">
+                          <Image
+                            src={friend.avatar_url || "/default-avatar.png"}
+                            alt="avatar"
+                            width={48}
+                            height={48}
+                            className="rounded-full object-cover"
+                          />
+                          <div className="flex-1">
+                            <h2 className="font-semibold text-white">
+                              {friend.display_name}
+                            </h2>
+                            <p className="text-white/50 text-sm">
+                              @{friend.username}
+                            </p>
+                          </div>
+                        </div>
+
+                        <Link
+                          href={`/profile/${friend.username}/${friend.id}`}
+                          className="mt-1 cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center gap-2"
+                        >
+                          <FaUser className="text-xs" />
+                          View Profile
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      )}
+    </div>
+  );
+}
