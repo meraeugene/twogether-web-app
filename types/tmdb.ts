@@ -1,6 +1,6 @@
 export type TMDBRawResult = {
-  id: number;
   media_type: "movie" | "tv";
+  id: number;
   name?: string; // for TV shows
   title?: string; // for movies
   poster_path?: string | null;
@@ -12,7 +12,6 @@ export type TMDBRawResult = {
 };
 
 export type TMDBEnrichedResult = TMDBRawResult & {
-  imdb_id: string;
   genres: string[]; // e.g. ['Action', 'Comedy']
   poster_url: string | null; // full image URL or null if not available
   year?: string;

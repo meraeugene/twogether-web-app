@@ -31,6 +31,9 @@ import { FriendRequestStatus, UserPreview } from "@/types/friends";
 import { IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import useSWR from "swr";
 import Link from "next/link";
+import { getOrCreateThread, sendMessage } from "@/actions/messageActions";
+import MessageModal from "@/components/MessageModal";
+import { useRouter } from "next/navigation";
 
 const tabs = ["Profile", "Recommendations", "Watchlist", "Friends"];
 
@@ -47,6 +50,8 @@ export default function TabbedProfileView({
   userWatchList: Recommendation[];
   followStats: FollowStats;
 }) {
+  const router = useRouter();
+
   const [activeTab, setActiveTab] = useState("Profile");
   const [pending, startTransition] = useTransition();
 
@@ -58,6 +63,10 @@ export default function TabbedProfileView({
 
   // FRIENDS STATE
   const [requestPending, startRequestTransition] = useTransition();
+
+  // MESSAGE STATE
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [messagePending, startMessageTransition] = useTransition();
 
   const {
     data: friendStatus,
@@ -102,6 +111,32 @@ export default function TabbedProfileView({
         await cancelFriendRequest(currentUser.id, user.id);
       }
       await refetchFriendStatus(); // re-fetch updated status
+    });
+  };
+
+  const handleSendMessage = (content: string) => {
+    startMessageTransition(async () => {
+      if (!user.id || !currentUser.id || !content.trim()) return;
+
+      try {
+        // Step 1: Ensure thread exists
+        const thread = await getOrCreateThread(currentUser.id, user.id);
+
+        // Step 2: Send the message
+        await sendMessage({
+          threadId: thread.id,
+          senderId: currentUser.id,
+          receiverId: user.id,
+          content,
+        });
+
+        // Step 3: Close the modal
+        setShowMessageModal(false);
+
+        router.push(`/messages`);
+      } catch (err) {
+        console.error("Failed to send message:", err);
+      }
     });
   };
 
@@ -183,7 +218,11 @@ export default function TabbedProfileView({
                 </button>
 
                 {/* Message */}
-                <button className="bg-white/10 cursor-pointer hover:bg-white/20 transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white">
+                <button
+                  onClick={() => setShowMessageModal(true)}
+                  disabled={messagePending}
+                  className="bg-white/10 cursor-pointer hover:bg-white/20 transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white"
+                >
                   <FaEnvelope className="text-white" />
                   Message
                 </button>
@@ -327,6 +366,13 @@ export default function TabbedProfileView({
           </AnimatePresence>
         </div>
       )}
+
+      <MessageModal
+        open={showMessageModal}
+        onClose={() => setShowMessageModal(false)}
+        onSend={handleSendMessage}
+        loading={messagePending}
+      />
     </div>
   );
 }

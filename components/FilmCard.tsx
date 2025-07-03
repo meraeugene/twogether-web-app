@@ -9,14 +9,21 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Recommendation } from "@/types/recommendation";
 import { deleteRecommendation } from "@/actions/recommendationActions";
-import ConfirmModal from "@/components/ConfirmModal"; // Make sure path is correct
+import ConfirmModal from "@/components/ConfirmModal";
+import { removeFromWatchlist } from "@/actions/watchlistActions";
 
 export default function FilmCard({
   item,
   userId,
+  isDeleteRecommendation,
+  isRemoveFromWatchlist,
+  watchlistItemId,
 }: {
   item: Recommendation;
+  isDeleteRecommendation?: boolean;
+  isRemoveFromWatchlist?: boolean;
   userId?: string;
+  watchlistItemId?: string;
 }) {
   const [isPending, startTransition] = useTransition();
   const [isVisible, setIsVisible] = useState(true);
@@ -26,7 +33,11 @@ export default function FilmCard({
     setShowConfirm(false);
     setIsVisible(false);
     startTransition(async () => {
-      await deleteRecommendation(userId!, item.recommendation_id);
+      if (isDeleteRecommendation) {
+        await deleteRecommendation(userId!, item.recommendation_id);
+      } else if (isRemoveFromWatchlist && watchlistItemId) {
+        await removeFromWatchlist(watchlistItemId, userId!);
+      }
     });
   };
 
@@ -65,7 +76,7 @@ export default function FilmCard({
                 </Link>
               </div>
 
-              {userId && (
+              {userId && isDeleteRecommendation && (
                 <div
                   className="absolute top-4 right-4 z-30 
                     -translate-y-4 opacity-0 
@@ -78,7 +89,25 @@ export default function FilmCard({
                     className="px-3 py-1 flex cursor-pointer items-center gap-1 text-xs rounded-full bg-red-600 hover:bg-red-700 text-white shadow"
                   >
                     <MdDelete className="text-base" />
-                    {isPending ? "Deleting..." : "Delete"}
+                    {isPending ? "Deleting..." : "Delete Recommendation"}
+                  </button>
+                </div>
+              )}
+
+              {userId && isRemoveFromWatchlist && (
+                <div
+                  className="absolute top-4 right-4 z-30 
+                    -translate-y-4 opacity-0 
+                    group-hover:translate-y-0 group-hover:opacity-100 
+                    transition-all duration-500 ease-out"
+                >
+                  <button
+                    onClick={() => setShowConfirm(true)}
+                    disabled={isPending}
+                    className="px-3 py-1 flex cursor-pointer items-center gap-1 text-xs rounded-full bg-red-600 hover:bg-red-700 text-white shadow"
+                  >
+                    <MdDelete className="text-base" />
+                    {isPending ? "Removing..." : "Remove from Watchlist"}
                   </button>
                 </div>
               )}
@@ -118,9 +147,17 @@ export default function FilmCard({
         open={showConfirm}
         onClose={() => setShowConfirm(false)}
         onConfirm={confirmDelete}
-        title="Delete Recommendation?"
-        description="This action cannot be undone."
-        confirmText="Delete"
+        title={
+          isDeleteRecommendation
+            ? `Delete "${item.title}" recommendation?`
+            : `Remove "${item.title}" from Watchlist?`
+        }
+        description={
+          isDeleteRecommendation
+            ? "This recommendation will no longer appear on your profile or others' feeds."
+            : "It will be removed from your watchlist, but you can add it again later."
+        }
+        confirmText={isDeleteRecommendation ? "Delete" : "Remove"}
         cancelText="Cancel"
         loading={isPending}
       />

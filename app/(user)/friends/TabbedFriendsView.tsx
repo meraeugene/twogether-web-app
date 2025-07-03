@@ -26,22 +26,33 @@ export default function FriendsPage({
   const fetchSent = (currentUserId: string) =>
     getSentFriendRequests(currentUserId);
 
-  const { data: friends, mutate: refetchFriends } = useSWR(
+  const {
+    data: friends,
+    mutate: refetchFriends,
+    isLoading: isLoadingFriends,
+  } = useSWR(
     () => (activeTab === "Friends" ? ["friends", currentUserId] : null),
     () => fetchFriends(currentUserId)
   );
 
-  // Need refresh interval for live friend request
-  const { data: requests, mutate: refetchRequests } = useSWR(
+  const {
+    data: requests,
+    mutate: refetchRequests,
+    isLoading: isLoadingRequests,
+  } = useSWR(
     () => (activeTab === "Requests" ? ["requests", currentUserId] : null),
     () => fetchIncoming(currentUserId),
     {
-      refreshInterval: 5000, // Refresh every 5 seconds
+      refreshInterval: 5000,
       refreshWhenHidden: false,
     }
   );
 
-  const { data: sent, mutate: refetchSent } = useSWR(
+  const {
+    data: sent,
+    mutate: refetchSent,
+    isLoading: isLoadingSent,
+  } = useSWR(
     () => (activeTab === "Sent" ? ["sent", currentUserId] : null),
     () => fetchSent(currentUserId)
   );
@@ -101,58 +112,88 @@ export default function FriendsPage({
           >
             {activeTab === "Friends" && (
               <div className="max-w-4xl mx-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {friends?.map((user) => (
-                    <FriendCard
-                      key={user.id}
-                      name={user.display_name}
-                      username={user.username}
-                      avatarUrl={user.avatar_url || ""}
-                      status="friend"
-                      mutate={refetchFriends}
-                      id={user.id}
-                      currentUserId={currentUserId}
-                    />
-                  ))}
-                </div>
+                {isLoadingFriends ? (
+                  <div className="flex justify-center ">
+                    <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  </div>
+                ) : friends?.length === 0 ? (
+                  <div className="text-center text-white/50 ">
+                    No friends yet. Start adding some!
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {friends?.map((user) => (
+                      <FriendCard
+                        key={user.id}
+                        name={user.display_name}
+                        username={user.username}
+                        avatarUrl={user.avatar_url || ""}
+                        status="friend"
+                        mutate={refetchFriends}
+                        id={user.id}
+                        currentUserId={currentUserId}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
             {activeTab === "Requests" && (
               <div className="max-w-4xl mx-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2  gap-6">
-                  {requests?.map((user) => (
-                    <FriendCard
-                      key={user.id}
-                      name={user.display_name}
-                      username={user.username}
-                      avatarUrl={user.avatar_url || ""}
-                      status="request"
-                      id={user.id}
-                      currentUserId={currentUserId}
-                      mutate={refetchRequests}
-                    />
-                  ))}
-                </div>
+                {isLoadingRequests ? (
+                  <div className="flex justify-center ">
+                    <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  </div>
+                ) : requests?.length === 0 ? (
+                  <div className="text-center text-white/50 ">
+                    No incoming friend requests.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2  gap-6">
+                    {requests?.map((user) => (
+                      <FriendCard
+                        key={user.id}
+                        name={user.display_name}
+                        username={user.username}
+                        avatarUrl={user.avatar_url || ""}
+                        status="request"
+                        id={user.id}
+                        currentUserId={currentUserId}
+                        mutate={refetchRequests}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
             {activeTab === "Sent" && (
               <div className="max-w-4xl mx-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {sent?.map((user) => (
-                    <FriendCard
-                      key={user.id}
-                      name={user.display_name}
-                      username={user.username}
-                      avatarUrl={user.avatar_url || ""}
-                      status="sent"
-                      id={user.id}
-                      mutate={refetchSent}
-                      currentUserId={currentUserId}
-                    />
-                  ))}
-                </div>
+                {isLoadingSent ? (
+                  <div className="flex justify-center ">
+                    <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  </div>
+                ) : sent?.length === 0 ? (
+                  <div className="text-center text-white/50 ">
+                    No sent friend requests.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2  gap-6">
+                    {sent?.map((user) => (
+                      <FriendCard
+                        key={user.id}
+                        name={user.display_name}
+                        username={user.username}
+                        avatarUrl={user.avatar_url || ""}
+                        status="sent"
+                        id={user.id}
+                        currentUserId={currentUserId}
+                        mutate={refetchSent}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </motion.div>

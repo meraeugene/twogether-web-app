@@ -4,12 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function WatchInfo({
+  id,
   recommendation,
   initialInWatchlist,
   initialWatchlistId,
   currentUserId,
 }: {
   recommendation: Recommendation;
+  id: string;
   initialInWatchlist: boolean;
   initialWatchlistId: string | null;
   currentUserId: string;
@@ -24,6 +26,7 @@ export default function WatchInfo({
         <ToggleWatchlistButton
           currentUserId={currentUserId}
           initialInWatchlist={initialInWatchlist}
+          filmId={id}
           initialWatchlistId={initialWatchlistId}
           recommendationId={recommendation.recommendation_id}
         />

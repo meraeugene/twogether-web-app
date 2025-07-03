@@ -1,3 +1,5 @@
+"use client";
+
 import {
   acceptFriendRequest,
   cancelFriendRequest,
@@ -5,11 +7,14 @@ import {
   removeFriend,
 } from "@/actions/friendActions";
 import Image from "next/image";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { FaEnvelope, FaUser } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { FaUserXmark } from "react-icons/fa6";
 import Link from "next/link";
+import MessageModal from "@/components/MessageModal";
+import { getOrCreateThread, sendMessage } from "@/actions/messageActions";
+import { useRouter } from "next/navigation";
 
 export function FriendCard({
   name,
@@ -28,7 +33,37 @@ export function FriendCard({
   status: "friend" | "request" | "sent";
   mutate?: () => void;
 }) {
+  const router = useRouter();
+
   const [isPending, startTransition] = useTransition();
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [messagePending, startMessageTransition] = useTransition();
+
+  const handleSendMessage = (content: string) => {
+    startMessageTransition(async () => {
+      if (!id || !currentUserId || !content.trim()) return;
+
+      try {
+        // Step 1: Ensure thread exists
+        const thread = await getOrCreateThread(currentUserId, id);
+
+        // Step 2: Send the message
+        await sendMessage({
+          threadId: thread.id,
+          senderId: currentUserId,
+          receiverId: id,
+          content,
+        });
+
+        // Step 3: Close the modal
+        setShowMessageModal(false);
+
+        router.push(`/messages`);
+      } catch (err) {
+        console.error("Failed to send message:", err);
+      }
+    });
+  };
 
   const handleAccept = () => {
     startTransition(async () => {
@@ -40,15 +75,9 @@ export function FriendCard({
 
   const handleUnfriend = () => {
     startTransition(async () => {
-      console.log("Attempting to unfriend:", currentUserId, id);
       if (!id || !currentUserId) return;
-      const { error } = await removeFriend(currentUserId, id);
-      if (error) {
-        console.error("Unfriend failed:", error.message);
-      } else {
-        console.log("Unfriend successful");
-        mutate?.();
-      }
+      await removeFriend(currentUserId, id);
+      mutate?.();
     });
   };
 
@@ -67,6 +96,7 @@ export function FriendCard({
       mutate?.();
     });
   };
+
   return (
     <motion.div className="p-4 bg-white/5 rounded-xl border border-white/10 gap-4">
       <div className="flex items-start gap-4 mb-5">
@@ -104,7 +134,8 @@ export function FriendCard({
           </button>
 
           <button
-            disabled={isPending}
+            onClick={() => setShowMessageModal(true)}
+            disabled={messagePending}
             className="text-sm cursor-pointer text-white/80 px-3 py-1 rounded-full bg-white/10 hover:bg-red-600 transition flex gap-2 items-center"
           >
             <FaEnvelope className="text-white" />
@@ -139,6 +170,13 @@ export function FriendCard({
           Cancel
         </button>
       )}
+
+      <MessageModal
+        open={showMessageModal}
+        onClose={() => setShowMessageModal(false)}
+        onSend={handleSendMessage}
+        loading={messagePending}
+      />
     </motion.div>
   );
 }

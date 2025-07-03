@@ -4,6 +4,17 @@ import { createClient } from "@/utils/supabase/server";
 import { Recommendation } from "@/types/recommendation";
 import { revalidatePath } from "next/cache";
 
+export const createRecommendation = async (user_id: string, form: any) => {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("recommendations").insert({
+    user_id,
+    ...form,
+  });
+
+  return { error };
+};
+
 export const getRecommendations = async (): Promise<
   Recommendation[] | null
 > => {
@@ -14,7 +25,7 @@ export const getRecommendations = async (): Promise<
     .select("*")
     .eq("visibility", "public")
     .order("created_at", { ascending: false })
-    .limit(20);
+    .limit(18);
 
   if (error) {
     console.error("Error fetching recommendations:", error);

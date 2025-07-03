@@ -6,6 +6,7 @@ import { IoMdAdd } from "react-icons/io";
 import { MdMovieFilter } from "react-icons/md";
 import { RiFilmAiLine, RiMovieAiLine } from "react-icons/ri";
 import { FaUserFriends } from "react-icons/fa";
+import { LuMessageSquareHeart } from "react-icons/lu";
 
 const Header = async () => {
   const user = await getCurrentUser();
@@ -54,6 +55,13 @@ const Header = async () => {
           >
             <FaUserFriends className="text-lg" />
             Friends
+          </Link>
+          <Link
+            href="/messages"
+            className="px-4 py-2 rounded-md flex items-center gap-2 text-sm font-medium bg-white/10 backdrop-blur border border-white/20 shadow-sm text-white hover:bg-white/20 transition"
+          >
+            <LuMessageSquareHeart className="text-lg" />
+            Messages
           </Link>
           <ProfileMenu user={user} />
         </nav>

@@ -7,7 +7,7 @@ import { useDebounce } from "use-debounce";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 import { PartialRecommendation } from "@/types/recommendation";
 import RecommendCardSkeleton from "./RecommendCardSkeleton";
-import { fetcher } from "@/utils/fetcher";
+import { fetcher } from "@/utils/swr/fetcher";
 import ErrorMessage from "@/components/ErrorMessage";
 
 export default function RecommendStepMovieSearch({
@@ -28,18 +28,23 @@ export default function RecommendStepMovieSearch({
   const results: TMDBEnrichedResult[] = data || [];
 
   const handleSelect = (item: TMDBEnrichedResult) => {
+    const tmdb_id = item.id;
     const title = item.title || item.name || "Unknown";
     const type = item.media_type === "tv" ? "show" : "movie";
     const poster_url = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
-    const stream_url = `https://vidsrc.cc/v2/embed/${type}/${item.id}?autoPlay=false&poster=true`;
+    const stream_url = [
+      `https://vidlink.pro/${type}/${item.id}?title=true&poster=true&autoplay=false&nextbutton=true`,
+      `https://vidsrc.cc/v2/embed/${type}/${item.id}?autoPlay=false&poster=true`,
+      `https://vidsrc.to/embed/movie/${item.id}`,
+    ];
     const genres = item.genres ?? [];
     const year = item.year || "Unknown Year";
     const duration = item.duration || null;
     const synopsis = item.overview || "No synopsis available";
 
     onSelect({
+      tmdb_id,
       title,
-      imdb_id: item.imdb_id,
       genres,
       poster_url,
       type,

@@ -6,3 +6,12 @@ export type UserPreview = {
 };
 
 export type FriendRequestStatus = "accepted" | "pending" | "none" | "self";
+
+export type OnlineFriend = {
+  id: string;
+  username: string;
+  display_name: string;
+  avatar_url: string;
+  is_online: boolean;
+  last_seen: string | null;
+};

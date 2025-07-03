@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { Recommendation } from "@/types/recommendation";
 import { getCurrentUser } from "./authActions";
 import { revalidatePath } from "next/cache";
+import { match } from "assert";
 
 // Fetch watchlist by user ID
 export async function getWatchlistByUserId(
@@ -27,7 +28,7 @@ export async function getWatchlistByUserId(
 
 // Check if a recommendation is in the watchlist
 export async function checkIfInWatchlist(
-  imdbId: string,
+  tmdbid: number,
   currentUserId: string
 ) {
   const supabase = await createClient();
@@ -36,7 +37,7 @@ export async function checkIfInWatchlist(
     .from("watchlist_flattened")
     .select("id")
     .eq("user_id", currentUserId)
-    .eq("imdb_id", imdbId)
+    .eq("tmdb_id", tmdbid)
     .maybeSingle();
 
   return {
@@ -48,7 +49,8 @@ export async function checkIfInWatchlist(
 // Add to watchlist
 export async function addToWatchlist(
   recommendationId: string,
-  currentUserId: string
+  currentUserId: string,
+  filmId: string
 ) {
   const supabase = await createClient();
 
@@ -62,20 +64,26 @@ export async function addToWatchlist(
     .single();
 
   if (error) throw new Error(error.message);
-  revalidatePath("/watch/[id]");
+
+  revalidatePath(`/watch/${filmId}`);
   return data.id;
 }
 
 // Remove from watchlist
-export async function removeFromWatchlist(id: string) {
+export async function removeFromWatchlist(
+  id: string,
+  userId: string,
+  filmId?: string
+) {
   const supabase = await createClient();
 
   const { error } = await supabase
     .from("watchlist_items")
     .delete()
-    .eq("id", id);
+    .match({ id, user_id: userId }); // secure: only if user owns it
 
   if (error) throw new Error(error.message);
-  revalidatePath("/watch/[id]");
+  revalidatePath(`/watch/${filmId}`);
+  revalidatePath("/watchlist");
   return true;
 }

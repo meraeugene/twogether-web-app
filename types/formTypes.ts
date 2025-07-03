@@ -28,11 +28,11 @@ export type OnboardingForm = {
 };
 
 export type RecommendationForm = {
+  tmdb_id: number;
   title: string;
-  imdb_id: string;
   poster_url: string;
   type: "movie" | "show";
-  stream_url: string;
+  stream_url: string[];
   comment: string;
   visibility: "public" | "friends" | "private";
 };

@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Toaster } from "sonner";
+import { getCurrentUser } from "@/actions/authActions";
+import PresenceManager from "@/components/PresenceManager";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,11 +23,13 @@ export const metadata: Metadata = {
     "Twogether is a social movie and TV show platform where users can stream, recommend, and discuss their favorite films. Watch together, chat privately, and discover what others love — all in one place.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const currentUser = await getCurrentUser();
+
   return (
     <html lang="en">
       <head></head>
@@ -34,6 +38,7 @@ export default function RootLayout({
       >
         <Toaster position="top-center" richColors />
         <Header />
+        {currentUser?.id && <PresenceManager userId={currentUser.id} />}
         {children}
         <Footer />
       </body>

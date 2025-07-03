@@ -1,38 +1,52 @@
-import { getRecommendations } from "@/actions/recommendationActions";
-import FilmCard from "@/components/FilmCard";
+"use client";
 
-export default async function BrowsePage() {
-  const allData = (await getRecommendations()) || [];
+import useSWR from "swr";
+import { getRecommendations } from "@/actions/recommendationActions";
+import LatestRecoRow from "./LatestRecoRow";
+import GenreRecoRow from "./GenreRecoRow";
+import RowSkeleton from "./RowSkeleton";
+import ErrorMessage from "@/components/ErrorMessage";
+
+export default function BrowsePage() {
+  const {
+    data: allData,
+    isLoading,
+    error,
+  } = useSWR("all-recommendations", () => getRecommendations());
+
+  if (isLoading) {
+    return (
+      <main className="pt-28 min-h-screen px-15 bg-black pb-16 space-y-6">
+        <RowSkeleton />
+        <RowSkeleton />
+        <RowSkeleton />
+        <RowSkeleton />
+        <RowSkeleton />
+      </main>
+    );
+  }
+
+  if (!allData || error) {
+    return (
+      <ErrorMessage
+        title="Failed to load recommendations."
+        message="Please try again later or contact support if the issue persists."
+      />
+    );
+  }
 
   const genres = [...new Set(allData.flatMap((r) => r.genres || []))].sort();
   const getByGenre = (genre: string) =>
     allData.filter((r) => r.genres?.includes(genre));
 
   return (
-    <main className="pb-16 pt-28 min-h-screen space-y-6 bg-black px-15 font-[family-name:var(--font-geist-mono)]">
-      <section className="mb-16">
-        <h2 className="text-3xl font-semibold">Latest Reco</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mt-6">
-          {allData.map((item) => (
-            <FilmCard key={item.recommendation_id} item={item} />
-          ))}
-        </div>
-      </section>
-
+    <main className="pt-28 min-h-screen px-15 bg-black pb-16 space-y-6">
+      <LatestRecoRow items={allData} />
       {genres.map((genre) => {
         const items = getByGenre(genre);
-        if (items.length === 0) return null;
-
-        return (
-          <section key={genre} className="mb-16">
-            <h2 className="text-3xl font-semibold">{genre} Picks</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mt-6">
-              {items.map((item) => (
-                <FilmCard key={item.recommendation_id} item={item} />
-              ))}
-            </div>
-          </section>
-        );
+        return items.length > 0 ? (
+          <GenreRecoRow key={genre} genre={genre} items={items} />
+        ) : null;
       })}
     </main>
   );

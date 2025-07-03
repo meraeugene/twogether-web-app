@@ -1,33 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
 import { TMDBRawResult, TMDBEnrichedResult } from "@/types/tmdb";
 
-// Cache store
+// In-memory cache (fast but temporary)
 const cache = new Map<
   string,
   { data: TMDBEnrichedResult[]; timestamp: number }
 >();
 const CACHE_TTL = 1000 * 60 * 5; // 5 minutes
 
-const TMDB_API_KEY = process.env.TMDB_API_KEY;
+const TMDB_API_KEY = process.env.TMDB_API_KEY!;
+const BASE_URL = "https://api.themoviedb.org/3";
 
 export async function GET(req: NextRequest) {
   const query = req.nextUrl.searchParams.get("query");
-  if (!query)
+  if (!query) {
     return NextResponse.json({ error: "Missing query" }, { status: 400 });
+  }
 
   const cacheKey = query.toLowerCase().trim();
-  const cached = cache.get(cacheKey);
   const now = Date.now();
+  const cached = cache.get(cacheKey);
 
+  // Serve from cache if available and fresh
   if (cached && now - cached.timestamp < CACHE_TTL) {
     return NextResponse.json(cached.data);
   }
 
-  const searchRes = await fetch(
-    `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(
-      query
-    )}&api_key=${TMDB_API_KEY}`
-  );
+  // Fetch search results
+  const searchUrl = `${BASE_URL}/search/multi?query=${encodeURIComponent(
+    query
+  )}&api_key=${TMDB_API_KEY}`;
+  const searchRes = await fetch(searchUrl);
+
+  if (!searchRes.ok) {
+    return NextResponse.json({ error: "TMDB search failed" }, { status: 502 });
+  }
 
   const searchData = await searchRes.json();
 
@@ -38,42 +45,53 @@ export async function GET(req: NextRequest) {
         item.media_type === "movie"
           ? parseInt(item.release_date?.slice(0, 4) || "0")
           : parseInt(item.first_air_date?.slice(0, 4) || "0");
-
-      return getYear(b) - getYear(a); // Descending: latest first
+      return getYear(b) - getYear(a);
     });
 
+  // Fetch details concurrently (parallel API calls)
   const enrichedResults: TMDBEnrichedResult[] = await Promise.all(
     rawResults.map(async (item): Promise<TMDBEnrichedResult> => {
-      const detailsRes = await fetch(
-        `https://api.themoviedb.org/3/${item.media_type}/${item.id}?api_key=${TMDB_API_KEY}&append_to_response=external_ids`
-      );
+      try {
+        const detailsRes = await fetch(
+          `${BASE_URL}/${item.media_type}/${item.id}?api_key=${TMDB_API_KEY}`
+        );
+        if (!detailsRes.ok) throw new Error("Details fetch failed");
 
-      const detailsData = await detailsRes.json();
+        const details = await detailsRes.json();
 
-      return {
-        ...item,
-        imdb_id: detailsData.external_ids?.imdb_id || "",
-        genres:
-          detailsData.genres?.map(
-            (g: { id: number; name: string }) => g.name
-          ) || [],
-        poster_url: item.poster_path
-          ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
-          : null,
-        year:
-          item.media_type === "movie"
-            ? detailsData.release_date?.slice(0, 4)
-            : detailsData.first_air_date?.slice(0, 4),
-        duration:
-          item.media_type === "movie"
-            ? detailsData.runtime
-            : detailsData.episode_run_time?.[0] || 0,
-        synopsis: detailsData.overview || "",
-      };
+        return {
+          ...item,
+          genres:
+            details.genres?.map((g: { id: number; name: string }) => g.name) ||
+            [],
+          poster_url: item.poster_path
+            ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+            : null,
+          year:
+            item.media_type === "movie"
+              ? details.release_date?.slice(0, 4)
+              : details.first_air_date?.slice(0, 4),
+          duration:
+            item.media_type === "movie"
+              ? details.runtime
+              : details.episode_run_time?.[0] || 0,
+          synopsis: details.overview || "",
+        };
+      } catch (err) {
+        console.error(`Failed to fetch details for ID ${item.id}:`, err);
+        return {
+          ...item,
+          genres: [],
+          poster_url: null,
+          year: undefined,
+          duration: undefined,
+          synopsis: "",
+        };
+      }
     })
   );
 
-  // Cache the enriched results
+  // Cache result for future requests
   cache.set(cacheKey, { data: enrichedResults, timestamp: now });
 
   return NextResponse.json(enrichedResults);

@@ -1,9 +1,9 @@
 export type PartialRecommendation = {
+  tmdb_id: number;
   title: string;
-  imdb_id: string;
   poster_url: string;
   type: "movie" | "show";
-  stream_url: string;
+  stream_url: string[];
   genres: string[];
   year: string;
   duration: number | null;
@@ -11,9 +11,10 @@ export type PartialRecommendation = {
 };
 
 export type Recommendation = {
+  id: string;
+  tmdb_id: number;
   recommendation_id: string;
   title: string;
-  imdb_id: string;
   poster_url?: string;
   type: "movie" | "show";
   stream_url: string;

@@ -13,28 +13,32 @@ export default function ToggleWatchlistButton({
   initialInWatchlist,
   initialWatchlistId,
   currentUserId,
+  filmId,
 }: {
   recommendationId: string;
   initialInWatchlist: boolean;
   initialWatchlistId: string | null;
   currentUserId: string;
+  filmId: string;
 }) {
   const [isInList, setIsInList] = useState(initialInWatchlist);
   const [watchlistId, setWatchlistId] = useState(initialWatchlistId);
   const [isPending, startTransition] = useTransition();
 
-  console.log(isInList);
-
   const handleToggle = () => {
     startTransition(async () => {
       try {
         if (isInList && watchlistId) {
-          await removeFromWatchlist(watchlistId);
+          await removeFromWatchlist(watchlistId, currentUserId, filmId);
           toast.info("Removed from watchlist");
           setIsInList(false);
           setWatchlistId(null);
         } else {
-          const id = await addToWatchlist(recommendationId, currentUserId);
+          const id = await addToWatchlist(
+            recommendationId,
+            currentUserId,
+            filmId
+          );
           toast.success("Added to watchlist!");
           setIsInList(true);
           setWatchlistId(id);
