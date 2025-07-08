@@ -36,6 +36,7 @@ export default function WatchSuggestions({
             >
               <Link
                 href={`/watch/${rec.recommendation_id}`}
+                shallow={true}
                 className="
               flex items-center justify-center
               w-12 h-12 rounded-full
