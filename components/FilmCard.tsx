@@ -55,7 +55,7 @@ export default function FilmCard({
             }}
             transition={{ duration: 0.45, ease: "easeInOut" }}
             layout
-            className="group relative w-full rounded-lg overflow-hidden shadow-lg"
+            className="group relative w-full rounded-lg font-[family-name:var(--font-geist-sans)] overflow-hidden shadow-lg"
           >
             <div className="relative aspect-[2/3] w-full">
               <Image
@@ -113,12 +113,10 @@ export default function FilmCard({
               )}
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 z-20 px-4 py-4 text-white translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-              <div className="text-base font-semibold truncate">
-                {item.title}
-              </div>
+            <div className="py-4 text-white bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+              <div className="text-base font-semibold  ">{item.title}</div>
 
-              <div className="flex items-center justify-between text-sm text-white/60 mt-2">
+              <div className="flex items-center justify-between text-sm text-white/60 mt-1">
                 <span>
                   {item.year} · {item.duration}m
                 </span>
@@ -126,6 +124,12 @@ export default function FilmCard({
                   {item.type}
                 </span>
               </div>
+
+              {item.comment && (
+                <p className="text-sm text-white/80 mt-2 italic  border-l-4 border-red-500 pl-3">
+                  “{item.comment}”
+                </p>
+              )}
 
               {item.recommended_by && (
                 <div className="text-sm text-gray-400 italic mt-1">

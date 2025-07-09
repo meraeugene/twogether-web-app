@@ -65,6 +65,12 @@ export default function WatchSuggestions({
               </div>
             </div>
 
+            {rec.comment && (
+              <p className="text-xs text-white/80 mt-2 italic  border-l-4 border-red-500 pl-3">
+                “{rec.comment}”
+              </p>
+            )}
+
             {rec.recommended_by && (
               <div className="text-white/40 italic text-xs mt-1">
                 Recommended by{" "}

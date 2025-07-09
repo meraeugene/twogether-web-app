@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { getSuggestions } from "@/actions/suggestionsActions";
 import { getRecommendationById } from "@/actions/recommendationActions";
 import { checkIfInWatchlist } from "@/actions/watchlistActions";
+import WatchGemeni from "./WatchGemeni";
 
 export default async function WatchPage({
   params,
@@ -64,6 +65,8 @@ export default async function WatchPage({
         {suggestions && suggestions?.length > 0 && (
           <WatchSuggestions suggestions={suggestions} />
         )}
+
+        <WatchGemeni title={recommendation.title} />
       </div>
     </main>
   );
