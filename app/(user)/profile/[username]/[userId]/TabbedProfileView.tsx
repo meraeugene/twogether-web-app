@@ -185,7 +185,7 @@ export default function TabbedProfileView({
                 {/* Add Friend */}
                 <button
                   onClick={handleAddFriendToggle}
-                  disabled={cooldown}
+                  disabled={requestPending}
                   className={`cursor-pointer transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white ${
                     friendStatus === "pending"
                       ? "bg-red-600 hover:bg-red-700"
@@ -212,8 +212,8 @@ export default function TabbedProfileView({
                 {/* Follow */}
                 <button
                   onClick={handleFollowToggle}
-                  disabled={cooldown}
-                  className={`transition cursor-pointer text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
+                  disabled={cooldown || pending}
+                  className={`transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
                     ${
                       isFollowing
                         ? "bg-red-600 hover:bg-red-700"
