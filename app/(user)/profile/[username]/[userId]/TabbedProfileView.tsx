@@ -207,11 +207,18 @@ export default function TabbedProfileView({
                 <button
                   onClick={handleFollowToggle}
                   disabled={pending}
-                  className={`transition cursor-pointer text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white ${
-                    isFollowing
-                      ? "bg-red-600 hover:bg-red-700"
-                      : "bg-white/10 hover:bg-white/20"
-                  }`}
+                  className={`transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
+                    ${
+                      isFollowing
+                        ? "bg-red-600 hover:bg-red-700"
+                        : "bg-white/10 hover:bg-white/20"
+                    }
+                    ${
+                      pending
+                        ? "cursor-not-allowed opacity-50"
+                        : "cursor-pointer"
+                    }
+                    `}
                 >
                   {isFollowing ? <IoPersonRemove /> : <IoPersonAdd />}
                   {isFollowing ? "Unfollow" : "Follow"}
