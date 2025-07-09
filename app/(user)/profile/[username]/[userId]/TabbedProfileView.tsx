@@ -53,7 +53,7 @@ export default function TabbedProfileView({
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState("Profile");
-  const [pending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   // FOLLOWING STATE
   const [isFollowing, setIsFollowing] = useState<boolean>(
@@ -212,8 +212,8 @@ export default function TabbedProfileView({
                 {/* Follow */}
                 <button
                   onClick={handleFollowToggle}
-                  disabled={cooldown || pending}
-                  className={`transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
+                  disabled={cooldown}
+                  className={`transition cursor-pointer text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
                     ${
                       isFollowing
                         ? "bg-red-600 hover:bg-red-700"
