@@ -1,6 +1,6 @@
 const loading = () => {
   return (
-    <main>
+    <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-15 pt-28 pb-16 text-white">
       <div className="mb-6">
         <div className="h-7 w-42 bg-white/10 rounded mb-6 animate-pulse" />
         <div className="h-4 w-96 bg-white/5 rounded mb-7 animate-pulse" />
