@@ -1,4 +1,4 @@
-const MyRecommendationSkeleton = () => {
+const loading = () => {
   return (
     <main className="min-h-screen px-15 pt-28 pb-16 bg-black text-white font-[family-name:var(--font-geist-sans)]">
       <div className="mb-6">
@@ -19,4 +19,4 @@ const MyRecommendationSkeleton = () => {
   );
 };
 
-export default MyRecommendationSkeleton;
+export default loading;

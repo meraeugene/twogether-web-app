@@ -1,6 +1,6 @@
-const WatchPageSkeleton = () => {
+const loading = () => {
   return (
-    <main>
+    <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-15 pt-28 pb-16 text-white">
       <div className="flex flex-col lg:flex-row gap-10 animate-pulse">
         <div className="flex-1 ">
           <div className="w-full aspect-video bg-white/10 rounded-lg" />
@@ -33,4 +33,4 @@ const WatchPageSkeleton = () => {
   );
 };
 
-export default WatchPageSkeleton;
+export default loading;

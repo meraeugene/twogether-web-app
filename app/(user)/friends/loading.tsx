@@ -1,10 +1,8 @@
 export default function FriendsPageLoading() {
   return (
     <div className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black text-white px-4 sm:px-15 pt-28 pb-16">
-      {/* Hero Banner Skeleton */}
       <div className="relative w-full h-70 border border-gray-900 rounded-xl overflow-hidden animate-pulse bg-white/5 mb-6" />
 
-      {/* Tabs Skeleton */}
       <div className="flex justify-center border-b border-white/10 sticky top-0 z-20 bg-black/90 mb-8">
         {["Friends", "Requests", "Sent"].map((tab, i) => (
           <div
@@ -16,7 +14,6 @@ export default function FriendsPageLoading() {
         ))}
       </div>
 
-      {/* Cards Grid Skeleton */}
       <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
         {Array.from({ length: 6 }).map((_, i) => (
           <div
