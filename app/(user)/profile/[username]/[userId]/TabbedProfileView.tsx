@@ -63,6 +63,7 @@ export default function TabbedProfileView({
 
   // FRIENDS STATE
   const [requestPending, startRequestTransition] = useTransition();
+  const [cooldown, setCooldown] = useState(false);
 
   // MESSAGE STATE
   const [showMessageModal, setShowMessageModal] = useState(false);
@@ -95,8 +96,13 @@ export default function TabbedProfileView({
   );
 
   const handleFollowToggle = () => {
+    if (cooldown) return;
+
     setIsFollowing((prev) => !prev);
     setFollowers((prev) => (isFollowing ? prev - 1 : prev + 1));
+
+    setCooldown(true);
+    setTimeout(() => setCooldown(false), 500); // 500ms cooldown
 
     startTransition(() => {
       toggleFollow(currentUser.id, user.id);
@@ -179,7 +185,7 @@ export default function TabbedProfileView({
                 {/* Add Friend */}
                 <button
                   onClick={handleAddFriendToggle}
-                  disabled={requestPending}
+                  disabled={cooldown}
                   className={`cursor-pointer transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white ${
                     friendStatus === "pending"
                       ? "bg-red-600 hover:bg-red-700"
@@ -206,17 +212,12 @@ export default function TabbedProfileView({
                 {/* Follow */}
                 <button
                   onClick={handleFollowToggle}
-                  disabled={pending}
-                  className={`transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
+                  disabled={cooldown}
+                  className={`transition cursor-pointer text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
                     ${
                       isFollowing
                         ? "bg-red-600 hover:bg-red-700"
                         : "bg-white/10 hover:bg-white/20"
-                    }
-                    ${
-                      pending
-                        ? "cursor-not-allowed opacity-50"
-                        : "cursor-pointer"
                     }
                     `}
                 >
