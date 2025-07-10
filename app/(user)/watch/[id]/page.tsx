@@ -40,7 +40,7 @@ export default async function WatchPage({
 
   return (
     <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-15 pt-28 pb-16 text-white">
-      <div className="flex flex-col lg:flex-row gap-10">
+      <div className="flex flex-col lg:flex-row  gap-10">
         <div className="flex-1 space-y-10">
           <WatchPlayer
             urls={
@@ -65,9 +65,9 @@ export default async function WatchPage({
         {suggestions && suggestions?.length > 0 && (
           <WatchSuggestions suggestions={suggestions} />
         )}
-
-        <WatchGemeni title={recommendation.title} />
       </div>
+
+      <WatchGemeni title={recommendation.title} />
     </main>
   );
 }
