@@ -10,7 +10,7 @@ const ITEMS_PER_PAGE = 6;
 
 export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
   const [page, setPage] = useState(0);
-  const maxPage = Math.floor(items.length / ITEMS_PER_PAGE);
+  const maxPage = Math.ceil(items.length / ITEMS_PER_PAGE) - 1;
 
   const handleNext = () => {
     if (page < maxPage) setPage(page + 1);

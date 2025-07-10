@@ -16,7 +16,7 @@ export default function GenreRecoRow({
   items: Recommendation[];
 }) {
   const [page, setPage] = useState(0);
-  const maxPage = Math.floor(items.length / ITEMS_PER_PAGE);
+  const maxPage = Math.ceil(items.length / ITEMS_PER_PAGE) - 1;
 
   const handleNext = () => {
     if (page < maxPage) setPage(page + 1);
@@ -30,6 +30,8 @@ export default function GenreRecoRow({
     page * ITEMS_PER_PAGE,
     (page + 1) * ITEMS_PER_PAGE
   );
+
+  console.log(genre, paginated);
 
   return (
     <section className="mb-16">
