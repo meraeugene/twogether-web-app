@@ -12,7 +12,7 @@ export default async function UserProfile({
 }: {
   params: Promise<{ username: string; userId: string }>;
 }) {
-  const username = (await params).username;
+  const username = decodeURIComponent((await params).username);
   const userId = (await params).userId;
 
   const currentUser: CurrentUser | null = await getCurrentUser();
