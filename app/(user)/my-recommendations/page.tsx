@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ErrorMessage from "@/components/ErrorMessage";
 import { getCurrentUser } from "@/actions/authActions";
 import { redirect } from "next/navigation";
 import { getMyRecommendations } from "@/actions/recommendationActions";
@@ -21,7 +20,7 @@ export default async function MyRecommendationsPage() {
           Your Movie/Show Recommendations are Empty
         </h1>
         <p className="text-gray-400 mb-6 ">
-          You haven't recommended anything yet. Start{" "}
+          You haven&apos;t recommended anything yet. Start{" "}
           <Link href="/browse" className="text-white underline">
             browsing
           </Link>{" "}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { FaLock, FaUsers, FaGlobe } from "react-icons/fa";
+import { FaLock, FaGlobe } from "react-icons/fa";
 import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
 
