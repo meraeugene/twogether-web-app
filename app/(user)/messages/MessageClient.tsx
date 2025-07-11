@@ -26,8 +26,8 @@ export default function MessagesClient({
   >(undefined);
 
   return (
-    <div className="grid grid-cols-[400px_1fr]  rounded-xl  border border-white/10  ">
-      <div className="bg-black/20 border-r  border-white/10 ">
+    <div className="grid grid-cols-[400px_1fr]   rounded-xl  border border-white/10  ">
+      <div className="bg-black/20 border-r   border-white/10 ">
         <div className="flex gap-2   p-4 ">
           {["Online", "Inbox", "Requests"].map((t) => (
             <button

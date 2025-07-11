@@ -8,9 +8,14 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { Recommendation } from "@/types/recommendation";
-import { deleteRecommendation } from "@/actions/recommendationActions";
+import {
+  deleteRecommendation,
+  toggleRecommendationVisibility,
+} from "@/actions/recommendationActions";
 import ConfirmModal from "@/components/ConfirmModal";
 import { removeFromWatchlist } from "@/actions/watchlistActions";
+import { PrivacyModal } from "./PrivacyModal";
+import { FaLock } from "react-icons/fa";
 
 export default function FilmCard({
   item,
@@ -38,6 +43,20 @@ export default function FilmCard({
       } else if (isRemoveFromWatchlist && watchlistItemId) {
         await removeFromWatchlist(watchlistItemId, userId!);
       }
+    });
+  };
+
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [isUpdatingPrivacy, startPrivacyTransition] = useTransition();
+
+  const handleVisibilityChange = (newVisibility: "public" | "private") => {
+    startPrivacyTransition(async () => {
+      await toggleRecommendationVisibility(
+        userId!,
+        item.recommendation_id,
+        newVisibility
+      );
+      setShowPrivacyModal(false);
     });
   };
 
@@ -90,6 +109,14 @@ export default function FilmCard({
                   >
                     <MdDelete className="text-base" />
                     {isPending ? "Deleting..." : "Delete Recommendation"}
+                  </button>
+
+                  <button
+                    onClick={() => setShowPrivacyModal(true)}
+                    className="mt-2 w-full cursor-pointer px-3 py-1 flex items-center gap-2 text-xs rounded-full border border-white/20 hover:border-white/40 hover:bg-white/5 text-white/80 hover:text-white transition"
+                  >
+                    <FaLock className="text-xs" />
+                    <span>Edit Privacy</span>
                   </button>
                 </div>
               )}
@@ -164,6 +191,14 @@ export default function FilmCard({
         confirmText={isDeleteRecommendation ? "Delete" : "Remove"}
         cancelText="Cancel"
         loading={isPending}
+      />
+
+      <PrivacyModal
+        open={showPrivacyModal}
+        currentVisibility={item.visibility}
+        onClose={() => setShowPrivacyModal(false)}
+        onChange={handleVisibilityChange}
+        loading={isUpdatingPrivacy}
       />
     </>
   );

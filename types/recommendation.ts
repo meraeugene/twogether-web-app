@@ -28,6 +28,6 @@ export type Recommendation = {
     username: string;
     avatar_url: string;
   };
-  visibility: "public" | "friends" | "private";
+  visibility: "public" | "private";
   created_at: string;
 };

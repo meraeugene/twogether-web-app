@@ -53,6 +53,28 @@ export async function getRecommendationById(
 
   return data;
 }
+export async function getMyRecommendations(userId: string): Promise<{
+  public: Recommendation[];
+  private: Recommendation[];
+}> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("recommendations_flattened")
+    .select("*")
+    .eq("recommended_by->>id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error || !data) {
+    console.error("Error fetching recommendation:", error);
+    return { public: [], private: [] };
+  }
+
+  return {
+    public: data.filter((item) => item.visibility === "public"),
+    private: data.filter((item) => item.visibility === "private"),
+  };
+}
 
 export async function getUserRecommendationsById(
   userId: string
@@ -63,6 +85,7 @@ export async function getUserRecommendationsById(
     .from("recommendations_flattened")
     .select("*")
     .eq("recommended_by->>id", userId) // JSON field query
+    .eq("visibility", "public")
     .order("created_at", { ascending: false }); // optional: latest first
 
   if (error || !data) {
@@ -87,6 +110,28 @@ export async function deleteRecommendation(
   if (error) {
     console.error("Error deleting recommendation:", error);
     throw new Error("Failed to delete recommendation");
+  }
+
+  revalidatePath("/my-recommendations");
+  return { success: true };
+}
+
+export async function toggleRecommendationVisibility(
+  userId: string,
+  recommendationId: string,
+  visibility: "public" | "friends" | "private"
+) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("recommendations")
+    .update({ visibility })
+    .eq("id", recommendationId)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Failed to toggle visibility:", error);
+    throw new Error("Failed to toggle visibility");
   }
 
   revalidatePath("/my-recommendations");

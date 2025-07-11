@@ -7,6 +7,7 @@ import { formatCompactTime } from "@/utils/messages/formatCompactTime";
 import { MessageThread } from "@/types/messages";
 import { useMessageSound } from "@/utils/messages/useMessageSound";
 import { useEffect, useRef } from "react";
+import { isEmojiOnly } from "@/utils/messages/isEmoji";
 
 export default function MessageThreadList({
   userId,
@@ -81,9 +82,18 @@ export default function MessageThreadList({
     <div className="space-y-2 border-t border-white/10  p-4 ">
       {threads.map((thread: MessageThread) => {
         const isSender = thread.last_message_sender_id === userId;
-        const lastMessagePreview = thread.last_message
-          ? `${isSender ? "You: " : ""}${thread.last_message}`
-          : "No messages yet";
+
+        let lastMessagePreview = "No messages yet";
+
+        if (thread.last_message) {
+          const isEmoji = isEmojiOnly(thread.last_message);
+
+          lastMessagePreview = isEmoji
+            ? isSender
+              ? "You sent an emoji"
+              : "Sent an emoji"
+            : `${isSender ? "You: " : ""}${thread.last_message}`;
+        }
 
         const isUnread =
           thread.unread_count > 0 && thread.last_message_sender_id !== userId;
