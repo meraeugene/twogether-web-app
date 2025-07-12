@@ -157,9 +157,15 @@ export default function FilmCard({
               <div className="text-base font-semibold  ">{item.title}</div>
 
               <div className="flex items-center justify-between text-sm text-white/60 mt-1">
-                <span>
-                  {item.year} · {item.duration}m
+                <span className="flex items-center gap-2">
+                  <span className="text-white/80">{item.year}</span>
+                  {item.type === "tv" && (
+                    <span className="text-amber-400, font-medium">
+                      S{item.seasons || 1} · E{item.episodes || 1}
+                    </span>
+                  )}
                 </span>
+
                 <span className="bg-gray-700 rounded-sm px-2 py-1 text-xs capitalize">
                   {item.type}
                 </span>

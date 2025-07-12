@@ -19,7 +19,7 @@ export default function WatchInfo({
   isAiRecommendation?: boolean;
 }) {
   return (
-    <div className="space-y-3 font-[family-name:var(--font-geist-mono)]">
+    <div className="space-y-3  font-[family-name:var(--font-geist-mono)] ">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold font-[family-name:var(--font-geist-sans)]">
           {recommendation.title}

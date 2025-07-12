@@ -11,12 +11,10 @@ import { useEffect } from "react";
 import { formatPromptTitle } from "@/utils/ai-recommend/formatPromptTitle";
 import { useAIRecommendations } from "@/stores/useAIRecommendation";
 import { toast } from "sonner";
+import { uniqueById } from "@/utils/ai-recommend/uniqueById";
 
 export default function AIRecommendForm() {
-  const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<TMDBEnrichedResult[]>([]);
-  const [reason, setReason] = useState("");
   const loadingMessages = useMemo(
     () => [
       "Curating a masterpiece just for you...",
@@ -30,7 +28,15 @@ export default function AIRecommendForm() {
 
   const [currentMessage, setCurrentMessage] = useState(loadingMessages[0]);
 
-  const { setRecommendations } = useAIRecommendations();
+  const {
+    recommendations,
+    prompt,
+    reason,
+    setRecommendations,
+    setPrompt,
+    setReason,
+    clearAll,
+  } = useAIRecommendations();
 
   useEffect(() => {
     if (!loading) return;
@@ -45,10 +51,12 @@ export default function AIRecommendForm() {
   }, [loading, loadingMessages]);
 
   const handleSubmit = async () => {
-    if (!prompt.trim()) return;
+    if (!prompt.trim()) {
+      toast.error("Please enter a prompt to get recommendations.");
+      return;
+    }
 
     setLoading(true);
-    setResults([]);
 
     try {
       const { titles, reason } = await recommendMoviesListWithAI(prompt);
@@ -68,29 +76,14 @@ export default function AIRecommendForm() {
         })
       );
 
-      const uniqueById = (arr: TMDBEnrichedResult[]) => {
-        const seen = new Set();
-        return arr.filter((item) => {
-          if (seen.has(item.id)) return false;
-          seen.add(item.id);
-          return true;
-        });
-      };
-
       const filtered = uniqueById(fetched.filter(Boolean));
-      if (filtered.length === 0) {
-        toast.error("No matching movies found for your prompt.");
-        return;
-      }
 
-      // Update Zustand store with recommendations
       setRecommendations(
         filtered.map((m) => ({
           ...adaptTMDBToRecommendation(m),
           generated_by_ai: true,
         }))
       );
-      setResults(filtered);
 
       setReason(reason);
     } catch (err) {
@@ -101,8 +94,8 @@ export default function AIRecommendForm() {
   };
 
   const resetForm = () => {
-    setPrompt("");
-    setResults([]);
+    clearAll();
+    sessionStorage.removeItem("ai-recommendations");
   };
 
   const displayPrompt = formatPromptTitle(prompt);
@@ -110,7 +103,7 @@ export default function AIRecommendForm() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center pt-24 pb-16 px-15 bg-black text-white font-[family-name:var(--font-geist-sans)]">
       <AnimatePresence mode="wait">
-        {!results.length && (
+        {!recommendations.length && (
           <motion.div
             key="input"
             initial={{ opacity: 0, y: 30 }}
@@ -138,11 +131,18 @@ export default function AIRecommendForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-6 w-full py-3 rounded-xl cursor-pointer bg-gradient-to-br from-red-600 to-pink-600 hover:from-pink-700 hover:to-red-700 transition text-white font-semibold text-lg shadow-md shadow-pink-500/20 flex items-center justify-center gap-2 backdrop-blur-sm"
+                className="mt-6 w-full py-3 rounded-xl 
+           bg-white text-black 
+           hover:bg-neutral-200 
+           transition font-semibold text-lg 
+           shadow-md flex items-center justify-center gap-2 
+           backdrop-blur-sm 
+           disabled:opacity-60 disabled:cursor-not-allowed 
+           cursor-pointer"
               >
                 {loading && (
                   <motion.svg
-                    fill="currentColor"
+                    fill="#02020"
                     viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-4 h-4 text-white animate-pulse"
@@ -187,7 +187,7 @@ export default function AIRecommendForm() {
           </motion.div>
         )}
 
-        {results.length > 0 && (
+        {recommendations.length > 0 && (
           <motion.div
             key="results"
             initial={{ opacity: 0, y: 30 }}
@@ -199,7 +199,7 @@ export default function AIRecommendForm() {
             <div className="flex justify-center mt-4">
               <button
                 onClick={resetForm}
-                className="px-6 py-2 text-sm rounded-md cursor-pointer bg-white/10 hover:bg-white/20 text-white border border-white/10 transition font-medium backdrop-blur-sm"
+                className="px-6 py-2 text-sm rounded-md cursor-pointer bg-white text-black hover:bg-neutral-200 border border-black/10 transition font-medium backdrop-blur-sm"
               >
                 Recommend Me Again
               </button>
@@ -216,14 +216,8 @@ export default function AIRecommendForm() {
             )}
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 px-4">
-              {results.map((movie) => (
-                <FilmCard
-                  key={movie.id}
-                  item={{
-                    ...adaptTMDBToRecommendation(movie),
-                    generated_by_ai: true,
-                  }}
-                />
+              {recommendations.map((item) => (
+                <FilmCard key={item.id} item={item} />
               ))}
             </div>
           </motion.div>

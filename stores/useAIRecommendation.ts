@@ -29,14 +29,24 @@ const encryptedStorage = {
 
 type State = {
   recommendations: Recommendation[];
+  prompt: string;
+  reason: string;
   setRecommendations: (data: Recommendation[]) => void;
+  setPrompt: (value: string) => void;
+  setReason: (value: string) => void;
+  clearAll: () => void;
 };
 
 export const useAIRecommendations = create<State>()(
   persist(
     (set) => ({
       recommendations: [],
+      prompt: "",
+      reason: "",
       setRecommendations: (data) => set({ recommendations: data }),
+      setPrompt: (value) => set({ prompt: value }),
+      setReason: (value) => set({ reason: value }),
+      clearAll: () => set({ recommendations: [], prompt: "", reason: "" }),
     }),
     {
       name: "ai-recommendations",

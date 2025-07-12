@@ -110,8 +110,6 @@ export async function removeFriend(currentUserId: string, userId: string) {
     )
     .eq("status", "accepted");
 
-  console.log(error);
-
   return { error };
 }
 

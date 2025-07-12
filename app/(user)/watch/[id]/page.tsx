@@ -48,6 +48,19 @@ export default async function WatchPage({
                 ? recommendation.stream_url
                 : [recommendation.stream_url]
             }
+            type={recommendation.type}
+            episodeTitlesPerSeason={
+              recommendation.episode_titles_per_season
+                ? Object.fromEntries(
+                    Object.entries(
+                      recommendation.episode_titles_per_season
+                    ).map(([season, episodes]) => [
+                      Number(season),
+                      episodes.map((ep) => ep.title), // 👈 convert to string[]
+                    ])
+                  )
+                : undefined
+            }
           />{" "}
           <WatchInfo
             id={id}

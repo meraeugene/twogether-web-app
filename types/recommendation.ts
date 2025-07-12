@@ -2,12 +2,18 @@ export type PartialRecommendation = {
   tmdb_id: number;
   title: string;
   poster_url: string;
-  type: "movie" | "show";
+  type: "movie" | "tv";
   stream_url: string[];
   genres: string[];
   year: string;
   duration: number | null;
   synopsis?: string;
+  seasons?: number | null;
+  episodes?: number | null;
+  episode_titles_per_season?: Record<
+    number,
+    { episode_number: number; title: string }[]
+  >;
 };
 
 export type Recommendation = {
@@ -16,7 +22,7 @@ export type Recommendation = {
   recommendation_id: string;
   title: string;
   poster_url?: string;
-  type: "movie" | "show";
+  type: "movie" | "tv";
   stream_url: string[];
   comment: string;
   year?: string;
@@ -31,4 +37,10 @@ export type Recommendation = {
   visibility: "public" | "private";
   created_at: string;
   generated_by_ai?: boolean;
+  seasons?: number | null | undefined;
+  episodes?: number | null | undefined;
+  episode_titles_per_season?: Record<
+    number,
+    { episode_number: number; title: string }[]
+  >;
 };

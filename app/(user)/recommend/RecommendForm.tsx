@@ -25,7 +25,7 @@ const defaultForm: RecommendationForm = {
   visibility: "public",
 };
 
-const visibilityOptions = ["public", "friends", "private"];
+const visibilityOptions = ["public", "private"];
 
 interface RecommendFormsProps {
   userId: string;
@@ -115,7 +115,7 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
                 visibility: v as RecommendationForm["visibility"],
               })
             }
-            columns={3}
+            columns={2}
           />
         );
       default:

@@ -33,6 +33,11 @@ export async function askGemini(
           parts: [{ text: `${systemPrompt}\n\nUser: ${prompt}` }],
         },
       ],
+      config: {
+        thinkingConfig: {
+          thinkingBudget: 0, // Disables thinking
+        },
+      },
     });
 
     return response.text ?? "Sorry, Gemini did not return a response.";
@@ -50,11 +55,11 @@ export async function recommendMoviesListWithAI(
 
   When the user describes the kind of movies they want, respond with:
 
-  1. A short, simple paragraph (2–3 lines) explaining why these 10 movies match the user's request. 
+  1. A short, simple paragraph (2–3 lines) explaining why these 18 movies match the user's request. 
    - Use clear, friendly language.
    - Avoid technical or abstract explanations.
 
-  2. Then list **exactly 10 movie titles** (just the titles), one per line.
+  2. Then list exactly 18 movie titles, sorted from the most relevant to the least relevant based on the user's prompt. Only include the titles, one per line.
 
   Format:
   Reason:
@@ -63,7 +68,7 @@ export async function recommendMoviesListWithAI(
   Titles:
   <movie title 1>
   <movie title 2>
-  ...
+...
 `;
 
   try {
@@ -88,8 +93,8 @@ export async function recommendMoviesListWithAI(
       titlesMatch?.[1]
         ?.split("\n")
         .map((line) => line.trim())
-        .filter(Boolean)
-        .slice(0, 10) ?? [];
+        .filter(Boolean) ?? [];
+    // .slice(0, 10) ?? [];
 
     return { reason, titles };
   } catch (error) {

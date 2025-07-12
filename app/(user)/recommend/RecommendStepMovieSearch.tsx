@@ -30,17 +30,28 @@ export default function RecommendStepMovieSearch({
   const handleSelect = (item: TMDBEnrichedResult) => {
     const tmdb_id = item.id;
     const title = item.title || item.name || "Unknown";
-    const type = item.media_type === "tv" ? "show" : "movie";
+    const type = item.media_type === "tv" ? "tv" : "movie";
     const poster_url = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
-    const stream_url = [
-      `https://vidlink.pro/${type}/${item.id}?title=true&poster=true&autoplay=false&nextbutton=true`,
-      `https://vidsrc.cc/v2/embed/${type}/${item.id}?autoPlay=false&poster=true`,
-      `https://vidsrc.to/embed/movie/${item.id}`,
-    ];
     const genres = item.genres ?? [];
     const year = item.year || "Unknown Year";
     const duration = item.duration || null;
     const synopsis = item.overview || "No synopsis available";
+    const seasons = item.seasons ?? null;
+    const episodes = item.episodes ?? null;
+    const episodeTitlesPerSeason = item.episodeTitlesPerSeason ?? undefined;
+
+    const stream_url =
+      type === "tv"
+        ? [
+            `https://vidlink.pro/tv/${item.id}/1/1?title=true&poster=true&autoplay=false`,
+            `https://vidsrc.cc/v2/embed/tv/${item.id}/1/1?autoPlay=false&poster=true`,
+            `https://vidsrc.to/embed/tv/${item.id}/1/1`,
+          ]
+        : [
+            `https://vidlink.pro/movie/${item.id}?title=true&poster=true&autoplay=false`,
+            `https://vidsrc.cc/v2/embed/movie/${item.id}?autoPlay=false&poster=true`,
+            `https://vidsrc.to/embed/movie/${item.id}`,
+          ];
 
     onSelect({
       tmdb_id,
@@ -52,6 +63,9 @@ export default function RecommendStepMovieSearch({
       year,
       duration,
       synopsis,
+      seasons,
+      episodes,
+      episode_titles_per_season: episodeTitlesPerSeason,
     });
   };
 
@@ -107,9 +121,19 @@ export default function RecommendStepMovieSearch({
                 {item.title || item.name}
               </div>
               <div className="flex items-center justify-between mt-1">
-                <div className="text-sm text-white/60 capitalize">
-                  {item.year} · {item.duration}m
+                <div className="text-sm text-white/60 capitalize flex gap-2">
+                  <span>{item.year}</span>
+                  {item.media_type === "tv" ? (
+                    <span className="text-amber font-medium">
+                      S{item.seasons || 1}·E{item.episodes || 1}
+                    </span>
+                  ) : (
+                    <span className="text-amber font-medium">
+                      {item.duration || "0"}m
+                    </span>
+                  )}
                 </div>
+
                 <div className="text-xs bg-gray-700 rounded-sm px-2 py-1 text-white/60 capitalize">
                   {item.media_type}
                 </div>

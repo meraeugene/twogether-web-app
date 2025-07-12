@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TMDBRawResult, TMDBEnrichedResult } from "@/types/tmdb";
+import {
+  TMDBRawResult,
+  TMDBEnrichedResult,
+  EpisodeTitle,
+  TMDBSeasonResponse,
+} from "@/types/tmdb";
 
 // In-memory cache (fast but temporary)
 const cache = new Map<
@@ -59,6 +64,26 @@ export async function GET(req: NextRequest) {
 
         const details = await detailsRes.json();
 
+        const episodeTitlesPerSeason: Record<number, EpisodeTitle[]> = {};
+
+        if (item.media_type === "tv") {
+          for (let season = 1; season <= details.number_of_seasons; season++) {
+            const seasonRes = await fetch(
+              `${BASE_URL}/tv/${item.id}/season/${season}?api_key=${TMDB_API_KEY}`
+            );
+
+            if (seasonRes.ok) {
+              const seasonData: TMDBSeasonResponse = await seasonRes.json();
+              episodeTitlesPerSeason[season] = seasonData.episodes.map(
+                (ep): EpisodeTitle => ({
+                  episode_number: ep.episode_number,
+                  title: ep.name,
+                })
+              );
+            }
+          }
+        }
+
         return {
           ...item,
           genres:
@@ -74,8 +99,16 @@ export async function GET(req: NextRequest) {
           duration:
             item.media_type === "movie"
               ? details.runtime
-              : details.episode_run_time?.[0] || 0,
+              : details.episode_run_time?.[0] ||
+                details.episode_run_time?.[1] ||
+                24, // fallback
           synopsis: details.overview || "",
+          seasons:
+            item.media_type === "tv" ? details.number_of_seasons : undefined,
+          episodes:
+            item.media_type === "tv" ? details.number_of_episodes : undefined,
+          episodeTitlesPerSeason:
+            item.media_type === "tv" ? episodeTitlesPerSeason : undefined,
         };
       } catch (err) {
         console.error(`Failed to fetch details for ID ${item.id}:`, err);

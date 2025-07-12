@@ -57,9 +57,19 @@ export default function WatchSuggestions({
               {rec.title}
             </div>
             <div className="flex items-center justify-between">
-              <div className="text-white/60 text-xs mt-2">
-                {rec.year} · {rec.duration}m
+              <div className="text-white/60 text-xs mt-2 flex gap-2">
+                <span>{rec.year} </span>
+                {rec.type === "tv" ? (
+                  <span className="text-amber font-medium">
+                    S{rec.seasons || 1} · E{rec.episodes || 1}
+                  </span>
+                ) : (
+                  <span className="text-amber font-medium">
+                    {rec.duration || "0"}m
+                  </span>
+                )}
               </div>
+
               <div className="text-white/60  text-xs capitalize">
                 {rec.type}
               </div>

@@ -13,7 +13,7 @@ export function adaptTMDBToRecommendation(
     tmdb_id: tmdb.id,
     title: tmdb.title || tmdb.name || "Untitled",
     poster_url: tmdb.poster_url ?? undefined,
-    type: tmdb.media_type === "tv" ? "show" : "movie",
+    type: tmdb.media_type === "tv" ? "tv" : "movie",
     stream_url: [
       `https://vidlink.pro/${tmdb.media_type}/${tmdb.id}?title=true&poster=true&autoplay=false&nextbutton=true`,
       `https://vidsrc.to/embed/${tmdb.media_type}/${tmdb.id}`,

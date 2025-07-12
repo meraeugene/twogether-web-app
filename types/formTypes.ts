@@ -1,3 +1,5 @@
+import { EpisodeTitle } from "./tmdb";
+
 export type Genre =
   | "action"
   | "adventure"
@@ -31,8 +33,9 @@ export type RecommendationForm = {
   tmdb_id: number;
   title: string;
   poster_url: string;
-  type: "movie" | "show";
+  type: "movie" | "tv";
   stream_url: string[];
   comment: string;
-  visibility: "public" | "friends" | "private";
+  visibility: "public" | "private";
+  episodeTitlesPerSeason?: Record<number, EpisodeTitle[]>;
 };
