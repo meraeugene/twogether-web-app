@@ -53,6 +53,7 @@ export async function updateSession(request: NextRequest) {
     "/profile",
     "/friends",
     "/my-recommendations",
+    "/ai-recommend",
   ];
   if (!user && error && protectedPages.includes(pathname)) {
     url.pathname = "/";
