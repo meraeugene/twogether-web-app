@@ -16,6 +16,7 @@ import ConfirmModal from "@/components/ConfirmModal";
 import { removeFromWatchlist } from "@/actions/watchlistActions";
 import { PrivacyModal } from "./PrivacyModal";
 import { FaLock } from "react-icons/fa";
+import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 
 export default function FilmCard({
   item,
@@ -77,18 +78,30 @@ export default function FilmCard({
             className="group relative w-full rounded-lg font-[family-name:var(--font-geist-sans)] overflow-hidden shadow-lg"
           >
             <div className="relative aspect-[2/3] w-full">
-              <Image
-                src={item.poster_url || "/placeholder.png"}
-                alt={item.title}
-                priority
-                fill
-                className="object-cover w-full h-full transition duration-300 group-hover:brightness-50 rounded-lg"
-                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
-              />
+              {item.poster_url ? (
+                <Image
+                  src={item.poster_url}
+                  alt={item.title}
+                  priority
+                  fill
+                  className="object-cover w-full h-full transition duration-300 group-hover:brightness-50 rounded-lg"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                />
+              ) : (
+                <div className="flex items-center justify-center w-full h-full bg-gray-800 text-white text-xs p-2 text-center rounded-lg font-[family-name:var(--font-geist-sans)]">
+                  No Image Available
+                </div>
+              )}
 
               <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/50 backdrop-blur-sm">
                 <Link
-                  href={`/watch/${item.recommendation_id}`}
+                  href={
+                    item.generated_by_ai
+                      ? `/ai-recommend/watch/${
+                          item.recommendation_id
+                        }/${getSlugFromTitle(item.title)}`
+                      : `/watch/${item.recommendation_id}`
+                  }
                   className="flex items-center justify-center w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md ring-1 ring-white/10 hover:ring-3 hover:ring-red-100 transition duration-300 ease-in-out transform hover:scale-110"
                 >
                   <FaPlay className="text-xl" />

@@ -22,6 +22,22 @@ const Header = async () => {
       {user ? (
         <nav className="flex items-center  gap-3">
           <Link
+            href="/ai-recommend"
+            className="px-4 py-2 rounded-md flex items-center gap-2 text-sm font-medium bg-white/10 backdrop-blur border border-white/20 shadow-sm text-white hover:bg-white/20 transition"
+          >
+            {/* Gemini Icon */}
+            <svg
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              width="1em"
+              height="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />
+            </svg>{" "}
+            AI Recommend
+          </Link>
+          <Link
             href="/browse"
             className="px-4 py-2 rounded-md flex items-center gap-2 text-sm font-medium bg-white/10 backdrop-blur border border-white/20 shadow-sm text-white hover:bg-white/20 transition"
           >

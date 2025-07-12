@@ -17,7 +17,7 @@ export type Recommendation = {
   title: string;
   poster_url?: string;
   type: "movie" | "show";
-  stream_url: string;
+  stream_url: string[];
   comment: string;
   year?: string;
   duration?: number;
@@ -30,4 +30,5 @@ export type Recommendation = {
   };
   visibility: "public" | "private";
   created_at: string;
+  generated_by_ai?: boolean;
 };

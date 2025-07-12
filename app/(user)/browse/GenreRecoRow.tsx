@@ -31,8 +31,6 @@ export default function GenreRecoRow({
     (page + 1) * ITEMS_PER_PAGE
   );
 
-  console.log(genre, paginated);
-
   return (
     <section className="mb-16">
       <div className="flex justify-between items-center">

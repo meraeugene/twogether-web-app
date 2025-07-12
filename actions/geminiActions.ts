@@ -41,3 +41,59 @@ export async function askGemini(
     return "Sorry, I could not generate a response.";
   }
 }
+
+export async function recommendMoviesListWithAI(
+  prompt: string
+): Promise<{ reason: string; titles: string[] }> {
+  const systemPrompt = `
+  You are a helpful AI movie recommender.
+
+  When the user describes the kind of movies they want, respond with:
+
+  1. A short, simple paragraph (2–3 lines) explaining why these 10 movies match the user's request. 
+   - Use clear, friendly language.
+   - Avoid technical or abstract explanations.
+
+  2. Then list **exactly 10 movie titles** (just the titles), one per line.
+
+  Format:
+  Reason:
+  <easy-to-understand explanation here>
+
+  Titles:
+  <movie title 1>
+  <movie title 2>
+  ...
+`;
+
+  try {
+    const result = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: `${systemPrompt}\n\nUser: ${prompt}` }],
+        },
+      ],
+    });
+
+    const raw = result.text ?? "";
+
+    const reasonMatch = raw.match(/Reason:\s*([\s\S]*?)\n\s*Titles:/i);
+    const titlesMatch = raw.match(/Titles:\s*([\s\S]*)/i);
+
+    const reason =
+      reasonMatch?.[1]?.trim() || "Here's a curated list based on your taste.";
+    const titles =
+      titlesMatch?.[1]
+        ?.split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .slice(0, 10) ?? [];
+
+    return { reason, titles };
+  } catch (error) {
+    console.error("Gemini AI error:", error);
+    return { reason: "", titles: [] };
+  }
+}

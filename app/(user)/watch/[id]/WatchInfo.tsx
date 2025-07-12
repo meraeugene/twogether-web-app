@@ -9,12 +9,14 @@ export default function WatchInfo({
   initialInWatchlist,
   initialWatchlistId,
   currentUserId,
+  isAiRecommendation = false,
 }: {
   recommendation: Recommendation;
   id: string;
   initialInWatchlist: boolean;
   initialWatchlistId: string | null;
-  currentUserId: string;
+  currentUserId?: string;
+  isAiRecommendation?: boolean;
 }) {
   return (
     <div className="space-y-3 font-[family-name:var(--font-geist-mono)]">
@@ -23,13 +25,15 @@ export default function WatchInfo({
           {recommendation.title}
         </h1>
 
-        <ToggleWatchlistButton
-          currentUserId={currentUserId}
-          initialInWatchlist={initialInWatchlist}
-          filmId={id}
-          initialWatchlistId={initialWatchlistId}
-          recommendationId={recommendation.recommendation_id}
-        />
+        {!isAiRecommendation && (
+          <ToggleWatchlistButton
+            currentUserId={currentUserId || ""}
+            initialInWatchlist={initialInWatchlist}
+            filmId={id}
+            initialWatchlistId={initialWatchlistId}
+            recommendationId={recommendation.recommendation_id}
+          />
+        )}
       </div>
 
       <p className="text-base text-white/50 w-1/2 font-[family-name:var(--font-geist-sans)]">
@@ -58,7 +62,11 @@ export default function WatchInfo({
       <p className="text-white/60 mt-2 uppercase text-sm">Recommended by </p>
 
       <Link
-        href={`/profile/${recommendation.recommended_by.username}/${recommendation.recommended_by.id}`}
+        href={`${
+          isAiRecommendation
+            ? null
+            : `/profile/${recommendation.recommended_by.username}/${recommendation.recommended_by.id}`
+        }`}
         className="flex items-center  gap-3  w-fit py-2 px-3 rounded-md transition-colors bg-white/5 hover:bg-white/10 backdrop-blur border border-white/10"
       >
         <Image
