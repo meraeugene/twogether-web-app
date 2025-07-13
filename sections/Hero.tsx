@@ -72,14 +72,14 @@ const Hero = ({ user }: HeroProps) => {
               </motion.h1>
 
               <motion.p
-                className="text-lg text-gray-300 max-w-2xl mx-auto xl:text-2xl"
+                className="text-base md:text-lg xl:text-xl text-gray-300 max-w-2xl mx-auto font-[family-name:var(--font-geist-mono)]"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
                 style={{ fontFamily: "var(--font-geist-mono)" }}
               >
-                Discover, watch, and bond over movies and shows with others.
-                Built for connection, built for fun.
+                Discover, and watch over movies and shows with others. Built for
+                connection, built for fun.
               </motion.p>
 
               <motion.div

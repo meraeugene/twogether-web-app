@@ -7,8 +7,19 @@ import WatchSuggestions from "@/app/(user)/watch/[id]/WatchSuggestions";
 import WatchInfo from "@/app/(user)/watch/[id]/WatchInfo";
 import WatchGemeni from "@/app/(user)/watch/[id]/WatchGemeni";
 import WatchPlayer from "@/app/(user)/watch/[id]/WatchPlayer";
+import { CurrentUser } from "@/types/user";
+import { useEffect, useState } from "react";
 
-export default function AIWatchClient() {
+export default function AIWatchClient({
+  currentUser,
+  alreadyRecommended,
+}: {
+  currentUser: CurrentUser;
+  alreadyRecommended: boolean;
+}) {
+  const [hasHydrated, setHasHydrated] = useState(false);
+  useEffect(() => setHasHydrated(true), []);
+
   const params = useParams();
   const id = params?.id as string;
 
@@ -16,6 +27,8 @@ export default function AIWatchClient() {
   const recommendation = recommendations.find(
     (r) => r.recommendation_id === id
   );
+
+  if (!hasHydrated) return null;
 
   if (!recommendation) {
     return (
@@ -56,6 +69,8 @@ export default function AIWatchClient() {
           initialInWatchlist={false}
           initialWatchlistId={null}
           isAiRecommendation={recommendation.generated_by_ai}
+          currentUserId={currentUser.id}
+          alreadyRecommended={alreadyRecommended}
         />
       </div>
 

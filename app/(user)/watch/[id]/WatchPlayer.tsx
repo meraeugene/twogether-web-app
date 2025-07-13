@@ -111,7 +111,7 @@ export default function WatchPlayer({
       )}
 
       {/* Info Note */}
-      <p className="md:text-center sm:text-left text-white/40 text-xs sm:text-sm mt-4">
+      <p className="text-left text-white/40 text-xs sm:text-sm mt-4">
         Having issues? Try switching servers or episodes.
       </p>
     </div>

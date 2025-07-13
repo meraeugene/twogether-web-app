@@ -64,7 +64,7 @@ export function PrivacyModal({
                       handleChange(opt.value as "private" | "public")
                     }
                     disabled={loading}
-                    className={`w-full flex items-center justify-between px-4 py-2 rounded-lg border text-left transition-all
+                    className={`w-full flex cursor-pointer items-center justify-between px-4 py-2 rounded-lg border text-left transition-all
                       ${
                         currentVisibility === opt.value
                           ? "bg-white/10 border-white/30"
@@ -88,7 +88,7 @@ export function PrivacyModal({
               <button
                 onClick={() => !loading && onClose()}
                 disabled={loading}
-                className="px-4 py-2 text-sm rounded-lg border border-white/20 bg-white/10 hover:bg-white/20 transition disabled:opacity-50"
+                className="px-4 py-2 cursor-pointer text-sm rounded-lg border border-white/20 bg-white/10 hover:bg-white/20 transition disabled:opacity-50"
               >
                 Cancel
               </button>

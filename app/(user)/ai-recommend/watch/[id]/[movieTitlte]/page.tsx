@@ -1,11 +1,25 @@
-"use client";
+import { getCurrentUser } from "@/actions/authActions";
+import AIWatchClient from "./AIWatchClient";
+import { redirect } from "next/navigation";
+import { hasUserRecommendedFilm } from "@/actions/recommendationActions";
 
-import dynamic from "next/dynamic";
+export default async function AIWatchPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const baseId = (await params).id;
+  const tmdbId = baseId?.split("-")?.[1] ?? "";
 
-const AIWatchClient = dynamic(() => import("./AIWatchClient"), {
-  ssr: false,
-});
+  const currentUser = await getCurrentUser();
+  if (!currentUser) redirect("/");
 
-export default function AIWatchPage() {
-  return <AIWatchClient />;
+  const hasRecommended = await hasUserRecommendedFilm(currentUser.id, tmdbId);
+
+  return (
+    <AIWatchClient
+      currentUser={currentUser}
+      alreadyRecommended={hasRecommended}
+    />
+  );
 }

@@ -137,3 +137,23 @@ export async function toggleRecommendationVisibility(
   revalidatePath("/my-recommendations");
   return { success: true };
 }
+
+export async function hasUserRecommendedFilm(
+  userId: string,
+  tmdbId: string
+): Promise<boolean> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("recommendations")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("tmdb_id", tmdbId);
+
+  if (error) {
+    console.error("Error checking recommendation:", error);
+    return false;
+  }
+
+  return !!data?.length;
+}
