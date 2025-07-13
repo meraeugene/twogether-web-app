@@ -1,6 +1,11 @@
 "use client";
-import React, { useRef } from "react";
+import React, { ReactNode, useRef } from "react";
 import { useScroll, useTransform, motion, MotionValue } from "motion/react";
+
+interface HeaderProps {
+  translate: MotionValue<number>;
+  titleComponent: string | ReactNode;
+}
 
 export const HeroScrollPreview = ({
   titleComponent,
@@ -54,7 +59,7 @@ export const HeroScrollPreview = ({
   );
 };
 
-export const Header = ({ translate, titleComponent }: any) => {
+export const Header = ({ translate, titleComponent }: HeaderProps) => {
   return (
     <motion.div
       style={{
