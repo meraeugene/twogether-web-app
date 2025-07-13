@@ -31,7 +31,7 @@ const fadeUp: Variants = {
   },
 };
 
-export function Navbar({ user }: { user: CurrentUser }) {
+export function Navbar({ user }: { user: CurrentUser | null }) {
   const [isPending, startTransition] = useTransition();
 
   const [menuOpen, setMenuOpen] = useState(false);
