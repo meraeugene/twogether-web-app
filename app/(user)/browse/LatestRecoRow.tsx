@@ -29,7 +29,7 @@ export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
     <section className="mb-16">
       {/* Header Row with arrows */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-semibold">Latest Reco</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold">Latest Reco</h2>
         <div className="flex gap-2">
           <button
             onClick={handlePrev}
@@ -56,7 +56,7 @@ export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -100, opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-8"
         >
           {paginated.map((item) => (
             <FilmCard key={item.recommendation_id} item={item} />

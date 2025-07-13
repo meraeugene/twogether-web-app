@@ -1,32 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TextInputCard } from "@/components/StepCard";
 import { recommendMoviesListWithAI } from "@/actions/geminiActions";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 import FilmCard from "@/components/FilmCard";
 import { adaptTMDBToRecommendation } from "@/utils/ai-recommend/adaptTMDBToRecommendation";
-import { useEffect } from "react";
 import { formatPromptTitle } from "@/utils/ai-recommend/formatPromptTitle";
 import { useAIRecommendations } from "@/stores/useAIRecommendation";
 import { toast } from "sonner";
 import { uniqueById } from "@/utils/ai-recommend/uniqueById";
+import { FiRefreshCcw } from "react-icons/fi";
 
 export default function AIRecommendForm() {
   const [loading, setLoading] = useState(false);
-  const loadingMessages = useMemo(
-    () => [
-      "Curating a masterpiece just for you...",
-      "Exploring hidden gems in the movie universe...",
-      "Summoning stories that match your vibe...",
-      "Piecing together your perfect watchlist...",
-      "Projecting your perfect movie night...",
-    ],
-    []
-  );
-
-  const [currentMessage, setCurrentMessage] = useState(loadingMessages[0]);
 
   const {
     recommendations,
@@ -37,18 +25,6 @@ export default function AIRecommendForm() {
     setReason,
     clearAll,
   } = useAIRecommendations();
-
-  useEffect(() => {
-    if (!loading) return;
-
-    let i = 0;
-    const interval = setInterval(() => {
-      i = (i + 1) % loadingMessages.length;
-      setCurrentMessage(loadingMessages[i]);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [loading, loadingMessages]);
 
   const handleSubmit = async () => {
     if (!prompt.trim()) {
@@ -101,9 +77,9 @@ export default function AIRecommendForm() {
   const displayPrompt = formatPromptTitle(prompt);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center pt-24 pb-16 px-15 bg-black text-white font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen  flex flex-col px-7 md:px-15 items-center justify-center pt-24 pb-16  lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 bg-black text-white font-[family-name:var(--font-geist-sans)]">
       <AnimatePresence mode="wait">
-        {!recommendations.length && (
+        {!loading && recommendations.length === 0 && (
           <motion.div
             key="input"
             initial={{ opacity: 0, y: 30 }}
@@ -130,7 +106,7 @@ export default function AIRecommendForm() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading && !prompt.trim()}
                 className="mt-6 w-full py-3 rounded-xl 
            bg-white text-black 
            hover:bg-neutral-200 
@@ -138,7 +114,7 @@ export default function AIRecommendForm() {
            shadow-md flex items-center justify-center gap-2 
            backdrop-blur-sm 
            disabled:opacity-60 disabled:cursor-not-allowed 
-           cursor-pointer"
+           cursor-pointer "
               >
                 {loading && (
                   <motion.svg
@@ -159,13 +135,12 @@ export default function AIRecommendForm() {
                 )}
                 {loading ? (
                   <motion.span
-                    key={currentMessage}
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.4 }}
                   >
-                    {currentMessage}
+                    Generating Recommendations...
                   </motion.span>
                 ) : (
                   <div className="flex items-center gap-2">
@@ -187,7 +162,7 @@ export default function AIRecommendForm() {
           </motion.div>
         )}
 
-        {recommendations.length > 0 && (
+        {(loading || recommendations.length > 0) && (
           <motion.div
             key="results"
             initial={{ opacity: 0, y: 30 }}
@@ -196,30 +171,61 @@ export default function AIRecommendForm() {
             transition={{ duration: 0.4 }}
             className="w-full"
           >
-            <div className="flex justify-center mt-4">
-              <button
-                onClick={resetForm}
-                className="px-6 py-2 text-sm rounded-md cursor-pointer bg-white text-black hover:bg-neutral-200 border border-black/10 transition font-medium backdrop-blur-sm"
-              >
-                Recommend Me Again
-              </button>
-            </div>
-
-            <h2 className="text-2xl font-semibold mt-6 mb-3 text-center">
-              {displayPrompt} AI Picks for You
-            </h2>
-
-            {reason && (
-              <p className="text-center text-sm text-white/70 max-w-2xl mx-auto mb-12">
-                {reason}
-              </p>
+            {/* Reset Button */}
+            {!loading && (
+              <div className="flex justify-center mt-4">
+                <button
+                  onClick={resetForm}
+                  className="px-6 py-2 text-sm lg:text-base rounded-md cursor-pointer bg-white text-black hover:bg-neutral-200 border border-black/10 transition font-medium backdrop-blur-sm flex items-center gap-2"
+                >
+                  <FiRefreshCcw className="text-base" />
+                  Recommend Me Again
+                </button>
+              </div>
             )}
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 px-4">
-              {recommendations.map((item) => (
-                <FilmCard key={item.id} item={item} />
-              ))}
-            </div>
+            {/* Heading Section */}
+            {!loading && (
+              <header className="mt-6 mb-10 text-center">
+                <h2 className="text-3xl md:text-4xl  font-semibold">
+                  {displayPrompt} <span className="text-red-600">AI Picks</span>{" "}
+                  for You
+                </h2>
+                {reason && (
+                  <p className="mt-4 text-sm md:text-base  text-white/70 max-w-2xl mx-auto">
+                    {reason}
+                  </p>
+                )}
+              </header>
+            )}
+
+            {/* Grid Section */}
+            <section aria-label="AI Recommendations">
+              <div className=" mt-6">
+                {loading ? (
+                  <>
+                    <h2 className="text-center text-3xl md:text-4xl font-semibold mb-8 animate-pulse">
+                      Generating Recommendations...
+                    </h2>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                      {Array.from({ length: 18 }).map((_, i) => (
+                        <div
+                          key={i}
+                          className="aspect-[2/3] w-full rounded-md bg-white/10 animate-pulse"
+                        />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+                    {recommendations.map((item) => (
+                      <FilmCard key={item.id} item={item} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
           </motion.div>
         )}
       </AnimatePresence>

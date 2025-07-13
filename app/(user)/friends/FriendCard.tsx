@@ -115,10 +115,10 @@ export function FriendCard({
 
       {/* buttons go here */}
       {status === "friend" && (
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Link
             href={`/profile/${username}/${id}`}
-            className="mt-1 cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
+            className="cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
           >
             <FaUser className="text-xs" />
             View Profile
@@ -147,7 +147,7 @@ export function FriendCard({
         <div className="flex gap-2">
           <Link
             href={`/profile/${username}/${id}`}
-            className="mt-1 cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
+            className=" cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
           >
             <FaUser className="text-xs" />
             View Profile

@@ -85,10 +85,10 @@ export default function RecommendStepMovieSearch({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search a movie or show"
-        className="w-full p-4 rounded-lg bg-black/80 text-white placeholder-white/40 border border-white/10 text-lg"
+        className="w-full p-4  mb-0 rounded-lg bg-black/80 text-white placeholder-white/40 border border-white/10 text-lg"
       />
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 mt-4 md:grid-cols-3 lg:grid-cols-3 gap-4 ">
         {isLoading &&
           Array.from({ length: 6 }).map((_, i) => (
             <RecommendCardSkeleton key={i} />
@@ -117,9 +117,7 @@ export default function RecommendStepMovieSearch({
                   </div>
                 )}
               </div>
-              <div className="text-base truncate">
-                {item.title || item.name}
-              </div>
+              <div className="text-base ">{item.title || item.name}</div>
               <div className="flex items-center justify-between mt-1">
                 <div className="text-sm text-white/60 capitalize flex gap-2">
                   <span>{item.year}</span>

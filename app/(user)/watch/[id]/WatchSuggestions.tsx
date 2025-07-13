@@ -9,7 +9,7 @@ export default function WatchSuggestions({
   suggestions: Recommendation[];
 }) {
   return (
-    <aside className="w-full lg:w-[10%] space-y-4">
+    <aside className="w-full xl:w-[15%] 2xl:w-[10%] space-y-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-1 gap-4">
       {suggestions.map((rec) => (
         <div
           key={rec.recommendation_id}
@@ -53,24 +53,35 @@ export default function WatchSuggestions({
           </div>
 
           <div className="flex-1 text-sm py-2">
+            <Link
+              href={`/watch/${rec.recommendation_id}`}
+              className="w-full flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mt-2 mb-4 lg:hidden"
+            >
+              <FaPlay className="text-white text-xs" />
+              Watch Now
+            </Link>
             <div className="font-medium text-white line-clamp-2">
               {rec.title}
             </div>
             <div className="flex items-center justify-between">
-              <div className="text-white/60 text-xs mt-2 flex gap-2">
+              <div className="text-white/80 text-xs mt-2 flex gap-2">
                 <span>{rec.year} </span>
                 {rec.type === "tv" ? (
-                  <span className="text-amber font-medium">
+                  <span className="text-white/50 font-medium">
                     S{rec.seasons || 1} · E{rec.episodes || 1}
                   </span>
                 ) : (
-                  <span className="text-amber font-medium">
+                  <span className="text-white/50 font-medium">
                     {rec.duration || "0"}m
                   </span>
                 )}
               </div>
 
-              <div className="text-white/60  text-xs capitalize">
+              <div
+                className={`${
+                  rec.type === "tv" ? "uppercase" : "capitalize"
+                } text-white/70  text-xs `}
+              >
                 {rec.type}
               </div>
             </div>

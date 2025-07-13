@@ -1,9 +1,9 @@
 const loading = () => {
   return (
-    <main className="min-h-screen px-15 pt-28 pb-16 bg-black text-white font-[family-name:var(--font-geist-sans)]">
+    <main className="min-h-screen px-7  pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 bg-black text-white">
       <div className="mb-6">
-        <div className="h-7 w-108 bg-white/10 rounded mb-6 animate-pulse" />
-        <div className="h-4 w-96 bg-white/5 rounded mb-7 animate-pulse" />
+        <div className="h-7 w-1/3 bg-white/10 rounded mb-6 animate-pulse" />
+        <div className="h-4 w-1/4 bg-white/5 rounded mb-7 animate-pulse" />
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
         {Array.from({ length: 6 }).map((_, i) => (

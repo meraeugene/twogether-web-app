@@ -39,8 +39,8 @@ export default async function WatchPage({
   );
 
   return (
-    <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-15 pt-28 pb-16 text-white">
-      <div className="flex flex-col lg:flex-row  gap-10">
+    <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7  pt-28 pb-16 lg:px-24  xl:px-32 2xl:px-26 xl:pt-34 text-white">
+      <div className="flex flex-col  xl:flex-row  gap-10">
         <div className="flex-1 space-y-10">
           <WatchPlayer
             urls={
@@ -56,7 +56,7 @@ export default async function WatchPage({
                       recommendation.episode_titles_per_season
                     ).map(([season, episodes]) => [
                       Number(season),
-                      episodes.map((ep) => ep.title), // 👈 convert to string[]
+                      episodes.map((ep) => ep.title),
                     ])
                   )
                 : undefined

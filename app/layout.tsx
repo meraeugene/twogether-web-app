@@ -36,7 +36,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        <Toaster position="top-center" richColors />
+        <Toaster position="top-center" />
         <Header />
         {currentUser?.id && <PresenceManager userId={currentUser.id} />}
         {children}

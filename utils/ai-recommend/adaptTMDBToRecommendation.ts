@@ -14,15 +14,26 @@ export function adaptTMDBToRecommendation(
     title: tmdb.title || tmdb.name || "Untitled",
     poster_url: tmdb.poster_url ?? undefined,
     type: tmdb.media_type === "tv" ? "tv" : "movie",
-    stream_url: [
-      `https://vidlink.pro/${tmdb.media_type}/${tmdb.id}?title=true&poster=true&autoplay=false&nextbutton=true`,
-      `https://vidsrc.to/embed/${tmdb.media_type}/${tmdb.id}`,
-      `https://vidsrc.cc/v2/embed/${tmdb.media_type}/${tmdb.id}?autoPlay=false&poster=true`,
-    ],
+    stream_url:
+      tmdb.media_type === "tv"
+        ? [
+            `https://vidlink.pro/tv/${tmdb.id}/1/1?title=true&poster=true&autoplay=false`,
+            `https://vidsrc.cc/v2/embed/tv/${tmdb.id}/1/1?autoPlay=false&poster=true`,
+            `https://vidsrc.to/embed/tv/${tmdb.id}/1/1`,
+          ]
+        : [
+            `https://vidlink.pro/movie/${tmdb.id}?title=true&poster=true&autoplay=false`,
+            `https://vidsrc.cc/v2/embed/movie/${tmdb.id}?autoPlay=false&poster=true`,
+            `https://vidsrc.to/embed/movie/${tmdb.id}`,
+          ],
+
     genres: tmdb.genres,
     year: tmdb.year,
     duration: tmdb.duration ?? undefined,
     synopsis: tmdb.synopsis,
+    seasons: tmdb.seasons ?? undefined,
+    episodes: tmdb.episodes ?? undefined,
+    episode_titles_per_season: tmdb.episodeTitlesPerSeason ?? undefined,
     comment: "AI Recommended",
     visibility: "public",
     created_at: new Date().toISOString(),

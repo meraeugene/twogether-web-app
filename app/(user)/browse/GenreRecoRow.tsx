@@ -34,7 +34,7 @@ export default function GenreRecoRow({
   return (
     <section className="mb-16">
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-semibold">{genre} Picks</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold">{genre} Picks</h2>
         <div className="flex gap-2">
           <button
             onClick={handlePrev}
@@ -60,7 +60,7 @@ export default function GenreRecoRow({
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -100, opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mt-6"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8 mt-6"
         >
           {paginated.map((item) => (
             <FilmCard key={item.recommendation_id} item={item} />

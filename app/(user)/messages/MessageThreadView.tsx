@@ -205,7 +205,7 @@ export default function MessageThreadView({
       {/* Request prompt */}
       {threadStatus === "pending" && (
         <div className="border-t  border-white/10 mt-6 text-sm flex justify-center items-center flex-col  text-white">
-          <div className="py-3 flex flex-col">
+          <div className="py-3 flex flex-col px-4 text-center text-sm">
             <span>
               Accept message request from{" "}
               <b>

@@ -1,7 +1,7 @@
 export default function RowSkeleton() {
   return (
     <section className="mb-16">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6 mt-4">
         <div className="h-8 w-44 rounded bg-white/10 animate-pulse" />
       </div>
 

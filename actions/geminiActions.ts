@@ -46,28 +46,30 @@ export async function askGemini(
     return "Sorry, I could not generate a response.";
   }
 }
-
 export async function recommendMoviesListWithAI(
   prompt: string
 ): Promise<{ reason: string; titles: string[] }> {
   const systemPrompt = `
-  You are a helpful AI movie recommender.
+You are a helpful AI movie and TV show recommender.
 
-  When the user describes the kind of movies they want, respond with:
+When the user describes the kind of content they want, respond with:
 
-  1. A short, simple paragraph (2–3 lines) explaining why these 18 movies match the user's request. 
+1. A short, simple paragraph (2–3 lines) explaining why these 18 titles match the user's request.
    - Use clear, friendly language.
    - Avoid technical or abstract explanations.
 
-  2. Then list exactly 18 movie titles, sorted from the most relevant to the least relevant based on the user's prompt. Only include the titles, one per line.
+2. Then list exactly 18 titles, sorted from the most relevant to the least relevant based on the user's prompt.
+   - Include both movies and TV shows if appropriate.
+   - Only list the title names (no years, no types, no numbering, no extra info).
+   - One title per line.
 
-  Format:
-  Reason:
-  <easy-to-understand explanation here>
+Format:
+Reason:
+<easy-to-understand explanation here>
 
-  Titles:
-  <movie title 1>
-  <movie title 2>
+Titles:
+<title 1>
+<title 2>
 ...
 `;
 
@@ -94,7 +96,6 @@ export async function recommendMoviesListWithAI(
         ?.split("\n")
         .map((line) => line.trim())
         .filter(Boolean) ?? [];
-    // .slice(0, 10) ?? [];
 
     return { reason, titles };
   } catch (error) {

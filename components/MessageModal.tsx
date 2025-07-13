@@ -31,30 +31,30 @@ export default function MessageModal({
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
           <motion.div
-            className="w-full max-w-md p-6 rounded-xl shadow-xl border border-white/10 bg-white/10 text-white backdrop-blur-2xl"
+            className="w-full max-w-xs sm:max-w-md p-4 sm:p-6 rounded-xl shadow-xl border border-white/10 bg-white/10 text-white backdrop-blur-2xl"
             initial={{ scale: 0.96, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.96, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <h2 className="text-xl font-semibold mb-4">
-              Send your flirty first move !
+            <h2 className="text-lg sm:text-xl font-semibold mb-4">
+              Send your flirty first move!
             </h2>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full bg-black/20 text-white p-3 rounded-lg border border-white/20 mb-4  h-28 outline-none"
+              className="w-full bg-black/20 text-white p-3 rounded-lg border border-white/20 mb-4 h-28 outline-none resize-none text-sm sm:text-base"
               placeholder="Type your message..."
               disabled={loading}
             />
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-end flex-wrap gap-3">
               <button
                 onClick={onClose}
                 disabled={loading}
@@ -65,7 +65,7 @@ export default function MessageModal({
               <button
                 onClick={handleSend}
                 disabled={loading}
-                className="w-[90px] flex items-center justify-center cursor-pointer text-sm rounded-lg bg-red-600 hover:bg-red-700"
+                className="px-4 py-2 min-w-[90px] flex items-center justify-center cursor-pointer text-sm rounded-lg bg-red-600 hover:bg-red-700"
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

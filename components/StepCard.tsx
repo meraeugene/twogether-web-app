@@ -1,7 +1,7 @@
 "use client";
 
 const baseButtonStyle =
-  "rounded-xl border-2 p-4 text-center text-lg font-medium transition-all font-[family-name:var(--font-geist-mono)]";
+  "rounded-xl border-2 p-4 text-center text-sm lg:text-lg font-medium transition-all font-[family-name:var(--font-geist-mono)]";
 
 export function TextInputCard({
   value,
@@ -18,7 +18,7 @@ export function TextInputCard({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full p-4 border border-white/10 rounded-lg text-lg bg-black/80 text-white placeholder-white/40 backdrop-blur-sm font-[family-name:var(--font-geist-mono)]"
+      className="w-full outline-none p-4 border border-white/10 rounded-lg  lg:text-lg bg-black/80 text-white placeholder-white/40 backdrop-blur-sm font-[family-name:var(--font-geist-mono)]"
     />
   );
 }
@@ -35,8 +35,19 @@ export function SingleSelectCards({
   columns?: number;
   onEnter?: () => void;
 }) {
+  const columnClass =
+    columns === 1
+      ? "lg:grid-cols-1"
+      : columns === 2
+      ? "lg:grid-cols-2"
+      : columns === 3
+      ? "lg:grid-cols-3"
+      : "lg:grid-cols-1";
+
   return (
-    <div className={`grid gap-6 grid-cols-${columns}`}>
+    <div
+      className={`grid gap-4 lg:gap-6 grid-cols-1 md:grid-cols-3 ${columnClass}`}
+    >
       {options.map((opt) => (
         <button
           key={opt}
@@ -74,8 +85,17 @@ export function MultiSelectCards({
     }
   };
 
+  const columnClass =
+    columns === 1
+      ? "lg:grid-cols-1"
+      : columns === 2
+      ? "lg:grid-cols-2"
+      : columns === 3
+      ? "lg:grid-cols-3"
+      : "lg:grid-cols-1";
+
   return (
-    <div className={`grid gap-6 grid-cols-${columns}`}>
+    <div className={`grid gap-4 lg:gap-6 grid-cols-2 ${columnClass}`}>
       {options.map((opt) => {
         const isSelected = values.includes(opt);
         return (
@@ -120,7 +140,7 @@ export function TextareaCard({
         }
       }}
       rows={5}
-      className="w-full p-4 border border-white/10 rounded-lg text-lg bg-black/80 text-white placeholder-white/40 backdrop-blur-sm font-[family-name:var(--font-geist-mono)] resize-none"
+      className="w-full p-4 border border-white/10 rounded-lg lg:text-lg bg-black/80 text-white placeholder-white/40 backdrop-blur-sm font-[family-name:var(--font-geist-mono)] resize-none"
     />
   );
 }

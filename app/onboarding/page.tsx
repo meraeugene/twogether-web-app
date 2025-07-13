@@ -135,7 +135,7 @@ export default function OnboardingPage() {
       return;
     }
 
-    toast.success("Onboarding complete! Welcome to the app!");
+    toast.success("Onboarding complete! Welcome TwoGether!");
     router.push("/browse");
   };
 
@@ -210,7 +210,7 @@ export default function OnboardingPage() {
                 <TextInputCard
                   value={customSocialIntent}
                   onChange={(val) => setCustomSocialIntent(val)}
-                  placeholder="Type your own social intent here..."
+                  placeholder="Add social intent..."
                 />
               </div>
               <button
@@ -270,6 +270,7 @@ export default function OnboardingPage() {
           <SingleSelectCards
             options={["movies", "shows", "both"]}
             value={form.prefers}
+            columns={3}
             onChange={(v) =>
               setForm({ ...form, prefers: v as OnboardingForm["prefers"] })
             }
@@ -281,7 +282,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center pt-28 pb-16 bg-black text-white">
+    <main className="min-h-screen flex flex-col justify-center items-center  bg-black text-white px-15 pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-34">
       {/* STEPS PROGESS */}
       <div className="flex flex-wrap justify-center gap-2 mb-8 text-sm">
         {steps.map((s, i) => (
@@ -306,7 +307,7 @@ export default function OnboardingPage() {
       </div>
 
       {/* TITLE */}
-      <h1 className="text-3xl font-semibold mb-2 text-center font-[family-name:var(--font-geist-sans)]">
+      <h1 className="text-2xl lg:text-3xl font-semibold mb-2 text-center font-[family-name:var(--font-geist-sans)]">
         {steps[step].prompt}
       </h1>
 

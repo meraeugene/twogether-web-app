@@ -153,15 +153,62 @@ export default function FilmCard({
               )}
             </div>
 
+            {/* Mobile action buttons - Delete & Privacy */}
+            {userId && isDeleteRecommendation && (
+              <div className="lg:hidden flex gap-3 mt-4 ">
+                {/* Delete Button */}
+                <button
+                  onClick={() => setShowConfirm(true)}
+                  disabled={isPending}
+                  className="flex-1 p-2 rounded-md flex items-center justify-center
+    text-white/90 bg-red-500/20 hover:bg-red-600/30 transition-all
+    backdrop-blur border border-red-400/40 shadow-md disabled:opacity-60"
+                  title="Delete Recommendation"
+                >
+                  <MdDelete className="text-base" />
+                </button>
+
+                {/* Privacy Button */}
+                <button
+                  onClick={() => setShowPrivacyModal(true)}
+                  className="flex-1 p-2 rounded-md flex items-center justify-center 
+      text-white/90 bg-white/10 hover:bg-white/20 transition-all 
+      backdrop-blur border border-white/20 shadow-sm"
+                  title="Edit Privacy"
+                >
+                  <FaLock className="text-sm" />
+                </button>
+              </div>
+            )}
+
             <div className="py-4 text-white bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+              <Link
+                href={
+                  item.generated_by_ai
+                    ? `/ai-recommend/watch/${
+                        item.recommendation_id
+                      }/${getSlugFromTitle(item.title)}`
+                    : `/watch/${item.recommendation_id}`
+                }
+                className="w-full flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mt-2 mb-4 lg:hidden"
+              >
+                <FaPlay className="text-white text-xs" />
+                Watch Now
+              </Link>
+
               <div className="text-base font-semibold  ">{item.title}</div>
 
               <div className="flex items-center justify-between text-sm text-white/60 mt-1">
                 <span className="flex items-center gap-2">
                   <span className="text-white/80">{item.year}</span>
-                  {item.type === "tv" && (
-                    <span className="text-amber-400, font-medium">
+
+                  {item.type === "tv" ? (
+                    <span className="text-white/50 font-medium">
                       S{item.seasons || 1} · E{item.episodes || 1}
+                    </span>
+                  ) : (
+                    <span className="text-white/50 font-medium">
+                      {item.duration || 0}m
                     </span>
                   )}
                 </span>

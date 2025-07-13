@@ -1,0 +1,49 @@
+import { IoMdAdd } from "react-icons/io";
+import { MdMovieFilter } from "react-icons/md";
+import { RiFilmAiLine, RiMovieAiLine } from "react-icons/ri";
+import { FaUserFriends } from "react-icons/fa";
+import { LuMessageSquareHeart } from "react-icons/lu";
+export const primaryNavItems = [
+  {
+    label: "AI Recommend",
+    href: "/ai-recommend",
+    icon: (
+      <svg fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em">
+        <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />
+      </svg>
+    ),
+  },
+  {
+    label: "Browse",
+    href: "/browse",
+    icon: <RiMovieAiLine className="text-lg" />,
+  },
+  {
+    label: "Recommend",
+    href: "/recommend",
+    icon: <IoMdAdd className="text-lg" />,
+  },
+];
+
+export const secondaryNavItems = [
+  {
+    label: "My Recos",
+    href: "/my-recommendations",
+    icon: <RiFilmAiLine className="text-lg" />,
+  },
+  {
+    label: "Watchlist",
+    href: "/watchlist",
+    icon: <MdMovieFilter className="text-lg" />,
+  },
+  {
+    label: "Friends",
+    href: "/friends",
+    icon: <FaUserFriends className="text-lg" />,
+  },
+  {
+    label: "Messages",
+    href: "/messages",
+    icon: <LuMessageSquareHeart className="text-lg" />,
+  },
+];

@@ -79,7 +79,7 @@ export default function WatchComments({
   return (
     <div className="space-y-5">
       {/* New Comment Input */}
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full">
         <input
           ref={inputRef}
           type="text"
@@ -87,13 +87,20 @@ export default function WatchComments({
           onChange={(e) => setNewComment(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handlePostComment()}
           placeholder={`Add a public comment as ${username}`}
-          className="flex-1 px-4 py-2 bg-white/10 text-white rounded-md backdrop-blur-sm border border-white/10"
+          className="flex-1 px-4 py-2 rounded-lg bg-white/10 text-white placeholder-white/40
+               backdrop-blur-md border border-white/10 focus:outline-none
+               focus:ring-2 focus:ring-red-500 transition"
         />
+
         <button
           onClick={handlePostComment}
-          className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm flex items-center gap-2"
+          className="px-5 py-2 flex items-center justify-center gap-2 text-sm font-medium
+               rounded-lg bg-red-600 hover:bg-red-700 text-white transition
+               shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={!newComment.trim()}
         >
-          <BiSend /> Post
+          <BiSend className="text-base" />
+          Post
         </button>
       </div>
 
@@ -128,22 +135,24 @@ export default function WatchComments({
               );
 
               return (
-                <div key={comment.id} className="space-y-3">
-                  {/* Top-level comment */}
-                  <div className="flex gap-3 text-sm mb-4">
+                <div
+                  key={comment.id}
+                  className="space-y-4 border-b border-white/5 pb-6"
+                >
+                  {/* Top-level Comment */}
+                  <div className="flex gap-3 text-sm">
                     <div>
                       <Image
                         src={comment.user?.avatar_url || "/default-avatar.png"}
                         alt={comment.user?.username || "User"}
                         width={40}
                         height={40}
-                        className="rounded-full object-cover"
-                        style={{ aspectRatio: "1 / 1" }}
+                        className="rounded-full object-cover aspect-square"
                       />
                     </div>
                     <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <p className="font-medium text-white">
+                      <div className="flex items-center gap-2 mb-1">
+                        <p className="font-semibold text-white">
                           {comment.user?.username}
                         </p>
                         <span className="text-white/50 text-xs">
@@ -153,18 +162,19 @@ export default function WatchComments({
                         </span>
                       </div>
                       <p className="text-white/80">{comment.content}</p>
-                      <div className="flex gap-4 text-xs text-white/60 mt-1">
+                      <div className="flex gap-4 text-xs text-white/60 mt-2">
                         <button
                           onClick={() => handleReaction(comment.id, "like")}
-                          className="flex items-center cursor-pointer gap-1 hover:text-white"
+                          className="flex items-center gap-1 hover:text-white transition"
                         >
-                          <BiLike className="text-lg" /> {comment.likes || 0}
+                          <BiLike className="text-base" />
+                          {comment.likes || 0}
                         </button>
                         <button
                           onClick={() => handleReaction(comment.id, "dislike")}
-                          className="flex items-center cursor-pointer gap-1 hover:text-white"
+                          className="flex items-center gap-1 hover:text-white transition"
                         >
-                          <BiDislike className="text-lg" />{" "}
+                          <BiDislike className="text-base" />
                           {comment.dislikes || 0}
                         </button>
                         <button
@@ -174,7 +184,7 @@ export default function WatchComments({
                               commentId: comment.id,
                             })
                           }
-                          className="hover:text-white cursor-pointer"
+                          className="hover:text-white transition"
                         >
                           Reply
                         </button>
@@ -183,44 +193,51 @@ export default function WatchComments({
                   </div>
 
                   {/* Replies */}
-                  {replies.map((reply) => (
-                    <div key={reply.id} className="ml-12 flex gap-3 text-sm ">
-                      <div>
-                        <Image
-                          src={reply.user?.avatar_url || "/default-avatar.png"}
-                          alt={reply.user?.username || "User"}
-                          width={28}
-                          height={28}
-                          className="rounded-full object-cover"
-                        />
+                  <div className="space-y-3 ml-10">
+                    {replies.map((reply) => (
+                      <div key={reply.id} className="flex gap-3 text-sm">
+                        <div>
+                          <Image
+                            src={
+                              reply.user?.avatar_url || "/default-avatar.png"
+                            }
+                            alt={reply.user?.username || "User"}
+                            width={32}
+                            height={32}
+                            className="rounded-full object-cover aspect-square"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="font-medium text-white">
+                              {reply.user?.username}
+                            </p>
+                            <span className="text-white/50 text-xs">
+                              {formatDistanceToNow(new Date(reply.created_at), {
+                                addSuffix: true,
+                              })}
+                            </span>
+                          </div>
+                          <p className="text-white/80">{reply.content}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-white">
-                          {reply.user?.username}
-                          <span className="text-white/50 ml-2 text-xs">
-                            {formatDistanceToNow(new Date(reply.created_at), {
-                              addSuffix: true,
-                            })}
-                          </span>
-                        </p>
-                        <p className="text-white/80">{reply.content}</p>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
 
-                  {replySubmittingId === comment.id && (
-                    <div className="ml-12 mt-4 flex gap-3 animate-pulse">
-                      <div className="w-8 h-8 rounded-full bg-white/20" />
-                      <div className="flex-1 space-y-2">
-                        <div className="h-2 w-28 bg-white/20 rounded" />
-                        <div className="h-2 w-3/5 bg-white/10 rounded" />
+                    {/* Reply Skeleton (Loading) */}
+                    {replySubmittingId === comment.id && (
+                      <div className="flex gap-3 animate-pulse">
+                        <div className="w-8 h-8 rounded-full bg-white/10" />
+                        <div className="flex-1 space-y-2">
+                          <div className="h-3 w-24 bg-white/10 rounded" />
+                          <div className="h-2 w-1/2 bg-white/5 rounded" />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
 
-                  {/* Inline Reply */}
+                  {/* Inline Reply Box */}
                   {replyTo?.commentId === comment.id && (
-                    <div className="ml-12 mt-4 flex gap-2">
+                    <div className="ml-10 mt-3 flex flex-col sm:flex-row gap-2">
                       <input
                         type="text"
                         value={replyText}
@@ -229,23 +246,26 @@ export default function WatchComments({
                           e.key === "Enter" && handlePostReply()
                         }
                         placeholder={`Reply to @${replyTo?.username}`}
-                        className="flex-1 border border-white/10 py-2 bg-white/10 text-white px-4 rounded-md backdrop-blur-sm"
+                        className="flex-1 px-4 py-2 rounded-md bg-white/10 text-white border border-white/10 backdrop-blur-sm placeholder:text-white/40 text-sm"
                       />
-                      <button
-                        onClick={handlePostReply}
-                        className="px-6 flex items-center gap-2 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm"
-                      >
-                        <BiSend /> Reply
-                      </button>
-                      <button
-                        onClick={() => {
-                          setReplyTo(null);
-                          setReplyText("");
-                        }}
-                        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-md text-sm"
-                      >
-                        Cancel
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handlePostReply}
+                          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-1"
+                        >
+                          <BiSend className="text-base" />
+                          Reply
+                        </button>
+                        <button
+                          onClick={() => {
+                            setReplyTo(null);
+                            setReplyText("");
+                          }}
+                          className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-md text-sm"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>

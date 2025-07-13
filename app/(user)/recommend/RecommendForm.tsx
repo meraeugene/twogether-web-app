@@ -10,8 +10,8 @@ import { createRecommendation } from "@/actions/recommendationActions";
 import { useRouter } from "next/navigation";
 
 const steps = [
-  { key: "movie", prompt: "Search for a movie or show to recommend" },
-  { key: "comment", prompt: "Add a personal comment or message" },
+  { key: "movie", prompt: "What do you wanna recommend?" },
+  { key: "comment", prompt: "What’s the vibe? Why do you love it?" },
   { key: "visibility", prompt: "Who can see this recommendation?" },
 ] as const;
 
@@ -126,7 +126,7 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="min-h-screen flex flex-col justify-center items-center pt-28 pb-16 bg-black text-white"
+      className="min-h-screen flex flex-col justify-center items-center pt-28 pb-16 bg-black text-white px-7 overflow-hidden lg:pt-32"
     >
       {/* Steps Progress */}
       <div className="flex flex-wrap justify-center gap-2 mb-8 text-sm">
@@ -170,11 +170,11 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
         </motion.div>
       </AnimatePresence>
 
-      <div className="w-full max-w-2xl mt-8 font-[family-name:var(--font-geist-mono)]">
+      <div className="w-full max-w-2xl   font-[family-name:var(--font-geist-mono)]">
         <button
           type="submit"
           disabled={loading}
-          className="px-5 uppercase w-full py-4 bg-gray-200 text-black hover:bg-gray-300 cursor-pointer rounded-xl"
+          className="px-5 uppercase w-full py-4 mt-6 bg-gray-200 text-black hover:bg-gray-300 cursor-pointer rounded-xl"
         >
           {loading ? (
             <div className="flex items-center justify-center gap-3">

@@ -1,12 +1,14 @@
 const loading = () => {
   return (
-    <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-15 pt-28 pb-16 text-white">
+    <main className="min-h-screen bg-black flex flex-col  lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 px-7 pt-28  pb-16 text-white">
       <div className="flex flex-col lg:flex-row gap-10 animate-pulse">
         <div className="flex-1 ">
           <div className="w-full aspect-video bg-white/10 rounded-lg" />
 
-          <div className="flex justify-between items-center gap-8 mt-12">
+          <div className="flex justify-between items-center  gap-8 mt-12">
             <div className="h-10 w-[60%] bg-white/10 rounded-lg" />
+            <div className="h-10 w-[13%] bg-white/10 rounded-lg" />
+
             <div className="h-10 w-[13%] bg-white/10 rounded-lg" />
           </div>
 

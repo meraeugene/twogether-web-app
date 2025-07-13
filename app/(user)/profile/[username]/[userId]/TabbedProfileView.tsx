@@ -148,18 +148,18 @@ export default function TabbedProfileView({
 
   return (
     <div
-      className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-15 pt-28 pb-16 text-white
+      className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col   pt-28 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 pb-16 text-white px-7
 "
     >
       {/* Banner */}
       <div
-        className="relative w-full h-74 bg-cover bg-center "
+        className="relative w-full rounded-md overflow-hidden bg-cover bg-center h-80 sm:h-96 md:h-[20rem] "
         style={{ backgroundImage: `url('/hero.png')` }}
       >
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm " />
+        <div className="absolute  inset-0 bg-black/70 backdrop-blur-sm " />
         {!loadingFriendStatus && (
           <motion.div
-            className="relative z-10 flex flex-col items-center  justify-center h-full text-center"
+            className="relative  z-10 flex flex-col items-center  justify-center h-full text-center"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -169,7 +169,7 @@ export default function TabbedProfileView({
               alt="avatar"
               width={96}
               height={96}
-              className="rounded-full border-4 border-white shadow-lg object-cover w-21 h-21"
+              className="rounded-full  border-4 border-white shadow-lg object-cover w-21 h-21"
             />
 
             <h1 className="mt-4 text-2xl font-bold">{user.display_name}</h1>
@@ -181,7 +181,7 @@ export default function TabbedProfileView({
 
             {/* Action buttons */}
             {currentUser?.id !== user.id && (
-              <div className="mt-4 flex gap-3">
+              <div className="mt-4 flex flex-wrap justify-center gap-3">
                 {/* Add Friend */}
                 <button
                   onClick={handleAddFriendToggle}
@@ -241,7 +241,7 @@ export default function TabbedProfileView({
       </div>
 
       {/* Tabs */}
-      <div className="flex justify-center border-b border-white/10 bg-black/90 sticky top-0 z-20">
+      <div className="flex flex-wrap justify-center border-b border-white/10 bg-black/90 sticky top-0 z-20">
         {tabs.map((tab) => (
           <button
             key={tab}
@@ -333,7 +333,7 @@ export default function TabbedProfileView({
               )}
               {activeTab === "Friends" && (
                 <div className="text-white/80">
-                  <div className="grid max-w-4xl mx-auto grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
+                  <div className="grid max-w-4xl mx-auto grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
                     {userFriends?.map((friend) => (
                       <motion.div
                         key={friend.id}

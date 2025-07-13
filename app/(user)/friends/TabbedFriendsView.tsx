@@ -65,26 +65,19 @@ export default function FriendsPage({
     }`;
 
   return (
-    <div className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black text-white px-4 sm:px-15 pt-28 pb-16">
+    <div className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black text-white px-7  pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32">
       {/* Hero Banner */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative w-full h-70 border border-gray-900 rounded-xl overflow-hidden "
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="relative w-full aspect-[3/1] sm:aspect-[5/2] md:aspect-[16/5] lg:aspect-[16/4] xl:aspect-[16/3] max-h-[500px] xl:max-h-[200px] border border-white/10 rounded-3xl overflow-hidden shadow-xl"
       >
         {/* Background Image */}
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center scale-105 transition-transform duration-700"
           style={{ backgroundImage: `url('/friends.png')` }}
         />
-
-        {/* Content pinned to bottom */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center z-10">
-          <h1 className="text-3xl font-[family-name:var(--font-geist-mono)] font-bold text-white">
-            Connect, Watch, Laugh together.
-          </h1>
-        </div>
       </motion.div>
 
       {/* Tabs */}

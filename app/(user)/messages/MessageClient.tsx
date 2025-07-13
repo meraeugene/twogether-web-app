@@ -5,6 +5,7 @@ import MessageThreadList from "./MessageThreadList";
 import MessageThreadView from "./MessageThreadView";
 import OnlineFriendsList from "./OnlineFriendsList";
 import MessageRequestList from "./MessageRequestList";
+import { HiArrowLeft } from "react-icons/hi";
 
 export default function MessagesClient({
   currentUserId,
@@ -26,9 +27,14 @@ export default function MessagesClient({
   >(undefined);
 
   return (
-    <div className="grid grid-cols-[400px_1fr]   rounded-xl  border border-white/10  ">
-      <div className="bg-black/20 border-r   border-white/10 ">
-        <div className="flex gap-2   p-4 ">
+    <div className="flex flex-col  lg:grid lg:grid-cols-[400px_1fr]  rounded-xl border border-white/10">
+      {/* Left Panel - Thread List */}
+      <div
+        className={`bg-black/20 border-r border-white/10 ${
+          selectedThreadId ? "hidden lg:block" : "block"
+        }`}
+      >
+        <div className="flex gap-2 p-4">
           {["Online", "Inbox", "Requests"].map((t) => (
             <button
               key={t}
@@ -67,6 +73,7 @@ export default function MessagesClient({
             activeThreadId={activeThreadId}
           />
         )}
+
         {tab === "Requests" && (
           <MessageRequestList
             currentUserId={currentUserId}
@@ -89,6 +96,7 @@ export default function MessagesClient({
             activeThreadId={activeThreadId}
           />
         )}
+
         {tab === "Online" && (
           <OnlineFriendsList
             currentUserId={currentUserId}
@@ -113,21 +121,34 @@ export default function MessagesClient({
         )}
       </div>
 
-      <div className="bg-black/10">
-        {selectedThreadId && selectedUserId ? (
-          <MessageThreadView
-            threadId={selectedThreadId}
-            currentUserId={currentUserId}
-            otherUserId={selectedUserId}
-            otherUserAvatar={selectedUserAvatar}
-            otherUserDisplayName={selectedUserDisplayName}
-            otherUserUsername={selectedUserUsername}
-            threadStatus={selectedUserMessageStatus}
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-white/50">
-            Select a conversation to start chatting
-          </div>
+      {/* Right Panel - Thread View */}
+      <div className="bg-black/10 relative">
+        {selectedThreadId && selectedUserId && (
+          <>
+            {/* Mobile Back Button */}
+            <div className="lg:hidden p-2 border-b border-white/10 ">
+              <button
+                onClick={() => {
+                  setSelectedThreadId(null);
+                  setSelectedUserId(null);
+                }}
+                className="text-white hover:text-red-500 transition p-2"
+                aria-label="Back"
+              >
+                <HiArrowLeft className="text-xl" />
+              </button>
+            </div>
+
+            <MessageThreadView
+              threadId={selectedThreadId}
+              currentUserId={currentUserId}
+              otherUserId={selectedUserId}
+              otherUserAvatar={selectedUserAvatar}
+              otherUserDisplayName={selectedUserDisplayName}
+              otherUserUsername={selectedUserUsername}
+              threadStatus={selectedUserMessageStatus}
+            />
+          </>
         )}
       </div>
     </div>
