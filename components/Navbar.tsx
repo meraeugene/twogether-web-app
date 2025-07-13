@@ -52,8 +52,14 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
 
   return (
     <motion.header
-      animate={{ height: "auto" }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ height: "auto", opacity: 1, y: 0 }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+        delay: 0.1,
+      }}
       className={` overflow-hidden fixed top-6  left-1/2 -translate-x-1/2 w-[90%] md:w-[60%] lg:w-[50%] xl:w-[40%] 2xl:w-[90%]  max-w-full z-50 
         bg-black/60 backdrop-blur-3xl border border-white/10 shadow-xl
         font-[family-name:var(--font-geist-sans)]
