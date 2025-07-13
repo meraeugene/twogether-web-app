@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "Twogether",
     images: [
       {
-        url: "https://twogether.app/og-image.png", // replace with your actual OG image URL
+        url: "https://raw.githubusercontent.com/meraeugene/twogether-web-app/refs/heads/main/public/thumbnail.png", // replace with your actual OG image URL
         width: 1200,
         height: 630,
         alt: "Twogether – Watch & Recommend Movies Socially",
@@ -42,7 +42,9 @@ export const metadata: Metadata = {
     title: "Twogether – Watch & Recommend Movies Socially",
     description:
       "Stream and recommend movies with friends. Twogether is your cozy social movie space to discover what couples and friends are watching together.",
-    images: ["https://twogether.app/og-image.png"], // replace with your actual image
+    images: [
+      "https://raw.githubusercontent.com/meraeugene/twogether-web-app/refs/heads/main/public/thumbnail.png",
+    ], // replace with your actual image
   },
 };
 
