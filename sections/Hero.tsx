@@ -89,7 +89,7 @@ const Hero = ({ user }: HeroProps) => {
               >
                 <button
                   onClick={handleClick}
-                  className="bg-red-600 hover:bg-red-700 hover:shadow-[0_0_20px_rgba(255,0,0,0.4)] text-white px-6 py-3 rounded-lg text-lg font-semibold flex items-center gap-3 justify-center transition-all duration-300 mx-auto font-[family-name:var(--font-geist-mono)]"
+                  className="bg-red-600 hover:bg-red-700 hover:shadow-[0_0_20px_rgba(255,0,0,0.4)] text-white px-6 py-3 rounded-lg text-lg font-semibold flex items-center gap-3 justify-center cursor-pointer transition-all duration-300 mx-auto font-[family-name:var(--font-geist-mono)]"
                 >
                   <FaPlayCircle className="text-xl" />
                   Start TWOGETHER

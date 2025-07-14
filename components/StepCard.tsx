@@ -18,7 +18,7 @@ export function TextInputCard({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full outline-none p-4 border border-white/10 rounded-lg  lg:text-lg bg-black/80 text-white placeholder-white/40 backdrop-blur-sm font-[family-name:var(--font-geist-mono)]"
+      className="w-full outline-none p-4 border border-white/10 rounded-lg text-sm  lg:text-lg bg-black/80 text-white placeholder-white/40 backdrop-blur-sm font-[family-name:var(--font-geist-mono)]"
     />
   );
 }
@@ -95,7 +95,9 @@ export function MultiSelectCards({
       : "lg:grid-cols-1";
 
   return (
-    <div className={`grid gap-4 lg:gap-6 grid-cols-2 ${columnClass}`}>
+    <div
+      className={`grid gap-4 lg:gap-6 grid-cols-1 md:grid-cols-2 ${columnClass}`}
+    >
       {options.map((opt) => {
         const isSelected = values.includes(opt);
         return (

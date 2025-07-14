@@ -1,27 +1,31 @@
 import { EpisodeTitle } from "./tmdb";
 
 export type Genre =
-  | "action"
-  | "adventure"
-  | "animation"
-  | "comedy"
-  | "crime"
-  | "documentary"
-  | "drama"
-  | "family"
-  | "fantasy"
-  | "history"
-  | "horror"
-  | "music"
-  | "mystery"
-  | "romance"
-  | "sci-fi"
-  | "thriller"
-  | "war"
-  | "western";
+  | "Action"
+  | "Adventure"
+  | "Animation"
+  | "Comedy"
+  | "Crime"
+  | "Documentary"
+  | "Drama"
+  | "Family"
+  | "Fantasy"
+  | "History"
+  | "Horror"
+  | "Music"
+  | "Mystery"
+  | "Romance"
+  | "Science Fiction"
+  | "TV Movie"
+  | "Thriller"
+  | "War"
+  | "Western";
 
 export type OnboardingForm = {
   username: string;
+  display_name?: string;
+  bio?: string;
+  avatar_url?: string;
   relationship_status: string;
   social_intent: string[];
   favorite_genres: Genre[];

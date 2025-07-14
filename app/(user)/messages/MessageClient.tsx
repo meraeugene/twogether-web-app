@@ -30,7 +30,7 @@ export default function MessagesClient({
     <div className="flex flex-col  lg:grid lg:grid-cols-[400px_1fr]  rounded-xl border border-white/10">
       {/* Left Panel - Thread List */}
       <div
-        className={`bg-black/20 border-r border-white/10 ${
+        className={`bg-black/20 lg:border-r border-r-0  border-white/10 ${
           selectedThreadId ? "hidden lg:block" : "block"
         }`}
       >

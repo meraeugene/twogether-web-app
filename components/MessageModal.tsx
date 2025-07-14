@@ -50,7 +50,7 @@ export default function MessageModal({
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full bg-black/20 text-white p-3 rounded-lg border border-white/20 mb-4 h-28 outline-none resize-none text-sm sm:text-base"
+              className="w-full bg-black/20 text-white p-3 rounded-lg border border-white/20 mb-4 h-28  resize-none text-sm sm:text-base"
               placeholder="Type your message..."
               disabled={loading}
             />

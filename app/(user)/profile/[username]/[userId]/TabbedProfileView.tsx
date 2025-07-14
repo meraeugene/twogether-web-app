@@ -153,7 +153,7 @@ export default function TabbedProfileView({
     >
       {/* Banner */}
       <div
-        className="relative w-full rounded-md overflow-hidden bg-cover bg-center h-80 sm:h-96 md:h-[20rem] "
+        className="relative px-2  w-full rounded-md overflow-hidden bg-cover bg-center h-80 sm:h-96 md:h-[20rem] "
         style={{ backgroundImage: `url('/hero.png')` }}
       >
         <div className="absolute  inset-0 bg-black/70 backdrop-blur-sm " />
@@ -169,7 +169,7 @@ export default function TabbedProfileView({
               alt="avatar"
               width={96}
               height={96}
-              className="rounded-full  border-4 border-white shadow-lg object-cover w-21 h-21"
+              className="rounded-full  shadow-lg  object-cover w-21 h-21"
             />
 
             <h1 className="mt-4 text-2xl font-bold">{user.display_name}</h1>
@@ -270,29 +270,15 @@ export default function TabbedProfileView({
             >
               {activeTab === "Profile" && (
                 <div className="max-w-4xl mx-auto">
-                  <motion.div
-                    className="flex items-start justify-center gap-3 p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10 mb-6"
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div>
-                      <div className="text-red-400 mt-1 flex items-center justify-center mb-2 gap-2">
-                        <FaFileAlt />
-                        <p className="text-white/70 text-sm text-center">
-                          About me
-                        </p>
-                      </div>
+                  <div className="mb-6">
+                    <InfoCard
+                      icon={<FaFileAlt />}
+                      title="About me"
+                      className="md:justify-center"
+                      value={user.bio || "No bio available."}
+                    />
+                  </div>
 
-                      <p className="text-white text-sm font-medium text-justify">
-                        {/* {user.bio || "No bio added."} */}
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit. Quod accusantium ab hic quibusdam ipsum placeat, a
-                        maxime in pariatur nihil, quo temporibus asperiores et
-                        facilis voluptas repudiandae eius sapiente ut.
-                      </p>
-                    </div>
-                  </motion.div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <InfoCard
                       icon={<FaFilm />}

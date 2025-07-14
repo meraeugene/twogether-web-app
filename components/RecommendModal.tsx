@@ -60,7 +60,7 @@ export default function RecommendModal({
                 </label>
                 <textarea
                   rows={3}
-                  className="w-full outline-none p-2 rounded-lg bg-white/10 border border-white/20 text-sm text-white resize-none"
+                  className="w-full  p-2 rounded-lg bg-white/10 border border-white/20 text-sm text-white resize-none"
                   placeholder="Why do you recommend this?"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}

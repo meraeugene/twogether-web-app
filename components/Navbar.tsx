@@ -16,6 +16,7 @@ import {
 import type { Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { CurrentUser } from "@/types/user";
+import { LuUserRoundPen } from "react-icons/lu";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -60,7 +61,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
         damping: 30,
         delay: 0.1,
       }}
-      className={` overflow-hidden fixed top-6  left-1/2 -translate-x-1/2 w-[90%] md:w-[60%] lg:w-[50%] xl:w-[40%] 2xl:w-[90%]  max-w-full z-50 
+      className={` overflow-hidden fixed top-6  left-1/2 -translate-x-1/2 w-[90%] md:w-[60%] lg:w-[50%] xl:w-[40%] 2xl:w-[95%]  max-w-full z-50 
         bg-black/60 backdrop-blur-3xl border border-white/10 shadow-xl
         font-[family-name:var(--font-geist-sans)]
         ${isExpanded ? "rounded-3xl" : "rounded-full"}`}
@@ -130,14 +131,39 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                   </Link>
                 </motion.div>
               ))}
-              {/* User Profile Section */}
-              <motion.div
-                className="group relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition"
-                variants={fadeUp}
-              >
-                <HiOutlineUserCircle />
-                {user.full_name}
+
+              <motion.div variants={fadeUp}>
+                <Link
+                  href={`/profile/${user.username}/${user.id}`}
+                  onClick={() => setMenuOpen(false)}
+                  className={`group relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
+      ${
+        pathname === `/profile/${user.username}/${user.id}`
+          ? "bg-white text-black font-semibold"
+          : "text-white bg-white/10 hover:bg-white/20"
+      }`}
+                >
+                  <HiOutlineUserCircle />
+                  My Profile
+                </Link>
               </motion.div>
+
+              <motion.div variants={fadeUp}>
+                <Link
+                  href={`/profile/${user.username}`}
+                  onClick={() => setMenuOpen(false)}
+                  className={`group relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
+      ${
+        pathname === `/profile/${user.username}`
+          ? "bg-white text-black font-semibold"
+          : "text-white bg-white/10 hover:bg-white/20"
+      }`}
+                >
+                  <LuUserRoundPen />
+                  Edit Profile
+                </Link>
+              </motion.div>
+
               {/* Logout Button */}
               <motion.div variants={fadeUp}>
                 <button
@@ -279,14 +305,37 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                   <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
                     Account
                   </h3>
-                  {/* User Profile Section */}
-                  <motion.div
-                    className="group relative text-lg font-semibold tracking-wide text-white/90  px-5 py-3.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3"
-                    variants={fadeUp}
-                  >
-                    <HiOutlineUserCircle />
-                    {user.full_name}
+
+                  <motion.div variants={fadeUp}>
+                    <Link
+                      href={`/profile/${user.username}/${user.id}`}
+                      onClick={() => setMenuOpen(false)}
+                      className={`group relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-xl backdrop-blur-xl transition-all flex items-center gap-3 ${
+                        pathname === `/profile/${user.username}/${user.id}`
+                          ? "bg-white text-black border-white/20"
+                          : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
+                      }`}
+                    >
+                      <HiOutlineUserCircle />
+                      My Profile
+                    </Link>
                   </motion.div>
+
+                  <motion.div variants={fadeUp}>
+                    <Link
+                      href={`/profile/${user.username}`}
+                      onClick={() => setMenuOpen(false)}
+                      className={`group relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-xl backdrop-blur-xl transition-all flex items-center gap-3 ${
+                        pathname === `/profile/${user.username}`
+                          ? "bg-white text-black border-white/20"
+                          : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
+                      }`}
+                    >
+                      <LuUserRoundPen />
+                      Edit Profile
+                    </Link>
+                  </motion.div>
+
                   {/* Logout Button */}
                   <motion.div variants={fadeUp}>
                     <button

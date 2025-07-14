@@ -10,11 +10,17 @@ export default function ErrorMessage({
   hint?: string;
 }) {
   return (
-    <section className="pt-28 flex justify-center items-center min-h-screen text-center bg-black text-red-500">
-      <div className="px-8 py-12">
-        <h1 className="text-4xl font-bold mb-4">{title}</h1>
-        <p className="text-xl text-red-400">{message}</p>
-        {hint && <p className="mt-4 text-base text-red-300 italic">{hint}</p>}
+    <section className="min-h-screen w-full flex items-center justify-center bg-black px-6 py-20 sm:py-28">
+      <div className="max-w-md w-full text-center space-y-2">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-red-500">
+          {title}
+        </h1>
+        <p className="text-base sm:text-lg text-red-300">{message}</p>
+        {hint && (
+          <p className="text-sm sm:text-base text-red-200/70 italic border-t border-red-500/20 pt-4">
+            {hint}
+          </p>
+        )}
       </div>
     </section>
   );

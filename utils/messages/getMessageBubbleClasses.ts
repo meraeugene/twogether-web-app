@@ -9,7 +9,7 @@ export function getMessageBubbleClasses({
   isLastOfGroup: boolean;
   isOnlyEmoji?: boolean;
 }) {
-  const base = isOnlyEmoji ? "text-[15px]" : "px-4 py-2 text-[15px]";
+  const base = isOnlyEmoji ? "text-[15px]" : "px-4 py-2 text-[15px] ";
   const color = isOnlyEmoji
     ? "bg-transparent text-white"
     : isSender

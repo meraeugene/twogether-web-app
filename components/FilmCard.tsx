@@ -88,7 +88,7 @@ export default function FilmCard({
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
                 />
               ) : (
-                <div className="flex items-center justify-center w-full h-full bg-gray-800 text-white text-xs p-2 text-center rounded-lg font-[family-name:var(--font-geist-sans)]">
+                <div className="flex items-center justify-center w-full h-full bg-white/10 text-white text-xs p-2 text-center rounded-lg font-[family-name:var(--font-geist-sans)]">
                   No Image Available
                 </div>
               )}
@@ -179,6 +179,21 @@ export default function FilmCard({
                   <FaLock className="text-sm" />
                 </button>
               </div>
+            )}
+
+            {userId && isRemoveFromWatchlist && (
+              <button
+                onClick={() => setShowConfirm(true)}
+                disabled={isPending}
+                className="mt-4  lg:hidden w-full   gap-2 rounded-md 
+       px-1 py-2 text-xs font-medium  
+       hover:text-red-200 font-[family-name:var(--font-geist-mono)] 
+       disabled:cursor-not-allowed 
+      text-white/90 bg-red-500/20  hover:bg-red-600/30 transition-all
+    backdrop-blur border border-red-400/40 shadow-md disabled:opacity-60"
+              >
+                {isPending ? "Removing..." : "Remove from Watchlist"}
+              </button>
             )}
 
             <div className="py-4 text-white bg-gradient-to-t from-black/80 via-black/40 to-transparent">

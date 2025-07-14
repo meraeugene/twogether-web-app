@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import useSWR from "swr";
-import { useDebounce } from "use-debounce";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 import { PartialRecommendation } from "@/types/recommendation";
 import RecommendCardSkeleton from "./RecommendCardSkeleton";
@@ -11,13 +9,16 @@ import { fetcher } from "@/utils/swr/fetcher";
 import ErrorMessage from "@/components/ErrorMessage";
 
 export default function RecommendStepMovieSearch({
+  query,
+  setQuery,
+  debouncedQuery,
   onSelect,
 }: {
+  query: string;
+  setQuery: (v: string) => void;
+  debouncedQuery: string;
   onSelect: (movie: PartialRecommendation) => void;
 }) {
-  const [query, setQuery] = useState("");
-  const [debouncedQuery] = useDebounce(query, 500);
-
   const { data, error, isLoading } = useSWR<TMDBEnrichedResult[]>(
     debouncedQuery
       ? `/api/recommend?query=${encodeURIComponent(debouncedQuery)}`
@@ -97,46 +98,63 @@ export default function RecommendStepMovieSearch({
         {!isLoading &&
           results.length > 0 &&
           results.map((item) => (
-            <button
+            <div
               key={item.id}
-              onClick={() => handleSelect(item)}
-              className="transition cursor-pointer hover:bg-gray-900 hover:scale-[1.02] rounded-lg p-2 text-left"
+              className="transition hover:bg-gray-900 hover:scale-[1.02] rounded-lg py-4 lg:py-2 lg:p-2 text-left"
             >
-              <div className="relative w-full aspect-[2/3] mb-2 rounded overflow-hidden">
-                {item.poster_path ? (
-                  <Image
-                    src={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
-                    alt={item.title || item.name || "poster"}
-                    fill
-                    sizes="(max-width: 768px) 100vw"
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-white/10 flex items-center justify-center">
-                    <span className="text-white/60">No Image</span>
-                  </div>
-                )}
-              </div>
-              <div className="text-base ">{item.title || item.name}</div>
-              <div className="flex items-center justify-between mt-1">
-                <div className="text-sm text-white/60 capitalize flex gap-2">
-                  <span>{item.year}</span>
-                  {item.media_type === "tv" ? (
-                    <span className="text-amber font-medium">
-                      S{item.seasons || 1}·E{item.episodes || 1}
-                    </span>
+              <button
+                className="cursor-pointer w-full"
+                onClick={() => handleSelect(item)}
+              >
+                {/* Poster */}
+                <div className="relative w-full aspect-[2/3] rounded overflow-hidden mb-2">
+                  {item.poster_path ? (
+                    <Image
+                      src={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
+                      alt={item.title || item.name || "poster"}
+                      fill
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                      className="object-cover"
+                    />
                   ) : (
-                    <span className="text-amber font-medium">
-                      {item.duration || "0"}m
-                    </span>
+                    <div className="w-full h-full bg-white/10 flex items-center justify-center">
+                      <span className="text-white/60">No Image</span>
+                    </div>
                   )}
                 </div>
 
-                <div className="text-xs bg-gray-700 rounded-sm px-2 py-1 text-white/60 capitalize">
-                  {item.media_type}
+                {/* Title */}
+                <div className="text-base ">{item.title || item.name}</div>
+
+                {/* Metadata */}
+                <div className="flex items-center justify-between mt-2">
+                  <div className="text-sm text-white/60 capitalize flex gap-2">
+                    <span>{item.year}</span>
+                    {item.media_type === "tv" ? (
+                      <span className="text-amber font-medium">
+                        S{item.seasons || 1}·E{item.episodes || 1}
+                      </span>
+                    ) : (
+                      <span className="text-amber font-medium">
+                        {item.duration || "0"}m
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="text-xs bg-gray-700 rounded-sm px-2 py-1 text-white/60 capitalize">
+                    {item.media_type}
+                  </div>
                 </div>
-              </div>
-            </button>
+              </button>
+
+              {/* Mobile select button */}
+              <button
+                onClick={() => handleSelect(item)}
+                className="block lg:hidden mt-3 w-full bg-white hover:bg-gray-100 text-black text-sm py-2 rounded-md transition"
+              >
+                Select
+              </button>
+            </div>
           ))}
       </div>
 

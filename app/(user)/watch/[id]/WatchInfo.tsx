@@ -69,7 +69,7 @@ export default function WatchInfo({
   return (
     <div className="space-y-5 font-[family-name:var(--font-geist-mono)] text-white ">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div className="flex justify-between w-full flex-wrap gap-4 items-center">
+        <div className="flex justify-between w-full flex-wrap gap-4 flex-col md:flex-row  lg:items-center">
           <h1 className="text-2xl md:text-4xl font-bold font-[family-name:var(--font-geist-sans)] leading-tight">
             {recommendation.title}
           </h1>
@@ -87,7 +87,7 @@ export default function WatchInfo({
           {isAiRecommendation && !alreadyRecommended && (
             <button
               onClick={() => setOpen(true)}
-              className="cursor-pointer inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 transition text-white text-sm md:text-base px-4 py-2 rounded-md font-medium"
+              className="cursor-pointer w-fit inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 transition text-white text-sm md:text-base px-4 py-2 rounded-md font-medium"
             >
               <Sparkles className="w-4 h-4" />
               Recommend This!

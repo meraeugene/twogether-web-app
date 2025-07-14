@@ -91,7 +91,7 @@ export function MessageItem({
         <div className="max-w-[70%] flex flex-col items-end gap-1 group">
           <div className="flex items-center gap-1">
             {isSender && (
-              <span className="text-[12px] text-white/40 opacity-0 group-hover:opacity-100 transition">
+              <span className="text-[12px]  hidden lg:block   text-white/40 opacity-0 group-hover:opacity-100 transition">
                 {time}
               </span>
             )}
@@ -108,7 +108,7 @@ export function MessageItem({
             </div>
 
             {!isSender && (
-              <span className="text-[12px] text-white/40 opacity-0 group-hover:opacity-100 transition">
+              <span className="text-[12px] hidden lg:block text-white/40 opacity-0 group-hover:opacity-100 transition">
                 {time}
               </span>
             )}

@@ -27,9 +27,8 @@ export type User = {
         | "Thriller"
         | "War"
         | "Western"
-      )[]
-    | null;
-  favorite_moods: string[] | null;
+      )[];
+  favorite_moods: string[];
   prefers: "movies" | "shows" | "both";
   onboarding_complete: boolean;
 };

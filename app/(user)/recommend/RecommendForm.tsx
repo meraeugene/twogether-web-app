@@ -8,6 +8,8 @@ import { useState } from "react";
 import { RecommendationForm } from "@/types/formTypes";
 import { createRecommendation } from "@/actions/recommendationActions";
 import { useRouter } from "next/navigation";
+import { useDebounce } from "use-debounce";
+import Image from "next/image";
 
 const steps = [
   { key: "movie", prompt: "What do you wanna recommend?" },
@@ -37,6 +39,8 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<RecommendationForm>(defaultForm);
   const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState("");
+  const [debouncedQuery] = useDebounce(query, 500);
 
   const currentKey = steps[step].key;
 
@@ -86,6 +90,9 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
       case "movie":
         return (
           <RecommendStepMovieSearch
+            query={query}
+            setQuery={setQuery}
+            debouncedQuery={debouncedQuery}
             onSelect={(movie) =>
               setForm({
                 ...form,
@@ -96,12 +103,25 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
         );
       case "comment":
         return (
-          <TextareaCard
-            value={form.comment}
-            onChange={(v) => setForm({ ...form, comment: v })}
-            placeholder="Write your thoughts or why you're recommending this..."
-            onEnter={nextStepCheck}
-          />
+          <div className="space-y-6 flex flex-col items-center">
+            {form.poster_url && (
+              <div className="w-32 relative aspect-[2/3] rounded-xl overflow-hidden bg-gradient-to-br from-white/5 to-white/10 border border-white/10 shadow-xl backdrop-blur-md">
+                <Image
+                  src={form.poster_url}
+                  alt={form.title}
+                  fill
+                  sizes="(max-width: 768px) 50vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
+            <TextareaCard
+              value={form.comment}
+              onChange={(v) => setForm({ ...form, comment: v })}
+              placeholder="Write your thoughts or why you're recommending this..."
+              onEnter={nextStepCheck}
+            />
+          </div>
         );
 
       case "visibility":

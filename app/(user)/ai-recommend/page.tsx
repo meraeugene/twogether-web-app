@@ -104,45 +104,19 @@ export default function AIRecommendForm() {
                 placeholder="e.g. I want a romantic comedy films 2000 vibes..."
               />
 
-              <button
-                type="submit"
-                disabled={loading && !prompt.trim()}
-                className="mt-6 w-full py-3 rounded-xl 
-           bg-white text-black 
-           hover:bg-neutral-200 
-           transition font-semibold text-lg 
-           shadow-md flex items-center justify-center gap-2 
-           backdrop-blur-sm 
-           disabled:opacity-60 disabled:cursor-not-allowed 
-           cursor-pointer "
-              >
-                {loading && (
-                  <motion.svg
-                    fill="#02020"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4 text-white animate-pulse"
-                    initial={{ scale: 1 }}
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{
-                      duration: 1,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />
-                  </motion.svg>
-                )}
-                {loading ? (
-                  <motion.span
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    Generating Recommendations...
-                  </motion.span>
-                ) : (
+              <div className="bg-white/20 mt-6 backdrop-blur-xl border border-white/10 rounded-xl p-2 flex justify-center items-center">
+                <button
+                  type="submit"
+                  disabled={loading && !prompt.trim()}
+                  className="w-full  py-3 rounded-xl 
+      bg-white text-black 
+      hover:bg-neutral-200 
+      transition font-semibold text-lg 
+      shadow-md flex items-center justify-center gap-2 
+      backdrop-blur-sm 
+      disabled:opacity-60 disabled:cursor-not-allowed 
+      cursor-pointer"
+                >
                   <div className="flex items-center gap-2">
                     {/* Gemini Icon */}
                     <svg
@@ -156,8 +130,8 @@ export default function AIRecommendForm() {
                     </svg>
                     <span>Magic Recommendations</span>
                   </div>
-                )}
-              </button>
+                </button>
+              </div>
             </form>
           </motion.div>
         )}
