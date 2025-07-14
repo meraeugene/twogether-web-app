@@ -1,4 +1,3 @@
-// stores/useAIRecommendation.ts
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import CryptoJS from "crypto-js";

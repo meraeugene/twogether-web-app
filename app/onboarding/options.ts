@@ -1,6 +1,6 @@
 export const relationshipStatusOptions = [
   "single",
-  "relationship",
+  "in a relationship",
   "situationship",
   "talking stage",
   "complicated",
@@ -9,14 +9,10 @@ export const relationshipStatusOptions = [
 
 export const socialIntentOptions = [
   "chat",
-  "watch together",
-  "get recommendations",
-  "make friends",
+  "get recos",
   "flirt",
   "date",
   "just browsing",
-  "nothing serious",
-  "deep convos",
   "secret",
 ];
 
@@ -46,14 +42,8 @@ export const moodOptions = [
   "nonchalant",
   "funny",
   "mysterious",
-  "heartwarming",
   "dark",
-  "emotional",
-  "uplifting",
-  "tense",
-  "chill",
   "romantic",
-  "nostalgic",
   "secret",
 ];
 

@@ -96,7 +96,7 @@ export function MultiSelectCards({
 
   return (
     <div
-      className={`grid gap-4 lg:gap-6 grid-cols-1 md:grid-cols-2 ${columnClass}`}
+      className={`grid gap-4 lg:gap-6 grid-cols-2 md:grid-cols-2 ${columnClass}`}
     >
       {options.map((opt) => {
         const isSelected = values.includes(opt);

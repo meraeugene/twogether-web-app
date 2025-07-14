@@ -76,13 +76,15 @@ export function MessageItem({
       >
         {/* Avatar */}
         {!isSender && isLastOfGroup ? (
-          <Image
-            width={32}
-            height={32}
-            src={avatarUrl || "/default-avatar.png"}
-            alt="user"
-            className="rounded-full"
-          />
+          <div className="w-8 h-8 rounded-full overflow-hidden">
+            <Image
+              width={32}
+              height={32}
+              src={avatarUrl || "/default-avatar.png"}
+              alt="user"
+              className="rounded-full"
+            />
+          </div>
         ) : (
           !isSender && <div className="w-[32px] h-[32px]" />
         )}

@@ -116,7 +116,8 @@ export default function TabbedProfileView({
       } else if (friendStatus === "pending") {
         await cancelFriendRequest(currentUser.id, user.id);
       }
-      await refetchFriendStatus(); // re-fetch updated status
+
+      await refetchFriendStatus(); // Always refresh status from server
     });
   };
 

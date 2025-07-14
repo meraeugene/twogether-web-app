@@ -119,13 +119,15 @@ export default function MessageThreadList({
                 : "hover:bg-white/5"
             }`}
           >
-            <Image
-              width={44}
-              height={44}
-              className="rounded-full object-cover"
-              src={thread.other_avatar_url || "/default-avatar.png"}
-              alt={thread.other_username || "User Avatar"}
-            />
+            <div className="w-11 h-11 rounded-full overflow-hidden">
+              <Image
+                width={44}
+                height={44}
+                className="rounded-full object-cover"
+                src={thread.other_avatar_url || "/default-avatar.png"}
+                alt={thread.other_username || "User Avatar"}
+              />
+            </div>
 
             <div className="flex-1 text-left">
               <div className="flex justify-between items-center">

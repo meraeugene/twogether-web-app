@@ -5,11 +5,14 @@ const loading = () => {
         <div className="flex-1 ">
           <div className="w-full aspect-video bg-white/10 rounded-lg" />
 
+          <div className="flex items-center mt-7 gap-3">
+            <div className="h-10 w-[30%] bg-white/10 rounded-lg" />
+            <div className="h-10 w-[30%] bg-white/10 rounded-lg" />
+          </div>
+
           <div className="flex justify-between items-center  gap-8 mt-12">
             <div className="h-10 w-[60%] bg-white/10 rounded-lg" />
-            <div className="h-10 w-[13%] bg-white/10 rounded-lg" />
-
-            <div className="h-10 w-[13%] bg-white/10 rounded-lg" />
+            <div className="h-10 w-[40%] bg-white/10 rounded-lg" />
           </div>
 
           <div className="h-4 w-[10%] bg-white/10 rounded-sm mt-6" />

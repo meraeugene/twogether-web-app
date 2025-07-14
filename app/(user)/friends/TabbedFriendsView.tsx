@@ -9,6 +9,7 @@ import {
   getSentFriendRequests,
 } from "@/actions/friendActions";
 import useSWR from "swr";
+import { AddFriendSearch } from "./AddFriendSearch";
 
 const tabs = ["Friends", "Requests", "Sent"];
 
@@ -105,12 +106,14 @@ export default function FriendsPage({
           >
             {activeTab === "Friends" && (
               <div className="max-w-4xl mx-auto">
+                <AddFriendSearch currentUserId={currentUserId} />
+
                 {isLoadingFriends ? (
                   <div className="flex justify-center ">
                     <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
                   </div>
                 ) : friends?.length === 0 ? (
-                  <div className="text-center text-white/50 ">
+                  <div className="text-center text-white/50  ">
                     No friends yet. Start adding some!
                   </div>
                 ) : (

@@ -123,17 +123,22 @@ export default function MessageThreadView({
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
+  const isRequestReceiver =
+    threadStatus === "pending" && messages?.[0]?.receiver_id === currentUserId;
+
   return (
     <div className="flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
-        <Image
-          src={otherUserAvatar || "/default-avatar.png"}
-          alt={otherUserDisplayName}
-          width={36}
-          height={36}
-          className="rounded-full object-cover"
-        />
+        <div className="w-9 h-9 rounded-full overflow-hidden">
+          <Image
+            src={otherUserAvatar || "/default-avatar.png"}
+            alt={otherUserDisplayName}
+            width={36}
+            height={36}
+            className="rounded-full object-cover"
+          />
+        </div>
         <span className="text-white">{otherUserDisplayName}</span>
       </div>
 
@@ -203,18 +208,18 @@ export default function MessageThreadView({
       </div>
 
       {/* Request prompt */}
-      {threadStatus === "pending" && (
-        <div className="border-t  border-white/10 mt-6 text-sm flex justify-center items-center flex-col  text-white">
+      {isRequestReceiver && (
+        <div className="border-t border-white/10 mt-6 text-sm flex justify-center items-center flex-col text-white">
           <div className="py-3 flex flex-col px-4 text-center text-sm">
             <span>
               Accept message request from{" "}
               <b>
                 {otherUserDisplayName} ({otherUserUsername})
               </b>
-              {""} ?
+              ?
             </span>
             <span className="text-xs text-white/50 mt-1 mx-auto">
-              If you accept, they will also be able to send you message.
+              If you accept, they will also be able to send you messages.
             </span>
           </div>
           <div className="flex py-4 gap-4 border-t border-white/10 w-full justify-center items-center">
@@ -249,7 +254,7 @@ export default function MessageThreadView({
       )}
 
       {/* Input */}
-      {threadStatus !== "pending" && (
+      {!(threadStatus === "pending" && isRequestReceiver) && (
         <motion.form
           onSubmit={(e) => {
             e.preventDefault();

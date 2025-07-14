@@ -70,13 +70,15 @@ export default function OnlineFriendsList({
         >
           {/* Avatar + Ping */}
           <div className="relative">
-            <Image
-              src={friend.avatar_url || "/default-avatar.png"}
-              alt={friend.display_name || friend.username}
-              width={44}
-              height={44}
-              className="rounded-full object-cover"
-            />
+            <div className="w-11 h-11 rounded-full overflow-hidden">
+              <Image
+                src={friend.avatar_url || "/default-avatar.png"}
+                alt={friend.display_name || friend.username}
+                width={44}
+                height={44}
+                className="rounded-full object-cover"
+              />
+            </div>
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-black" />
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 animate-ping opacity-75" />
           </div>

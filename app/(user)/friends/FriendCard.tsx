@@ -77,6 +77,7 @@ export function FriendCard({
     startTransition(async () => {
       if (!id || !currentUserId) return;
       await removeFriend(currentUserId, id);
+
       mutate?.();
     });
   };
@@ -85,6 +86,7 @@ export function FriendCard({
     startTransition(async () => {
       if (!id || !currentUserId) return;
       await rejectFriendRequest(id, currentUserId);
+
       mutate?.();
     });
   };
@@ -100,13 +102,15 @@ export function FriendCard({
   return (
     <motion.div className="p-4 bg-white/5 rounded-xl border border-white/10 gap-4">
       <div className="flex items-start gap-4 mb-5">
-        <Image
-          src={avatarUrl || "/default-avatar.png"}
-          alt="avatar"
-          width={48}
-          height={48}
-          className="rounded-full object-cover"
-        />
+        <div className="w-12 h-12 rounded-full overflow-hidden">
+          <Image
+            src={avatarUrl || "/default-avatar.png"}
+            alt="avatar"
+            width={48}
+            height={48}
+            className="rounded-full object-cover"
+          />
+        </div>
         <div className="flex-1">
           <h2 className="font-semibold text-white">{name}</h2>
           <p className="text-white/50 text-sm">@{username}</p>
@@ -115,7 +119,7 @@ export function FriendCard({
 
       {/* buttons go here */}
       {status === "friend" && (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 justify-end">
           <Link
             href={`/profile/${username}/${id}`}
             className="cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
@@ -170,13 +174,23 @@ export function FriendCard({
         </div>
       )}
       {status === "sent" && (
-        <button
-          onClick={handleCancel}
-          disabled={isPending}
-          className="cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-red-600 transition"
-        >
-          Cancel
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={handleCancel}
+            disabled={isPending}
+            className="cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-red-600 transition"
+          >
+            Cancel
+          </button>
+
+          <Link
+            href={`/profile/${username}/${id}`}
+            className=" cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
+          >
+            <FaUser className="text-xs" />
+            View Profile
+          </Link>
+        </div>
       )}
 
       <MessageModal

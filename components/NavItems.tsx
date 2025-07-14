@@ -1,8 +1,11 @@
+"use client";
+
 import { IoMdAdd } from "react-icons/io";
 import { MdMovieFilter } from "react-icons/md";
 import { RiFilmAiLine, RiMovieAiLine } from "react-icons/ri";
 import { FaUserFriends } from "react-icons/fa";
 import { LuMessageSquareHeart } from "react-icons/lu";
+
 export const primaryNavItems = [
   {
     label: "AI Recommend",

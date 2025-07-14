@@ -149,7 +149,7 @@ export async function getMessageRequests() {
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from("view_incoming_message_requests")
+    .from("view_message_requests")
     .select("*");
 
   if (error) throw new Error(error.message);

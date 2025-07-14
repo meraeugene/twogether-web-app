@@ -2,6 +2,19 @@
 import { FriendRequestStatus, OnlineFriend } from "@/types/friends";
 import { createClient } from "@/utils/supabase/server";
 
+export async function searchUsersByUsernamePrefix(query: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("id, username, display_name, avatar_url")
+    .ilike("username", `${query}%`) // case-insensitive prefix match
+    .limit(10);
+
+  if (error) throw error;
+
+  return data;
+}
 export async function getFriendStats(
   currentUserId: string,
   profileUserId: string

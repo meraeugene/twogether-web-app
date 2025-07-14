@@ -49,10 +49,10 @@ export default function OnboardingPage() {
   const handleAddCustomRelationship = () => {
     const trimmed = customRelationship.trim();
 
-    if (!trimmed) {
-      toast.error("How can we add something that does not exist?");
-      return;
-    }
+    if (!trimmed)
+      return toast.error(
+        "Bro... you ghosted the input. At least tell us your situationship status 😩"
+      );
 
     if (!relationshipStatusOptions.includes(trimmed)) {
       setRelationshipStatusOptions((prev) => [...prev, trimmed]);
@@ -69,12 +69,10 @@ export default function OnboardingPage() {
   const handleAddCustomSocialIntent = () => {
     const trimmed = customSocialIntent.trim();
 
-    if (!trimmed) {
-      toast.error(
-        "Should we remind you again? How can we add something that does not exist?"
+    if (!trimmed)
+      return toast.error(
+        "You forgot your social intent... introvert detected 😅"
       );
-      return;
-    }
 
     if (
       trimmed &&
@@ -92,7 +90,7 @@ export default function OnboardingPage() {
 
     if (!trimmed) {
       toast.error(
-        "Hmmm, are we deadass? How can we add something that does not exist?"
+        "Adding empty mood? That’s *so* emotionally unavailable of you 💅"
       );
       return;
     }
@@ -282,7 +280,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center  bg-black text-white px-15 pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-34">
+    <main className="min-h-screen flex flex-col justify-center items-center  bg-black text-white  pb-16  pt-28 px-7 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32">
       {/* STEPS PROGESS */}
       <div className="flex flex-wrap justify-center gap-2 mb-8 text-sm">
         {steps.map((s, i) => (
@@ -336,27 +334,36 @@ export default function OnboardingPage() {
           <button
             onClick={() => {
               if (step === 0 && !form.username.trim()) {
-                toast.error("Please enter a username to continue.");
+                toast.error(
+                  "Username is missing. Are you trying to ghost us already?"
+                );
                 return;
               }
-
               if (step === 1 && !form.relationship_status.trim()) {
-                toast.error("Please select a relationship status to continue.");
+                toast.error(
+                  "Relationship status is required. It's complicated, but still required."
+                );
                 return;
               }
 
               if (step === 2 && !form.social_intent.length) {
-                toast.error("Please select at least one social intent.");
+                toast.error(
+                  "What are you here for? Even secret agents have a mission."
+                );
                 return;
               }
 
               if (step === 3 && !form.favorite_genres.length) {
-                toast.error("Please select at least one favorite genre.");
+                toast.error(
+                  "Pick at least one genre. No one likes a flavorless film fan."
+                );
                 return;
               }
 
               if (step === 4 && !form.favorite_moods.length) {
-                toast.error("Please select at least one favorite mood.");
+                toast.error(
+                  "Set the mood! Or are you always this emotionally mysterious?"
+                );
                 return;
               }
 

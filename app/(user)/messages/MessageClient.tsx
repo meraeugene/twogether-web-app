@@ -12,7 +12,9 @@ export default function MessagesClient({
 }: {
   currentUserId: string;
 }) {
-  const [tab, setTab] = useState<"Online" | "Inbox" | "Requests">("Inbox");
+  const [tab, setTab] = useState<"Online" | "Inbox" | "Requests" | "Sent">(
+    "Inbox"
+  );
   const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
@@ -34,21 +36,54 @@ export default function MessagesClient({
           selectedThreadId ? "hidden lg:block" : "block"
         }`}
       >
-        <div className="flex gap-2 p-4">
-          {["Online", "Inbox", "Requests"].map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t as "Online" | "Inbox" | "Requests")}
-              className={`px-3 py-1 w-full cursor-pointer rounded-full text-sm transition
-                ${
-                  tab === t
-                    ? "bg-red-600 text-white hover:bg-red-700"
-                    : "bg-white/10 text-white/50 hover:bg-white/20 hover:text-white"
-                }`}
-            >
-              {t}
-            </button>
-          ))}
+        <div className="grid grid-cols-2 border-b border-white/10">
+          {/* Friends Section */}
+          <div className="border-r border-white/10 px-2 py-4">
+            <p className="text-xs text-white/40 pb-2 text-center uppercase tracking-wider">
+              Friends
+            </p>
+            <div className="flex   gap-2 ">
+              {["Online", "Inbox"].map((t) => (
+                <button
+                  key={t}
+                  onClick={() =>
+                    setTab(t as "Online" | "Inbox" | "Requests" | "Sent")
+                  }
+                  className={`px-3 py-1 w-full cursor-pointer rounded-full text-sm transition ${
+                    tab === t
+                      ? "bg-red-600 text-white hover:bg-red-700"
+                      : "bg-white/10 text-white/50 hover:bg-white/20 hover:text-white"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Message Requests Section */}
+          <div className="px-2 py-4">
+            <p className="text-xs text-white/40 pb-2 text-center uppercase tracking-wider">
+              Message Requests
+            </p>
+            <div className="flex   gap-2 ">
+              {["Requests", "Sent"].map((t) => (
+                <button
+                  key={t}
+                  onClick={() =>
+                    setTab(t as "Online" | "Inbox" | "Requests" | "Sent")
+                  }
+                  className={`px-3 py-1 w-full cursor-pointer rounded-full text-sm transition ${
+                    tab === t
+                      ? "bg-red-600 text-white hover:bg-red-700"
+                      : "bg-white/10 text-white/50 hover:bg-white/20 hover:text-white"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {tab === "Inbox" && (
@@ -76,6 +111,31 @@ export default function MessagesClient({
 
         {tab === "Requests" && (
           <MessageRequestList
+            direction="incoming"
+            currentUserId={currentUserId}
+            onSelectThread={(
+              id,
+              otherId,
+              avatar,
+              displayName,
+              username,
+              threadStatus
+            ) => {
+              setSelectedThreadId(id);
+              setSelectedUserId(otherId);
+              setActiveThreadId(id);
+              setSelectedUserAvatar(avatar);
+              setSelectedUserDisplayName(displayName);
+              setSelectedUserUsername(username);
+              setSelectedUserMessageStatus(threadStatus);
+            }}
+            activeThreadId={activeThreadId}
+          />
+        )}
+
+        {tab === "Sent" && (
+          <MessageRequestList
+            direction="sent"
             currentUserId={currentUserId}
             onSelectThread={(
               id,

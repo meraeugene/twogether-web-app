@@ -11,7 +11,7 @@ import {
 } from "@/components/StepCard";
 import {
   genreOptions,
-  moodOptions,
+  moodOptions as moodOptionsBase,
   relationshipStatusOptions as relationshipStatusOptionsBase,
   socialIntentOptions as socialIntentOptionsBase,
 } from "@/app/onboarding/options";
@@ -33,14 +33,14 @@ export default function EditProfileForm({ user }: { user: User }) {
     social_intent: user.social_intent || [],
     favorite_genres: user.favorite_genres || [],
     favorite_moods: user.favorite_moods || [],
-    prefers: "both",
+    prefers: user.prefers,
   });
 
   const [isPending, startTransition] = useTransition();
   const [relationshipStatusOptions, setRelationshipStatusOptions] = useState(
     relationshipStatusOptionsBase
   );
-  const [moodsOptions, setMoodsOptions] = useState(moodOptions);
+  const [moodsOptions, setMoodsOptions] = useState(moodOptionsBase);
   const [socialIntentOptions, setSocialIntentOptions] = useState(
     socialIntentOptionsBase
   );
@@ -49,6 +49,22 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [customSocialIntent, setCustomSocialIntent] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [showStickySubmit, setShowStickySubmit] = useState(false);
+
+  useEffect(() => {
+    setMoodsOptions(() =>
+      Array.from(new Set([...moodOptionsBase, ...user.favorite_moods]))
+    );
+
+    setSocialIntentOptions(() =>
+      Array.from(
+        new Set([...socialIntentOptionsBase, ...(user.social_intent || [])])
+      )
+    );
+
+    setRelationshipStatusOptions((prev) =>
+      Array.from(new Set([...prev, user.relationship_status as string]))
+    );
+  }, [user.favorite_moods, user.social_intent, user.relationship_status]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,7 +79,10 @@ export default function EditProfileForm({ user }: { user: User }) {
   const handleAddCustomRelationship = () => {
     const trimmed = customRelationship.trim();
     if (!trimmed)
-      return toast.error("Please enter a valid relationship status.");
+      return toast.error(
+        "Bro... you ghosted the input. At least tell us your situationship status 😩"
+      );
+
     if (!relationshipStatusOptions.includes(trimmed)) {
       setRelationshipStatusOptions((prev) => [...prev, trimmed]);
     }
@@ -73,17 +92,32 @@ export default function EditProfileForm({ user }: { user: User }) {
 
   const handleAddCustomMood = () => {
     const trimmed = customMood.trim();
-    if (!trimmed) return toast.error("Please enter a valid mood.");
-    if (!moodsOptions.includes(trimmed)) {
-      setMoodsOptions((prev) => [...prev, trimmed]);
+
+    if (!trimmed) {
+      toast.error(
+        "Adding empty mood? That’s *so* emotionally unavailable of you 💅"
+      );
+      return;
     }
-    setForm({ ...form, favorite_moods: [...form.favorite_moods, trimmed] });
+
+    if (
+      trimmed &&
+      !form.favorite_moods.includes(trimmed) &&
+      !moodsOptions.includes(trimmed)
+    ) {
+      setMoodsOptions((prev) => [...prev, trimmed]);
+      setForm({ ...form, favorite_moods: [...form.favorite_moods, trimmed] });
+    }
     setCustomMood("");
   };
 
   const handleAddCustomSocialIntent = () => {
     const trimmed = customSocialIntent.trim();
-    if (!trimmed) return toast.error("Please enter a valid intent.");
+    if (!trimmed)
+      return toast.error(
+        "You forgot your social intent... introvert detected 😅"
+      );
+
     if (!socialIntentOptions.includes(trimmed)) {
       setSocialIntentOptions((prev) => [...prev, trimmed]);
     }
@@ -275,7 +309,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         <div>
           <label className="block mb-3 text-sm">Favorite Moods</label>
           <MultiSelectCards
-            options={moodOptions}
+            options={moodsOptions}
             values={form.favorite_moods}
             onChange={(moods) => setForm({ ...form, favorite_moods: moods })}
             columns={2}
