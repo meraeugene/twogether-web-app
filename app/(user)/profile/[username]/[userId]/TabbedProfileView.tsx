@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaHeart,
@@ -63,7 +63,6 @@ export default function TabbedProfileView({
 
   // FRIENDS STATE
   const [followCooldown, setFollowCooldown] = useState(false);
-  const [friendCooldown, setFriendCooldown] = useState(false);
 
   // MESSAGE STATE
   const [showMessageModal, setShowMessageModal] = useState(false);
@@ -115,12 +114,10 @@ export default function TabbedProfileView({
   const effectiveFriendStatus = localFriendStatus ?? friendStatus;
 
   const handleAddFriendToggle = () => {
-    if (!friendStatus || friendCooldown) return;
+    if (!friendStatus) return;
 
     const optimisticStatus = friendStatus === "none" ? "pending" : "none";
     setLocalFriendStatus(optimisticStatus);
-    setFriendCooldown(true);
-    setTimeout(() => setFriendCooldown(false), 500);
 
     (async () => {
       try {
@@ -137,10 +134,6 @@ export default function TabbedProfileView({
       }
     })();
   };
-
-  useEffect(() => {
-    setLocalFriendStatus(null); // clear override when real status changes
-  }, [friendStatus]);
 
   const handleSendMessage = (content: string) => {
     startMessageTransition(async () => {
@@ -207,10 +200,10 @@ export default function TabbedProfileView({
                 {/* Add Friend */}
                 <button
                   onClick={handleAddFriendToggle}
-                  disabled={friendCooldown}
+                  disabled={!effectiveFriendStatus}
                   className={`cursor-pointer transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
                         ${
-                          friendCooldown
+                          effectiveFriendStatus
                             ? "opacity-50 cursor-not-allowed"
                             : "cursor-pointer"
                         }
