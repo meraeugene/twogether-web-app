@@ -9,7 +9,7 @@ const page = async () => {
   }
 
   return (
-    <div className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col  px-6 pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 text-white">
+    <div className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col  px-4 pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 text-white">
       <MessagesClient currentUserId={currentUser.id} />
     </div>
   );

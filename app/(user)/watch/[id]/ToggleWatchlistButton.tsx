@@ -26,12 +26,15 @@ export default function ToggleWatchlistButton({
   const [isPending, startTransition] = useTransition();
 
   const handleToggle = () => {
+    // Optimistically update UI first
+    const optimisticInList = !isInList;
+    setIsInList(optimisticInList);
+
     startTransition(async () => {
       try {
-        if (isInList && watchlistId) {
+        if (!optimisticInList && watchlistId) {
           await removeFromWatchlist(watchlistId, currentUserId, filmId);
-          toast.info("Removed from watchlist");
-          setIsInList(false);
+          toast.info("Poof! Gone from your watchlist 🎬💨");
           setWatchlistId(null);
         } else {
           const id = await addToWatchlist(
@@ -39,11 +42,12 @@ export default function ToggleWatchlistButton({
             currentUserId,
             filmId
           );
-          toast.success("Added to watchlist!");
-          setIsInList(true);
+          toast.success("Nice pick! Now starring on your watchlist 🎞️🌟");
           setWatchlistId(id);
         }
       } catch {
+        // Revert state if failed
+        setIsInList(!optimisticInList);
         toast.error("Something went wrong.");
       }
     });
@@ -53,13 +57,13 @@ export default function ToggleWatchlistButton({
     <button
       onClick={handleToggle}
       disabled={isPending}
-      className={` cursor-pointer w-fit flex items-center gap-2 px-4 py-2 rounded-md text-sm transition
+      className={`cursor-pointer w-fit flex items-center gap-2 px-4 py-2 rounded-md text-sm transition
         ${
           isInList
             ? "bg-red-600 hover:bg-red-500"
-            : "bg-red-500 hover:bg-red-600"
+            : "bg-white text-black hover:bg-white/90"
         }
-        ${isPending ? "opacity-50 cursor-not-allowed" : ""}
+       
       `}
     >
       <MdMovieFilter />

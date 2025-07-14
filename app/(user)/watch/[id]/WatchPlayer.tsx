@@ -85,7 +85,7 @@ export default function WatchPlayer({
           </div>
 
           {/* Episode Selector */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
             {episodeTitlesPerSeason?.[selectedSeason]?.map((title, i) => {
               const ep = i + 1;
               const isActive = selectedEpisode === ep;
@@ -93,7 +93,7 @@ export default function WatchPlayer({
                 <button
                   key={ep}
                   onClick={() => setSelectedEpisode(ep)}
-                  className={`px-4 py-2 text-xs sm:text-sm rounded-xl flex-wrap flex items-center gap-2 transition
+                  className={`px-4 cursor-pointer  py-2 text-xs sm:text-sm rounded-xl flex-wrap flex items-center gap-2 transition
                     ${
                       isActive
                         ? "bg-red-600 text-white font-semibold"

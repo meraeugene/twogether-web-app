@@ -49,10 +49,9 @@ export default function OnboardingPage() {
   const handleAddCustomRelationship = () => {
     const trimmed = customRelationship.trim();
 
-    if (!trimmed)
-      return toast.error(
-        "Bro... you ghosted the input. At least tell us your situationship status 😩"
-      );
+    if (!trimmed) {
+      return null;
+    }
 
     if (!relationshipStatusOptions.includes(trimmed)) {
       setRelationshipStatusOptions((prev) => [...prev, trimmed]);
@@ -69,11 +68,6 @@ export default function OnboardingPage() {
   const handleAddCustomSocialIntent = () => {
     const trimmed = customSocialIntent.trim();
 
-    if (!trimmed)
-      return toast.error(
-        "You forgot your social intent... introvert detected 😅"
-      );
-
     if (
       trimmed &&
       !form.social_intent.includes(trimmed) &&
@@ -89,10 +83,7 @@ export default function OnboardingPage() {
     const trimmed = customMood.trim();
 
     if (!trimmed) {
-      toast.error(
-        "Adding empty mood? That’s *so* emotionally unavailable of you 💅"
-      );
-      return;
+      return null;
     }
 
     if (
@@ -133,7 +124,7 @@ export default function OnboardingPage() {
       return;
     }
 
-    toast.success("Onboarding complete! Welcome TwoGether!");
+    toast.success("Welcome to Twogether — your movie journey starts now! 🍿✨");
     router.push("/browse");
   };
 
@@ -179,6 +170,7 @@ export default function OnboardingPage() {
                   placeholder="Add your option here..."
                 />
               </div>
+
               <button
                 type="submit"
                 className="px-4 w-[20%] uppercase rounded-lg bg-gray-100 text-black hover:bg-gray-300 font-[family-name:var(--font-geist-mono)] italic cursor-pointer"
@@ -257,6 +249,7 @@ export default function OnboardingPage() {
               <button
                 type="submit"
                 className="px-4 w-[20%] uppercase rounded-lg bg-gray-100 text-black hover:bg-gray-300 font-[family-name:var(--font-geist-mono)] italic cursor-pointer"
+                disabled={!customMood.trim()}
               >
                 Add
               </button>
@@ -280,7 +273,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center  bg-black text-white  pb-16  pt-28 px-7 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32">
+    <main className="min-h-screen flex flex-col justify-center items-center  bg-black text-white  pb-16  pt-28 px-7 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 overflow-hidden">
       {/* STEPS PROGESS */}
       <div className="flex flex-wrap justify-center gap-2 mb-8 text-sm">
         {steps.map((s, i) => (
@@ -335,34 +328,33 @@ export default function OnboardingPage() {
             onClick={() => {
               if (step === 0 && !form.username.trim()) {
                 toast.error(
-                  "Username is missing. Are you trying to ghost us already?"
+                  "Oops! No username? Trying to vanish into thin air? 👻"
                 );
                 return;
               }
+
               if (step === 1 && !form.relationship_status.trim()) {
-                toast.error(
-                  "Relationship status is required. It's complicated, but still required."
-                );
+                toast.error(" At least tell us your situationship status 😩");
                 return;
               }
 
               if (step === 2 && !form.social_intent.length) {
                 toast.error(
-                  "What are you here for? Even secret agents have a mission."
+                  "You forgot your social intent... introvert detected 😅"
                 );
                 return;
               }
 
               if (step === 3 && !form.favorite_genres.length) {
                 toast.error(
-                  "Pick at least one genre. No one likes a flavorless film fan."
+                  "Pick at least one genre 🎬 No one likes a flavorless film fan."
                 );
                 return;
               }
 
               if (step === 4 && !form.favorite_moods.length) {
                 toast.error(
-                  "Set the mood! Or are you always this emotionally mysterious?"
+                  "Adding empty mood? That’s *so* emotionally unavailable of you 💅"
                 );
                 return;
               }

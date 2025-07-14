@@ -10,6 +10,11 @@ export const faqs = [
       "You can chat with our AI assistant and get smart movie or show recommendations based on your mood, favorite genres, or watch history.",
   },
   {
+    question: "Can I chat with AI while watching?",
+    answer:
+      "Yes! While watching a movie or show, you can chat with the AI for trivia, scene info, or related recommendations in real time.",
+  },
+  {
     question: "Is there a way to chat with friends?",
     answer:
       "Yes. You can send private messages to friends, share recommendations, and discuss movies or shows.",

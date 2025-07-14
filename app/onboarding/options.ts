@@ -12,7 +12,7 @@ export const socialIntentOptions = [
   "get recos",
   "flirt",
   "date",
-  "just browsing",
+  "watch",
   "secret",
 ];
 

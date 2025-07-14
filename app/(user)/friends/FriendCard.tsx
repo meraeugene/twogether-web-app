@@ -15,6 +15,14 @@ import Link from "next/link";
 import MessageModal from "@/components/MessageModal";
 import { getOrCreateThread, sendMessage } from "@/actions/messageActions";
 import { useRouter } from "next/navigation";
+import { KeyedMutator } from "swr";
+
+interface FriendPreview {
+  id: string;
+  username: string;
+  display_name: string;
+  avatar_url: string;
+}
 
 export function FriendCard({
   name,
@@ -31,11 +39,10 @@ export function FriendCard({
   id?: string;
   currentUserId: string;
   status: "friend" | "request" | "sent";
-  mutate?: () => void;
+  mutate?: KeyedMutator<FriendPreview[]>;
 }) {
   const router = useRouter();
-
-  const [isPending, startTransition] = useTransition();
+  const [actionPending, startActionTransition] = useTransition();
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messagePending, startMessageTransition] = useTransition();
 
@@ -66,36 +73,74 @@ export function FriendCard({
   };
 
   const handleAccept = () => {
-    startTransition(async () => {
-      if (!id || !currentUserId) return;
-      await acceptFriendRequest(id, currentUserId);
-      mutate?.();
-    });
-  };
-
-  const handleUnfriend = () => {
-    startTransition(async () => {
-      if (!id || !currentUserId) return;
-      await removeFriend(currentUserId, id);
-
-      mutate?.();
+    if (!id || !currentUserId) return;
+    startActionTransition(() => {
+      mutate?.(
+        async () => {
+          await acceptFriendRequest(id, currentUserId);
+          return [];
+        },
+        {
+          optimisticData: (currentData) =>
+            (currentData ?? []).filter((req) => req.id !== id),
+          rollbackOnError: true,
+          revalidate: false,
+        }
+      );
     });
   };
 
   const handleDecline = () => {
-    startTransition(async () => {
-      if (!id || !currentUserId) return;
-      await rejectFriendRequest(id, currentUserId);
-
-      mutate?.();
+    if (!id || !currentUserId) return;
+    startActionTransition(() => {
+      mutate?.(
+        async () => {
+          await rejectFriendRequest(id, currentUserId);
+          return [];
+        },
+        {
+          optimisticData: (currentData) =>
+            (currentData ?? []).filter((req) => req.id !== id),
+          rollbackOnError: true,
+          revalidate: false,
+        }
+      );
     });
   };
 
   const handleCancel = () => {
-    startTransition(async () => {
-      if (!id || !currentUserId) return;
-      await cancelFriendRequest(currentUserId, id);
-      mutate?.();
+    if (!id || !currentUserId) return;
+    startActionTransition(() => {
+      mutate?.(
+        async () => {
+          await cancelFriendRequest(currentUserId, id);
+          return [];
+        },
+        {
+          optimisticData: (currentData) =>
+            (currentData ?? []).filter((sent) => sent.id !== id),
+          rollbackOnError: true,
+          revalidate: false,
+        }
+      );
+    });
+  };
+
+  const handleUnfriend = () => {
+    if (!id || !currentUserId) return;
+    startActionTransition(() => {
+      mutate?.(
+        async () => {
+          await removeFriend(currentUserId, id);
+          return [];
+        },
+        {
+          optimisticData: (currentData) =>
+            (currentData ?? []).filter((friend) => friend.id !== id),
+          rollbackOnError: true,
+          revalidate: false,
+        }
+      );
     });
   };
 
@@ -125,12 +170,12 @@ export function FriendCard({
             className="cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
           >
             <FaUser className="text-xs" />
-            View Profile
+            Profile
           </Link>
 
           <button
             onClick={handleUnfriend}
-            disabled={isPending}
+            disabled={actionPending}
             className="text-sm cursor-pointer px-3 py-1 rounded-full  bg-red-600 hover:bg-red-700 text-white transition flex gap-2 items-center "
           >
             <FaUserXmark className="text-white" />
@@ -154,19 +199,19 @@ export function FriendCard({
             className=" cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
           >
             <FaUser className="text-xs" />
-            View Profile
+            Profile
           </Link>
 
           <button
             onClick={handleAccept}
-            disabled={isPending}
+            disabled={actionPending}
             className="cursor-pointer text-sm px-3 py-1 rounded-full bg-green-600 hover:bg-green-700 transition"
           >
             Accept
           </button>
           <button
             onClick={handleDecline}
-            disabled={isPending}
+            disabled={actionPending}
             className="cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition"
           >
             Decline
@@ -177,7 +222,7 @@ export function FriendCard({
         <div className="flex flex-wrap gap-2">
           <button
             onClick={handleCancel}
-            disabled={isPending}
+            disabled={actionPending}
             className="cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-red-600 transition"
           >
             Cancel
@@ -188,7 +233,7 @@ export function FriendCard({
             className=" cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
           >
             <FaUser className="text-xs" />
-            View Profile
+            Profile
           </Link>
         </div>
       )}

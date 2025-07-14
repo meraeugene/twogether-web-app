@@ -25,7 +25,7 @@ export default function RecommendModal({
 
   const handleSubmit = () => {
     if (!comment.trim()) {
-      toast.error("Please enter a comment before recommending.");
+      toast.error("You forgot the comment! Your voice deserves a scene. 🎬");
       return;
     }
 

@@ -16,7 +16,6 @@ import {
   socialIntentOptions as socialIntentOptionsBase,
 } from "@/app/onboarding/options";
 import { Genre, OnboardingForm } from "@/types/formTypes";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { uploadToCloudinary } from "@/utils/cloudinary/uploadToCloudinary";
 import Image from "next/image";
@@ -78,10 +77,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
   const handleAddCustomRelationship = () => {
     const trimmed = customRelationship.trim();
-    if (!trimmed)
-      return toast.error(
-        "Bro... you ghosted the input. At least tell us your situationship status 😩"
-      );
+    if (!trimmed) return null;
 
     if (!relationshipStatusOptions.includes(trimmed)) {
       setRelationshipStatusOptions((prev) => [...prev, trimmed]);
@@ -94,10 +90,7 @@ export default function EditProfileForm({ user }: { user: User }) {
     const trimmed = customMood.trim();
 
     if (!trimmed) {
-      toast.error(
-        "Adding empty mood? That’s *so* emotionally unavailable of you 💅"
-      );
-      return;
+      return null;
     }
 
     if (
@@ -113,10 +106,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
   const handleAddCustomSocialIntent = () => {
     const trimmed = customSocialIntent.trim();
-    if (!trimmed)
-      return toast.error(
-        "You forgot your social intent... introvert detected 😅"
-      );
+    if (!trimmed) return null;
 
     if (!socialIntentOptions.includes(trimmed)) {
       setSocialIntentOptions((prev) => [...prev, trimmed]);
@@ -176,7 +166,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           </label>
 
           <div className="flex items-center gap-4">
-            <div className="relative w-20 h-20 rounded-full overflow-hidden border border-white/20 shadow-md bg-white/10">
+            <div className="relative w-20 h-20 rounded-full overflow-hidden border border-white/5 shadow-md bg-white/10">
               {preview ? (
                 selectedImage ? (
                   <Image

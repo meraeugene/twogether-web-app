@@ -58,18 +58,18 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
       return;
     }
 
-    toast.success("Recommendation added!");
+    toast.success("Boom! Your recommendation just hit the screen 🎬✨");
     router.push("/browse");
   };
 
   const nextStepCheck = () => {
     if (currentKey === "movie" && !form.tmdb_id) {
-      toast.error("Please choose a movie.");
+      toast.error("No title? No tale! Pick a film to start the magic ✨");
       return;
     }
 
     if (currentKey === "comment" && !form.comment.trim()) {
-      toast.error("Please write a comment.");
+      toast.error("Say something! Your thoughts deserve the spotlight 💬✨");
       return;
     }
 

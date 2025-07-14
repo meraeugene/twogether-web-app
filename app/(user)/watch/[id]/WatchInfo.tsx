@@ -57,7 +57,9 @@ export default function WatchInfo({
 
     setLoading(false);
     if (!error) {
-      toast.success("Recommendation submitted successfully!");
+      toast.success(
+        "Recommendation submitted! Your taste just blessed someone’s watchlist 🎉"
+      );
       setOpen(false);
       router.refresh();
     } else {
@@ -136,13 +138,16 @@ export default function WatchInfo({
             href={`/profile/${recommendation.recommended_by.username}/${recommendation.recommended_by.id}`}
             className="inline-flex items-center gap-3 py-2 px-3 rounded-md transition-colors bg-white/5 hover:bg-white/10 backdrop-blur border border-white/10 w-fit"
           >
-            <Image
-              src={recommendation.recommended_by.avatar_url}
-              alt="Avatar"
-              width={28}
-              height={28}
-              className="rounded-full"
-            />
+            <div className="w-7 h-7 rounded-full overflow-hidden">
+              <Image
+                src={recommendation.recommended_by.avatar_url}
+                alt="Avatar"
+                width={28}
+                height={28}
+                className="object-cover"
+              />
+            </div>
+
             <strong className="capitalize text-sm md:text-base">
               {recommendation.recommended_by.username}
             </strong>

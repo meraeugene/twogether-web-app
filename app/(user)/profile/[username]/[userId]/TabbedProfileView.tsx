@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaHeart,
@@ -109,17 +109,37 @@ export default function TabbedProfileView({
     });
   };
 
-  const handleAddFriendToggle = async () => {
-    startRequestTransition(async () => {
-      if (friendStatus === "none") {
-        await sendFriendRequest(currentUser.id, user.id);
-      } else if (friendStatus === "pending") {
-        await cancelFriendRequest(currentUser.id, user.id);
-      }
+  const [localFriendStatus, setLocalFriendStatus] =
+    useState<FriendRequestStatus | null>(null);
 
-      await refetchFriendStatus(); // Always refresh status from server
+  const effectiveFriendStatus = localFriendStatus ?? friendStatus;
+
+  const handleAddFriendToggle = () => {
+    if (!friendStatus) return;
+
+    const optimisticStatus = friendStatus === "none" ? "pending" : "none";
+
+    setLocalFriendStatus(optimisticStatus); // Optimistic update
+
+    startRequestTransition(async () => {
+      try {
+        if (friendStatus === "none") {
+          await sendFriendRequest(currentUser.id, user.id);
+        } else if (friendStatus === "pending") {
+          await cancelFriendRequest(currentUser.id, user.id);
+        }
+
+        await refetchFriendStatus();
+      } catch (err) {
+        setLocalFriendStatus(friendStatus); // Rollback on error
+        console.error("Friend request error:", err);
+      }
     });
   };
+
+  useEffect(() => {
+    setLocalFriendStatus(null); // clear override when real status changes
+  }, [friendStatus]);
 
   const handleSendMessage = (content: string) => {
     startMessageTransition(async () => {
@@ -174,7 +194,7 @@ export default function TabbedProfileView({
             />
 
             <h1 className="mt-4 text-2xl font-bold">{user.display_name}</h1>
-            <p className="text-white/70">@{user.username}</p>
+            <p className="text-red-500 ">@{user.username}</p>
 
             <p className="text-white/60 text-sm mt-1">
               {followers} follower{followers !== 1 ? "s" : ""}
@@ -188,24 +208,24 @@ export default function TabbedProfileView({
                   onClick={handleAddFriendToggle}
                   disabled={requestPending}
                   className={`cursor-pointer transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white ${
-                    friendStatus === "pending"
+                    effectiveFriendStatus === "pending"
                       ? "bg-red-600 hover:bg-red-700"
-                      : friendStatus === "accepted"
+                      : effectiveFriendStatus === "accepted"
                       ? "bg-green-600 hover:bg-green-700"
                       : "bg-white/10 hover:bg-white/20"
                   }`}
                 >
-                  {friendStatus === "pending" ? (
+                  {effectiveFriendStatus === "pending" ? (
                     <FaTimes className="text-white" />
-                  ) : friendStatus === "accepted" ? (
+                  ) : effectiveFriendStatus === "accepted" ? (
                     <FaUserFriends className="text-white" />
                   ) : (
                     <FaUserPlus className="text-white" />
                   )}
 
-                  {friendStatus === "pending"
+                  {effectiveFriendStatus === "pending"
                     ? "Cancel Request"
-                    : friendStatus === "accepted"
+                    : effectiveFriendStatus === "accepted"
                     ? "Friends"
                     : "Add Friend"}
                 </button>
@@ -350,7 +370,7 @@ export default function TabbedProfileView({
                           className="mt-1 cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center gap-2"
                         >
                           <FaUser className="text-xs" />
-                          View Profile
+                          Profile
                         </Link>
                       </motion.div>
                     ))}

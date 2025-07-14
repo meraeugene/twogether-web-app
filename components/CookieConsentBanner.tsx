@@ -18,14 +18,40 @@ export default function CookieConsentBanner() {
     setShow(false);
   };
 
+  const variants = {
+    initial: { y: 50, opacity: 0 },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        stiffness: 300,
+        damping: 30,
+        mass: 0.5,
+        delay: 1, // Entrance delay only
+      },
+    },
+    exit: {
+      y: 20,
+      opacity: 0,
+      scale: 0.98,
+      transition: {
+        stiffness: 300,
+        damping: 30,
+        mass: 0.5,
+        delay: 0, // No exit delay
+      },
+    },
+  } as const;
+
   return (
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 20, opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+          layout
+          variants={variants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
           className="fixed font-[family-name:var(--font-geist-sans)] bottom-4 left-1/2 -translate-x-1/2 w-[90%] md:w-[450px] bg-white/10 backdrop-blur-lg border border-white/20 text-white px-5 py-4 rounded-xl shadow-xl z-50"
         >
           <div className="text-sm md:text-base mb-4">
