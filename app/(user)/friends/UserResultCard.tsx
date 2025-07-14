@@ -26,13 +26,12 @@ export function UserResultCard({
   const [status, setStatus] = useState<FriendRequestStatus>(initialStatus);
 
   const handleSendRequest = () => {
-    // ✅ Update button immediately
     setStatus("pending");
 
     startTransition(async () => {
       try {
-        await sendFriendRequest(currentUserId, user.id);
         toast.success(`Friend request sent to @${user.username}`);
+        await sendFriendRequest(currentUserId, user.id);
       } catch (err) {
         console.error("Error sending friend request:", err);
         toast.error("Failed to add friend.");

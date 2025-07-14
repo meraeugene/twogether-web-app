@@ -62,7 +62,6 @@ export default function TabbedProfileView({
   const [followers, setFollowers] = useState<number>(followStats.followers);
 
   // FRIENDS STATE
-  const [requestPending, startRequestTransition] = useTransition();
   const [cooldown, setCooldown] = useState(false);
 
   // MESSAGE STATE
@@ -115,13 +114,15 @@ export default function TabbedProfileView({
   const effectiveFriendStatus = localFriendStatus ?? friendStatus;
 
   const handleAddFriendToggle = () => {
-    if (!friendStatus) return;
+    if (!friendStatus || cooldown) return;
 
     const optimisticStatus = friendStatus === "none" ? "pending" : "none";
 
     setLocalFriendStatus(optimisticStatus); // Optimistic update
+    setCooldown(true);
+    setTimeout(() => setCooldown(false), 500); // 500ms cooldown like follow toggle
 
-    startRequestTransition(async () => {
+    (async () => {
       try {
         if (friendStatus === "none") {
           await sendFriendRequest(currentUser.id, user.id);
@@ -134,7 +135,7 @@ export default function TabbedProfileView({
         setLocalFriendStatus(friendStatus); // Rollback on error
         console.error("Friend request error:", err);
       }
-    });
+    })();
   };
 
   useEffect(() => {
@@ -206,7 +207,7 @@ export default function TabbedProfileView({
                 {/* Add Friend */}
                 <button
                   onClick={handleAddFriendToggle}
-                  disabled={requestPending}
+                  disabled={cooldown}
                   className={`cursor-pointer transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white ${
                     effectiveFriendStatus === "pending"
                       ? "bg-red-600 hover:bg-red-700"

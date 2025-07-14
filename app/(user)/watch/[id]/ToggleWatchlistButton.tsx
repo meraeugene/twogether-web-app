@@ -33,16 +33,16 @@ export default function ToggleWatchlistButton({
     startTransition(async () => {
       try {
         if (!optimisticInList && watchlistId) {
-          await removeFromWatchlist(watchlistId, currentUserId, filmId);
           toast.info("Poof! Gone from your watchlist 🎬💨");
+          await removeFromWatchlist(watchlistId, currentUserId, filmId);
           setWatchlistId(null);
         } else {
+          toast.success("Nice pick! Now starring on your watchlist 🎞️🌟");
           const id = await addToWatchlist(
             recommendationId,
             currentUserId,
             filmId
           );
-          toast.success("Nice pick! Now starring on your watchlist 🎞️🌟");
           setWatchlistId(id);
         }
       } catch {
