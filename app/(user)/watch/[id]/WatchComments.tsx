@@ -1,8 +1,15 @@
 "use client";
 
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { useRef, useState } from "react";
-import { BiSend, BiLike, BiDislike } from "react-icons/bi";
+import { BiSend } from "react-icons/bi";
+
+import {
+  AiFillLike,
+  AiFillDislike,
+  AiOutlineDislike,
+  AiOutlineLike,
+} from "react-icons/ai";
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
 import {
@@ -38,10 +45,14 @@ export default function WatchComments({
     error,
     isLoading,
     mutate: refetchComments,
-  } = useSWR(["comments", recId], () => getCommentsForRecommendation(recId), {
-    refreshInterval: 5000, // Auto-refresh every 5 seconds
-    refreshWhenHidden: false,
-  });
+  } = useSWR(
+    ["comments", recId],
+    () => getCommentsForRecommendation(recId, currentUserId),
+    {
+      refreshInterval: 1000, // Auto-refresh every 5 seconds
+      refreshWhenHidden: false,
+    }
+  );
 
   const handlePostComment = async () => {
     if (!newComment.trim()) return;
@@ -67,13 +78,53 @@ export default function WatchComments({
     await refetchComments();
     setReplySubmittingId(null);
   };
-
   const handleReaction = async (
     commentId: string,
     type: "like" | "dislike"
   ) => {
-    await reactToComment(commentId, type, currentUserId);
-    refetchComments(); // Refetch after reacting
+    const updated = comments.map((comment) => {
+      if (comment.id !== commentId) return comment;
+      const updatedComment = { ...comment };
+
+      const alreadyReacted = comment.userReaction === type;
+
+      if (alreadyReacted) {
+        // remove reaction
+        if (type === "like") {
+          updatedComment.likes = Math.max((comment.likes || 1) - 1, 0);
+        } else {
+          updatedComment.dislikes = Math.max((comment.dislikes || 1) - 1, 0);
+        }
+        updatedComment.userReaction = null;
+      } else {
+        // switch or add reaction
+        if (type === "like") {
+          updatedComment.likes = (comment.likes || 0) + 1;
+          if (comment.userReaction === "dislike") {
+            updatedComment.dislikes = Math.max((comment.dislikes || 1) - 1, 0);
+          }
+        } else {
+          updatedComment.dislikes = (comment.dislikes || 0) + 1;
+          if (comment.userReaction === "like") {
+            updatedComment.likes = Math.max((comment.likes || 1) - 1, 0);
+          }
+        }
+        updatedComment.userReaction = type;
+      }
+
+      return updatedComment;
+    });
+
+    mutate(["comments", recId], () => updated, false);
+
+    try {
+      await reactToComment(commentId, type, currentUserId);
+      // You may skip revalidation here
+      // await mutate(["comments", recId]);
+    } catch (error) {
+      console.error("Reaction failed", error);
+      await mutate(["comments", recId]); // fallback
+    }
   };
 
   return (
@@ -165,18 +216,36 @@ export default function WatchComments({
                       <div className="flex gap-4 text-xs text-white/60 mt-2">
                         <button
                           onClick={() => handleReaction(comment.id, "like")}
-                          className="flex items-center gap-1 hover:text-white transition"
+                          className={`flex cursor-pointer items-center gap-1 transition ${
+                            comment.userReaction === "like"
+                              ? "text-red-500"
+                              : "text-white/60 hover:text-white"
+                          }`}
                         >
-                          <BiLike className="text-base" />
+                          {comment.userReaction === "like" ? (
+                            <AiFillLike className="text-base" />
+                          ) : (
+                            <AiOutlineLike className="text-base" />
+                          )}
                           {comment.likes || 0}
                         </button>
+
                         <button
                           onClick={() => handleReaction(comment.id, "dislike")}
-                          className="flex items-center gap-1 hover:text-white transition"
+                          className={`flex cursor-pointer items-center gap-1 transition ${
+                            comment.userReaction === "dislike"
+                              ? "text-blue-400"
+                              : "text-white/60 hover:text-white"
+                          }`}
                         >
-                          <BiDislike className="text-base" />
+                          {comment.userReaction === "dislike" ? (
+                            <AiFillDislike className="text-base" />
+                          ) : (
+                            <AiOutlineDislike className="text-base" />
+                          )}
                           {comment.dislikes || 0}
                         </button>
+
                         <button
                           onClick={() =>
                             setReplyTo({
@@ -184,7 +253,7 @@ export default function WatchComments({
                               commentId: comment.id,
                             })
                           }
-                          className="hover:text-white transition"
+                          className="hover:text-white cursor-pointer transition"
                         >
                           Reply
                         </button>
@@ -251,7 +320,7 @@ export default function WatchComments({
                       <div className="flex gap-2">
                         <button
                           onClick={handlePostReply}
-                          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-1"
+                          className="px-4 cursor-pointer py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm flex items-center gap-1"
                         >
                           <BiSend className="text-base" />
                           Reply
@@ -261,7 +330,7 @@ export default function WatchComments({
                             setReplyTo(null);
                             setReplyText("");
                           }}
-                          className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-md text-sm"
+                          className="px-4 cursor-pointer py-2 bg-white/10 hover:bg-white/20 text-white rounded-md text-sm"
                         >
                           Cancel
                         </button>

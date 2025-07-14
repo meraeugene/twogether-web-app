@@ -62,7 +62,8 @@ export default function TabbedProfileView({
   const [followers, setFollowers] = useState<number>(followStats.followers);
 
   // FRIENDS STATE
-  const [cooldown, setCooldown] = useState(false);
+  const [followCooldown, setFollowCooldown] = useState(false);
+  const [friendCooldown, setFriendCooldown] = useState(false);
 
   // MESSAGE STATE
   const [showMessageModal, setShowMessageModal] = useState(false);
@@ -95,13 +96,13 @@ export default function TabbedProfileView({
   );
 
   const handleFollowToggle = () => {
-    if (cooldown) return;
+    if (followCooldown) return;
 
     setIsFollowing((prev) => !prev);
     setFollowers((prev) => (isFollowing ? prev - 1 : prev + 1));
 
-    setCooldown(true);
-    setTimeout(() => setCooldown(false), 500); // 500ms cooldown
+    setFollowCooldown(true);
+    setTimeout(() => setFollowCooldown(false), 500);
 
     startTransition(() => {
       toggleFollow(currentUser.id, user.id);
@@ -114,13 +115,12 @@ export default function TabbedProfileView({
   const effectiveFriendStatus = localFriendStatus ?? friendStatus;
 
   const handleAddFriendToggle = () => {
-    if (!friendStatus || cooldown) return;
+    if (!friendStatus || friendCooldown) return;
 
     const optimisticStatus = friendStatus === "none" ? "pending" : "none";
-
-    setLocalFriendStatus(optimisticStatus); // Optimistic update
-    setCooldown(true);
-    setTimeout(() => setCooldown(false), 500); // 500ms cooldown like follow toggle
+    setLocalFriendStatus(optimisticStatus);
+    setFriendCooldown(true);
+    setTimeout(() => setFriendCooldown(false), 500);
 
     (async () => {
       try {
@@ -132,7 +132,7 @@ export default function TabbedProfileView({
 
         await refetchFriendStatus();
       } catch (err) {
-        setLocalFriendStatus(friendStatus); // Rollback on error
+        setLocalFriendStatus(friendStatus);
         console.error("Friend request error:", err);
       }
     })();
@@ -207,14 +207,20 @@ export default function TabbedProfileView({
                 {/* Add Friend */}
                 <button
                   onClick={handleAddFriendToggle}
-                  disabled={cooldown}
-                  className={`cursor-pointer transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white ${
-                    effectiveFriendStatus === "pending"
-                      ? "bg-red-600 hover:bg-red-700"
-                      : effectiveFriendStatus === "accepted"
-                      ? "bg-green-600 hover:bg-green-700"
-                      : "bg-white/10 hover:bg-white/20"
-                  }`}
+                  disabled={friendCooldown}
+                  className={`cursor-pointer transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
+                        ${
+                          friendCooldown
+                            ? "opacity-50 cursor-not-allowed"
+                            : "cursor-pointer"
+                        }
+                     ${
+                       effectiveFriendStatus === "pending"
+                         ? "bg-red-600 hover:bg-red-700"
+                         : effectiveFriendStatus === "accepted"
+                         ? "bg-green-600 hover:bg-green-700"
+                         : "bg-white/10 hover:bg-white/20"
+                     }`}
                 >
                   {effectiveFriendStatus === "pending" ? (
                     <FaTimes className="text-white" />
@@ -234,8 +240,15 @@ export default function TabbedProfileView({
                 {/* Follow */}
                 <button
                   onClick={handleFollowToggle}
-                  disabled={cooldown}
-                  className={`transition cursor-pointer text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
+                  disabled={followCooldown}
+                  className={`transition
+                        ${
+                          followCooldown
+                            ? "opacity-50 cursor-not-allowed"
+                            : "cursor-pointer"
+                        }
+
+                    cursor-pointer text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
                     ${
                       isFollowing
                         ? "bg-red-600 hover:bg-red-700"

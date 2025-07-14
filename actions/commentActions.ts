@@ -1,8 +1,10 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-
-export async function getCommentsForRecommendation(recId: string) {
+export async function getCommentsForRecommendation(
+  recId: string,
+  currentUserId: string
+) {
   const supabase = await createClient();
 
   const { data: comments, error } = await supabase
@@ -13,25 +15,35 @@ export async function getCommentsForRecommendation(recId: string) {
 
   if (error) throw new Error("Failed to fetch comments");
 
-  // Enrich with like/dislike counts
   const enriched = await Promise.all(
     (comments || []).map(async (comment) => {
-      const { count: likes } = await supabase
-        .from("comment_reactions")
-        .select("*", { count: "exact", head: true })
-        .eq("comment_id", comment.id)
-        .eq("type", "like");
+      const [{ count: likes }, { count: dislikes }, { data: userReaction }] =
+        await Promise.all([
+          supabase
+            .from("comment_reactions")
+            .select("*", { count: "exact", head: true })
+            .eq("comment_id", comment.id)
+            .eq("type", "like"),
 
-      const { count: dislikes } = await supabase
-        .from("comment_reactions")
-        .select("*", { count: "exact", head: true })
-        .eq("comment_id", comment.id)
-        .eq("type", "dislike");
+          supabase
+            .from("comment_reactions")
+            .select("*", { count: "exact", head: true })
+            .eq("comment_id", comment.id)
+            .eq("type", "dislike"),
+
+          supabase
+            .from("comment_reactions")
+            .select("type")
+            .eq("comment_id", comment.id)
+            .eq("user_id", currentUserId)
+            .maybeSingle(),
+        ]);
 
       return {
         ...comment,
         likes: likes ?? 0,
         dislikes: dislikes ?? 0,
+        userReaction: userReaction?.type ?? null,
       };
     })
   );
