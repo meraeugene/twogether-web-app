@@ -63,6 +63,7 @@ export default function TabbedProfileView({
 
   // FRIENDS STATE
   const [followCooldown, setFollowCooldown] = useState(false);
+  const [friendCooldown, setFriendCooldown] = useState(false);
 
   // MESSAGE STATE
   const [showMessageModal, setShowMessageModal] = useState(false);
@@ -114,10 +115,12 @@ export default function TabbedProfileView({
   const effectiveFriendStatus = localFriendStatus ?? friendStatus;
 
   const handleAddFriendToggle = () => {
-    if (!friendStatus) return;
+    if (!friendStatus || friendCooldown) return;
 
     const optimisticStatus = friendStatus === "none" ? "pending" : "none";
     setLocalFriendStatus(optimisticStatus);
+    setFriendCooldown(true);
+    setTimeout(() => setFriendCooldown(false), 500);
 
     (async () => {
       try {
@@ -200,10 +203,10 @@ export default function TabbedProfileView({
                 {/* Add Friend */}
                 <button
                   onClick={handleAddFriendToggle}
-                  disabled={!effectiveFriendStatus}
+                  disabled={friendCooldown}
                   className={`cursor-pointer transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
                         ${
-                          effectiveFriendStatus
+                          friendCooldown
                             ? "opacity-50 cursor-not-allowed"
                             : "cursor-pointer"
                         }
