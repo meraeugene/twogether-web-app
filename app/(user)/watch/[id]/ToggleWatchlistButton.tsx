@@ -5,21 +5,25 @@ import { MdMovieFilter } from "react-icons/md";
 import { toast } from "sonner";
 import {
   addToWatchlist,
+  addToWatchlistWithMetadata,
   removeFromWatchlist,
 } from "@/actions/watchlistActions";
+import { WatchlistMetadata } from "@/types/watchlist";
 
 export default function ToggleWatchlistButton({
   recommendationId,
   initialInWatchlist,
   initialWatchlistId,
   currentUserId,
-  filmId,
+  fallbackMetadata,
+  isAiRecommendation = false,
 }: {
   recommendationId: string;
   initialInWatchlist: boolean;
   initialWatchlistId: string | null;
   currentUserId: string;
-  filmId: string;
+  fallbackMetadata: WatchlistMetadata;
+  isAiRecommendation?: boolean;
 }) {
   const [isInList, setIsInList] = useState(initialInWatchlist);
   const [watchlistId, setWatchlistId] = useState(initialWatchlistId);
@@ -34,15 +38,17 @@ export default function ToggleWatchlistButton({
       try {
         if (!optimisticInList && watchlistId) {
           toast.info("Poof! Gone from your watchlist 🎬💨");
-          await removeFromWatchlist(watchlistId, currentUserId, filmId);
+          await removeFromWatchlist(watchlistId, currentUserId);
           setWatchlistId(null);
         } else {
-          toast.success("Nice pick! Now starring on your watchlist 🎞️🌟");
-          const id = await addToWatchlist(
-            recommendationId,
-            currentUserId,
-            filmId
-          );
+          toast.success("Nice pick! Now starring on your watchlist 🌟");
+          const id =
+            recommendationId && !isAiRecommendation
+              ? await addToWatchlist(recommendationId, currentUserId)
+              : await addToWatchlistWithMetadata(
+                  currentUserId,
+                  fallbackMetadata
+                );
           setWatchlistId(id);
         }
       } catch {
@@ -57,13 +63,14 @@ export default function ToggleWatchlistButton({
     <button
       onClick={handleToggle}
       disabled={isPending}
-      className={`cursor-pointer w-fit flex items-center gap-2 px-4 py-2 rounded-md text-sm transition
+      className={`w-fit flex items-center gap-2 px-4 py-2 rounded-md text-sm transition
         ${
           isInList
             ? "bg-red-600 hover:bg-red-500"
             : "bg-white text-black hover:bg-white/90"
         }
-       
+         ${isPending ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+
       `}
     >
       <MdMovieFilter />

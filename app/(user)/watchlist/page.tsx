@@ -31,7 +31,7 @@ export default async function WatchlistPage() {
             <Link href="/browse" className="text-white hover:underline">
               browsing
             </Link>{" "}
-            and add movies/shows you want to watch later!
+            now.
           </p>
         </div>
       ) : (

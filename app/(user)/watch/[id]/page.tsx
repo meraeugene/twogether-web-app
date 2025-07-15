@@ -33,6 +33,7 @@ export default async function WatchPage({
   }
 
   const suggestions = await getSuggestions(id, recommendation.genres);
+
   const { inWatchlist, id: watchListId } = await checkIfInWatchlist(
     recommendation.tmdb_id,
     currentUser.id
@@ -63,7 +64,6 @@ export default async function WatchPage({
             }
           />{" "}
           <WatchInfo
-            id={id}
             recommendation={recommendation}
             initialInWatchlist={inWatchlist}
             initialWatchlistId={watchListId}

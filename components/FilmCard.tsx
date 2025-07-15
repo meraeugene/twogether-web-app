@@ -97,9 +97,9 @@ export default function FilmCard({
                 <Link
                   href={
                     item.generated_by_ai
-                      ? `/ai-recommend/watch/${
-                          item.recommendation_id
-                        }/${getSlugFromTitle(item.title)}`
+                      ? `/ai-recommend/watch/${item.tmdb_id}/${getSlugFromTitle(
+                          item.title
+                        )}`
                       : `/watch/${item.recommendation_id}`
                   }
                   className="flex items-center justify-center w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md ring-1 ring-white/10 hover:ring-3 hover:ring-red-100 transition duration-300 ease-in-out transform hover:scale-110"
@@ -200,9 +200,9 @@ export default function FilmCard({
               <Link
                 href={
                   item.generated_by_ai
-                    ? `/ai-recommend/watch/${
-                        item.recommendation_id
-                      }/${getSlugFromTitle(item.title)}`
+                    ? `/ai-recommend/watch/${item.tmdb_id}/${getSlugFromTitle(
+                        item.title
+                      )}`
                     : `/watch/${item.recommendation_id}`
                 }
                 className="w-full flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mt-2 mb-4 lg:hidden"
@@ -246,7 +246,9 @@ export default function FilmCard({
                     href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
                     className="text-white font-medium hover:underline"
                   >
-                    {item.recommended_by.username}
+                    {item.generated_by_ai
+                      ? "AI Assistant"
+                      : item.recommended_by.username}
                   </Link>
                 </div>
               )}

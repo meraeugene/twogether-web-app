@@ -111,16 +111,14 @@ export default function TabbedProfileView({
 
   const [localFriendStatus, setLocalFriendStatus] =
     useState<FriendRequestStatus | null>(null);
-
   const effectiveFriendStatus = localFriendStatus ?? friendStatus;
 
   const handleAddFriendToggle = () => {
-    if (!friendStatus || friendCooldown) return;
+    if (!friendStatus) return;
 
     const optimisticStatus = friendStatus === "none" ? "pending" : "none";
     setLocalFriendStatus(optimisticStatus);
     setFriendCooldown(true);
-    setTimeout(() => setFriendCooldown(false), 500);
 
     (async () => {
       try {
@@ -134,6 +132,8 @@ export default function TabbedProfileView({
       } catch (err) {
         setLocalFriendStatus(friendStatus);
         console.error("Friend request error:", err);
+      } finally {
+        setFriendCooldown(false);
       }
     })();
   };
@@ -204,7 +204,7 @@ export default function TabbedProfileView({
                 <button
                   onClick={handleAddFriendToggle}
                   disabled={friendCooldown}
-                  className={`cursor-pointer transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
+                  className={` transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
                         ${
                           friendCooldown
                             ? "opacity-50 cursor-not-allowed"
@@ -244,7 +244,7 @@ export default function TabbedProfileView({
                             : "cursor-pointer"
                         }
 
-                    cursor-pointer text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
+                     text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
                     ${
                       isFollowing
                         ? "bg-red-600 hover:bg-red-700"

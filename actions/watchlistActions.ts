@@ -2,9 +2,8 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { Recommendation } from "@/types/recommendation";
-import { getCurrentUser } from "./authActions";
 import { revalidatePath } from "next/cache";
-import { match } from "assert";
+import { WatchlistMetadata } from "@/types/watchlist";
 
 // Fetch watchlist by user ID
 export async function getWatchlistByUserId(
@@ -49,8 +48,7 @@ export async function checkIfInWatchlist(
 // Add to watchlist
 export async function addToWatchlist(
   recommendationId: string,
-  currentUserId: string,
-  filmId: string
+  currentUserId: string
 ) {
   const supabase = await createClient();
 
@@ -65,25 +63,47 @@ export async function addToWatchlist(
 
   if (error) throw new Error(error.message);
 
-  revalidatePath(`/watch/${filmId}`);
+  revalidatePath("/watchlist");
+
   return data.id;
 }
 
 // Remove from watchlist
-export async function removeFromWatchlist(
-  id: string,
-  userId: string,
-  filmId?: string
-) {
+export async function removeFromWatchlist(id: string, userId: string) {
   const supabase = await createClient();
 
   const { error } = await supabase
     .from("watchlist_items")
     .delete()
-    .match({ id, user_id: userId }); // secure: only if user owns it
+    .match({ id, user_id: userId });
 
   if (error) throw new Error(error.message);
-  revalidatePath(`/watch/${filmId}`);
+
   revalidatePath("/watchlist");
+
   return true;
+}
+
+// IF ITS A AI GENERATED OR A SEARCH MOVIE
+export async function addToWatchlistWithMetadata(
+  currentUserId: string,
+  metadata: WatchlistMetadata
+) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("watchlist_items")
+    .insert({
+      user_id: currentUserId,
+      recommendation_id: null,
+      ...metadata,
+    })
+    .select("id")
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/watchlist");
+
+  return data.id;
 }

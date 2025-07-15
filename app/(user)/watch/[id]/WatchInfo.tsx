@@ -13,7 +13,6 @@ import { omit } from "@/utils/ai-recommend/omit";
 import { useRouter } from "next/navigation";
 
 export default function WatchInfo({
-  id,
   recommendation,
   initialInWatchlist,
   initialWatchlistId,
@@ -22,7 +21,6 @@ export default function WatchInfo({
   isAiRecommendation = false,
 }: {
   recommendation: Recommendation;
-  id: string;
   initialInWatchlist: boolean;
   initialWatchlistId: string | null;
   currentUserId: string;
@@ -41,15 +39,15 @@ export default function WatchInfo({
     setLoading(true);
 
     // Omit unnecessary fields from the recommendation data to prevent sending AI-generated metadata
-    const safeData = omit(recommendation, [
+    const aiRecommendData = omit(recommendation, [
+      "id",
       "generated_by_ai",
       "recommended_by",
-      "id",
       "recommendation_id",
     ]);
 
     const { error } = await createRecommendation(currentUserId!, {
-      ...safeData,
+      ...aiRecommendData,
       comment: formData.comment,
       visibility: formData.visibility,
       user_id: currentUserId,
@@ -76,15 +74,20 @@ export default function WatchInfo({
             {recommendation.title}
           </h1>
 
-          {!isAiRecommendation && (
-            <ToggleWatchlistButton
-              currentUserId={currentUserId || ""}
-              initialInWatchlist={initialInWatchlist}
-              filmId={id}
-              initialWatchlistId={initialWatchlistId}
-              recommendationId={recommendation.recommendation_id}
-            />
-          )}
+          <ToggleWatchlistButton
+            currentUserId={currentUserId || ""}
+            initialInWatchlist={initialInWatchlist}
+            initialWatchlistId={initialWatchlistId}
+            recommendationId={recommendation.recommendation_id}
+            isAiRecommendation={isAiRecommendation}
+            fallbackMetadata={omit(recommendation, [
+              "id",
+              "generated_by_ai",
+              "recommendation_id",
+              "created_at",
+              "visibility",
+            ])}
+          />
 
           {isAiRecommendation && !alreadyRecommended && (
             <button

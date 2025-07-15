@@ -13,19 +13,23 @@ import { useEffect, useState } from "react";
 export default function AIWatchClient({
   currentUser,
   alreadyRecommended,
+  initialInWatchlist,
+  initialWatchlistId,
 }: {
   currentUser: CurrentUser;
   alreadyRecommended: boolean;
+  initialInWatchlist: boolean;
+  initialWatchlistId: string | null;
 }) {
   const [hasHydrated, setHasHydrated] = useState(false);
   useEffect(() => setHasHydrated(true), []);
 
   const params = useParams();
-  const id = params?.id as string;
+  const tmdbId = params?.id as string;
 
   const recommendations = useAIRecommendations.getState().recommendations;
   const recommendation = recommendations.find(
-    (r) => r.recommendation_id === id
+    (r) => r.tmdb_id === Number(tmdbId)
   );
 
   if (!hasHydrated) return null;
@@ -64,10 +68,9 @@ export default function AIWatchClient({
 
       <div className="mt-8">
         <WatchInfo
-          id={recommendation.id}
           recommendation={recommendation}
-          initialInWatchlist={false}
-          initialWatchlistId={null}
+          initialInWatchlist={initialInWatchlist}
+          initialWatchlistId={initialWatchlistId}
           isAiRecommendation={recommendation.generated_by_ai}
           currentUserId={currentUser.id}
           alreadyRecommended={alreadyRecommended}

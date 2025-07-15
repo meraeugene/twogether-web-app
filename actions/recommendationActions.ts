@@ -140,7 +140,7 @@ export async function toggleRecommendationVisibility(
 
 export async function hasUserRecommendedFilm(
   userId: string,
-  tmdbId: string
+  tmdbId: number
 ): Promise<boolean> {
   const supabase = await createClient();
 
