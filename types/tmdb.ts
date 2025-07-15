@@ -24,6 +24,8 @@ export type TMDBSeasonResponse = {
 };
 
 export type TMDBEnrichedResult = TMDBRawResult & {
+  tmdb_id?: number;
+  type?: string;
   genres: string[]; // e.g. ['Action', 'Comedy']
   poster_url: string | null; // full image URL or null if not available
   year?: string;

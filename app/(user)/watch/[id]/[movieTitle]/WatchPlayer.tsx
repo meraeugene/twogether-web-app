@@ -43,7 +43,7 @@ export default function WatchPlayer({
           <button
             key={index}
             onClick={() => setCurrentUrlIndex(index)}
-            className={`px-4 py-2 text-sm flex items-center gap-2 rounded-xl transition font-medium
+            className={`px-4 cursor-pointer py-2 text-sm flex items-center gap-2 rounded-xl transition font-medium
               ${
                 currentUrlIndex === index
                   ? "bg-red-600 text-white font-semibold"

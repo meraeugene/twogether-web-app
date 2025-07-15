@@ -17,6 +17,8 @@ import { removeFromWatchlist } from "@/actions/watchlistActions";
 import { PrivacyModal } from "./PrivacyModal";
 import { FaLock } from "react-icons/fa";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
+import { useRouter } from "next/navigation";
+import { useTMDBWatch } from "@/stores/useTMDBWatch";
 
 export default function FilmCard({
   item,
@@ -61,6 +63,25 @@ export default function FilmCard({
     });
   };
 
+  const router = useRouter();
+  const setCurrentTMDB = useTMDBWatch((s) => s.setCurrentTMDB);
+
+  const handleClick = () => {
+    const slug = getSlugFromTitle(item.title);
+
+    if (item.generated_by_ai) {
+      router.push(`/ai-recommend/watch/${item.tmdb_id}/${slug}`);
+    } else if (
+      item.recommendation_id?.startsWith("movie-") ||
+      item.recommendation_id?.startsWith("tv-")
+    ) {
+      router.push(`/watch/${item.tmdb_id}/${slug}`);
+    } else {
+      setCurrentTMDB(item);
+      router.push(`/tmdb/watch/${item.tmdb_id}/${slug}`);
+    }
+  };
+
   return (
     <>
       <AnimatePresence mode="popLayout">
@@ -94,18 +115,12 @@ export default function FilmCard({
               )}
 
               <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/50 backdrop-blur-sm">
-                <Link
-                  href={
-                    item.generated_by_ai
-                      ? `/ai-recommend/watch/${item.tmdb_id}/${getSlugFromTitle(
-                          item.title
-                        )}`
-                      : `/watch/${item.recommendation_id}`
-                  }
-                  className="flex items-center justify-center w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md ring-1 ring-white/10 hover:ring-3 hover:ring-red-100 transition duration-300 ease-in-out transform hover:scale-110"
+                <button
+                  onClick={handleClick}
+                  className="flex cursor-pointer items-center justify-center w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md ring-1 ring-white/10 hover:ring-3 hover:ring-red-100 transition duration-300 ease-in-out transform hover:scale-110"
                 >
                   <FaPlay className="text-xl" />
-                </Link>
+                </button>
               </div>
 
               {userId && isDeleteRecommendation && (
@@ -197,19 +212,13 @@ export default function FilmCard({
             )}
 
             <div className="py-4 text-white bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-              <Link
-                href={
-                  item.generated_by_ai
-                    ? `/ai-recommend/watch/${item.tmdb_id}/${getSlugFromTitle(
-                        item.title
-                      )}`
-                    : `/watch/${item.recommendation_id}`
-                }
-                className="w-full flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mt-2 mb-4 lg:hidden"
+              <button
+                onClick={handleClick}
+                className="w-full cursor-pointer flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mt-2 mb-4 lg:hidden"
               >
                 <FaPlay className="text-white text-xs" />
                 Watch Now
-              </Link>
+              </button>
 
               <div className="text-base font-semibold  ">{item.title}</div>
 
@@ -233,13 +242,13 @@ export default function FilmCard({
                 </span>
               </div>
 
-              {item.comment && (
+              {item.recommendation_id && item.comment && (
                 <p className="text-sm text-white/80 mt-2 italic  border-l-4 border-red-500 pl-3">
                   “{item.comment}”
                 </p>
               )}
 
-              {item.recommended_by && (
+              {item.recommended_by.id && (
                 <div className="text-sm text-gray-400 italic mt-1">
                   Recommended by{" "}
                   <Link
@@ -278,7 +287,7 @@ export default function FilmCard({
 
       <PrivacyModal
         open={showPrivacyModal}
-        currentVisibility={item.visibility}
+        currentVisibility={item.visibility || "public"}
         onClose={() => setShowPrivacyModal(false)}
         onChange={handleVisibilityChange}
         loading={isUpdatingPrivacy}

@@ -1,7 +1,7 @@
 "use client";
 
 import { Recommendation } from "@/types/recommendation";
-import ToggleWatchlistButton from "@/app/(user)/watch/[id]/ToggleWatchlistButton";
+import ToggleWatchlistButton from "@/app/(user)/watch/[id]/[movieTitle]/ToggleWatchlistButton";
 import Image from "next/image";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
@@ -74,30 +74,32 @@ export default function WatchInfo({
             {recommendation.title}
           </h1>
 
-          <ToggleWatchlistButton
-            currentUserId={currentUserId || ""}
-            initialInWatchlist={initialInWatchlist}
-            initialWatchlistId={initialWatchlistId}
-            recommendationId={recommendation.recommendation_id}
-            isAiRecommendation={isAiRecommendation}
-            fallbackMetadata={omit(recommendation, [
-              "id",
-              "generated_by_ai",
-              "recommendation_id",
-              "created_at",
-              "visibility",
-            ])}
-          />
+          <div className="flex gap-3 md:flex-row flex-col ">
+            <ToggleWatchlistButton
+              currentUserId={currentUserId || ""}
+              initialInWatchlist={initialInWatchlist}
+              initialWatchlistId={initialWatchlistId}
+              recommendationId={recommendation.recommendation_id}
+              isAiRecommendation={isAiRecommendation}
+              fallbackMetadata={omit(recommendation, [
+                "id",
+                "generated_by_ai",
+                "recommendation_id",
+                "created_at",
+                "visibility",
+              ])}
+            />
 
-          {isAiRecommendation && !alreadyRecommended && (
-            <button
-              onClick={() => setOpen(true)}
-              className="cursor-pointer w-fit inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 transition text-white text-sm md:text-base px-4 py-2 rounded-md font-medium"
-            >
-              <Sparkles className="w-4 h-4" />
-              Recommend This!
-            </button>
-          )}
+            {isAiRecommendation && !alreadyRecommended && (
+              <button
+                onClick={() => setOpen(true)}
+                className="cursor-pointer w-fit inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 transition text-white text-sm md:text-base px-4 py-2 rounded-md font-medium"
+              >
+                <Sparkles className="w-4 h-4" />
+                Recommend This!
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

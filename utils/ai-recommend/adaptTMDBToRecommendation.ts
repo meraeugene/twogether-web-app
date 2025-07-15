@@ -1,6 +1,5 @@
 import { Recommendation } from "@/types/recommendation";
 import { TMDBEnrichedResult } from "@/types/tmdb";
-import { v4 as uuidv4 } from "uuid";
 
 export function adaptTMDBToRecommendation(
   tmdb: TMDBEnrichedResult
@@ -34,13 +33,13 @@ export function adaptTMDBToRecommendation(
     seasons: tmdb.seasons ?? undefined,
     episodes: tmdb.episodes ?? undefined,
     episode_titles_per_season: tmdb.episodeTitlesPerSeason ?? undefined,
-    comment: "AI Recommended",
+    comment: "",
     visibility: "public",
     created_at: new Date().toISOString(),
     recommended_by: {
-      id: "ai-recommendation",
-      username: "AI Assistant",
-      avatar_url: "/gemini-color.svg",
+      id: "",
+      username: "",
+      avatar_url: "",
     },
   };
 }

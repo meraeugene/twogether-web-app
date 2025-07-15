@@ -1,12 +1,22 @@
 "use client";
 
 import { IoMdAdd } from "react-icons/io";
-import { MdMovieFilter } from "react-icons/md";
+import { MdMovieFilter, MdStars } from "react-icons/md";
 import { RiFilmAiLine, RiMovieAiLine } from "react-icons/ri";
 import { FaUserFriends } from "react-icons/fa";
 import { LuMessageSquareHeart } from "react-icons/lu";
 
 export const primaryNavItems = [
+  {
+    label: "Browse",
+    href: "/browse",
+    icon: <RiMovieAiLine className="text-lg" />,
+  },
+  {
+    label: "Recos",
+    href: "/recos",
+    icon: <MdStars className="text-lg" />,
+  },
   {
     label: "AI Recommend",
     href: "/ai-recommend",
@@ -15,11 +25,6 @@ export const primaryNavItems = [
         <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />
       </svg>
     ),
-  },
-  {
-    label: "Browse",
-    href: "/browse",
-    icon: <RiMovieAiLine className="text-lg" />,
   },
   {
     label: "Recommend",

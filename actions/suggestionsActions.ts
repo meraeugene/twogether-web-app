@@ -5,7 +5,7 @@ import { Recommendation } from "@/types/recommendation";
 import { getCurrentUser } from "./authActions";
 
 export async function getSuggestions(
-  currentId: string,
+  currentId: number,
   genres: string[]
 ): Promise<Recommendation[] | null> {
   const supabase = await createClient();
@@ -13,7 +13,7 @@ export async function getSuggestions(
   const { data, error } = await supabase
     .from("recommendations_flattened")
     .select("*")
-    .neq("recommendation_id", currentId)
+    .neq("tmdb_id", currentId)
     .overlaps("genres", genres)
     .eq("visibility", "public")
     .order("created_at", { ascending: false })

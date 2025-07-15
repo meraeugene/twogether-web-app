@@ -19,7 +19,7 @@ export default async function WatchPage({
 
   const [currentUser, recommendation] = await Promise.all([
     getCurrentUser(),
-    getRecommendationById(id),
+    getRecommendationById(Number(id)),
   ]);
 
   if (!currentUser) redirect("/");
@@ -32,7 +32,7 @@ export default async function WatchPage({
     );
   }
 
-  const suggestions = await getSuggestions(id, recommendation.genres);
+  const suggestions = await getSuggestions(Number(id), recommendation.genres);
 
   const { inWatchlist, id: watchListId } = await checkIfInWatchlist(
     recommendation.tmdb_id,

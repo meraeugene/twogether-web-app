@@ -36,14 +36,14 @@ export const getRecommendations = async (): Promise<
 };
 
 export async function getRecommendationById(
-  recommendation_id: string
+  tmdbId: number
 ): Promise<Recommendation | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("recommendations_flattened")
     .select("*")
-    .eq("recommendation_id", recommendation_id)
+    .eq("tmdb_id", tmdbId)
     .single<Recommendation>();
 
   if (error || !data) {

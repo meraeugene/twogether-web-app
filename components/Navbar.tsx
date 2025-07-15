@@ -7,12 +7,7 @@ import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import { primaryNavItems, secondaryNavItems } from "./NavItems";
 import { signOut } from "@/actions/authActions";
-import { RiLogoutCircleLine } from "react-icons/ri";
-import {
-  HiOutlineInformationCircle,
-  HiOutlineSparkles,
-  HiOutlineQuestionMarkCircle,
-} from "react-icons/hi";
+import { RiLogoutCircleLine, RiMovieAiLine } from "react-icons/ri";
 import type { Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { CurrentUser } from "@/types/user";
@@ -170,26 +165,27 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
             </>
           ) : (
             <>
-              {["about", "features", "faqs"].map((id) => (
-                <motion.div key={id} variants={fadeUp}>
-                  <Link
-                    href={`#${id}`}
-                    onClick={() => setMenuOpen(false)}
-                    className="group cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition"
+              <motion.div variants={fadeUp}>
+                <Link
+                  href="/browse"
+                  onClick={() => setMenuOpen(false)}
+                  className={`group cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur border border-white/20 shadow-sm transition ${
+                    pathname === "/browse"
+                      ? "bg-white text-black font-semibold"
+                      : "text-white bg-white/10 hover:bg-white/20"
+                  }`}
+                >
+                  <RiMovieAiLine className="text-xl" />
+                  <span
+                    className={`drop-shadow-[0_0_3px_rgba(255,0,0,0.3)] ${
+                      pathname === "/browse" ? "text-black" : "text-white/80"
+                    }`}
                   >
-                    <span className="text-white/80  drop-shadow-[0_0_3px_rgba(255,0,0,0.3)]">
-                      {
-                        {
-                          about: <HiOutlineInformationCircle />,
-                          features: <HiOutlineSparkles />,
-                          faqs: <HiOutlineQuestionMarkCircle />,
-                        }[id]
-                      }
-                    </span>
-                    {id.charAt(0).toUpperCase() + id.slice(1)}
-                  </Link>
-                </motion.div>
-              ))}
+                    Browse
+                  </span>
+                </Link>
+              </motion.div>
+
               <motion.div variants={fadeUp}>
                 <LoginButton />
               </motion.div>
@@ -327,26 +323,29 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                 </>
               ) : (
                 <>
-                  {["about", "features", "faqs"].map((id) => (
-                    <motion.div key={id} variants={fadeUp}>
-                      <Link
-                        href={`#${id}`}
-                        onClick={() => setMenuOpen(false)}
-                        className="group cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition"
+                  <motion.div variants={fadeUp}>
+                    <Link
+                      href="/browse"
+                      onClick={() => setMenuOpen(false)}
+                      className={`group cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
+                        pathname === "/browse"
+                          ? "bg-white text-black border-white/20 font-semibold"
+                          : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
+                      }`}
+                    >
+                      <RiMovieAiLine />
+                      <span
+                        className={`drop-shadow-[0_0_3px_rgba(255,0,0,0.3)] ${
+                          pathname === "/browse"
+                            ? "text-black"
+                            : "text-white/80"
+                        }`}
                       >
-                        <span className="text-white/80  drop-shadow-[0_0_3px_rgba(255,0,0,0.3)]">
-                          {
-                            {
-                              about: <HiOutlineInformationCircle />,
-                              features: <HiOutlineSparkles />,
-                              faqs: <HiOutlineQuestionMarkCircle />,
-                            }[id]
-                          }
-                        </span>
-                        {id.charAt(0).toUpperCase() + id.slice(1)}
-                      </Link>
-                    </motion.div>
-                  ))}
+                        Browse
+                      </span>
+                    </Link>
+                  </motion.div>
+
                   <motion.div variants={fadeUp}>
                     <LoginButton />
                   </motion.div>

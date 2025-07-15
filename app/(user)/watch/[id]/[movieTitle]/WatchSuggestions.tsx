@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Recommendation } from "@/types/recommendation";
 import { FaPlay } from "react-icons/fa";
+import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 
 export default function WatchSuggestions({
   suggestions,
@@ -35,7 +36,7 @@ export default function WatchSuggestions({
             "
             >
               <Link
-                href={`/watch/${rec.recommendation_id}`}
+                href={`/watch/${rec.tmdb_id}/${getSlugFromTitle(rec.title)}`}
                 shallow={true}
                 className="
               flex items-center justify-center
@@ -54,7 +55,7 @@ export default function WatchSuggestions({
 
           <div className="flex-1 text-sm py-2">
             <Link
-              href={`/watch/${rec.recommendation_id}`}
+              href={`/watch/${rec.tmdb_id}/${getSlugFromTitle(rec.title)}`}
               className="w-full flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mt-2 mb-4 lg:hidden"
             >
               <FaPlay className="text-white text-xs" />

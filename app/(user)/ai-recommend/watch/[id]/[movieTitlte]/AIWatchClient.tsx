@@ -3,12 +3,13 @@
 import { useParams } from "next/navigation";
 import { useAIRecommendations } from "@/stores/useAIRecommendation";
 import ErrorMessage from "@/components/ErrorMessage";
-import WatchSuggestions from "@/app/(user)/watch/[id]/WatchSuggestions";
-import WatchInfo from "@/app/(user)/watch/[id]/WatchInfo";
-import WatchGemeni from "@/app/(user)/watch/[id]/WatchGemeni";
-import WatchPlayer from "@/app/(user)/watch/[id]/WatchPlayer";
+import WatchSuggestions from "@/app/(user)/watch/[id]/[movieTitle]/WatchSuggestions";
+import WatchInfo from "@/app/(user)/watch/[id]/[movieTitle]/WatchInfo";
+import WatchGemeni from "@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni";
+import WatchPlayer from "@/app/(user)/watch/[id]/[movieTitle]/WatchPlayer";
 import { CurrentUser } from "@/types/user";
 import { useEffect, useState } from "react";
+import WatchSkeletonLoading from "@/components/WatchSkeletonLoading";
 
 export default function AIWatchClient({
   currentUser,
@@ -32,7 +33,7 @@ export default function AIWatchClient({
     (r) => r.tmdb_id === Number(tmdbId)
   );
 
-  if (!hasHydrated) return null;
+  if (!hasHydrated) return <WatchSkeletonLoading />;
 
   if (!recommendation) {
     return (

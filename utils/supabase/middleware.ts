@@ -46,7 +46,7 @@ export async function updateSession(request: NextRequest) {
   // 1. Redirect unauthenticated users trying to access protected routes
   const protectedPages = [
     "/onboarding",
-    "/browse",
+    "/recos",
     "/recommend",
     "/watch",
     "/watchlist",
