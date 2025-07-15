@@ -16,7 +16,6 @@ import {
 import type { Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { CurrentUser } from "@/types/user";
-import { LuUserRoundPen } from "react-icons/lu";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -67,7 +66,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
         ${isExpanded ? "rounded-3xl" : "rounded-full"}`}
     >
       {/* Desktop Menu */}
-      <div className="relative z-10 flex justify-between items-center px-4 md:px-8 py-3">
+      <div className="relative z-10 flex justify-between items-center px-4 md:px-8 2xl:px-6 py-3">
         <Link
           href="/"
           onClick={() => setMenuOpen(false)}
@@ -91,7 +90,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`group relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
+                  className={`group relative px-4 2xl:px-3 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
     ${
       pathname === item.href
         ? "bg-white text-black font-semibold"
@@ -113,7 +112,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                   <Link
                     href={item.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`group relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
+                    className={`group relative px-4 py-2 2xl:px-3  rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
       ${
         pathname === item.href
           ? "bg-white text-black font-semibold"
@@ -136,7 +135,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                 <Link
                   href={`/profile/${user.username}/${user.id}`}
                   onClick={() => setMenuOpen(false)}
-                  className={`group relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
+                  className={`group relative px-4 py-2 2xl:px-3  rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
       ${
         pathname === `/profile/${user.username}/${user.id}`
           ? "bg-white text-black font-semibold"
@@ -144,23 +143,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
       }`}
                 >
                   <HiOutlineUserCircle />
-                  My Profile
-                </Link>
-              </motion.div>
-
-              <motion.div variants={fadeUp}>
-                <Link
-                  href={`/profile/${user.username}`}
-                  onClick={() => setMenuOpen(false)}
-                  className={`group relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
-      ${
-        pathname === `/profile/${user.username}`
-          ? "bg-white text-black font-semibold"
-          : "text-white bg-white/10 hover:bg-white/20"
-      }`}
-                >
-                  <LuUserRoundPen />
-                  Edit Profile
+                  Profile
                 </Link>
               </motion.div>
 
@@ -169,7 +152,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                 <button
                   onClick={handleLogout}
                   disabled={isPending}
-                  className="group cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition"
+                  className="group cursor-pointer 2xl:px-3  relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition"
                 >
                   {isPending ? (
                     <>
@@ -317,22 +300,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                       }`}
                     >
                       <HiOutlineUserCircle />
-                      My Profile
-                    </Link>
-                  </motion.div>
-
-                  <motion.div variants={fadeUp}>
-                    <Link
-                      href={`/profile/${user.username}`}
-                      onClick={() => setMenuOpen(false)}
-                      className={`group relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-xl backdrop-blur-xl transition-all flex items-center gap-3 ${
-                        pathname === `/profile/${user.username}`
-                          ? "bg-white text-black border-white/20"
-                          : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
-                      }`}
-                    >
-                      <LuUserRoundPen />
-                      Edit Profile
+                      Profile
                     </Link>
                   </motion.div>
 

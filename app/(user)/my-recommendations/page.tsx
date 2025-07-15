@@ -16,7 +16,7 @@ export default async function MyRecommendationsPage() {
 
   if (hasNoRecs) {
     return (
-      <main className="min-h-screen bg-black px-7 lg:px-15 pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)]">
+      <main className="min-h-screen bg-black px-7  pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)] lg:px-24 xl:px-32 2xl:px-26 xl:pt-32">
         <h1 className="text-2xl font-bold mb-4">
           Your Movie/Show Recommendations are Empty
         </h1>

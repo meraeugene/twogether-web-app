@@ -34,6 +34,7 @@ import Link from "next/link";
 import { getOrCreateThread, sendMessage } from "@/actions/messageActions";
 import MessageModal from "@/components/MessageModal";
 import { useRouter } from "next/navigation";
+import { LuUserRoundPen } from "react-icons/lu";
 
 const tabs = ["Profile", "Recommendations", "Watchlist", "Friends"];
 
@@ -196,6 +197,17 @@ export default function TabbedProfileView({
             <p className="text-white/60 text-sm mt-1">
               {followers} follower{followers !== 1 ? "s" : ""}
             </p>
+
+            {currentUser?.id === user.id && (
+              <Link
+                href={`/profile/${user.username}`}
+                className={`group mt-5 relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm hover:bg-white/20
+                `}
+              >
+                <LuUserRoundPen />
+                Edit Profile
+              </Link>
+            )}
 
             {/* Action buttons */}
             {currentUser?.id !== user.id && (

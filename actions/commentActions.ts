@@ -88,15 +88,33 @@ export async function reactToComment(
 ) {
   const supabase = await createClient();
 
-  await supabase
+  // Fetch existing reaction
+  const { data: existingReaction } = await supabase
     .from("comment_reactions")
-    .delete()
+    .select("type")
     .eq("user_id", currentUserId)
-    .eq("comment_id", commentId);
+    .eq("comment_id", commentId)
+    .maybeSingle();
 
-  await supabase.from("comment_reactions").insert({
-    user_id: currentUserId,
-    comment_id: commentId,
-    type,
-  });
+  // If already reacted with the same type, remove it (toggle off)
+  if (existingReaction?.type === type) {
+    await supabase
+      .from("comment_reactions")
+      .delete()
+      .eq("user_id", currentUserId)
+      .eq("comment_id", commentId);
+  } else {
+    // Otherwise, replace existing reaction with the new one
+    await supabase
+      .from("comment_reactions")
+      .delete()
+      .eq("user_id", currentUserId)
+      .eq("comment_id", commentId);
+
+    await supabase.from("comment_reactions").insert({
+      user_id: currentUserId,
+      comment_id: commentId,
+      type,
+    });
+  }
 }

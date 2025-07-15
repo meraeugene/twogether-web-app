@@ -78,18 +78,21 @@ export default function WatchComments({
     await refetchComments();
     setReplySubmittingId(null);
   };
+
   const handleReaction = async (
     commentId: string,
     type: "like" | "dislike"
   ) => {
+    // Optimistically update the UI by modifying the local state
     const updated = comments.map((comment) => {
       if (comment.id !== commentId) return comment;
+
       const updatedComment = { ...comment };
 
       const alreadyReacted = comment.userReaction === type;
 
       if (alreadyReacted) {
-        // remove reaction
+        // User is removing their existing reaction
         if (type === "like") {
           updatedComment.likes = Math.max((comment.likes || 1) - 1, 0);
         } else {
@@ -97,14 +100,18 @@ export default function WatchComments({
         }
         updatedComment.userReaction = null;
       } else {
-        // switch or add reaction
+        // User is adding a new reaction or switching from the opposite type
         if (type === "like") {
           updatedComment.likes = (comment.likes || 0) + 1;
+
+          // If user previously disliked, decrease dislike count
           if (comment.userReaction === "dislike") {
             updatedComment.dislikes = Math.max((comment.dislikes || 1) - 1, 0);
           }
         } else {
           updatedComment.dislikes = (comment.dislikes || 0) + 1;
+
+          // If user previously liked, decrease like count
           if (comment.userReaction === "like") {
             updatedComment.likes = Math.max((comment.likes || 1) - 1, 0);
           }
@@ -115,15 +122,19 @@ export default function WatchComments({
       return updatedComment;
     });
 
+    // Optimistically update the local SWR cache without revalidation
     mutate(["comments", recId], () => updated, false);
 
     try {
+      // Send the reaction to the server
       await reactToComment(commentId, type, currentUserId);
-      // You may skip revalidation here
+
+      // Optional: Skip revalidation since UI is already updated optimistically
       // await mutate(["comments", recId]);
     } catch (error) {
+      // On error, fallback by refetching the data
       console.error("Reaction failed", error);
-      await mutate(["comments", recId]); // fallback
+      await mutate(["comments", recId]); // revalidate
     }
   };
 
