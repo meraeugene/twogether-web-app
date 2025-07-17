@@ -289,7 +289,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                     <Link
                       href={`/profile/${user.username}/${user.id}`}
                       onClick={() => setMenuOpen(false)}
-                      className={`group relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-xl backdrop-blur-xl transition-all flex items-center gap-3 ${
+                      className={`group relative  text-lg font-semibold tracking-wide px-5 py-3.5 rounded-xl backdrop-blur-xl border transition-all flex items-center gap-3 ${
                         pathname === `/profile/${user.username}/${user.id}`
                           ? "bg-white text-black border-white/20"
                           : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"

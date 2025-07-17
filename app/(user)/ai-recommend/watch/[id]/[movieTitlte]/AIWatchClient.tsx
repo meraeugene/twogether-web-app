@@ -44,8 +44,6 @@ export default function AIWatchClient({
     );
   }
 
-  console.log(recommendation);
-
   return (
     <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 text-white">
       <WatchPlayer
@@ -84,7 +82,7 @@ export default function AIWatchClient({
         <WatchSuggestions suggestions={[]} />
       )}
 
-      <WatchGemeni title={recommendation.title} />
+      <WatchGemeni currentUser={currentUser} title={recommendation.title} />
     </main>
   );
 }

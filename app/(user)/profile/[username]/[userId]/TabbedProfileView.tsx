@@ -35,6 +35,7 @@ import { getOrCreateThread, sendMessage } from "@/actions/messageActions";
 import MessageModal from "@/components/MessageModal";
 import { useRouter } from "next/navigation";
 import { LuUserRoundPen } from "react-icons/lu";
+import { toast } from "sonner";
 
 const tabs = ["Profile", "Recommendations", "Watchlist", "Friends"];
 
@@ -158,6 +159,7 @@ export default function TabbedProfileView({
         // Step 3: Close the modal
         setShowMessageModal(false);
 
+        toast.success("Message sent successfully!");
         router.push(`/messages`);
       } catch (err) {
         console.error("Failed to send message:", err);

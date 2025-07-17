@@ -5,8 +5,8 @@ const loading = () => {
         <div className="h-7 w-1/3 bg-white/10 rounded mb-6 animate-pulse" />
         <div className="h-4 w-1/4 bg-white/5 rounded mb-7 animate-pulse" />
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-        {Array.from({ length: 6 }).map((_, i) => (
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
+        {Array.from({ length: 18 }).map((_, i) => (
           <div
             key={i}
             className="animate-pulse bg-white/10 rounded-lg overflow-hidden aspect-[2/3]"

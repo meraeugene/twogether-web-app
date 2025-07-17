@@ -6,8 +6,15 @@ import { RxCross2 } from "react-icons/rx";
 import { HiPaperAirplane } from "react-icons/hi2";
 import { askGemini } from "@/actions/geminiActions";
 import ReactMarkdown from "react-markdown";
+import { CurrentUser } from "@/types/user";
 
-export default function WatchGemeni({ title }: { title: string }) {
+export default function WatchGemeni({
+  title,
+  currentUser,
+}: {
+  title: string;
+  currentUser: CurrentUser | null;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<
     { role: "user" | "gemini"; content: string }[]
@@ -38,6 +45,8 @@ export default function WatchGemeni({ title }: { title: string }) {
       setMessages((prev) => [...prev, { role: "gemini", content: reply }]);
     });
   };
+
+  console.log(currentUser);
 
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
@@ -150,46 +159,55 @@ export default function WatchGemeni({ title }: { title: string }) {
             </div>
 
             {/* Input */}
-            <div className="p-3 border-t border-white/10 bg-black/80">
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSend();
-                }}
-                className="flex items-center gap-2"
-              >
-                <textarea
-                  rows={1}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onInput={(e) => {
-                    const target = e.currentTarget;
-                    target.style.height = "auto"; // Reset height
-                    const maxHeight = 96; // Tailwind h-24 = 6rem = ~4 lines
-                    target.style.height =
-                      target.scrollHeight > maxHeight
-                        ? `${maxHeight}px`
-                        : `${target.scrollHeight}px`;
+            {currentUser ? (
+              <div className="p-3 border-t border-white/10 bg-black/80">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSend();
                   }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSend();
-                    }
-                  }}
-                  placeholder="Ask Gemini about this movie..."
-                  className="flex-1 resize-none overflow-auto max-h-24 bg-white/10 text-white px-3 py-2 text-sm rounded-2xl focus:outline-none focus:ring-1 ring-white/20 placeholder:text-white/50"
-                />
-
-                <button
-                  type="submit"
-                  disabled={isPending}
-                  className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition disabled:opacity-50"
+                  className="flex items-center gap-2"
                 >
-                  <HiPaperAirplane className="text-lg" />
-                </button>
-              </form>
-            </div>
+                  <textarea
+                    rows={1}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onInput={(e) => {
+                      const target = e.currentTarget;
+                      target.style.height = "auto"; // Reset height
+                      const maxHeight = 96; // Tailwind h-24 = 6rem = ~4 lines
+                      target.style.height =
+                        target.scrollHeight > maxHeight
+                          ? `${maxHeight}px`
+                          : `${target.scrollHeight}px`;
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSend();
+                      }
+                    }}
+                    placeholder="Ask Gemini about this movie..."
+                    className="flex-1 resize-none overflow-auto max-h-24 bg-white/10 text-white px-3 py-2 text-sm rounded-2xl focus:outline-none focus:ring-1 ring-white/20 placeholder:text-white/50"
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={isPending}
+                    className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition disabled:opacity-50"
+                  >
+                    <HiPaperAirplane className="text-lg" />
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <div className="w-full text-center font-[family-name:var(--font-geist-sans)]">
+                <div className="bg-black/80 backdrop-blur-md text-white px-4 py-2  text-sm border border-white/10 shadow-lg">
+                  Please <span className="text-red-500 font-medium">login</span>{" "}
+                  to chat with Gemini.
+                </div>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
