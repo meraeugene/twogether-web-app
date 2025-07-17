@@ -55,13 +55,13 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
         damping: 30,
         delay: 0.1,
       }}
-      className={` overflow-hidden fixed top-6  left-1/2 -translate-x-1/2 w-[90%] md:w-[60%] lg:w-[50%] xl:w-[40%] 2xl:w-[95%]  max-w-full z-50 
+      className={` overflow-hidden fixed    top-6  left-1/2 -translate-x-1/2  z-50 
         bg-black/60 backdrop-blur-3xl border border-white/10 shadow-xl
         font-[family-name:var(--font-geist-sans)]
         ${isExpanded ? "rounded-3xl" : "rounded-full"}`}
     >
       {/* Desktop Menu */}
-      <div className="relative z-10 flex justify-between items-center px-4 md:px-8 2xl:px-6 py-3">
+      <div className="relative z-10 flex justify-between gap-24 text-nowrap items-center px-4 md:px-8 2xl:px-6 py-3">
         <Link
           href="/"
           onClick={() => setMenuOpen(false)}

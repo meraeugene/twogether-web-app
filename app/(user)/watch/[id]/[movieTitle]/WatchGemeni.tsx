@@ -46,8 +46,6 @@ export default function WatchGemeni({
     });
   };
 
-  console.log(currentUser);
-
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
       {/* Floating Button */}
@@ -74,12 +72,11 @@ export default function WatchGemeni({
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
             key="chat-panel"
-            layout
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
             className="fixed bottom-0 right-0 w-full md:w-[400px] h-[70vh] bg-black/90 border-t md:border-l border-white/10 z-50 rounded-t-2xl md:rounded-l-none md:rounded-tl-2xl shadow-lg flex flex-col overflow-hidden backdrop-blur-md"
           >
             {/* Header */}

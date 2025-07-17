@@ -19,7 +19,8 @@ export async function GET(req: NextRequest) {
   }
 
   const genreId = TMDB_GENRE_MAP[genreParam];
-  const url = `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&include_adult=false&api_key=${API_KEY}&page=${page}`;
+
+  const url = `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&include_adult=false&certification_country=US&certification.lte=PG-13&api_key=${API_KEY}&page=${page}`;
 
   const res = await fetch(url);
   const tmdbData = await res.json();
