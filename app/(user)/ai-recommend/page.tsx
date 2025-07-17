@@ -54,7 +54,7 @@ export default function AIRecommendForm() {
       for (let i = 0; i < total; i++) {
         const title = titles[i];
 
-        setLoadingMessage(`Fetching "${title}" from the vault...`);
+        setLoadingMessage(`Summoning "${title}" to the spotlight...`);
 
         try {
           const res = await fetch(
@@ -197,28 +197,58 @@ export default function AIRecommendForm() {
             <section aria-label="AI Recommendations">
               <div className=" mt-6">
                 {loading ? (
-                  <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center px-6">
-                    <div className="flex flex-col items-center justify-center py-8 pb-4 gap-3 text-center">
-                      <div className="relative flex items-center justify-center">
-                        <div className="h-6 w-6 rounded-full border-4 border-white/20 border-t-white animate-spin" />
-                      </div>
-                      <p className="text-white/80 text-sm sm:text-base md:text-lg text-center px-4 animate-pulse break-words max-w-xl mx-auto">
-                        {loadingMessage}
-                      </p>
-                    </div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center px-6"
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      className="flex flex-col items-center justify-center py-8 pb-4 gap-3 text-center"
+                    >
+                      {/* Animated Spinner */}
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{
+                          repeat: Infinity,
+                          duration: 1.2,
+                          ease: "linear",
+                        }}
+                        className="h-6 w-6 rounded-full border-4 border-white/20 border-t-white"
+                      />
 
+                      {/* Animated Loading Message */}
+                      <motion.p
+                        key={loadingMessage}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.4 }}
+                        className="text-white/80 text-sm sm:text-base md:text-lg text-center px-4 break-words max-w-xl mx-auto"
+                      >
+                        {loadingMessage}
+                      </motion.p>
+                    </motion.div>
+
+                    {/* Animated Progress Bar */}
                     <div className="w-full max-w-sm">
                       <div className="h-4 bg-white/10 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-red-500 transition-all duration-300"
-                          style={{ width: `${progress}%` }}
+                        <motion.div
+                          className="h-full bg-red-500"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${progress}%` }}
+                          transition={{ duration: 0.3, ease: "easeOut" }}
                         />
                       </div>
                       <p className="text-sm text-white/60 mt-2 text-center">
                         {progress}%
                       </p>
                     </div>
-                  </div>
+                  </motion.div>
                 ) : (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
                     {recommendations.map((item) => (
