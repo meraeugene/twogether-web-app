@@ -15,6 +15,8 @@ import { FiRefreshCcw } from "react-icons/fi";
 
 export default function AIRecommendForm() {
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [loadingMessage, setLoadingMessage] = useState("");
 
   const {
     recommendations,
@@ -33,6 +35,8 @@ export default function AIRecommendForm() {
     }
 
     setLoading(true);
+    setProgress(5);
+    setLoadingMessage("Summoning hidden gems from the movie multiverse...");
 
     try {
       const { titles, reason } = await recommendMoviesListWithAI(prompt);
@@ -42,17 +46,32 @@ export default function AIRecommendForm() {
         return;
       }
 
-      const fetched = await Promise.all(
-        titles.map(async (title) => {
+      const total = titles.length;
+      const results: TMDBEnrichedResult[] = [];
+
+      setLoadingMessage("Hunting across galaxies for your match...");
+
+      for (let i = 0; i < total; i++) {
+        const title = titles[i];
+
+        setLoadingMessage(`Fetching "${title}" from the vault...`);
+
+        try {
           const res = await fetch(
             `/api/recommend?query=${encodeURIComponent(title)}`
           );
           const data: TMDBEnrichedResult[] = await res.json();
-          return data[0];
-        })
-      );
+          if (data[0]) results.push(data[0]);
+        } catch (err) {
+          console.error(`Failed to fetch ${title}`, err);
+        }
 
-      const filtered = uniqueById(fetched.filter(Boolean));
+        setProgress(Math.round(((i + 1) / total) * 100));
+      }
+
+      const filtered = uniqueById(results);
+
+      setLoadingMessage("Magic complete. Let’s hit play!");
 
       setRecommendations(
         filtered.map((m) => ({
@@ -62,6 +81,7 @@ export default function AIRecommendForm() {
       );
 
       setReason(reason);
+      setLoadingMessage("✅ Ready! Enjoy your curated list.");
     } catch (err) {
       console.error(err);
     } finally {
@@ -177,20 +197,28 @@ export default function AIRecommendForm() {
             <section aria-label="AI Recommendations">
               <div className=" mt-6">
                 {loading ? (
-                  <>
-                    <h2 className="text-center text-3xl md:text-4xl font-semibold mb-8 animate-pulse">
-                      Generating Recommendations...
-                    </h2>
-
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                      {Array.from({ length: 18 }).map((_, i) => (
-                        <div
-                          key={i}
-                          className="aspect-[2/3] w-full rounded-md bg-white/10 animate-pulse"
-                        />
-                      ))}
+                  <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center px-6">
+                    <div className="flex flex-col items-center justify-center py-8 pb-4 gap-3 text-center">
+                      <div className="relative flex items-center justify-center">
+                        <div className="h-6 w-6 rounded-full border-4 border-white/20 border-t-white animate-spin" />
+                      </div>
+                      <p className="text-white/80 text-sm sm:text-base md:text-lg text-center px-4 animate-pulse break-words max-w-xl mx-auto">
+                        {loadingMessage}
+                      </p>
                     </div>
-                  </>
+
+                    <div className="w-full max-w-sm">
+                      <div className="h-4 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-red-500 transition-all duration-300"
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                      <p className="text-sm text-white/60 mt-2 text-center">
+                        {progress}%
+                      </p>
+                    </div>
+                  </div>
                 ) : (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
                     {recommendations.map((item) => (

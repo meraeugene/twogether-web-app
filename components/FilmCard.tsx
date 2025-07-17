@@ -224,7 +224,7 @@ export default function FilmCard({
 
               <div className="text-base font-semibold  ">{item.title}</div>
 
-              <div className="flex items-center justify-between text-sm text-white/60 mt-1">
+              <div className="flex items-center justify-between flex-wrap text-sm text-white/60 mt-1">
                 <span className="flex items-center gap-2">
                   <span className="text-white/80">{item.year}</span>
 

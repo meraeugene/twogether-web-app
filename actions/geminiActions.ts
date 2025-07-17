@@ -46,6 +46,7 @@ export async function askGemini(
     return "Sorry, I could not generate a response.";
   }
 }
+
 export async function recommendMoviesListWithAI(
   prompt: string
 ): Promise<{ reason: string; titles: string[] }> {

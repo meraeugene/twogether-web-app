@@ -240,15 +240,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
           : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
       }`}
                       >
-                        <span
-                          className={`drop-shadow-[0_0_3px_rgba(255,0,0,0.3)] ${
-                            pathname === item.href
-                              ? "text-black"
-                              : "text-white/80"
-                          }`}
-                        >
-                          {item.icon}
-                        </span>
+                        <span>{item.icon}</span>
                         {item.label}
                       </Link>
                     </motion.div>
