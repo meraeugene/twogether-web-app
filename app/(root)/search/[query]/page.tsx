@@ -23,7 +23,7 @@ export default async function SearchPage({
         <ArrowLeft size={20} />
       </Link>
 
-      <h1 className="text-2xl md:text-3xl lg:text-3xl font-bold mb-6">
+      <h1 className="text-xl md:text-3xl lg:text-3xl font-bold mb-6">
         Search results for: <span className="text-red-500">{decodedQuery}</span>
       </h1>
 

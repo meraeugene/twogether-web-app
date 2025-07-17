@@ -327,10 +327,10 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                     <Link
                       href="/browse"
                       onClick={() => setMenuOpen(false)}
-                      className={`group cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
+                      className={`group border border-white/20 cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
                         pathname === "/browse"
-                          ? "bg-white text-black border-white/20 font-semibold"
-                          : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
+                          ? "bg-white text-black  font-semibold"
+                          : "text-white/ bg-white/5 hover:bg-white/20"
                       }`}
                     >
                       <RiMovieAiLine />

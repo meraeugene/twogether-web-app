@@ -45,9 +45,9 @@ export default function WatchGemeni({ title }: { title: string }) {
       <motion.button
         onClick={() => setIsOpen(true)}
         className="fixed z-50 cursor-pointer bottom-6 right-6 bg-red-600 hover:bg-red-700 text-white p-3 rounded-full shadow-lg"
-        initial={{ opacity: 0, y: 40, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ type: "spring", stiffness: 300 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 180, damping: 18 }}
       >
         {/* Gemini Icon */}
         <svg
@@ -66,10 +66,11 @@ export default function WatchGemeni({ title }: { title: string }) {
         {isOpen && (
           <motion.div
             key="chat-panel"
-            initial={{ opacity: 0, scale: 0.95, y: 30 }}
+            layout
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 30 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
             className="fixed bottom-0 right-0 w-full md:w-[400px] h-[70vh] bg-black/90 border-t md:border-l border-white/10 z-50 rounded-t-2xl md:rounded-l-none md:rounded-tl-2xl shadow-lg flex flex-col overflow-hidden backdrop-blur-md"
           >
             {/* Header */}
@@ -99,6 +100,7 @@ export default function WatchGemeni({ title }: { title: string }) {
               {messages.map((msg, i) => (
                 <motion.div
                   key={i}
+                  layout
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
@@ -132,6 +134,7 @@ export default function WatchGemeni({ title }: { title: string }) {
               ))}
               {isPending && (
                 <motion.div
+                  layout
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}

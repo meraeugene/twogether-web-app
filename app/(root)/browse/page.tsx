@@ -48,7 +48,7 @@ export default function BrowsePage() {
         </div>
 
         <div className="flex w-full flex-col md:flex-row justify-between gap-4 mb-10 text-center mt-6">
-          <h1 className="text-2xl md:text-3xl font-bold font-mono">
+          <h1 className="font-[family-name:var(--font-geist-mono)] text-2xl md:text-3xl ">
             Latest Movies
           </h1>
 
