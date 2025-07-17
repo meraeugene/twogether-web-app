@@ -18,7 +18,7 @@ export const primaryNavItems = [
     icon: <MdStars className="text-lg" />,
   },
   {
-    label: "AI Recommend",
+    label: "AI Reco",
     href: "/ai-recommend",
     icon: (
       <svg fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em">

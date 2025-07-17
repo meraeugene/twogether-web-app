@@ -23,7 +23,7 @@ const loading = () => {
         <div className="w-full lg:w-[10%] space-y-6">
           {Array.from({ length: 5 }).map((_, index) => (
             <div key={index}>
-              <div className="h-[270px] bg-white/10 rounded-lg" />
+              <div className="h-[250px] bg-white/10 rounded-lg" />
               <div className="h-4 bg-white/10  rounded-sm mt-3" />
               <div className="flex justify-between items-center gap-4">
                 <div className="h-3 bg-white/10 w-[35%]  rounded-sm mt-2" />
