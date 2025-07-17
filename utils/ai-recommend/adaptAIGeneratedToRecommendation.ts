@@ -1,7 +1,7 @@
 import { Recommendation } from "@/types/recommendation";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 
-export function adaptTMDBToRecommendation(
+export function adaptAIGeneratedToRecommendation(
   tmdb: TMDBEnrichedResult
 ): Recommendation {
   const baseId = `${tmdb.media_type}-${tmdb.id}`; // deterministic
@@ -33,13 +33,13 @@ export function adaptTMDBToRecommendation(
     seasons: tmdb.seasons ?? undefined,
     episodes: tmdb.episodes ?? undefined,
     episode_titles_per_season: tmdb.episodeTitlesPerSeason ?? undefined,
-    comment: "",
+    comment: "AI Recommended",
     visibility: "public",
     created_at: new Date().toISOString(),
     recommended_by: {
-      id: "",
-      username: "",
-      avatar_url: "",
+      id: "ai-generated",
+      username: "AI Recommendation",
+      avatar_url: "/gemini-color.svg",
     },
   };
 }

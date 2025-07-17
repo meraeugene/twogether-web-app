@@ -6,7 +6,7 @@ import { TextInputCard } from "@/components/StepCard";
 import { recommendMoviesListWithAI } from "@/actions/geminiActions";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 import FilmCard from "@/components/FilmCard";
-import { adaptTMDBToRecommendation } from "@/utils/ai-recommend/adaptTMDBToRecommendation";
+import { adaptAIGeneratedToRecommendation } from "@/utils/ai-recommend/adaptAIGeneratedToRecommendation";
 import { formatPromptTitle } from "@/utils/ai-recommend/formatPromptTitle";
 import { useAIRecommendations } from "@/stores/useAIRecommendation";
 import { toast } from "sonner";
@@ -56,7 +56,7 @@ export default function AIRecommendForm() {
 
       setRecommendations(
         filtered.map((m) => ({
-          ...adaptTMDBToRecommendation(m),
+          ...adaptAIGeneratedToRecommendation(m),
           generated_by_ai: true,
         }))
       );

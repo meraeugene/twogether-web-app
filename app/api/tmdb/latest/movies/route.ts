@@ -1,11 +1,6 @@
 import { Genre } from "@/types/formTypes";
 import { TMDB_GENRE_MAP } from "@/constants/tmdbGenres";
-import {
-  TMDBRawResult,
-  TMDBEnrichedResult,
-  EpisodeTitle,
-  TMDBSeasonResponse,
-} from "@/types/tmdb";
+import { TMDBRawResult, TMDBEnrichedResult } from "@/types/tmdb";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
@@ -17,7 +12,6 @@ function isGenre(value: string): value is Genre {
 
 export async function GET(req: NextRequest) {
   const genreParam = req.nextUrl.searchParams.get("genre");
-  const type = req.nextUrl.searchParams.get("type") || "movie";
   const page = Number(req.nextUrl.searchParams.get("page") || "1");
 
   if (!genreParam || !isGenre(genreParam)) {
@@ -25,7 +19,7 @@ export async function GET(req: NextRequest) {
   }
 
   const genreId = TMDB_GENRE_MAP[genreParam];
-  const url = `${BASE_URL}/discover/${type}?with_genres=${genreId}&sort_by=popularity.desc&include_adult=false&api_key=${API_KEY}&page=${page}`;
+  const url = `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&include_adult=false&api_key=${API_KEY}&page=${page}`;
 
   const res = await fetch(url);
   const tmdbData = await res.json();
@@ -35,30 +29,11 @@ export async function GET(req: NextRequest) {
     rawItems.map(async (item): Promise<TMDBEnrichedResult> => {
       try {
         const detailsRes = await fetch(
-          `${BASE_URL}/${type}/${item.id}?api_key=${API_KEY}`
+          `${BASE_URL}/movie/${item.id}?api_key=${API_KEY}`
         );
         if (!detailsRes.ok) throw new Error("Details fetch failed");
 
         const details = await detailsRes.json();
-
-        const episodeTitlesPerSeason: Record<number, EpisodeTitle[]> = {};
-
-        if (type === "tv") {
-          for (let season = 1; season <= details.number_of_seasons; season++) {
-            const seasonRes = await fetch(
-              `${BASE_URL}/tv/${item.id}/season/${season}?api_key=${API_KEY}`
-            );
-            if (seasonRes.ok) {
-              const seasonData: TMDBSeasonResponse = await seasonRes.json();
-              episodeTitlesPerSeason[season] = seasonData.episodes.map(
-                (ep) => ({
-                  episode_number: ep.episode_number,
-                  title: ep.name,
-                })
-              );
-            }
-          }
-        }
 
         return {
           ...item,
@@ -66,30 +41,20 @@ export async function GET(req: NextRequest) {
           poster_url: item.poster_path
             ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
             : null,
-          year:
-            type === "movie"
-              ? details.release_date?.slice(0, 4)
-              : details.first_air_date?.slice(0, 4),
-          type,
+          year: details.release_date?.slice(0, 4),
+          media_type: "movie",
           genres:
             details.genres?.map((g: { id: number; name: string }) => g.name) ||
             [],
-          duration:
-            type === "movie"
-              ? details.runtime
-              : details.episode_run_time?.[0] || 24,
+          duration: details.runtime,
           synopsis: details.overview || "",
-          seasons: type === "tv" ? details.number_of_seasons : undefined,
-          episodes: type === "tv" ? details.number_of_episodes : undefined,
-          episodeTitlesPerSeason:
-            type === "tv" ? episodeTitlesPerSeason : undefined,
         };
       } catch (err) {
         console.error(`Failed to enrich TMDB ID ${item.id}:`, err);
         return {
           ...item,
           tmdb_id: item.id,
-          type,
+          media_type: "movie",
           genres: [],
           poster_url: null,
           year: undefined,

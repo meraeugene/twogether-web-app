@@ -4,7 +4,7 @@ import useSWRInfinite from "swr/infinite";
 import { useEffect, useRef, useMemo } from "react";
 import FilmCard from "@/components/FilmCard";
 import { TMDBEnrichedResult } from "@/types/tmdb";
-import { adaptTMDBToRecommendation } from "@/utils/ai-recommend/adaptTMDBToRecommendation";
+import { adaptTMDBToRecommendation } from "@/utils/tmdb/adaptTMDBToRecommendation";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -15,7 +15,7 @@ export default function LatestTMDBList({ genre }: { genre: string }) {
   const loaderRef = useRef<HTMLDivElement>(null);
 
   const getKey = (pageIndex: number) =>
-    `/api/tmdb/latest?genre=${genre}&page=${pageIndex + 1}`;
+    `/api/tmdb/latest/movies?genre=${genre}&page=${pageIndex + 1}`;
 
   const { data, size, setSize, isValidating } = useSWRInfinite<
     TMDBEnrichedResult[]

@@ -71,7 +71,7 @@ export default function WatchPlayer({
                     setSelectedSeason(season);
                     setSelectedEpisode(1);
                   }}
-                  className={`px-4 py-2 text-sm rounded-xl transition font-medium
+                  className={`px-4 py-2 cursor-pointer text-sm rounded-xl transition font-medium
                     ${
                       isActive
                         ? "bg-red-600 text-white font-semibold"

@@ -86,7 +86,7 @@ export default function RecommendModal({
 
                   <button
                     onClick={() => setVisibility("private")}
-                    className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg border transition ${
+                    className={`flex cursor-pointer items-center gap-2 px-4 py-2 text-sm rounded-lg border transition ${
                       visibility === "private"
                         ? "bg-red-600 text-white border-red-500"
                         : "bg-white/5 text-white/70 border-white/20 hover:bg-white/10"

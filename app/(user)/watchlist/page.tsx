@@ -43,7 +43,7 @@ export default async function WatchlistPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8 mt-6">
             {watchList.map((item) => (
               <FilmCard
-                key={item.recommendation_id}
+                key={item.tmdb_id}
                 item={item}
                 userId={user.id}
                 isRemoveFromWatchlist={true}
