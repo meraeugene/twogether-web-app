@@ -58,6 +58,9 @@ export default function TMDBWatchPage({
       "id",
       "recommended_by",
       "recommendation_id",
+      "is_tmdb_recommendation",
+      "generated_by_ai",
+      "recommendation_created_at",
     ]);
 
     const { error } = await createRecommendation(currentUserId!, {
@@ -138,7 +141,7 @@ export default function TMDBWatchPage({
                 {isTMDBRecommendation && !alreadyRecommended && (
                   <button
                     onClick={() => setOpen(true)}
-                    className="cursor-pointer w-fit inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 transition text-white text-sm md:text-base px-4 py-2 rounded-md font-medium"
+                    className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black transition hover:bg-white/90 text-sm md:text-base px-4 py-2 rounded-md font-medium"
                   >
                     <Sparkles className="w-4 h-4" />
                     Recommend This!
