@@ -80,7 +80,10 @@ export default async function WatchPage({
         )}
       </div>
 
-      <WatchGemeni currentUser={currentUser} title={recommendation.title} />
+      <WatchGemeni
+        currentUserId={currentUser.id}
+        title={recommendation.title}
+      />
     </main>
   );
 }

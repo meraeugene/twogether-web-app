@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { GENRES } from "@/constants/genre";
 import LatestTMDBList from "./LatestTMDBList";
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
 
 export default function BrowsePage() {
   const router = useRouter();
@@ -34,28 +34,28 @@ export default function BrowsePage() {
     return <LatestTMDBList genre={selectedGenre} />;
   }, [selectedGenre]);
 
+  const placeholders = [
+    "Search for Inception...",
+    "Search for Interstellar...",
+    "Search for The Dark Knight...",
+    "Search for Fight Club...",
+    "Search for La La Land...",
+    "Search for Parasite...",
+    "Search for The Godfather...",
+    "Search for Everything Everywhere All At Once...",
+    "Search for The Grand Budapest Hotel...",
+    "Search for Whiplash...",
+  ];
+
   return (
     <main className="min-h-screen bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white font-[family-name:var(--font-geist-sans)]">
       <section className="mb-16">
         <div className="max-w-2xl mx-auto w-full">
-          <form
+          <PlaceholdersAndVanishInput
+            placeholders={placeholders}
+            onChange={(e) => setSearchQuery(e.target.value)}
             onSubmit={handleSubmit}
-            className="flex w-full max-w-xl mx-auto shadow-lg rounded-md md:rounded-lg overflow-hidden border border-white/10 bg-gradient-to-br from-black via-zinc-900 to-neutral-900"
-          >
-            <input
-              type="text"
-              placeholder="Search movie or show..."
-              className="bg-transparent text-white placeholder-white/40 px-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200 lg:px-6 lg:py-3 lg:text-base"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button
-              type="submit"
-              className="flex cursor-pointer items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-3 py-2 text-sm font-semibold transition-colors duration-200 lg:px-5 lg:py-3 lg:text-base"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-          </form>
+          />
         </div>
 
         <div className="flex w-full flex-col md:flex-row justify-between gap-4 mb-10 text-center mt-6">

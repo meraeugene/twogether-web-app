@@ -7,17 +7,16 @@ import WatchSuggestions from "@/app/(user)/watch/[id]/[movieTitle]/WatchSuggesti
 import WatchInfo from "@/app/(user)/watch/[id]/[movieTitle]/WatchInfo";
 import WatchGemeni from "@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni";
 import WatchPlayer from "@/app/(user)/watch/[id]/[movieTitle]/WatchPlayer";
-import { CurrentUser } from "@/types/user";
 import { useEffect, useState } from "react";
 import WatchSkeletonLoading from "@/components/WatchSkeletonLoading";
 
 export default function AIWatchClient({
-  currentUser,
+  currentUserId,
   alreadyRecommended,
   initialInWatchlist,
   initialWatchlistId,
 }: {
-  currentUser: CurrentUser;
+  currentUserId: string;
   alreadyRecommended: boolean;
   initialInWatchlist: boolean;
   initialWatchlistId: string | null;
@@ -70,10 +69,10 @@ export default function AIWatchClient({
       <div className="mt-8">
         <WatchInfo
           recommendation={recommendation}
+          isAiRecommendation={recommendation.generated_by_ai}
+          currentUserId={currentUserId}
           initialInWatchlist={initialInWatchlist}
           initialWatchlistId={initialWatchlistId}
-          isAiRecommendation={recommendation.generated_by_ai}
-          currentUserId={currentUser.id}
           alreadyRecommended={alreadyRecommended}
         />
       </div>
@@ -82,7 +81,7 @@ export default function AIWatchClient({
         <WatchSuggestions suggestions={[]} />
       )}
 
-      <WatchGemeni currentUser={currentUser} title={recommendation.title} />
+      <WatchGemeni currentUserId={currentUserId} title={recommendation.title} />
     </main>
   );
 }

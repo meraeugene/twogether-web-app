@@ -66,19 +66,14 @@ export default function FilmCard({
   const router = useRouter();
   const setCurrentTMDB = useTMDBWatch((s) => s.setCurrentTMDB);
 
-  console.log(item);
-
   const handleClick = () => {
     const slug = getSlugFromTitle(item.title);
 
     if (item.generated_by_ai) {
-      // If it's an AI-generated recommendation
       router.push(`/ai-recommend/watch/${item.tmdb_id}/${slug}`);
     } else if (item.recommended_by.id) {
-      // If it's a user recommendation and not AI-generated
       router.push(`/watch/${item.tmdb_id}/${slug}`);
     } else {
-      // If it's a TMDB item without a user recommendation
       setCurrentTMDB(item);
       router.push(`/tmdb/watch/${item.tmdb_id}/${slug}`);
     }
@@ -250,7 +245,7 @@ export default function FilmCard({
                 </p>
               )}
 
-              {item.recommended_by.id && (
+              {item.recommended_by.username && (
                 <div className="text-sm text-gray-400 italic mt-1">
                   Recommended by{" "}
                   <Link

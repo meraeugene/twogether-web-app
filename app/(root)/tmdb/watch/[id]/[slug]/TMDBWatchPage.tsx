@@ -6,18 +6,33 @@ import WatchGemeni from "@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useEffect, useState } from "react";
 import WatchSkeletonLoading from "@/components/WatchSkeletonLoading";
-import { CurrentUser } from "@/types/user";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
+import ToggleWatchlistButton from "@/app/(user)/watch/[id]/[movieTitle]/ToggleWatchlistButton";
+import { omit } from "@/utils/ai-recommend/omit";
+import RecommendModal from "@/components/RecommendModal";
+import { createRecommendation } from "@/actions/recommendationActions";
+import { toast } from "sonner";
 
 export default function TMDBWatchPage({
-  currentUser,
+  currentUserId,
+  alreadyRecommended,
+  initialInWatchlist,
+  initialWatchlistId,
+  isTMDBRecommendation,
 }: {
-  currentUser: CurrentUser | null;
+  currentUserId?: string;
+  alreadyRecommended: boolean;
+  initialInWatchlist: boolean;
+  initialWatchlistId: string | null;
+  isTMDBRecommendation?: boolean;
 }) {
   const router = useRouter();
 
   const recommendation = useTMDBWatch((s) => s.currentTMDB);
+
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [hasHydrated, setHasHydrated] = useState(false);
   useEffect(() => setHasHydrated(true), []);
@@ -32,6 +47,38 @@ export default function TMDBWatchPage({
       />
     );
   }
+
+  const handleSubmit = async (formData: {
+    comment: string;
+    visibility: string;
+  }) => {
+    setLoading(true);
+
+    const safeData = omit(recommendation, [
+      "id",
+      "recommended_by",
+      "recommendation_id",
+    ]);
+
+    const { error } = await createRecommendation(currentUserId!, {
+      ...safeData,
+      comment: formData.comment,
+      visibility: formData.visibility,
+      user_id: currentUserId,
+    });
+
+    setLoading(false);
+    if (!error) {
+      toast.success(
+        "Recommendation submitted! Your taste just blessed someone’s watchlist 🎉"
+      );
+      setOpen(false);
+      router.refresh();
+    } else {
+      toast.error("Error recommending. Please try again.");
+      console.error("Error recommending:", error);
+    }
+  };
 
   return (
     <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 text-white">
@@ -69,6 +116,35 @@ export default function TMDBWatchPage({
             <h1 className="text-2xl md:text-4xl font-bold font-[family-name:var(--font-geist-sans)] leading-tight">
               {recommendation.title}
             </h1>
+
+            {currentUserId && (
+              <div className="flex gap-3 md:flex-row flex-col ">
+                <ToggleWatchlistButton
+                  currentUserId={currentUserId || ""}
+                  initialInWatchlist={initialInWatchlist}
+                  initialWatchlistId={initialWatchlistId}
+                  recommendationId={recommendation.recommendation_id}
+                  isTMDBRecommendation={isTMDBRecommendation}
+                  fallbackMetadata={omit(recommendation, [
+                    "id",
+                    "generated_by_ai",
+                    "recommendation_id",
+                    "created_at",
+                    "visibility",
+                  ])}
+                />
+
+                {isTMDBRecommendation && !alreadyRecommended && (
+                  <button
+                    onClick={() => setOpen(true)}
+                    className="cursor-pointer w-fit inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 transition text-white text-sm md:text-base px-4 py-2 rounded-md font-medium"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    Recommend This!
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -97,7 +173,14 @@ export default function TMDBWatchPage({
         )}
       </div>
 
-      <WatchGemeni title={recommendation.title} currentUser={currentUser} />
+      <WatchGemeni title={recommendation.title} currentUserId={currentUserId} />
+
+      <RecommendModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onSubmit={handleSubmit}
+        loading={loading}
+      />
     </main>
   );
 }

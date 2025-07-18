@@ -15,7 +15,7 @@ const Demo = () => {
           }}
         />
         {/* Red Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-700/30 via-black/10 to-red-900/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/10 to-red-900/10" />
       </div>
 
       <DemoSteps data={data} />

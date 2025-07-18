@@ -26,7 +26,7 @@ export default async function AIWatchPage({
 
   return (
     <AIWatchClient
-      currentUser={currentUser}
+      currentUserId={currentUser.id}
       alreadyRecommended={hasRecommended}
       initialInWatchlist={inWatchlist}
       initialWatchlistId={watchListId}

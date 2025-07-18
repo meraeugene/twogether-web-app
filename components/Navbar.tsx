@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition, useRef } from "react";
 import Link from "next/link";
 import LoginButton from "./LoginButton";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiX } from "react-icons/hi";
@@ -32,6 +32,9 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
+  const lastScrollY = useRef(0);
+
   const toggleMenu = () => {
     if (!menuOpen) setIsExpanded(true);
     setMenuOpen((prev) => !prev);
@@ -43,19 +46,44 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
     });
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (Math.abs(currentScrollY - lastScrollY.current) < 10) return; // optional threshold
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setScrollDirection("down");
+      } else {
+        setScrollDirection("up");
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const pathname = usePathname();
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ height: "auto", opacity: 1, y: 0 }}
+      initial={{ y: 0, opacity: 1 }}
+      animate={{
+        y: scrollDirection === "down" ? -100 : 0,
+        opacity: scrollDirection === "down" ? 0 : 1,
+      }}
       transition={{
         type: "spring",
         stiffness: 300,
         damping: 30,
-        delay: 0.1,
+        duration: 0.35,
       }}
-      className={` overflow-hidden fixed  max-w-full w-[90%] md:w-[60%] lg:w-fit   top-6  left-1/2 -translate-x-1/2  z-50 
+      className={` overflow-hidden fixed  max-w-full w-[90%] md:w-[60%] lg:w-fit   top-6  left-1/2 -translate-x-1/2  z-[50] 
         bg-black/60 backdrop-blur-3xl border border-white/10 shadow-xl
         font-[family-name:var(--font-geist-sans)]
         ${isExpanded ? "rounded-3xl" : "rounded-full"}`}

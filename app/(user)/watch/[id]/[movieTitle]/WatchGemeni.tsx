@@ -6,14 +6,13 @@ import { RxCross2 } from "react-icons/rx";
 import { HiPaperAirplane } from "react-icons/hi2";
 import { askGemini } from "@/actions/geminiActions";
 import ReactMarkdown from "react-markdown";
-import { CurrentUser } from "@/types/user";
 
 export default function WatchGemeni({
   title,
-  currentUser,
+  currentUserId,
 }: {
   title: string;
-  currentUser: CurrentUser | null;
+  currentUserId?: string | null;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<
@@ -147,7 +146,7 @@ export default function WatchGemeni({
             </div>
 
             {/* Input */}
-            {currentUser ? (
+            {currentUserId ? (
               <div className="p-3 border-t border-white/10 bg-black/80">
                 <form
                   onSubmit={(e) => {

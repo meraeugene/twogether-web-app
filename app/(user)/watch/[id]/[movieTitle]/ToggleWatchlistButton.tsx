@@ -17,6 +17,7 @@ export default function ToggleWatchlistButton({
   currentUserId,
   fallbackMetadata,
   isAiRecommendation = false,
+  isTMDBRecommendation = false,
 }: {
   recommendationId: string;
   initialInWatchlist: boolean;
@@ -24,6 +25,7 @@ export default function ToggleWatchlistButton({
   currentUserId: string;
   fallbackMetadata: WatchlistMetadata;
   isAiRecommendation?: boolean;
+  isTMDBRecommendation?: boolean;
 }) {
   const [isInList, setIsInList] = useState(initialInWatchlist);
   const [watchlistId, setWatchlistId] = useState(initialWatchlistId);
@@ -43,7 +45,7 @@ export default function ToggleWatchlistButton({
         } else {
           toast.success("Nice pick! Now starring on your watchlist 🌟");
           const id =
-            recommendationId && !isAiRecommendation
+            recommendationId && !isAiRecommendation && !isTMDBRecommendation
               ? await addToWatchlist(recommendationId, currentUserId)
               : await addToWatchlistWithMetadata(
                   currentUserId,
