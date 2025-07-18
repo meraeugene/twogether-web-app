@@ -72,9 +72,9 @@ export default function WatchGemeni({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
+            exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
             key="chat-panel"
             className="fixed bottom-0 right-0 w-full md:w-[400px] h-[70vh] bg-black/90 border-t md:border-l border-white/10 z-50 rounded-t-2xl md:rounded-l-none md:rounded-tl-2xl shadow-lg flex flex-col overflow-hidden backdrop-blur-md"
@@ -106,7 +106,6 @@ export default function WatchGemeni({
               {messages.map((msg, i) => (
                 <motion.div
                   key={i}
-                  layout
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
@@ -140,7 +139,6 @@ export default function WatchGemeni({
               ))}
               {isPending && (
                 <motion.div
-                  layout
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}

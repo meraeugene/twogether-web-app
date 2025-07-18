@@ -146,7 +146,7 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="min-h-screen flex flex-col justify-center items-center pt-28 pb-16 bg-black text-white px-7 overflow-hidden lg:pt-32"
+      className="min-h-screen flex flex-col justify-center items-center pt-28 pb-16 bg-black text-white px-7 overflow-hidden lg:pt-32 "
     >
       {/* Steps Progress */}
       <div className="flex flex-wrap justify-center gap-2 mb-8 text-sm">
@@ -184,13 +184,13 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -100 }}
           transition={{ duration: 0.3 }}
-          className="w-full max-w-2xl"
+          className="w-full max-w-lg"
         >
           {renderStep()}
         </motion.div>
       </AnimatePresence>
 
-      <div className="w-full max-w-2xl   font-[family-name:var(--font-geist-mono)]">
+      <div className="w-full  max-w-lg font-[family-name:var(--font-geist-mono)]">
         <button
           type="submit"
           disabled={loading}
@@ -204,7 +204,7 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
           ) : step < steps.length - 1 ? (
             "Next"
           ) : (
-            "Finish"
+            "Recommend"
           )}
         </button>
       </div>
