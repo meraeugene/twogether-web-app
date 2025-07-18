@@ -35,9 +35,10 @@ export function adaptTMDBToRecommendation(
     episode_titles_per_season: tmdb.episodeTitlesPerSeason ?? undefined,
     visibility: "public",
     comment: "",
+    is_tmdb_recommendation: true,
     created_at: new Date().toISOString(),
     recommended_by: {
-      id: "",
+      id: "tmdb",
       username: "",
       avatar_url: "",
     },

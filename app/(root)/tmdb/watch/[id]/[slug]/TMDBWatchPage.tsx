@@ -131,6 +131,7 @@ export default function TMDBWatchPage({
                     "recommendation_id",
                     "created_at",
                     "visibility",
+                    "is_tmdb_recommendation",
                   ])}
                 />
 

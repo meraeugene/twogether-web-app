@@ -37,6 +37,7 @@ export type Recommendation = {
   visibility: "public" | "private";
   created_at: string;
   generated_by_ai?: boolean;
+  is_tmdb_recommendation?: boolean;
   seasons?: number | null | undefined;
   episodes?: number | null | undefined;
   episode_titles_per_season?: Record<

@@ -69,13 +69,20 @@ export default function FilmCard({
   const handleClick = () => {
     const slug = getSlugFromTitle(item.title);
 
-    if (item.generated_by_ai) {
+    if (item.generated_by_ai && item.recommended_by.id === "ai-generated") {
       router.push(`/ai-recommend/watch/${item.tmdb_id}/${slug}`);
-    } else if (item.recommended_by.id) {
-      router.push(`/watch/${item.tmdb_id}/${slug}`);
-    } else {
+      return;
+    }
+
+    if (item.is_tmdb_recommendation && item.recommended_by.id === "tmdb") {
       setCurrentTMDB(item);
       router.push(`/tmdb/watch/${item.tmdb_id}/${slug}`);
+      return;
+    }
+
+    if (item.recommendation_id) {
+      router.push(`/watch/${item.tmdb_id}/${slug}`);
+      return;
     }
   };
 
