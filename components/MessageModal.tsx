@@ -20,7 +20,7 @@ export default function MessageModal({
 
   const handleSend = () => {
     if (!message.trim()) {
-      toast.info("Message cannot be empty");
+      toast.info("You forgot to say something! 🫢");
       return;
     }
     onSend(message);

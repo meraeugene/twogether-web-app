@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/actions/authActions";
+import AiFeatures from "@/sections/AiFeatures";
 import Demo from "@/sections/Demo";
 import Faqs from "@/sections/Faqs";
 import Features from "@/sections/Features";
@@ -11,6 +12,7 @@ export default async function Home() {
     <main className="relative w-full min-h-screen font-[var(--font-geist-sans)] text-white bg-black">
       <Hero user={user ?? null} />
       <Demo />
+      <AiFeatures />
       <Features />
       <Faqs />
     </main>

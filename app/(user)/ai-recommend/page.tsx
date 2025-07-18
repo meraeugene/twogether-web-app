@@ -182,8 +182,8 @@ export default function AIRecommendForm() {
             {!loading && (
               <header className="mt-6 mb-10 text-center">
                 <h2 className="text-3xl md:text-4xl  font-semibold">
-                  {displayPrompt} <span className="text-red-600">AI Picks</span>{" "}
-                  for You
+                  <span className="text-red-600">{displayPrompt} </span> AI
+                  Picks for You
                 </h2>
                 {reason && (
                   <p className="mt-4 text-sm md:text-base  text-white/70 max-w-2xl mx-auto">
@@ -210,16 +210,7 @@ export default function AIRecommendForm() {
                       transition={{ duration: 0.4, ease: "easeInOut" }}
                       className="flex flex-col items-center justify-center py-8 pb-4 gap-3 text-center"
                     >
-                      {/* Animated Spinner */}
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{
-                          repeat: Infinity,
-                          duration: 1.2,
-                          ease: "linear",
-                        }}
-                        className="h-6 w-6 rounded-full border-4 border-white/20 border-t-white"
-                      />
+                      <div className="h-6 w-6 rounded-full border-3 border-white/20 border-t-white animate-spin" />
 
                       {/* Animated Loading Message */}
                       <motion.p

@@ -4,6 +4,7 @@ import { getMessageRequests } from "@/actions/messageActions";
 import useSWR from "swr";
 import { formatCompactTime } from "@/utils/messages/formatCompactTime";
 import Image from "next/image";
+import { isEmojiOnly } from "@/utils/messages/isEmoji";
 
 export default function MessageRequestList({
   currentUserId,
@@ -72,6 +73,19 @@ export default function MessageRequestList({
           ? formatCompactTime(new Date(request.latest_message_created_at))
           : "";
 
+        const isSender = request.sender_id === currentUserId;
+
+        let messagePreview = "No message";
+
+        if (request.latest_message) {
+          const isEmoji = isEmojiOnly(request.latest_message);
+          messagePreview = isEmoji
+            ? isSender
+              ? "You sent an emoji"
+              : "Sent an emoji"
+            : `${isSender ? "You: " : ""}${request.latest_message}`;
+        }
+
         return (
           <button
             key={request.thread_id}
@@ -106,9 +120,8 @@ export default function MessageRequestList({
                 {request.other_user_display_name || "Unnamed"}
               </p>
               <div className="text-white/50 text-[13px] flex items-center gap-1">
-                <span className="line-clamp-1">
-                  {request.latest_message || "No message"}
-                </span>
+                <span className="line-clamp-1">{messagePreview}</span>
+
                 {timeAgo && <span className="text-white/30">· {timeAgo}</span>}
               </div>
             </div>

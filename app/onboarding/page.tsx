@@ -315,14 +315,14 @@ export default function OnboardingPage() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -100 }}
           transition={{ duration: 0.3 }}
-          className="w-full max-w-2xl "
+          className="w-full max-w-lg "
         >
           {renderStep()}
         </motion.div>
       </AnimatePresence>
 
       {/* BUTTONS */}
-      <div className=" w-full max-w-2xl   mt-8 font-[family-name:var(--font-geist-mono)]">
+      <div className=" w-full max-w-lg  mt-8 font-[family-name:var(--font-geist-mono)]">
         {step < steps.length - 1 ? (
           <button
             onClick={() => {

@@ -13,11 +13,18 @@ export const DemoSteps = ({ data }: { data: TimelineEntry[] }) => {
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
-    if (ref.current) {
-      const rect = ref.current.getBoundingClientRect();
-      setHeight(rect.height);
-    }
-  }, [ref]);
+    if (!ref.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setHeight(entry.contentRect.height);
+      }
+    });
+
+    observer.observe(ref.current);
+
+    return () => observer.disconnect();
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -32,7 +39,7 @@ export const DemoSteps = ({ data }: { data: TimelineEntry[] }) => {
       className="w-full  bg-black text-white font-sans  md:px-10"
       ref={containerRef}
     >
-      <div className="max-w-4xl mx-auto pt-20 pb-4 px-7  md:px-8 lg:px-10">
+      <div className="max-w-4xl mx-auto pt-16 md:pt-20 pb-4 px-7  md:px-8 lg:px-10">
         <h2 className="text-3xl font-bold md:text-4xl  font-[family-name:var(--font-geist-sans)] mb-4 text-black dark:text-white max-w-4xl">
           <span className="text-red-500">How to recommend</span> a movie or show
         </h2>
@@ -42,7 +49,7 @@ export const DemoSteps = ({ data }: { data: TimelineEntry[] }) => {
         </p>
       </div>
 
-      <div ref={ref} className="relative max-w-4xl mx-auto pb-32">
+      <div ref={ref} className="relative max-w-4xl mx-auto pb-16">
         {data.map((item, index) => (
           <div
             key={index}
@@ -80,9 +87,10 @@ export const DemoSteps = ({ data }: { data: TimelineEntry[] }) => {
               height: heightTransform,
               opacity: opacityTransform,
             }}
-            className="absolute inset-x-0 top-0 w-[2px] 
-bg-gradient-to-t from-red-600 via-red-500 to-transparent 
-rounded-full shadow-[0_0_6px_rgba(255,255,255,0.3)]"
+            className="absolute inset-x-0 top-0 w-[3px]
+    bg-gradient-to-b from-white via-red-500 to-red-700
+    rounded-full animate-pulse
+    shadow-[0_0_12px_rgba(255,0,0,0.5)]"
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { GENRES } from "@/constants/genre";
 import LatestTMDBList from "./LatestTMDBList";
 import { useMemo, useState } from "react";
@@ -8,8 +8,19 @@ import { Search } from "lucide-react";
 
 export default function BrowsePage() {
   const router = useRouter();
-  const [selectedGenre, setSelectedGenre] = useState<string>("Action");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const searchParams = useSearchParams();
+
+  // Get initial genre from URL on first render
+  const initialGenre = searchParams.get("genre") || "Action";
+  const [selectedGenre, setSelectedGenre] = useState(initialGenre);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleGenreChange = (genre: string) => {
+    setSelectedGenre(genre);
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("genre", genre);
+    router.replace(`?${newParams.toString()}`);
+  };
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -34,7 +45,7 @@ export default function BrowsePage() {
             <input
               type="text"
               placeholder="Search movie or show..."
-              className="bg-transparent text-white placeholder-white/40 px-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200 lg:px-6 lg:py-3 lg:text-base  outline"
+              className="bg-transparent text-white placeholder-white/40 px-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200 lg:px-6 lg:py-3 lg:text-base"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -48,15 +59,15 @@ export default function BrowsePage() {
         </div>
 
         <div className="flex w-full flex-col md:flex-row justify-between gap-4 mb-10 text-center mt-6">
-          <h1 className="font-semibold text-2xl md:text-3xl ">Latest Movies</h1>
+          <h1 className="font-semibold text-2xl md:text-3xl">Latest Movies</h1>
 
           <select
-            className=" border border-white/10 px-4 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200"
+            className=" border border-white/10 px-4 py-2 rounded-md bg-black text-white text-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200"
             value={selectedGenre}
-            onChange={(e) => setSelectedGenre(e.target.value)}
+            onChange={(e) => handleGenreChange(e.target.value)}
           >
             {GENRES.map((genre) => (
-              <option key={genre} value={genre} className="text-black">
+              <option key={genre} value={genre}>
                 {genre}
               </option>
             ))}

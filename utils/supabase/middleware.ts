@@ -69,7 +69,7 @@ export async function updateSession(request: NextRequest) {
       .single();
 
     if (profile?.onboarding_complete) {
-      url.pathname = "/browse";
+      url.pathname = "/recos";
       return NextResponse.redirect(url);
     }
   }
