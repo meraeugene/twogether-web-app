@@ -10,6 +10,7 @@ import { createRecommendation } from "@/actions/recommendationActions";
 import { useRouter } from "next/navigation";
 import { useDebounce } from "use-debounce";
 import Image from "next/image";
+import { Sparkles } from "lucide-react";
 
 const steps = [
   { key: "movie", prompt: "What do you wanna recommend?" },
@@ -204,7 +205,10 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
           ) : step < steps.length - 1 ? (
             "Next"
           ) : (
-            "Recommend"
+            <div className="flex gap-2 justify-center items-center">
+              <Sparkles size={16} />
+              Recommend This!
+            </div>
           )}
         </button>
       </div>

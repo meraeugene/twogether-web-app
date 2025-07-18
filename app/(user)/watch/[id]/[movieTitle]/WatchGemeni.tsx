@@ -71,17 +71,7 @@ export default function WatchGemeni({
       {/* Chat Panel */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{
-              duration: 0.4,
-              ease: [0.22, 1, 0.36, 1], // smoother cubic-bezier easing
-            }}
-            key="chat-panel"
-            className="fixed bottom-0 right-0 w-full md:w-[400px] h-[70vh] bg-black/90 border-t md:border-l border-white/10 z-50 rounded-t-2xl md:rounded-l-none md:rounded-tl-2xl shadow-lg flex flex-col overflow-hidden backdrop-blur-sm"
-          >
+          <div className="fixed bottom-0 right-0 w-full md:w-[400px] h-[70vh] bg-black/90 border-t md:border-l border-white/10 z-50 rounded-t-2xl md:rounded-l-none md:rounded-tl-2xl shadow-lg flex flex-col overflow-hidden backdrop-blur-sm">
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/80">
               <h2 className="text-white font-semibold text-sm flex items-center gap-2">
@@ -206,7 +196,7 @@ export default function WatchGemeni({
                 </div>
               </div>
             )}
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>

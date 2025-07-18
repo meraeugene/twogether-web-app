@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaLock, FaGlobe } from "react-icons/fa";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 
 export default function RecommendModal({
   open,
@@ -118,7 +118,10 @@ export default function RecommendModal({
                     Recommending...
                   </>
                 ) : (
-                  "Recommend"
+                  <div className="flex gap-2 items-center">
+                    <Sparkles size={12} />
+                    Recommend
+                  </div>
                 )}
               </button>
             </div>
