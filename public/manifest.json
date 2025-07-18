@@ -1,0 +1,22 @@
+{
+  "name": "Twogether",
+  "short_name": "Twogether",
+  "description": "Watch, recommend, and discover movies socially.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ff385c",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/images/logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
