@@ -27,17 +27,11 @@ export default function BackToTopButton() {
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-4 pointer-events-none"
       } 
-      text-white  bg-white/70 backdrop-blur-3xl   border border-white/10
-      shadow-xl hover:shadow-2xl`}
+      text-white  cursor-pointer bg-white   border border-white/10
+    `}
       aria-label="Back to top"
     >
-      {/* Glossy reflection layer */}
-      <span className="absolute inset-0 rounded-full bg-black/10 blur-sm pointer-events-none" />
-
-      {/* Subtle top-left shine */}
-      <span className="absolute top-0 left-0 w-1/2 h-1/2 bg-white/70 rounded-full blur-md opacity-40" />
-
-      <ArrowUp className="w-5 h-5 relative z-10 text-red-500 font-extrabold drop-shadow" />
+      <ArrowUp className="w-5 h-5 relative z-10 text-red-500 font-extrabold " />
     </button>
   );
 }
