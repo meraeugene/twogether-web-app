@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { AnimatedTextCycle } from "@/components/ui/AnimatedTextCycle";
 import { SiPlayerdotme } from "react-icons/si";
 import { HeroScrollPreview } from "@/components/ui/HeroScrollPreview";
+import Image from "next/image";
 
 interface HeroProps {
   user?: {
@@ -106,11 +107,13 @@ const Hero = ({ user }: HeroProps) => {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="relative w-full h-full"
         >
-          <img
-            src="/hero.png"
+          <Image
+            src="/hero.webp"
             alt="hero"
-            className="absolute inset-0 w-full h-full object-cover rounded-2xl"
+            fill
+            className="object-cover rounded-2xl"
             draggable={false}
+            priority
           />
 
           {/* Overlay */}
