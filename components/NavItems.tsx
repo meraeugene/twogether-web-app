@@ -5,12 +5,18 @@ import { MdMovieFilter, MdStars } from "react-icons/md";
 import { RiFilmAiLine, RiMovieAiLine } from "react-icons/ri";
 import { FaUserFriends } from "react-icons/fa";
 import { LuMessageSquareHeart } from "react-icons/lu";
+import { BiMoviePlay } from "react-icons/bi";
 
 export const primaryNavItems = [
   {
     label: "Browse",
     href: "/browse",
     icon: <RiMovieAiLine className="text-lg" />,
+  },
+  {
+    label: "Binge",
+    href: "/binge",
+    icon: <BiMoviePlay className="text-lg" />,
   },
   {
     label: "Recos",
@@ -27,7 +33,7 @@ export const primaryNavItems = [
     ),
   },
   {
-    label: "Recommend",
+    label: "Reco",
     href: "/recommend",
     icon: <IoMdAdd className="text-lg" />,
   },
@@ -50,7 +56,7 @@ export const secondaryNavItems = [
     icon: <FaUserFriends className="text-lg" />,
   },
   {
-    label: "Messages",
+    label: "Chats",
     href: "/messages",
     icon: <LuMessageSquareHeart className="text-lg" />,
   },

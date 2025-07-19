@@ -232,7 +232,7 @@ export default function FilmCard({
 
                   {item.type === "tv" ? (
                     <span className="text-white/50 font-medium">
-                      S{item.seasons || 1} · E{item.episodes || 1}
+                      S{item.seasons || 1} · {item.episodes || 1}EPS
                     </span>
                   ) : (
                     <span className="text-white/50 font-medium">

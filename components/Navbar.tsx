@@ -11,6 +11,7 @@ import { RiLogoutCircleLine, RiMovieAiLine } from "react-icons/ri";
 import type { Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { CurrentUser } from "@/types/user";
+import { BiMoviePlay } from "react-icons/bi";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -215,6 +216,27 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
               </motion.div>
 
               <motion.div variants={fadeUp}>
+                <Link
+                  href="/binge"
+                  onClick={() => setMenuOpen(false)}
+                  className={`group cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur border border-white/20 shadow-sm transition ${
+                    pathname === "/binge"
+                      ? "bg-white text-black font-semibold"
+                      : "text-white bg-white/10 hover:bg-white/20"
+                  }`}
+                >
+                  <BiMoviePlay className="text-xl" />
+                  <span
+                    className={` ${
+                      pathname === "/binge" ? "text-black" : "text-white/80"
+                    }`}
+                  >
+                    Binge
+                  </span>
+                </Link>
+              </motion.div>
+
+              <motion.div variants={fadeUp}>
                 <LoginButton />
               </motion.div>
             </>
@@ -362,6 +384,27 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                         }`}
                       >
                         Browse
+                      </span>
+                    </Link>
+                  </motion.div>
+
+                  <motion.div variants={fadeUp}>
+                    <Link
+                      href="/binge"
+                      onClick={() => setMenuOpen(false)}
+                      className={`group border border-white/20 cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
+                        pathname === "/binge"
+                          ? "bg-white text-black  font-semibold"
+                          : "text-white/ bg-white/5 hover:bg-white/20"
+                      }`}
+                    >
+                      <BiMoviePlay />
+                      <span
+                        className={` ${
+                          pathname === "/binge" ? "text-black" : "text-white/80"
+                        }`}
+                      >
+                        Binge
                       </span>
                     </Link>
                   </motion.div>

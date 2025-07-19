@@ -69,7 +69,7 @@ export default function WatchSuggestions({
                 <span>{rec.year} </span>
                 {rec.type === "tv" ? (
                   <span className="text-white/50 font-medium">
-                    S{rec.seasons || 1} · E{rec.episodes || 1}
+                    S{rec.seasons || 1} · {rec.episodes || 1}EPS
                   </span>
                 ) : (
                   <span className="text-white/50 font-medium">

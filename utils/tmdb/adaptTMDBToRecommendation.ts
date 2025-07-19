@@ -25,7 +25,6 @@ export function adaptTMDBToRecommendation(
             `https://vidsrc.cc/v2/embed/movie/${tmdb.id}?autoPlay=false&poster=true`,
             `https://vidsrc.to/embed/movie/${tmdb.id}`,
           ],
-
     genres: tmdb.genres,
     year: tmdb.year,
     duration: tmdb.duration ?? undefined,

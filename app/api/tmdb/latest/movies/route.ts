@@ -22,7 +22,12 @@ export async function GET(req: NextRequest) {
 
   const url = `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&include_adult=false&certification_country=US&certification.lte=PG-13&api_key=${API_KEY}&page=${page}`;
 
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    // cache for 24 hours, consider `force-cache` if you want it 100% static
+    cache: "force-cache",
+    next: { revalidate: 86400 }, // revalidate every 24 hours
+  });
+
   const tmdbData = await res.json();
   const rawItems: TMDBRawResult[] = tmdbData.results || [];
 
@@ -30,8 +35,13 @@ export async function GET(req: NextRequest) {
     rawItems.map(async (item): Promise<TMDBEnrichedResult> => {
       try {
         const detailsRes = await fetch(
-          `${BASE_URL}/movie/${item.id}?api_key=${API_KEY}`
+          `${BASE_URL}/movie/${item.id}?api_key=${API_KEY}`,
+          {
+            cache: "force-cache",
+            next: { revalidate: 86400 },
+          }
         );
+
         if (!detailsRes.ok) throw new Error("Details fetch failed");
 
         const details = await detailsRes.json();
@@ -66,5 +76,13 @@ export async function GET(req: NextRequest) {
     })
   );
 
-  return NextResponse.json(enriched);
+  const response = NextResponse.json(enriched);
+
+  // ✅ Edge cache control for downstream CDNs
+  response.headers.set(
+    "Cache-Control",
+    "public, max-age=86400, stale-while-revalidate=60"
+  );
+
+  return response;
 }
