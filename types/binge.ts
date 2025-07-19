@@ -14,6 +14,7 @@ export type TMDBMovieDetails = {
   id: number;
   genres: TMDBGenre[];
   runtime: number;
+  release_date?: string;
   overview: string;
   belongs_to_collection: {
     id: number;
@@ -36,6 +37,7 @@ export type EnrichedMovie = {
   media_type: "movie";
   genres: string[];
   duration: number;
+  release_date?: string;
   synopsis: string;
 };
 
@@ -43,4 +45,20 @@ export type EnrichedCollection = {
   collection_id: number;
   collection_name: string;
   movies: EnrichedMovie[];
+};
+
+export type BingeCollection = {
+  collection_id: number;
+  collection_name: string;
+  movies: {
+    id: number;
+    tmdb_id: number;
+    title: string;
+    poster_url: string | null;
+    year?: string;
+    media_type: "movie" | "tv";
+    genres: string[];
+    duration?: number;
+    synopsis: string;
+  }[];
 };

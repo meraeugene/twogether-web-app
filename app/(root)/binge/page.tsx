@@ -4,14 +4,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { GENRES } from "@/constants/genre";
 import { useMemo, useState } from "react";
 import CollectionPage from "./CollectionPage";
+import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
+import { bingePlaceholders } from "@/constants/placeholders";
 
 export default function BingePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Get initial genre from URL on first render
   const initialGenre = searchParams.get("genre") || "Action";
   const [selectedGenre, setSelectedGenre] = useState(initialGenre);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleGenreChange = (genre: string) => {
     setSelectedGenre(genre);
@@ -20,13 +22,29 @@ export default function BingePage() {
     router.replace(`?${newParams.toString()}`);
   };
 
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    const trimmed = searchQuery.trim();
+    if (trimmed) {
+      router.push(`/search/collections/${encodeURIComponent(trimmed)}`);
+    }
+  };
+
   const latestList = useMemo(() => {
     return <CollectionPage genre={selectedGenre} />;
   }, [selectedGenre]);
 
   return (
-    <main className=" min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 text-white">
+    <main className="min-h-screen bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white font-[family-name:var(--font-geist-sans)]">
       <section className="mb-16">
+        <div className="max-w-2xl mx-auto w-full">
+          <PlaceholdersAndVanishInput
+            placeholders={bingePlaceholders}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onSubmit={handleSubmit}
+          />
+        </div>
+
         <div className="flex w-full flex-col md:flex-row justify-between gap-4 mb-10 text-center mt-6">
           <h1 className="font-semibold  text-2xl md:text-3xl">Binge Worthy</h1>
 

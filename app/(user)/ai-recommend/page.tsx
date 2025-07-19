@@ -6,7 +6,7 @@ import { TextInputCard } from "@/components/StepCard";
 import { recommendMoviesListWithAI } from "@/actions/geminiActions";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 import FilmCard from "@/components/FilmCard";
-import { adaptAIGeneratedToRecommendation } from "@/utils/ai-recommend/adaptAIGeneratedToRecommendation";
+import { adaptAIGeneratedToRecommendation } from "@/utils/adaptAIGeneratedToRecommendation";
 import { formatPromptTitle } from "@/utils/ai-recommend/formatPromptTitle";
 import { useAIRecommendations } from "@/stores/useAIRecommendation";
 import { toast } from "sonner";

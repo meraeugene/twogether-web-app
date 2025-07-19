@@ -3,25 +3,10 @@
 import { useEffect, useRef } from "react";
 import useSWRInfinite from "swr/infinite";
 import FilmCard from "@/components/FilmCard";
-import { adaptTMDBToRecommendation } from "@/utils/tmdb/adaptTMDBToRecommendation";
+import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
+import { BingeCollection } from "@/types/binge";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-type BingeCollection = {
-  collection_id: number;
-  collection_name: string;
-  movies: {
-    id: number;
-    tmdb_id: number;
-    title: string;
-    poster_url: string | null;
-    year?: string;
-    media_type: "movie" | "tv";
-    genres: string[];
-    duration?: number;
-    synopsis: string;
-  }[];
-};
 
 export default function CollectionPage({ genre }: { genre: string }) {
   const loaderRef = useRef<HTMLDivElement | null>(null);

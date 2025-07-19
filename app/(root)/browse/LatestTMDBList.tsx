@@ -4,7 +4,7 @@ import useSWRInfinite from "swr/infinite";
 import { useEffect, useRef, useMemo } from "react";
 import FilmCard from "@/components/FilmCard";
 import { TMDBEnrichedResult } from "@/types/tmdb";
-import { adaptTMDBToRecommendation } from "@/utils/tmdb/adaptTMDBToRecommendation";
+import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

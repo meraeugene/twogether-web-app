@@ -5,12 +5,12 @@ import { GENRES } from "@/constants/genre";
 import LatestTMDBList from "./LatestTMDBList";
 import { useMemo, useState } from "react";
 import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
+import { browsePlaceholders } from "@/constants/placeholders";
 
 export default function BrowsePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Get initial genre from URL on first render
   const initialGenre = searchParams.get("genre") || "Action";
   const [selectedGenre, setSelectedGenre] = useState(initialGenre);
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,25 +34,12 @@ export default function BrowsePage() {
     return <LatestTMDBList genre={selectedGenre} />;
   }, [selectedGenre]);
 
-  const placeholders = [
-    "Search for Inception...",
-    "Search for Interstellar...",
-    "Search for The Dark Knight...",
-    "Search for Fight Club...",
-    "Search for La La Land...",
-    "Search for Parasite...",
-    "Search for The Godfather...",
-    "Search for Everything Everywhere All At Once...",
-    "Search for The Grand Budapest Hotel...",
-    "Search for Whiplash...",
-  ];
-
   return (
     <main className="min-h-screen bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white font-[family-name:var(--font-geist-sans)]">
       <section className="mb-16">
         <div className="max-w-2xl mx-auto w-full">
           <PlaceholdersAndVanishInput
-            placeholders={placeholders}
+            placeholders={browsePlaceholders}
             onChange={(e) => setSearchQuery(e.target.value)}
             onSubmit={handleSubmit}
           />

@@ -1,7 +1,7 @@
 const loading = () => {
   return (
     <main className="min-h-screen bg-black flex flex-col  lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 px-7 pt-28  pb-16 text-white">
-      <div className="flex flex-col lg:flex-row gap-10 animate-pulse">
+      <div className="flex flex-col xl:flex-row gap-10 animate-pulse">
         <div className="flex-1 ">
           <div className="w-full aspect-video bg-white/10 rounded-lg" />
 
@@ -20,10 +20,10 @@ const loading = () => {
           <div className="h-6 w-[40%] bg-white/10 rounded-sm mt-4" />
           <div className="h-5 w-[15%] bg-white/10 rounded-sm mt-4" />
         </div>
-        <div className="w-full lg:w-[10%] space-y-6">
+        <div className="w-full lg:flex lg:justify-between xl:block  xl:w-[15%] 2xl:w-[10%] space-y-6">
           {Array.from({ length: 5 }).map((_, index) => (
             <div key={index}>
-              <div className="h-[200px] bg-white/10 rounded-lg" />
+              <div className="lg:h-[200px] xl:h-[250px]  bg-white/10 rounded-lg" />
               <div className="h-4 bg-white/10  rounded-sm mt-3" />
               <div className="flex justify-between items-center gap-4">
                 <div className="h-3 bg-white/10 w-[35%]  rounded-sm mt-2" />

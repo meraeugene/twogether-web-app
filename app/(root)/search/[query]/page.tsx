@@ -1,6 +1,6 @@
 import FilmCard from "@/components/FilmCard";
 import { TMDBEnrichedResult } from "@/types/tmdb";
-import { adaptTMDBToRecommendation } from "@/utils/tmdb/adaptTMDBToRecommendation";
+import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import { searchTMDB } from "@/utils/tmdb/search/searchTMDB";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";

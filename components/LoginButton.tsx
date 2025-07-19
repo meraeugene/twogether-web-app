@@ -9,7 +9,7 @@ const LoginButton = () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/browse`,
+        redirectTo: `${window.location.origin}/auth/callback?next=/recos`,
       },
     });
   };
