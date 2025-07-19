@@ -6,7 +6,7 @@ import {
   TMDBSeasonResponse,
 } from "@/types/tmdb";
 
-// In-memory cache (fast but temporary)
+// In-memory cache
 const cache = new Map<
   string,
   { data: TMDBEnrichedResult[]; timestamp: number }
@@ -26,17 +26,19 @@ export async function GET(req: NextRequest) {
   const now = Date.now();
   const cached = cache.get(cacheKey);
 
-  // Serve from cache if available and fresh
   if (cached && now - cached.timestamp < CACHE_TTL) {
-    return NextResponse.json(cached.data);
+    return NextResponse.json(cached.data, {
+      headers: {
+        "Cache-Control": "public, max-age=86400, stale-while-revalidate=60",
+      },
+    });
   }
 
-  // Fetch search results
   const searchUrl = `${BASE_URL}/search/multi?query=${encodeURIComponent(
     query
-  )}&api_key=${TMDB_API_KEY}`;
-  const searchRes = await fetch(searchUrl);
+  )}&api_key=${TMDB_API_KEY}&include_adult=false`;
 
+  const searchRes = await fetch(searchUrl);
   if (!searchRes.ok) {
     return NextResponse.json({ error: "TMDB search failed" }, { status: 502 });
   }
@@ -53,7 +55,6 @@ export async function GET(req: NextRequest) {
       return getYear(b) - getYear(a);
     });
 
-  // Fetch details concurrently (parallel API calls)
   const enrichedResults: TMDBEnrichedResult[] = await Promise.all(
     rawResults.map(async (item): Promise<TMDBEnrichedResult> => {
       try {
@@ -84,6 +85,13 @@ export async function GET(req: NextRequest) {
           }
         }
 
+        const duration =
+          item.media_type === "movie"
+            ? details.runtime
+            : details.episode_run_time?.[0] ||
+              details.episode_run_time?.[1] ||
+              24;
+
         return {
           ...item,
           genres:
@@ -96,12 +104,7 @@ export async function GET(req: NextRequest) {
             item.media_type === "movie"
               ? details.release_date?.slice(0, 4)
               : details.first_air_date?.slice(0, 4),
-          duration:
-            item.media_type === "movie"
-              ? details.runtime
-              : details.episode_run_time?.[0] ||
-                details.episode_run_time?.[1] ||
-                24, // fallback
+          duration,
           synopsis: details.overview || "",
           seasons:
             item.media_type === "tv" ? details.number_of_seasons : undefined,
@@ -124,8 +127,19 @@ export async function GET(req: NextRequest) {
     })
   );
 
-  // Cache result for future requests
-  cache.set(cacheKey, { data: enrichedResults, timestamp: now });
+  // Remove entries with no poster or 0/missing duration
+  const cleanedResults = enrichedResults.filter((item) => {
+    if (!item.poster_url) return false;
+    if (!item.duration || item.duration === 0) return false;
+    return true;
+  });
 
-  return NextResponse.json(enrichedResults);
+  // Cache it
+  cache.set(cacheKey, { data: cleanedResults, timestamp: now });
+
+  return NextResponse.json(cleanedResults, {
+    headers: {
+      "Cache-Control": "public, max-age=86400, stale-while-revalidate=60",
+    },
+  });
 }

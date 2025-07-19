@@ -66,36 +66,41 @@ export async function GET(req: NextRequest) {
       );
       const colData: TMDBCollection = await colRes.json();
 
-      const parts: EnrichedMovie[] = await Promise.all(
-        (colData.parts || []).map(async (part) => {
-          const partDetailsRes = await fetch(
-            `${BASE_URL}/movie/${part.id}?api_key=${API_KEY}`
-          );
-          const partDetails: TMDBMovieDetails = await partDetailsRes.json();
+      const parts: EnrichedMovie[] = [];
 
-          return {
-            id: part.id,
-            tmdb_id: part.id,
-            title: part.title,
-            poster_url: part.poster_path
-              ? `https://image.tmdb.org/t/p/w500${part.poster_path}`
-              : null,
-            year: part.release_date?.slice(0, 4),
-            media_type: "movie",
-            genres: partDetails.genres?.map((g) => g.name) || [],
-            duration: partDetails.runtime,
-            synopsis: partDetails.overview || "",
-          };
-        })
-      );
+      for (const part of colData.parts || []) {
+        const partDetailsRes = await fetch(
+          `${BASE_URL}/movie/${part.id}?api_key=${API_KEY}`
+        );
+        const partDetails: TMDBMovieDetails = await partDetailsRes.json();
 
-      collectionsMap[collection.id] = {
-        collection_id: collection.id,
-        collection_name: collection.name,
-        movies: parts.sort((a, b) =>
-          (a.year || "").localeCompare(b.year || "")
-        ),
-      };
+        // Skip movies with 0 or missing runtime
+        if (!partDetails.runtime || partDetails.runtime === 0) continue;
+
+        parts.push({
+          id: part.id,
+          tmdb_id: part.id,
+          title: part.title,
+          poster_url: part.poster_path
+            ? `https://image.tmdb.org/t/p/w500${part.poster_path}`
+            : null,
+          year: part.release_date?.slice(0, 4),
+          media_type: "movie",
+          genres: partDetails.genres?.map((g) => g.name) || [],
+          duration: partDetails.runtime,
+          synopsis: partDetails.overview || "",
+        });
+      }
+
+      if (parts.length > 0) {
+        collectionsMap[collection.id] = {
+          collection_id: collection.id,
+          collection_name: collection.name,
+          movies: parts.sort((a, b) =>
+            (a.year || "").localeCompare(b.year || "")
+          ),
+        };
+      }
     })
   );
 

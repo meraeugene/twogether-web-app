@@ -13,9 +13,12 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
     query
   )}&include_adult=false`;
 
-  const res = await fetch(searchUrl);
-  const { results } = (await res.json()) as { results: TMDBRawResult[] };
+  const res = await fetch(searchUrl, {
+    cache: "force-cache",
+    next: { revalidate: 86400 }, // 24 hours
+  });
 
+  const { results } = (await res.json()) as { results: TMDBRawResult[] };
   if (!results) return [];
 
   const filtered = results.filter(
@@ -31,24 +34,28 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
           ? `${BASE_URL}/movie/${item.id}?api_key=${API_KEY}`
           : `${BASE_URL}/tv/${item.id}?api_key=${API_KEY}`;
 
-      const detailRes = await fetch(detailUrl);
+      const detailRes = await fetch(detailUrl, {
+        cache: "force-cache",
+        next: { revalidate: 86400 },
+      });
+
       const details = await detailRes.json();
 
-      let episodeTitlesPerSeason: Record<number, EpisodeTitle[]> | undefined =
-        undefined;
+      let episodeTitlesPerSeason: Record<number, EpisodeTitle[]> | undefined;
 
-      // If it's a TV show, fetch episodes per season
       if (item.media_type === "tv") {
         episodeTitlesPerSeason = {};
         const totalSeasons = details.number_of_seasons || 0;
 
         for (let season = 1; season <= totalSeasons; season++) {
           const seasonUrl = `${BASE_URL}/tv/${item.id}/season/${season}?api_key=${API_KEY}`;
-          const seasonRes = await fetch(seasonUrl);
+          const seasonRes = await fetch(seasonUrl, {
+            cache: "force-cache",
+            next: { revalidate: 86400 },
+          });
 
           if (seasonRes.ok) {
             const seasonData: TMDBSeasonResponse = await seasonRes.json();
-
             episodeTitlesPerSeason[season] = seasonData.episodes.map((ep) => ({
               episode_number: ep.episode_number,
               title: ep.name,
@@ -88,5 +95,12 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
     })
   );
 
-  return enrichedResults;
+  const cleanedResults = enrichedResults.filter((item) => {
+    if (item.type === "movie") {
+      return item.duration && item.duration > 0;
+    }
+    return true;
+  });
+
+  return cleanedResults;
 }

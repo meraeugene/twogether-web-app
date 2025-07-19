@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
 
   const response = NextResponse.json(enriched);
 
-  // ✅ Edge cache control for downstream CDNs
+  // Edge cache control for downstream CDNs
   response.headers.set(
     "Cache-Control",
     "public, max-age=86400, stale-while-revalidate=60"

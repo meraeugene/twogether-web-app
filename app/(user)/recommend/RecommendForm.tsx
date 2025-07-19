@@ -60,7 +60,7 @@ const RecommendForm = ({ userId }: RecommendFormsProps) => {
     }
 
     toast.success("Boom! Your recommendation just hit the screen 🎬✨");
-    router.push("/browse");
+    router.push("/recos");
   };
 
   const nextStepCheck = () => {
