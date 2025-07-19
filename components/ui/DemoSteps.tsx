@@ -43,7 +43,7 @@ export const DemoSteps = ({ data }: { data: TimelineEntry[] }) => {
         <h2 className="text-3xl font-bold md:text-4xl  font-[family-name:var(--font-geist-sans)] mb-4 text-black dark:text-white max-w-4xl">
           <span className="text-red-500">How to recommend</span> a movie or show
         </h2>
-        <p className="text-neutral-700 dark:text-neutral-300 text-sm md:text-base lg:text-lg leading-relaxed font-[family-name:var(--font-geist-mono)] max-w-xl">
+        <p className="text-gray-300  text-sm md:text-base lg:text-lg leading-relaxed font-[family-name:var(--font-geist-mono)] max-w-xl">
           Follow this quick step-by-step guide to recommend movies and shows you
           love — it only takes a few taps to share something meaningful.
         </p>
