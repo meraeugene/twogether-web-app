@@ -83,7 +83,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
         damping: 30,
         duration: 0.35,
       }}
-      className={` overflow-hidden fixed  max-w-full w-[90%] md:w-[60%] lg:w-fit   top-6  left-1/2 -translate-x-1/2  z-[50] 
+      className={` overflow-hidden fixed  max-w-full w-[90%] md:w-[60%] lg:w-fit   top-6  left-1/2 -translate-x-1/2  z-[60] 
         bg-black/60 backdrop-blur-3xl border border-white/10 shadow-xl
         font-[family-name:var(--font-geist-sans)]
         ${isExpanded ? "rounded-3xl" : "rounded-full"}`}
