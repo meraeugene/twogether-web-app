@@ -17,7 +17,7 @@ const LoginButton = () => {
   return (
     <button
       onClick={handleLogin}
-      className="group cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition w-full"
+      className="group cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition w-full"
     >
       <FaGoogle className="text-white text-base" />
       Login

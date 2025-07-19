@@ -113,7 +113,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`group relative px-4 2xl:px-3 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
+                  className={`group relative px-4 2xl:px-3 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
     ${
       pathname === item.href
         ? "bg-white text-black font-semibold"
@@ -135,7 +135,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                   <Link
                     href={item.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`group relative px-4 py-2 2xl:px-3  rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
+                    className={`group relative px-4 py-2 2xl:px-3  rounded-lg flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
       ${
         pathname === item.href
           ? "bg-white text-black font-semibold"
@@ -158,7 +158,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                 <Link
                   href={`/profile/${user.username}/${user.id}`}
                   onClick={() => setMenuOpen(false)}
-                  className={`group relative px-4 py-2 2xl:px-3  rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
+                  className={`group relative px-4 py-2 2xl:px-3  rounded-lg flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
       ${
         pathname === `/profile/${user.username}/${user.id}`
           ? "bg-white text-black font-semibold"
@@ -175,7 +175,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                 <button
                   onClick={handleLogout}
                   disabled={isPending}
-                  className="group cursor-pointer 2xl:px-3  relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition"
+                  className="group cursor-pointer 2xl:px-3  relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition"
                 >
                   {isPending ? (
                     <>
@@ -197,7 +197,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                 <Link
                   href="/browse"
                   onClick={() => setMenuOpen(false)}
-                  className={`group cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur border border-white/20 shadow-sm transition ${
+                  className={`group cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur border border-white/20 shadow-sm transition ${
                     pathname === "/browse"
                       ? "bg-white text-black font-semibold"
                       : "text-white bg-white/10 hover:bg-white/20"
