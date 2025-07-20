@@ -35,6 +35,7 @@ export function adaptTMDBToRecommendation(
     visibility: "public",
     comment: "",
     is_tmdb_recommendation: true,
+    rating: 0,
     created_at: new Date().toISOString(),
     recommended_by: {
       id: "tmdb",

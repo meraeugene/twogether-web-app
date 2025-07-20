@@ -40,6 +40,7 @@ export type RecommendationForm = {
   type: "movie" | "tv";
   stream_url: string[];
   comment: string;
+  rating: number;
   visibility: "public" | "private";
   episodeTitlesPerSeason?: Record<number, EpisodeTitle[]>;
 };

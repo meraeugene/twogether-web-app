@@ -34,6 +34,7 @@ export default function WatchInfo({
 
   const handleSubmit = async (formData: {
     comment: string;
+    rating: number;
     visibility: "public" | "private";
   }) => {
     setLoading(true);
@@ -49,6 +50,7 @@ export default function WatchInfo({
     const { error } = await createRecommendation({
       ...aiRecommendData,
       comment: formData.comment,
+      rating: formData.rating,
       visibility: formData.visibility,
     });
 

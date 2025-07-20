@@ -19,6 +19,7 @@ import { FaLock } from "react-icons/fa";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { useRouter } from "next/navigation";
 import { useTMDBWatch } from "@/stores/useTMDBWatch";
+import { VisualHeartRating } from "./VisualHeartRating";
 
 export default function FilmCard({
   item,
@@ -252,13 +253,30 @@ export default function FilmCard({
                 </p>
               )}
 
+              {item.rating && (
+                <div className="mt-2">
+                  <VisualHeartRating value={item.rating} />
+                </div>
+              )}
+
               {item.recommended_by.username && (
-                <div className="text-sm text-gray-400 italic mt-1">
-                  Recommended by{" "}
+                <div className="text-sm text-gray-400 italic mt-1 flex items-center gap-2">
+                  <span>Recommended by</span>
                   <Link
                     href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
-                    className="text-white font-medium hover:underline"
+                    className="text-white font-medium hover:underline flex items-center gap-2"
                   >
+                    {item.recommended_by.avatar_url && (
+                      <div className="w-6 h-6 rounded-full overflow-hidden">
+                        <Image
+                          src={item.recommended_by.avatar_url}
+                          alt={item.recommended_by.username}
+                          width={24}
+                          height={24}
+                          className="rounded-full object-cover"
+                        />
+                      </div>
+                    )}
                     {item.generated_by_ai
                       ? "AI Assistant"
                       : item.recommended_by.username}

@@ -23,6 +23,7 @@ interface RecommendationFormData {
     number,
     { episode_number: number; title: string }[]
   >;
+  rating: number;
 }
 
 export const createRecommendation = async (form: RecommendationFormData) => {

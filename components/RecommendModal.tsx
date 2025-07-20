@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaLock, FaGlobe } from "react-icons/fa";
 import { toast } from "sonner";
 import { Loader2, Sparkles } from "lucide-react";
+import { HeartRating } from "./HeartRating";
 
 export default function RecommendModal({
   open,
@@ -16,11 +17,13 @@ export default function RecommendModal({
   onClose: () => void;
   onSubmit: (data: {
     comment: string;
+    rating: number;
     visibility: "public" | "private";
   }) => void;
   loading?: boolean;
 }) {
   const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(0);
   const [visibility, setVisibility] = useState<"public" | "private">("public");
 
   const handleSubmit = () => {
@@ -29,7 +32,7 @@ export default function RecommendModal({
       return;
     }
 
-    onSubmit({ comment, visibility });
+    onSubmit({ comment, rating, visibility });
   };
 
   return (
@@ -97,9 +100,16 @@ export default function RecommendModal({
                   </button>
                 </div>
               </div>
+
+              <div>
+                <label className="text-sm mb-1 block text-white/70">
+                  Rating
+                </label>
+                <HeartRating value={rating} onChange={setRating} />
+              </div>
             </div>
 
-            <div className="flex justify-end gap-3 mt-10">
+            <div className="flex justify-end gap-3 mt-8">
               <button
                 onClick={onClose}
                 disabled={loading}

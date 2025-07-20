@@ -11,10 +11,12 @@ import { useRouter } from "next/navigation";
 import { useDebounce } from "use-debounce";
 import Image from "next/image";
 import { Sparkles } from "lucide-react";
+import { HeartRating } from "@/components/HeartRating";
 
 const steps = [
   { key: "movie", prompt: "What do you wanna recommend?" },
   { key: "comment", prompt: "What’s the vibe? Why do you love it?" },
+  { key: "rating", prompt: "How much did it steal your heart?" },
   { key: "visibility", prompt: "Who can see this recommendation?" },
 ] as const;
 
@@ -25,6 +27,7 @@ const defaultForm: RecommendationForm = {
   type: "movie",
   stream_url: [],
   comment: "",
+  rating: 0,
   visibility: "public",
 };
 
@@ -120,7 +123,15 @@ const RecommendPage = () => {
             />
           </div>
         );
-
+      case "rating":
+        return (
+          <div className="flex flex-col items-center ">
+            <HeartRating
+              value={form.rating || 0}
+              onChange={(v) => setForm({ ...form, rating: v })}
+            />
+          </div>
+        );
       case "visibility":
         return (
           <SingleSelectCards
@@ -170,7 +181,7 @@ const RecommendPage = () => {
         {steps[step].prompt}
       </h1>
 
-      <p className="text-gray-400 mb-8 text-center font-[family-name:var(--font-geist-sans)]">
+      <p className="text-gray-400 mb-4 text-center font-[family-name:var(--font-geist-sans)]">
         Step {step + 1} of {steps.length}
       </p>
 
