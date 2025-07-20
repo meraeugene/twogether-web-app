@@ -255,27 +255,29 @@ export default function FilmCard({
 
               {item.rating && <VisualHeartRating value={item.rating} />}
 
-              <div className=" mt-3 ">
-                <Link
-                  href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
-                  className=" text-sm text-white/60 hover:underline flex items-center gap-2"
-                >
-                  {item.recommended_by.avatar_url && (
-                    <div className="w-6 h-6 rounded-full overflow-hidden">
-                      <Image
-                        src={item.recommended_by.avatar_url}
-                        alt={item.recommended_by.username}
-                        width={24}
-                        height={24}
-                        className="rounded-full object-cover"
-                      />
-                    </div>
-                  )}
-                  {item.generated_by_ai
-                    ? "AI Assistant"
-                    : item.recommended_by.username}
-                </Link>
-              </div>
+              {item.recommended_by.username && (
+                <div className=" mt-3 ">
+                  <Link
+                    href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
+                    className=" text-sm text-white/60 hover:underline flex items-center gap-2"
+                  >
+                    {item.recommended_by.avatar_url && (
+                      <div className="w-6 h-6 rounded-full overflow-hidden">
+                        <Image
+                          src={item.recommended_by.avatar_url}
+                          alt={item.recommended_by.username}
+                          width={24}
+                          height={24}
+                          className="rounded-full object-cover"
+                        />
+                      </div>
+                    )}
+                    {item.generated_by_ai
+                      ? "AI Assistant"
+                      : item.recommended_by.username}
+                  </Link>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

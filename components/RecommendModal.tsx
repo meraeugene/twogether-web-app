@@ -32,6 +32,11 @@ export default function RecommendModal({
       return;
     }
 
+    if (!rating) {
+      toast.error("Please provide a rating! Your opinion matters. ❤️");
+      return;
+    }
+
     onSubmit({ comment, rating, visibility });
   };
 
