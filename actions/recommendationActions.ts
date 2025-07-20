@@ -17,9 +17,12 @@ interface RecommendationFormData {
   genres?: string[];
   visibility?: "public" | "private";
   synopsis?: string;
-  seasons?: number;
-  episodes?: number;
-  episode_titles_per_season?: Record<string, string[]>;
+  seasons?: number | null;
+  episodes?: number | null;
+  episode_titles_per_season?: Record<
+    number,
+    { episode_number: number; title: string }[]
+  >;
 }
 
 export const createRecommendation = async (form: RecommendationFormData) => {

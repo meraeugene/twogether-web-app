@@ -50,7 +50,7 @@ export default function TMDBWatchPage({
 
   const handleSubmit = async (formData: {
     comment: string;
-    visibility: string;
+    visibility: "public" | "private";
   }) => {
     setLoading(true);
 
@@ -63,11 +63,10 @@ export default function TMDBWatchPage({
       "recommendation_created_at",
     ]);
 
-    const { error } = await createRecommendation(currentUserId!, {
+    const { error } = await createRecommendation({
       ...safeData,
       comment: formData.comment,
       visibility: formData.visibility,
-      user_id: currentUserId,
     });
 
     setLoading(false);

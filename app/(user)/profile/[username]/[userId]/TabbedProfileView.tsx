@@ -358,13 +358,13 @@ export default function TabbedProfileView({
               {activeTab === "Watchlist" && (
                 <div className="grid max-w-4xl mx-auto  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 ">
                   {userWatchList.map((item) => (
-                    <FilmCard key={item.recommendation_id} item={item} />
+                    <FilmCard key={item.tmdb_id} item={item} />
                   ))}
                 </div>
               )}
               {activeTab === "Friends" && (
                 <div className="text-white/80">
-                  <div className="grid max-w-4xl mx-auto grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
+                  <div className="grid max-w-5xl mx-auto grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
                     {userFriends?.map((friend) => (
                       <motion.div
                         key={friend.id}
