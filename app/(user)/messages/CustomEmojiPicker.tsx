@@ -13,7 +13,7 @@ export default function CustomEmojiPicker({
           key={code}
           onClick={() => onSelect(code)}
           title={code}
-          className="hover:bg-white/10 cursor-pointer rounded p-1"
+          className="transition-transform transform hover:scale-110 hover:bg-white/10 rounded cursor-pointer p-1"
         >
           <Image src={url} alt={code} width={44} height={44} />
         </button>

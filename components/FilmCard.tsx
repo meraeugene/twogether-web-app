@@ -118,7 +118,7 @@ export default function FilmCard({
                 </div>
               )}
 
-              <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/50 backdrop-blur-sm">
+              <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/50 ">
                 <button
                   onClick={handleClick}
                   className="flex cursor-pointer items-center justify-center w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md ring-1 ring-white/10 hover:ring-3 hover:ring-red-100 transition duration-300 ease-in-out transform hover:scale-110"
@@ -215,7 +215,7 @@ export default function FilmCard({
               </button>
             )}
 
-            <div className="py-4 text-white bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+            <div className="py-4 text-white ">
               <button
                 onClick={handleClick}
                 className="w-full cursor-pointer flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mt-2 mb-4 lg:hidden"

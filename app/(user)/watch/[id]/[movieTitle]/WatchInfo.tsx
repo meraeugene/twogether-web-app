@@ -149,7 +149,7 @@ export default function WatchInfo({
                 alt="Avatar"
                 width={28}
                 height={28}
-                className="object-cover"
+                className="w-[28px] h-[28px] object-cover"
               />
             </div>
 

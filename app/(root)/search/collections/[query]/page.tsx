@@ -43,7 +43,7 @@ export default async function BingeSearchPage({
         <div className="space-y-10">
           {sortedResults.map((collection) => (
             <section key={collection.collection_id}>
-              <h2 className="text-lg md:text-2xl lg:text-3xl font-semibold mb-4 text-white">
+              <h2 className="text-2xl lg:text-3xl font-semibold mb-4 text-white">
                 {collection.collection_name}
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-6">

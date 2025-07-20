@@ -48,7 +48,7 @@ export function MessageItem({
             alt={part}
             width={72}
             height={72}
-            className="inline-block align-middle object-cover"
+            className="inline-block align-middle object-cover w-[72px] h-auto"
             draggable={false}
           />
         ) : (

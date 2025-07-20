@@ -59,8 +59,8 @@ export default function WatchGemeni({
         <svg
           fill="currentColor"
           viewBox="0 0 24 24"
-          width="1.5em"
-          height="1.5em"
+          width="1.25rem"
+          height="1.25rem"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />

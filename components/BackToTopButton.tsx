@@ -22,7 +22,7 @@ export default function BackToTopButton() {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-6 xl:bottom-22 right-6 z-20 p-3 rounded-full transition-all duration-300 ease-in-out hover:scale-105 ${
+      className={`fixed bottom-20 right-6 z-20 p-3 rounded-full transition-all duration-300 ease-in-out hover:scale-105 ${
         visible
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-4 pointer-events-none"
