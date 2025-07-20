@@ -3,12 +3,36 @@
 import { createClient } from "@/utils/supabase/server";
 import { Recommendation } from "@/types/recommendation";
 import { revalidatePath } from "next/cache";
+import { getCurrentUser } from "./authActions";
 
-export const createRecommendation = async (user_id: string, form: any) => {
+interface RecommendationFormData {
+  title: string;
+  comment: string;
+  poster_url?: string;
+  tmdb_id: number;
+  type: "movie" | "tv";
+  stream_url: string[];
+  year?: string;
+  duration?: number;
+  genres?: string[];
+  visibility?: "public" | "private";
+  synopsis?: string;
+  seasons?: number;
+  episodes?: number;
+  episode_titles_per_season?: Record<string, string[]>;
+}
+
+export const createRecommendation = async (form: RecommendationFormData) => {
   const supabase = await createClient();
 
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+
   const { error } = await supabase.from("recommendations").insert({
-    user_id,
+    user_id: user.id,
     ...form,
   });
 
