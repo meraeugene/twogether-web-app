@@ -283,7 +283,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                       <Link
                         href={item.href}
                         onClick={() => setMenuOpen(false)}
-                        className={`group relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-xl border backdrop-blur-xl transition-all flex items-center gap-3
+                        className={`group relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3
       ${
         pathname === item.href
           ? "bg-white text-black border-white/20"
@@ -303,7 +303,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                       <Link
                         href={item.href}
                         onClick={() => setMenuOpen(false)}
-                        className={`group relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-xl border backdrop-blur-xl transition-all flex items-center gap-3
+                        className={`group relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3
       ${
         pathname.startsWith(item.href)
           ? "bg-white text-black border-white/20"
@@ -331,7 +331,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                     <Link
                       href={`/profile/${user.username}/${user.id}`}
                       onClick={() => setMenuOpen(false)}
-                      className={`group relative  text-lg font-semibold tracking-wide px-5 py-3.5 rounded-xl backdrop-blur-xl border transition-all flex items-center gap-3 ${
+                      className={`group relative  text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg backdrop-blur-xl border transition-all flex items-center gap-3 ${
                         pathname === `/profile/${user.username}/${user.id}`
                           ? "bg-white text-black border-white/20"
                           : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
@@ -347,7 +347,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                     <button
                       onClick={handleLogout}
                       disabled={isPending}
-                      className="group relative text-lg font-semibold tracking-wide text-white/90  px-5 py-3.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3 w-full"
+                      className="group relative text-lg font-semibold tracking-wide text-white/90  px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3 w-full"
                     >
                       {isPending ? (
                         <>
@@ -369,7 +369,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                     <Link
                       href="/browse"
                       onClick={() => setMenuOpen(false)}
-                      className={`group border border-white/20 cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
+                      className={`group border border-white/20 cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
                         pathname === "/browse"
                           ? "bg-white text-black  font-semibold"
                           : "text-white/ bg-white/5 hover:bg-white/20"
@@ -392,7 +392,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                     <Link
                       href="/binge"
                       onClick={() => setMenuOpen(false)}
-                      className={`group border border-white/20 cursor-pointer relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
+                      className={`group border border-white/20 cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
                         pathname === "/binge"
                           ? "bg-white text-black  font-semibold"
                           : "text-white/ bg-white/5 hover:bg-white/20"
