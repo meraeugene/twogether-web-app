@@ -45,5 +45,5 @@ export type Recommendation = {
     number,
     { episode_number: number; title: string }[]
   >;
-  rating: number;
+  rating?: number;
 };

@@ -36,7 +36,6 @@ export function adaptAIGeneratedToRecommendation(
     comment: "AI Recommended",
     visibility: "public",
     created_at: new Date().toISOString(),
-    rating: 0,
     recommended_by: {
       id: "ai-generated",
       username: "AI Recommendation",

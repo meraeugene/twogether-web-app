@@ -28,7 +28,6 @@ export function adaptCollectionMoviesToRecommendations(
       episode_titles_per_season: undefined,
       visibility: "public",
       comment: "",
-      rating: 0,
       is_tmdb_recommendation: true,
       created_at: new Date().toISOString(),
       recommended_by: {

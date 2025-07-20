@@ -65,8 +65,8 @@ export default function WatchSuggestions({
             <div className="font-medium text-white line-clamp-2">
               {rec.title}
             </div>
-            <div className="flex items-center justify-between">
-              <div className="text-white/80 text-xs mt-2 flex gap-2">
+            <div className="flex mt-2 items-center justify-between">
+              <div className="text-white/80 text-xs  flex gap-2">
                 <span>{rec.year} </span>
                 {rec.type === "tv" ? (
                   <span className="text-white/50 font-medium">
@@ -88,7 +88,15 @@ export default function WatchSuggestions({
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 mt-2">
+            {rec.comment && (
+              <p className="text-sm text-white/80 border-l-4 border-red-500 pl-2 my-3 italic">
+                &quot;{rec.comment}&quot;
+              </p>
+            )}
+
+            {rec.rating && <VisualHeartRating value={rec.rating} />}
+
+            <div className=" mt-3">
               <Link
                 href={`/profile/${rec.recommended_by.username}/${rec.recommended_by.id}`}
                 className=" text-sm text-white/60 hover:underline flex items-center gap-2"
@@ -106,15 +114,7 @@ export default function WatchSuggestions({
                 )}
                 {rec.recommended_by.username}
               </Link>
-
-              {rec.rating && <VisualHeartRating value={rec.rating} />}
             </div>
-
-            {rec.comment && (
-              <p className="text-xs text-white/80 mt-3 italic  border-l-3 border-red-500 pl-3">
-                “{rec.comment}”
-              </p>
-            )}
           </div>
         </div>
       ))}

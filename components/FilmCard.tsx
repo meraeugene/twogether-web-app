@@ -227,7 +227,7 @@ export default function FilmCard({
 
               <div className="text-base font-semibold  ">{item.title}</div>
 
-              <div className="flex items-center justify-between flex-wrap text-sm text-white/60 mt-1">
+              <div className="flex items-center justify-between flex-wrap gap-2 text-sm text-white/60 mt-1">
                 <span className="flex items-center gap-2">
                   <span className="text-white/80">{item.year}</span>
 
@@ -247,7 +247,15 @@ export default function FilmCard({
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3 mt-2">
+              {item.recommendation_id && item.comment && (
+                <p className="text-sm text-white/80 border-l-4 border-red-500 pl-2 my-3 italic">
+                  &quot;{item.comment}&quot;
+                </p>
+              )}
+
+              {item.rating && <VisualHeartRating value={item.rating} />}
+
+              <div className=" mt-3 ">
                 <Link
                   href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
                   className=" text-sm text-white/60 hover:underline flex items-center gap-2"
@@ -267,15 +275,7 @@ export default function FilmCard({
                     ? "AI Assistant"
                     : item.recommended_by.username}
                 </Link>
-
-                {item.rating && <VisualHeartRating value={item.rating} />}
               </div>
-
-              {item.recommendation_id && item.comment && (
-                <p className="text-sm text-white/80 mt-3 italic  border-l-3 border-red-500 pl-3">
-                  “{item.comment}”
-                </p>
-              )}
             </div>
           </motion.div>
         )}
