@@ -247,41 +247,34 @@ export default function FilmCard({
                 </span>
               </div>
 
+              <div className="flex flex-wrap items-center gap-3 mt-2">
+                <Link
+                  href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
+                  className=" text-sm text-white/60 hover:underline flex items-center gap-2"
+                >
+                  {item.recommended_by.avatar_url && (
+                    <div className="w-6 h-6 rounded-full overflow-hidden">
+                      <Image
+                        src={item.recommended_by.avatar_url}
+                        alt={item.recommended_by.username}
+                        width={24}
+                        height={24}
+                        className="rounded-full object-cover"
+                      />
+                    </div>
+                  )}
+                  {item.generated_by_ai
+                    ? "AI Assistant"
+                    : item.recommended_by.username}
+                </Link>
+
+                {item.rating && <VisualHeartRating value={item.rating} />}
+              </div>
+
               {item.recommendation_id && item.comment && (
-                <p className="text-sm text-white/80 mt-2 italic  border-l-4 border-red-500 pl-3">
+                <p className="text-sm text-white/80 mt-3 italic  border-l-3 border-red-500 pl-3">
                   “{item.comment}”
                 </p>
-              )}
-
-              {item.rating && (
-                <div className="mt-2">
-                  <VisualHeartRating value={item.rating} />
-                </div>
-              )}
-
-              {item.recommended_by.username && (
-                <div className="text-sm text-gray-400 italic mt-1 flex items-center gap-2">
-                  <span>Recommended by</span>
-                  <Link
-                    href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
-                    className="text-white font-medium hover:underline flex items-center gap-2"
-                  >
-                    {item.recommended_by.avatar_url && (
-                      <div className="w-6 h-6 rounded-full overflow-hidden">
-                        <Image
-                          src={item.recommended_by.avatar_url}
-                          alt={item.recommended_by.username}
-                          width={24}
-                          height={24}
-                          className="rounded-full object-cover"
-                        />
-                      </div>
-                    )}
-                    {item.generated_by_ai
-                      ? "AI Assistant"
-                      : item.recommended_by.username}
-                  </Link>
-                </div>
               )}
             </div>
           </motion.div>

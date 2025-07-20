@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Recommendation } from "@/types/recommendation";
 import { FaPlay } from "react-icons/fa";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
+import { VisualHeartRating } from "@/components/VisualHeartRating";
 
 export default function WatchSuggestions({
   suggestions,
@@ -87,22 +88,32 @@ export default function WatchSuggestions({
               </div>
             </div>
 
+            <div className="flex flex-wrap items-center gap-3 mt-2">
+              <Link
+                href={`/profile/${rec.recommended_by.username}/${rec.recommended_by.id}`}
+                className=" text-sm text-white/60 hover:underline flex items-center gap-2"
+              >
+                {rec.recommended_by.avatar_url && (
+                  <div className="w-6 h-6 rounded-full overflow-hidden">
+                    <Image
+                      src={rec.recommended_by.avatar_url}
+                      alt={rec.recommended_by.username}
+                      width={24}
+                      height={24}
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                )}
+                {rec.recommended_by.username}
+              </Link>
+
+              {rec.rating && <VisualHeartRating value={rec.rating} />}
+            </div>
+
             {rec.comment && (
-              <p className="text-xs text-white/80 mt-2 italic  border-l-4 border-red-500 pl-3">
+              <p className="text-xs text-white/80 mt-3 italic  border-l-3 border-red-500 pl-3">
                 “{rec.comment}”
               </p>
-            )}
-
-            {rec.recommended_by && (
-              <div className="text-white/40 italic text-xs mt-1">
-                Recommended by{" "}
-                <Link
-                  href={`/profile/${rec.recommended_by.username}/${rec.recommended_by.id}`}
-                  className="text-white hover:underline"
-                >
-                  {rec.recommended_by.username}
-                </Link>
-              </div>
             )}
           </div>
         </div>
