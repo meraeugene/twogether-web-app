@@ -11,7 +11,7 @@ const BASE_URL = "https://api.themoviedb.org/3";
 export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
   const searchUrl = `${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(
     query
-  )}&include_adult=false`;
+  )}&include_adult=false&language=en-US&region=US`;
 
   const res = await fetch(searchUrl, {
     cache: "force-cache",
@@ -95,7 +95,15 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
     })
   );
 
-  const cleanedResults = enrichedResults.filter((item) => {
+  const enrichedResultsSorted = enrichedResults
+    .filter((item) => item.year)
+    .sort((a, b) => {
+      const yearA = parseInt(a.year ?? "0", 10);
+      const yearB = parseInt(b.year ?? "0", 10);
+      return yearB - yearA;
+    });
+
+  const cleanedResults = enrichedResultsSorted.filter((item) => {
     if (item.type === "movie") {
       return item.duration && item.duration > 0;
     }
