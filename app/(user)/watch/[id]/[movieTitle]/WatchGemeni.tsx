@@ -116,7 +116,7 @@ export default function WatchGemeni({
 
               <button
                 onClick={() => setIsOpen(false)}
-                className="cursor-pointer p-2 rounded-full hover:bg-white/10 transition"
+                className="cursor-pointer lg:p-2 rounded-full hover:bg-white/10 transition"
               >
                 <RxCross2 className="text-white text-xl" />
               </button>
