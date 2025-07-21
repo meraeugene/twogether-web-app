@@ -5,12 +5,13 @@ import { GoogleGenAI } from "@google/genai";
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
-
 export async function askGemini(
   prompt: string,
-  title: string
+  title?: string
 ): Promise<string> {
-  const systemPrompt = `
+  console.log(title);
+  const systemPrompt = title
+    ? `
     You are a smart, friendly AI movie assistant. Assume the user is asking about the movie titled: "${title}".
     
     Guidelines:
@@ -22,7 +23,15 @@ export async function askGemini(
     - Suggest 1–2 other related things the user can ask about (only if it fits naturally).
     
     If the user greets or says "hello", suggest helpful things they can ask about this movie (e.g. plot, cast, characters, themes, trivia).
-    `;
+  `
+    : `
+    You are a smart, friendly AI movie assistant for film lovers.
+
+    Guidelines:
+    - Answer general questions clearly and simply.
+    - Avoid assuming any specific movie unless the user names one.
+    - Keep answers short, ideally in one sentence, unless more detail is needed.
+  `;
 
   try {
     const response = await ai.models.generateContent({
@@ -35,7 +44,7 @@ export async function askGemini(
       ],
       config: {
         thinkingConfig: {
-          thinkingBudget: 0, // Disables thinking
+          thinkingBudget: 0,
         },
       },
     });

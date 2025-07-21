@@ -25,6 +25,7 @@ export default function WatchGemeni({
   ]);
   const [input, setInput] = useState("");
   const [isPending, startTransition] = useTransition();
+  const [useMovieContext, setUseMovieContext] = useState(true);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -40,7 +41,10 @@ export default function WatchGemeni({
     setInput("");
 
     startTransition(async () => {
-      const reply = await askGemini(question, title);
+      const reply = await askGemini(
+        question,
+        useMovieContext ? title : undefined
+      );
       setMessages((prev) => [...prev, { role: "gemini", content: reply }]);
     });
   };
@@ -72,19 +76,44 @@ export default function WatchGemeni({
         {isOpen && (
           <div className="fixed bottom-0 right-0 w-full md:w-[400px] h-[70vh] bg-black/90 border-t md:border-l border-white/10 z-50 rounded-t-2xl md:rounded-l-none md:rounded-tl-2xl shadow-lg flex flex-col overflow-hidden backdrop-blur-sm">
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/80">
-              <h2 className="text-white font-semibold text-sm flex items-center gap-2">
-                <svg
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  height="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />
-                </svg>
-                Chat with Gemini
-              </h2>
+            <div className="flex items-start justify-between px-4 py-3 border-b border-white/10 bg-black/80">
+              <div className="flex flex-col gap-2">
+                <h2 className="text-white font-semibold text-sm flex items-center gap-2">
+                  <svg
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    height="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />
+                  </svg>
+                  Chat with Gemini
+                </h2>
+                <div className="text-xs text-white/60 space-x-2 ">
+                  <button
+                    onClick={() => setUseMovieContext(true)}
+                    className={`px-2 py-0.5 cursor-pointer rounded-full border text-xs ${
+                      useMovieContext
+                        ? "bg-red-600 border-red-500 text-white"
+                        : "hover:bg-white/10 border-white/20 text-white/60"
+                    }`}
+                  >
+                    Ask about this movie
+                  </button>
+                  <button
+                    onClick={() => setUseMovieContext(false)}
+                    className={`px-2 py-0.5 cursor-pointer rounded-full border text-xs ${
+                      !useMovieContext
+                        ? "bg-red-600 border-red-500 text-white"
+                        : "hover:bg-white/10 border-white/20 text-white/60"
+                    }`}
+                  >
+                    Ask something general
+                  </button>
+                </div>
+              </div>
+
               <button
                 onClick={() => setIsOpen(false)}
                 className="cursor-pointer p-2 rounded-full hover:bg-white/10 transition"
@@ -174,7 +203,11 @@ export default function WatchGemeni({
                         handleSend();
                       }
                     }}
-                    placeholder="Ask Gemini about this movie..."
+                    placeholder={
+                      useMovieContext
+                        ? "Ask Gemini about this movie..."
+                        : "Ask Gemini anything movie-related..."
+                    }
                     className="flex-1 resize-none overflow-auto max-h-24 bg-white/10 text-white px-3 py-2 text-sm rounded-2xl focus:outline-none focus:ring-1 ring-white/20 placeholder:text-white/50"
                   />
 
