@@ -206,7 +206,7 @@ export default function WatchGemeni({
                     placeholder={
                       useMovieContext
                         ? "Ask Gemini about this movie..."
-                        : "Ask Gemini anything movie-related..."
+                        : "Ask Gemini something general..."
                     }
                     className="flex-1 resize-none overflow-auto max-h-24 bg-white/10 text-white px-3 py-2 text-sm rounded-2xl focus:outline-none focus:ring-1 ring-white/20 placeholder:text-white/50"
                   />

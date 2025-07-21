@@ -25,7 +25,7 @@ const Hero = ({ user }: HeroProps) => {
       toast.error("Please sign in to start TWOGETHER.");
       return;
     }
-    router.push("/browse");
+    router.push("/recos");
   };
 
   return (
