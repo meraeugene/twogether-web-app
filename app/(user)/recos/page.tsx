@@ -1,6 +1,7 @@
 import { getRecommendations } from "@/actions/recommendationActions";
 import LatestRecoRow from "./LatestRecoRow";
 import GenreRecoRow from "./GenreRecoRow";
+import RecommendButton from "./RecommendButton";
 
 export default async function BrowsePage() {
   const allData = (await getRecommendations()) || [];
@@ -33,6 +34,8 @@ export default async function BrowsePage() {
           <GenreRecoRow key={genre} genre={genre} items={items} />
         ) : null;
       })}
+
+      <RecommendButton />
     </main>
   );
 }

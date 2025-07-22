@@ -157,14 +157,12 @@ export default function ChronologicalPage() {
 
       {/* Floating Button with Franchise Picker */}
       <div className="fixed bottom-6 right-6 z-[100]">
-        <motion.button
+        <button
           onClick={() => setIsOpen(!isOpen)}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-white cursor-pointer text-black p-3 rounded-full shadow-lg flex items-center gap-2 font-semibold"
+          className="bg-white transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer text-black p-3 rounded-full shadow-lg flex items-center gap-2 font-semibold"
         >
           <AiOutlineFieldTime className="w-5 h-5 text-red-500 font-extrabold" />
-        </motion.button>
+        </button>
 
         <AnimatePresence>
           {isOpen && (

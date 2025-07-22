@@ -36,8 +36,6 @@ import MessageModal from "@/components/MessageModal";
 import { useRouter } from "next/navigation";
 import { LuUserRoundPen } from "react-icons/lu";
 import { toast } from "sonner";
-import { RiLogoutCircleLine } from "react-icons/ri";
-import { signOut } from "@/actions/authActions";
 
 const tabs = ["Profile", "Recommendations", "Watchlist", "Friends"];
 
@@ -58,14 +56,6 @@ export default function TabbedProfileView({
 
   const [activeTab, setActiveTab] = useState("Profile");
   const [, startTransition] = useTransition();
-
-  const [isPendingLogout, startTransitionLogout] = useTransition();
-
-  const handleLogout = () => {
-    startTransitionLogout(async () => {
-      await signOut();
-    });
-  };
 
   // FOLLOWING STATE
   const [isFollowing, setIsFollowing] = useState<boolean>(
@@ -234,25 +224,6 @@ export default function TabbedProfileView({
                   <LuUserRoundPen />
                   Edit Profile
                 </Link>
-
-                <button
-                  onClick={handleLogout}
-                  disabled={isPendingLogout}
-                  className={`group cursor-pointer mt-5 relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm hover:bg-white/20
-                `}
-                >
-                  {isPendingLogout ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Logging out...</span>
-                    </>
-                  ) : (
-                    <>
-                      <RiLogoutCircleLine />
-                      <span>Logout</span>
-                    </>
-                  )}
-                </button>
               </div>
             )}
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { IoMdAdd } from "react-icons/io";
 import { MdMovieFilter, MdStars } from "react-icons/md";
 import { RiFilmAiLine, RiMovieAiLine } from "react-icons/ri";
 import { FaUserFriends } from "react-icons/fa";
@@ -37,11 +36,6 @@ export const primaryNavItems = [
         <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />
       </svg>
     ),
-  },
-  {
-    label: "Reco",
-    href: "/recommend",
-    icon: <IoMdAdd className="text-lg" />,
   },
 ];
 
