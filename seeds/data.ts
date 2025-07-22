@@ -6,6 +6,12 @@ export const MCU_CHRONOLOGY = [
     comment: "Steve Rogers begins it all in WWII.",
   },
   {
+    id: "mcumovie-1.5",
+    tmdb_id: 299537,
+    recommendation_id: "captain-marvel",
+    comment: "Carol Danvers becomes Captain Marvel in the 1990s.",
+  },
+  {
     id: "mcumovie-2",
     tmdb_id: 1726,
     recommendation_id: "iron-man",
@@ -19,13 +25,13 @@ export const MCU_CHRONOLOGY = [
   },
   {
     id: "mcumovie-4",
-    tmdb_id: 10195,
+    tmdb_id: 1724,
     recommendation_id: "the-incredible-hulk",
     comment: "Bruce Banner on the run.",
   },
   {
     id: "mcumovie-5",
-    tmdb_id: 76338,
+    tmdb_id: 10195,
     recommendation_id: "thor",
     comment: "Thor proves himself worthy of Mjölnir.",
   },
@@ -37,15 +43,15 @@ export const MCU_CHRONOLOGY = [
   },
   {
     id: "mcumovie-7",
-    tmdb_id: 68721,
-    recommendation_id: "iron-man-3",
-    comment: "Tony suffers PTSD post-Avengers battle.",
-  },
-  {
-    id: "mcumovie-8",
     tmdb_id: 76338,
     recommendation_id: "thor-the-dark-world",
     comment: "Thor fights the dark elves.",
+  },
+  {
+    id: "mcumovie-8",
+    tmdb_id: 68721,
+    recommendation_id: "iron-man-3",
+    comment: "Tony suffers PTSD post-Avengers battle.",
   },
   {
     id: "mcumovie-9",
@@ -67,7 +73,7 @@ export const MCU_CHRONOLOGY = [
   },
   {
     id: "mcumovie-12",
-    tmdb_id: 102899,
+    tmdb_id: 99861,
     recommendation_id: "avengers-age-of-ultron",
     comment: "Ultron is born.",
   },
@@ -85,7 +91,7 @@ export const MCU_CHRONOLOGY = [
   },
   {
     id: "mcumovie-15",
-    tmdb_id: 283995,
+    tmdb_id: 497698,
     recommendation_id: "black-widow",
     comment: "Natasha confronts her past.",
   },
@@ -96,8 +102,14 @@ export const MCU_CHRONOLOGY = [
     comment: "T'Challa becomes king of Wakanda.",
   },
   {
+    id: "mcumovie-16.5",
+    tmdb_id: 315635,
+    recommendation_id: "spider-man-homecoming",
+    comment: "Peter Parker navigates high school and heroics.",
+  },
+  {
     id: "mcumovie-17",
-    tmdb_id: 284053,
+    tmdb_id: 284052,
     recommendation_id: "doctor-strange",
     comment: "Stephen Strange becomes Sorcerer Supreme.",
   },
@@ -108,6 +120,12 @@ export const MCU_CHRONOLOGY = [
     comment: "Ragnarok approaches Asgard.",
   },
   {
+    id: "mcumovie-18.5",
+    tmdb_id: 363088,
+    recommendation_id: "antman-and-the-wasp",
+    comment: "Scott Lang and Hope van Dyne take on a new mission.",
+  },
+  {
     id: "mcumovie-19",
     tmdb_id: 299536,
     recommendation_id: "avengers-infinity-war",
@@ -115,13 +133,13 @@ export const MCU_CHRONOLOGY = [
   },
   {
     id: "mcumovie-20",
-    tmdb_id: 299537,
+    tmdb_id: 299534,
     recommendation_id: "avengers-endgame",
     comment: "Time heist to undo the snap.",
   },
   {
     id: "mcumovie-21",
-    tmdb_id: 497698,
+    tmdb_id: 429617,
     recommendation_id: "spider-man-far-from-home",
     comment: "Peter processes Tony's death.",
   },
@@ -149,17 +167,31 @@ export const MCU_CHRONOLOGY = [
     recommendation_id: "doctor-strange-in-the-multiverse-of-madness",
     comment: "Strange explores alternate realities.",
   },
+
   {
     id: "mcumovie-26",
+    tmdb_id: 505642,
+    recommendation_id: "black-panther-wakanda-forever",
+    comment: "Wakanda mourns and rises again.",
+  },
+  {
+    id: "mcumovie-27",
     tmdb_id: 616037,
     recommendation_id: "thor-love-and-thunder",
     comment: "Thor faces Gorr the God Butcher.",
   },
+
   {
-    id: "mcumovie-27",
-    tmdb_id: 505642,
-    recommendation_id: "black-panther-wakanda-forever",
-    comment: "Wakanda mourns and rises again.",
+    id: "mcumovie-27.5",
+    tmdb_id: 894205,
+    recommendation_id: "werewolf-by-night",
+    comment: "Jack Russell battles monsters in a dark Marvel special.",
+  },
+  {
+    id: "mcumovie-27.6",
+    tmdb_id: 774752,
+    recommendation_id: "the-guardians-of-the-galaxy-holiday-special",
+    comment: "The Guardians celebrate Christmas on Knowhere.",
   },
   {
     id: "mcumovie-28",
@@ -168,10 +200,34 @@ export const MCU_CHRONOLOGY = [
     comment: "Kang emerges from the Quantum Realm.",
   },
   {
+    id: "mcumovie-28.5",
+    tmdb_id: 447365,
+    recommendation_id: "guardians-of-the-galaxy-vol-3",
+    comment: "The Guardians face their past and Rocket's origins.",
+  },
+  {
     id: "mcumovie-29",
-    tmdb_id: 774752,
+    tmdb_id: 609681,
     recommendation_id: "the-marvels",
     comment: "Carol, Kamala, and Monica team up.",
+  },
+  {
+    id: "mcumovie-30",
+    tmdb_id: 533535,
+    recommendation_id: "deadpool-wolverine",
+    comment: "Deadpool and Wolverine team up in a multiverse adventure.",
+  },
+  {
+    id: "mcumovie-31",
+    tmdb_id: 822119,
+    recommendation_id: "captain-america-brave-new-world",
+    comment: "Sam Wilson takes up the Captain America mantle.",
+  },
+  {
+    id: "mcumovie-32",
+    tmdb_id: 986056,
+    recommendation_id: "thunderbolts",
+    comment: "A new team of anti-heroes emerges.",
   },
 ];
 
@@ -758,12 +814,6 @@ export const DCEU_CHRONOLOGY = [
     comment: "A new team of convicts takes on a deadly mission.",
   },
   {
-    id: "dceu-12",
-    tmdb_id: 110492,
-    recommendation_id: "peacemaker",
-    comment: "Peacemaker returns after Project Starfish with a new mission.",
-  },
-  {
     id: "dceu-13",
     tmdb_id: 436270,
     recommendation_id: "black-adam",
@@ -1017,12 +1067,6 @@ export const EVILDEAD_CHRONOLOGY = [
     tmdb_id: 109428,
     recommendation_id: "evil-dead",
     comment: "Reboot: cabin horror revisited.",
-  },
-  {
-    id: "ed-5",
-    tmdb_id: 62264,
-    recommendation_id: "ash-vs-evil-dead",
-    comment: "It's time to test the mettle of man.",
   },
   {
     id: "ed-6",
