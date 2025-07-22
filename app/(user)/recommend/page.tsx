@@ -154,8 +154,22 @@ const RecommendPage = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="min-h-screen flex flex-col justify-center items-center pt-28 pb-16 bg-black text-white px-7 overflow-hidden lg:pt-32 "
+      className="min-h-screen flex flex-col justify-center items-center pt-28 pb-16 bg-black text-white px-7 relative overflow-hidden lg:pt-32 "
     >
+      {/* Combined Background Layers */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Radial Dots */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle, rgba(220,38,38,0.2) 1px, transparent 1px)`,
+            backgroundSize: "40px 40px",
+          }}
+        />
+        {/* Red Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/10 to-red-900/10" />
+      </div>
+
       {/* Steps Progress */}
       <div className="flex flex-wrap justify-center gap-2 mb-8 text-sm">
         {steps.map((s, i) => (

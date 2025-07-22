@@ -9,7 +9,7 @@ export default async function Home() {
   const user = await getCurrentUser();
 
   return (
-    <main className="relative w-full min-h-screen font-[var(--font-geist-sans)] text-white bg-black">
+    <main className="relative w-full min-h-screen  text-white bg-black">
       <Hero user={user ?? null} />
       <Demo />
       <AiFeatures />

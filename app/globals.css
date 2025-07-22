@@ -7,9 +7,29 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #6b7280 #1f2937; /* thumb | track for Firefox */
 }
 
 body {
-  background: var(--background);
+  background: var(--background); /* Set in your :root or Tailwind config */
   color: var(--foreground);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937; /* dark gray track (gray-800 in Tailwind) */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #6b7280; /* medium gray thumb (gray-500) */
+  border: 3px solid #1f2937; /* match track */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af; /* lighter gray on hover (gray-400) */
 }

@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState, useTransition, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import LoginButton from "./LoginButton";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import { primaryNavItems, secondaryNavItems } from "./NavItems";
-import { signOut } from "@/actions/authActions";
-import { RiLogoutCircleLine, RiMovieAiLine } from "react-icons/ri";
+import { RiMovieAiLine } from "react-icons/ri";
 import type { Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { CurrentUser } from "@/types/user";
@@ -28,8 +27,6 @@ const fadeUp: Variants = {
 };
 
 export function Navbar({ user }: { user: CurrentUser | null }) {
-  const [isPending, startTransition] = useTransition();
-
   const [menuOpen, setMenuOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -39,12 +36,6 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
   const toggleMenu = () => {
     if (!menuOpen) setIsExpanded(true);
     setMenuOpen((prev) => !prev);
-  };
-
-  const handleLogout = () => {
-    startTransition(async () => {
-      await signOut();
-    });
   };
 
   useEffect(() => {
@@ -170,27 +161,6 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                   Profile
                 </Link>
               </motion.div>
-
-              {/* Logout Button */}
-              <motion.div variants={fadeUp}>
-                <button
-                  onClick={handleLogout}
-                  disabled={isPending}
-                  className="group cursor-pointer 2xl:px-3  relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition"
-                >
-                  {isPending ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Logging out
-                    </>
-                  ) : (
-                    <>
-                      <RiLogoutCircleLine />
-                      Logout
-                    </>
-                  )}
-                </button>
-              </motion.div>
             </>
           ) : (
             <>
@@ -255,9 +225,6 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="relative 2xl:hidden border-t border-white/10 p-4 flex flex-col text-white rounded-b-3xl   max-h-[75vh] overflow-y-auto"
           >
-            {/* Optional noise overlay */}
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 pointer-events-none z-0 rounded-b-3xl" />
-
             <motion.div
               initial="hidden"
               animate="show"
@@ -340,27 +307,6 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                       <HiOutlineUserCircle />
                       Profile
                     </Link>
-                  </motion.div>
-
-                  {/* Logout Button */}
-                  <motion.div variants={fadeUp}>
-                    <button
-                      onClick={handleLogout}
-                      disabled={isPending}
-                      className="group relative text-lg font-semibold tracking-wide text-white/90  px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3 w-full"
-                    >
-                      {isPending ? (
-                        <>
-                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Logging out
-                        </>
-                      ) : (
-                        <>
-                          <RiLogoutCircleLine />
-                          Logout
-                        </>
-                      )}
-                    </button>
                   </motion.div>
                 </>
               ) : (

@@ -6,6 +6,7 @@ import { RiFilmAiLine, RiMovieAiLine } from "react-icons/ri";
 import { FaUserFriends } from "react-icons/fa";
 import { LuMessageSquareHeart } from "react-icons/lu";
 import { BiMoviePlay } from "react-icons/bi";
+import { AiOutlineFieldTime } from "react-icons/ai";
 
 export const primaryNavItems = [
   {
@@ -17,6 +18,11 @@ export const primaryNavItems = [
     label: "Binge",
     href: "/binge",
     icon: <BiMoviePlay className="text-lg" />,
+  },
+  {
+    label: "Chrono",
+    href: "/chrono",
+    icon: <AiOutlineFieldTime className="text-lg" />,
   },
   {
     label: "Recos",

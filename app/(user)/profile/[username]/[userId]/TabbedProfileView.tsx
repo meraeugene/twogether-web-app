@@ -36,6 +36,8 @@ import MessageModal from "@/components/MessageModal";
 import { useRouter } from "next/navigation";
 import { LuUserRoundPen } from "react-icons/lu";
 import { toast } from "sonner";
+import { RiLogoutCircleLine } from "react-icons/ri";
+import { signOut } from "@/actions/authActions";
 
 const tabs = ["Profile", "Recommendations", "Watchlist", "Friends"];
 
@@ -56,6 +58,14 @@ export default function TabbedProfileView({
 
   const [activeTab, setActiveTab] = useState("Profile");
   const [, startTransition] = useTransition();
+
+  const [isPendingLogout, startTransitionLogout] = useTransition();
+
+  const handleLogout = () => {
+    startTransitionLogout(async () => {
+      await signOut();
+    });
+  };
 
   // FOLLOWING STATE
   const [isFollowing, setIsFollowing] = useState<boolean>(
@@ -169,9 +179,23 @@ export default function TabbedProfileView({
 
   return (
     <div
-      className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col   pt-28 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 pb-16 text-white px-7
+      className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col   pt-28 lg:px-24 relative xl:px-32 2xl:px-26 xl:pt-32 pb-16 text-white px-7
 "
     >
+      {/* Combined Background Layers */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Radial Dots */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle, rgba(220,38,38,0.2) 1px, transparent 1px)`,
+            backgroundSize: "40px 40px",
+          }}
+        />
+        {/* Red Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/10 to-red-900/10" />
+      </div>
+
       {/* Banner */}
       <div
         className="relative px-2  w-full rounded-md overflow-hidden bg-cover bg-center h-80 sm:h-96 md:h-[20rem] "
@@ -201,14 +225,26 @@ export default function TabbedProfileView({
             </p>
 
             {currentUser?.id === user.id && (
-              <Link
-                href={`/profile/${user.username}`}
-                className={`group mt-5 relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm hover:bg-white/20
+              <div className="flex items-center gap-3">
+                <Link
+                  href={`/profile/${user.username}`}
+                  className={`group mt-5 relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm hover:bg-white/20
                 `}
-              >
-                <LuUserRoundPen />
-                Edit Profile
-              </Link>
+                >
+                  <LuUserRoundPen />
+                  Edit Profile
+                </Link>
+
+                <button
+                  onClick={handleLogout}
+                  disabled={isPendingLogout}
+                  className={`group cursor-pointer mt-5 relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm hover:bg-white/20
+                `}
+                >
+                  <RiLogoutCircleLine />
+                  Logout
+                </button>
+              </div>
             )}
 
             {/* Action buttons */}
