@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
-import { FRANCHISES } from "./data";
+import { FRANCHISE_GROUPS } from "./data";
 import { Recommendation } from "@/types/recommendation";
 import { FaPlay } from "react-icons/fa";
 import { useTMDBWatch } from "@/stores/useTMDBWatch";
@@ -63,7 +63,6 @@ export default function ChronologicalPage() {
       .replace(/(^-|-$)+/g, "");
 
   const handleWatchNow = (movie: Recommendation) => {
-    console.log(movie);
     const slug = getSlugFromTitle(movie.title);
     if (movie.is_tmdb_recommendation && movie.recommended_by.id === "tmdb") {
       setCurrentTMDB(movie);
@@ -178,7 +177,7 @@ export default function ChronologicalPage() {
              md:top-0 md:right-0 md:bottom-0 md:left-auto md:w-[400px]
              md:shadow-xl"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center mb-0 justify-between">
                 <li>
                   <span className="text-lg font-bold">
                     Chronological Movies
@@ -194,23 +193,30 @@ export default function ChronologicalPage() {
                   </span>
                 </li>
               </div>
-              {FRANCHISES.map(({ key, label }) => (
-                <li
-                  key={key}
-                  onClick={() => {
-                    setSelectedFranchise(key);
-                    setIsOpen(false);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className={`group cursor-pointer relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3
-                  ${
-                    selectedFranchise === key
-                      ? "bg-white text-black border-white/20"
-                      : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
-                  }`}
-                >
-                  {label}
-                </li>
+              {FRANCHISE_GROUPS.map(({ genre, items }) => (
+                <div key={genre} className="space-y-3">
+                  <li className="uppercase text-xs tracking-wider text-white/60 px-2 pt-4">
+                    {genre}
+                  </li>
+                  {items.map(({ key, label }) => (
+                    <li
+                      key={key}
+                      onClick={() => {
+                        setSelectedFranchise(key);
+                        setIsOpen(false);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className={`group cursor-pointer relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3
+        ${
+          selectedFranchise === key
+            ? "bg-white text-black border-white/20"
+            : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
+        }`}
+                    >
+                      {label}
+                    </li>
+                  ))}
+                </div>
               ))}
             </motion.ul>
           )}
