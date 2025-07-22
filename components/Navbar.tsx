@@ -11,6 +11,7 @@ import type { Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { CurrentUser } from "@/types/user";
 import { BiMoviePlay } from "react-icons/bi";
+import { AiOutlineFieldTime } from "react-icons/ai";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -207,6 +208,27 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
               </motion.div>
 
               <motion.div variants={fadeUp}>
+                <Link
+                  href="/chrono"
+                  onClick={() => setMenuOpen(false)}
+                  className={`group cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur border border-white/20 shadow-sm transition ${
+                    pathname === "/chrono"
+                      ? "bg-white text-black font-semibold"
+                      : "text-white bg-white/10 hover:bg-white/20"
+                  }`}
+                >
+                  <AiOutlineFieldTime className="text-xl" />
+                  <span
+                    className={` ${
+                      pathname === "/chrono" ? "text-black" : "text-white/80"
+                    }`}
+                  >
+                    Chrono
+                  </span>
+                </Link>
+              </motion.div>
+
+              <motion.div variants={fadeUp}>
                 <LoginButton />
               </motion.div>
             </>
@@ -351,6 +373,29 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                         }`}
                       >
                         Binge
+                      </span>
+                    </Link>
+                  </motion.div>
+
+                  <motion.div variants={fadeUp}>
+                    <Link
+                      href="/chrono"
+                      onClick={() => setMenuOpen(false)}
+                      className={`group border border-white/20 cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
+                        pathname === "/chrono"
+                          ? "bg-white text-black  font-semibold"
+                          : "text-white/ bg-white/5 hover:bg-white/20"
+                      }`}
+                    >
+                      <AiOutlineFieldTime />
+                      <span
+                        className={` ${
+                          pathname === "/chrono"
+                            ? "text-black"
+                            : "text-white/80"
+                        }`}
+                      >
+                        Chrono
                       </span>
                     </Link>
                   </motion.div>
