@@ -216,34 +216,49 @@ export default function AIRecommendForm() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center px-6"
+                    className=" z-[100] bg-black/10 backdrop-blur-sm flex flex-col items-center justify-center px-6 overflow-hidden"
                   >
+                    {/* Background Video (no absolute) */}
+
+                    <video
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className=" object-cover "
+                    >
+                      <source src="/ai-loading.webm" type="video/webm" />
+                      Your browser does not support the video tag.
+                    </video>
+
+                    {/* Foreground Loader */}
                     <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.4, ease: "easeInOut" }}
-                      className="flex flex-col items-center justify-center py-8 pb-4 gap-3 text-center"
+                      className="flex flex-col items-center justify-center pb-4  gap-3 text-center z-10"
                     >
-                      <div className="h-6 w-6 rounded-full border-3 border-white/20 border-t-white animate-spin" />
-
-                      {/* Animated Loading Message */}
                       <motion.p
                         key={loadingMessage}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.4 }}
-                        className="text-white/80 text-sm sm:text-base md:text-lg text-center px-4 break-words max-w-xl mx-auto"
+                        className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-400 text-base md:text-lg text-center px-4 break-words max-w-xl mx-auto"
                       >
                         {loadingMessage}
                       </motion.p>
+
+                      <p className="text-white/60 text-xs md:text-sm max-w-xs mx-auto animate-pulse">
+                        Please stay on this page while we generate your movie
+                        recommendations.
+                      </p>
                     </motion.div>
 
-                    {/* Animated Progress Bar */}
-                    <div className="w-full max-w-sm">
+                    <div className="w-full max-w-sm z-10">
                       <div className="h-4 bg-white/10 rounded-full overflow-hidden">
                         <motion.div
-                          className="h-full bg-red-500"
+                          className="h-full bg-gradient-to-r from-purple-900 via-indigo-500 to-pink-500"
                           initial={{ width: 0 }}
                           animate={{ width: `${progress}%` }}
                           transition={{ duration: 0.3, ease: "easeOut" }}
