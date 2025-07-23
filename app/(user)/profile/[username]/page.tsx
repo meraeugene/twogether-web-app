@@ -11,12 +11,7 @@ export default async function Page({
   const user = await getUserByUsername(username);
 
   if (!user) {
-    return (
-      <ErrorMessage
-        title="User Not Found"
-        message="The user you are trying to edit does not exist or has been deleted."
-      />
-    );
+    return <ErrorMessage />;
   }
 
   return (

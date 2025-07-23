@@ -35,12 +35,7 @@ export default function AIWatchClient({
   if (!hasHydrated) return <WatchSkeletonLoading />;
 
   if (!recommendation) {
-    return (
-      <ErrorMessage
-        title="AI Recommendation not found"
-        message="We could not find the movie you selected. Try searching again."
-      />
-    );
+    return <ErrorMessage />;
   }
 
   return (

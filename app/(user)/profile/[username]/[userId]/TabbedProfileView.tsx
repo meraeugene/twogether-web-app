@@ -86,7 +86,7 @@ export default function TabbedProfileView({
 
   const {
     data: userFriends,
-    // isLoading: loadingUserFriends,
+    isLoading: loadingUserFriends,
     // mutate: refetchUserFriends,
   } = useSWR<UserPreview[]>(
     ["friends", user.id],
@@ -371,49 +371,66 @@ export default function TabbedProfileView({
                   ))}
                 </div>
               )}
-              {activeTab === "Watchlist" && (
-                <div className="grid max-w-4xl mx-auto  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 ">
-                  {userWatchList.map((item) => (
-                    <FilmCard key={item.tmdb_id} item={item} />
-                  ))}
-                </div>
-              )}
+
+              {activeTab === "Watchlist" &&
+                (userWatchList.length === 0 ? (
+                  <div className="text-center text-white/50  col-span-full">
+                    Nothing here yet!
+                  </div>
+                ) : (
+                  <div className="grid max-w-4xl mx-auto grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    {userWatchList.map((item) => (
+                      <FilmCard key={item.tmdb_id} item={item} />
+                    ))}
+                  </div>
+                ))}
+
               {activeTab === "Friends" && (
                 <div className="text-white/80">
                   <div className="grid max-w-5xl mx-auto grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
-                    {userFriends?.map((friend) => (
-                      <motion.div
-                        key={friend.id}
-                        className="flex flex-col items-start p-4 bg-white/5 rounded-xl border border-white/10 gap-4"
-                        whileHover={{ scale: 1.02 }}
-                      >
-                        <div className="flex items-center gap-4 w-full">
-                          <Image
-                            src={friend.avatar_url || "/default-avatar.png"}
-                            alt="avatar"
-                            width={48}
-                            height={48}
-                            className="rounded-full object-cover"
-                          />
-                          <div className="flex-1">
-                            <h2 className="font-semibold text-white">
-                              {friend.display_name}
-                            </h2>
-                            <p className="text-white/50 text-sm">
-                              @{friend.username}
-                            </p>
-                          </div>
-                        </div>
-
-                        <Link
-                          href={`/profile/${friend.username}/${friend.id}`}
-                          className="mt-1 cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center gap-2"
+                    {loadingUserFriends ? (
+                      <div className="col-span-full flex justify-center">
+                        <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      </div>
+                    ) : userFriends?.length === 0 ? (
+                      <div className="col-span-full text-center  text-white/50">
+                        No friends yet. Friendless user here!
+                      </div>
+                    ) : (
+                      userFriends?.map((friend) => (
+                        <motion.div
+                          key={friend.id}
+                          className="flex flex-col items-start p-4 bg-white/5 rounded-xl border border-white/10 gap-4"
+                          whileHover={{ scale: 1.02 }}
                         >
-                          <FaUser className="text-xs" />
-                          Profile
-                        </Link>
-                      </motion.div>
-                    ))}
+                          <div className="flex items-center gap-4 w-full">
+                            <Image
+                              src={friend.avatar_url || "/default-avatar.png"}
+                              alt="avatar"
+                              width={48}
+                              height={48}
+                              className="rounded-full object-cover"
+                            />
+                            <div className="flex-1">
+                              <h2 className="font-semibold text-white">
+                                {friend.display_name}
+                              </h2>
+                              <p className="text-white/50 text-sm">
+                                @{friend.username}
+                              </p>
+                            </div>
+                          </div>
+
+                          <Link
+                            href={`/profile/${friend.username}/${friend.id}`}
+                            className="mt-1 cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center gap-2"
+                          >
+                            <FaUser className="text-xs" />
+                            Profile
+                          </Link>
+                        </motion.div>
+                      ))
+                    )}
                   </div>
                 </div>
               )}

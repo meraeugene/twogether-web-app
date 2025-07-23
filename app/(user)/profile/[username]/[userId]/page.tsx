@@ -29,13 +29,7 @@ export default async function UserProfile({
     ]);
 
   if (!user || !userRecommendations || !userWatchList || !followStats) {
-    return (
-      <ErrorMessage
-        title="Something went wrong"
-        message="We couldn't load this user's profile."
-        hint="Please try again later."
-      />
-    );
+    return <ErrorMessage />;
   }
 
   return (

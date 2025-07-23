@@ -40,12 +40,7 @@ export default function TMDBWatchPage({
   if (!hasHydrated) return <WatchSkeletonLoading />;
 
   if (!recommendation) {
-    return (
-      <ErrorMessage
-        title="Movie Not Found"
-        message="We could not find the movie you selected. Try searching again."
-      />
-    );
+    return <ErrorMessage />;
   }
 
   const handleSubmit = async (formData: {

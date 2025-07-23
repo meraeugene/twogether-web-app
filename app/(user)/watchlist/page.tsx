@@ -12,13 +12,7 @@ export default async function WatchlistPage() {
   const watchList = await getWatchlistByUserId(user.id);
 
   if (!watchList) {
-    return (
-      <ErrorMessage
-        title="Failed to Load Watchlist"
-        message="Unable to fetch your watchlist."
-        hint="Please try again later."
-      />
-    );
+    return <ErrorMessage />;
   }
 
   return (

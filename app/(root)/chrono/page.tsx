@@ -41,7 +41,7 @@ export default function ChronologicalPage() {
   const { data, error, isLoading } = useSWR<{
     name: string;
     movies: Recommendation[];
-  }>(`/api/tmdba/chronological?franchise=${selectedFranchise}`, fetcher);
+  }>(`/api/tmdb/chronological?franchise=${selectedFranchise}`, fetcher);
 
   if (isLoading)
     return (
@@ -50,13 +50,7 @@ export default function ChronologicalPage() {
       </div>
     );
 
-  if (error || !data)
-    return (
-      <ErrorMessage
-        title="Failed to load chronological movies"
-        message="Please try again later."
-      />
-    );
+  if (error || !data) return <ErrorMessage />;
 
   const getSlugFromTitle = (title: string) =>
     title

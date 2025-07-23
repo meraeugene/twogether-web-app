@@ -22,10 +22,7 @@ export default function CollectionPage({ genre }: { genre: string }) {
   });
 
   if (error) {
-    <ErrorMessage
-      title="Failed to load collections"
-      message="Please try again later."
-    />;
+    <ErrorMessage />;
   }
 
   const collections = data ? data.flat() : [];

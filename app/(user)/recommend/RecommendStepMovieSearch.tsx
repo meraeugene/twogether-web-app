@@ -71,13 +71,7 @@ export default function RecommendStepMovieSearch({
   };
 
   if (error) {
-    return (
-      <ErrorMessage
-        title={error.details?.error || "Failed to results."}
-        message={error.details?.message || "Please try again later."}
-        hint={error.details?.hint}
-      />
-    );
+    return <ErrorMessage />;
   }
 
   return (

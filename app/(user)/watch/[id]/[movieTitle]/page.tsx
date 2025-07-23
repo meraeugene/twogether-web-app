@@ -24,12 +24,7 @@ export default async function WatchPage({
 
   if (!currentUser) redirect("/");
   if (!recommendation) {
-    return (
-      <ErrorMessage
-        title="Recommendation not found"
-        message="The movie or show you are looking for doesn't exist."
-      />
-    );
+    return <ErrorMessage />;
   }
 
   const suggestions = await getSuggestions(Number(id), recommendation.genres);
