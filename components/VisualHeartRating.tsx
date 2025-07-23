@@ -1,3 +1,5 @@
+"use client";
+
 import { IoMdHeart, IoMdHeartHalf, IoMdHeartEmpty } from "react-icons/io";
 
 type Props = {

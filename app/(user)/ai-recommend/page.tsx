@@ -257,7 +257,7 @@ export default function AIRecommendForm() {
 
                       <p className="text-white/60 text-xs md:text-sm max-w-xs mx-auto animate-pulse">
                         Please stay on this page while we generate your movie
-                        recommendations.
+                        and show recommendations.
                       </p>
                     </motion.div>
 

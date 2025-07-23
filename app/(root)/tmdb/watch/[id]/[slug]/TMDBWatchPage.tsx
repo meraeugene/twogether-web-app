@@ -6,13 +6,13 @@ import WatchGemeni from "@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useEffect, useState } from "react";
 import WatchSkeletonLoading from "@/components/WatchSkeletonLoading";
-import { useRouter } from "next/navigation";
 import { ArrowLeft, Sparkles } from "lucide-react";
 import ToggleWatchlistButton from "@/app/(user)/watch/[id]/[movieTitle]/ToggleWatchlistButton";
 import { omit } from "@/utils/ai-recommend/omit";
 import RecommendModal from "@/components/RecommendModal";
 import { createRecommendation } from "@/actions/recommendationActions";
 import { toast } from "sonner";
+import BackButton from "@/components/BackButton";
 
 export default function TMDBWatchPage({
   currentUserId,
@@ -27,8 +27,6 @@ export default function TMDBWatchPage({
   initialWatchlistId: string | null;
   isTMDBRecommendation?: boolean;
 }) {
-  const router = useRouter();
-
   const recommendation = useTMDBWatch((s) => s.currentTMDB);
 
   const [open, setOpen] = useState(false);
@@ -72,7 +70,6 @@ export default function TMDBWatchPage({
         "Recommendation submitted! Your taste just blessed someone’s watchlist 🎉"
       );
       setOpen(false);
-      router.refresh();
     } else {
       toast.error("Error recommending. Please try again.");
       console.error("Error recommending:", error);
@@ -82,14 +79,9 @@ export default function TMDBWatchPage({
   return (
     <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 relative lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 text-white">
       {/* Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
+      <div className="absolute pointer-events-none   inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
-      <button
-        onClick={() => router.back()}
-        className="inline-flex w-12 h-8 lg:hidden items-center justify-center rounded-md bg-white text-red-600 hover:bg-red-600 hover:text-white transition mb-6"
-      >
-        <ArrowLeft size={20} />
-      </button>
+      <BackButton />
 
       <WatchPlayer
         urls={

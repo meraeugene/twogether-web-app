@@ -1,3 +1,5 @@
+"use client";
+
 const WatchSkeletonLoading = () => {
   return (
     <main className="min-h-screen bg-black flex flex-col  lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 px-7 pt-28  pb-16 text-white">
