@@ -18,13 +18,20 @@ export const GET = async () => {
     }
 
     return new NextResponse(JSON.stringify(recommendations), { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error getting recommendations:", error);
-    return new NextResponse(
-      JSON.stringify({
-        message: error.message,
-        error: error.error,
-      }),
+
+    const message =
+      error instanceof Error ? error.message : "Internal Server Error";
+
+    const errorDetails =
+      error instanceof Error ? error.stack : JSON.stringify(error);
+
+    return NextResponse.json(
+      {
+        message,
+        error: errorDetails,
+      },
       { status: 500 }
     );
   }
