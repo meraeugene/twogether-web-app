@@ -149,7 +149,7 @@ export default function AIRecommendForm() {
                 onChange={(v) => {
                   setPrompt(v);
                 }}
-                placeholder="e.g. I want a romantic comedy films 2000 vibes..."
+                placeholder="e.g. Witty romantic films"
               />
 
               <div className="bg-white/10 mt-6 backdrop-blur-xl border border-white/10 rounded-xl p-2 flex justify-center items-center">
