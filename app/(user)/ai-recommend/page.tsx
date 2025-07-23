@@ -149,7 +149,7 @@ export default function AIRecommendForm() {
       shadow-md flex items-center justify-center gap-2 
       backdrop-blur-sm 
       disabled:opacity-60 disabled:cursor-not-allowed 
-      cursor-pointer"
+      cursor-pointer "
                 >
                   <div className="flex items-center gap-2">
                     {/* Gemini Icon */}
@@ -264,7 +264,7 @@ export default function AIRecommendForm() {
                           transition={{ duration: 0.3, ease: "easeOut" }}
                         />
                       </div>
-                      <p className="text-sm text-white/60 mt-2 text-center">
+                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-400 font-bold text-sm mt-2 text-center">
                         {progress}%
                       </p>
                     </div>
