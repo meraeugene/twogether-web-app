@@ -20,6 +20,7 @@ import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { useRouter } from "next/navigation";
 import { useTMDBWatch } from "@/stores/useTMDBWatch";
 import { VisualHeartRating } from "./VisualHeartRating";
+import { mutate } from "swr";
 
 export default function FilmCard({
   item,
@@ -44,8 +45,10 @@ export default function FilmCard({
     startTransition(async () => {
       if (isDeleteRecommendation) {
         await deleteRecommendation(userId!, item.recommendation_id);
+        mutate("/api/recos"); // Refresh recommendations cache
       } else if (isRemoveFromWatchlist && watchlistItemId) {
         await removeFromWatchlist(watchlistItemId, userId!);
+        mutate("/api/my-watchlist"); // Refresh watchlist cache
       }
     });
   };
@@ -60,6 +63,7 @@ export default function FilmCard({
         item.recommendation_id,
         newVisibility
       );
+      mutate("/api/my-recos"); // Refresh my recommendations cache
       setShowPrivacyModal(false);
     });
   };

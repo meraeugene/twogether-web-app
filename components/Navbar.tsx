@@ -123,7 +123,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
     }`}
                 >
                   <span
-                    className={`drop-shadow-[0_0_3px_rgba(255,0,0,0.3)] ${
+                    className={` ${
                       pathname === item.href ? "text-black" : "text-white/80"
                     }`}
                   >
@@ -145,7 +145,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
       }`}
                   >
                     <span
-                      className={`drop-shadow-[0_0_3px_rgba(255,0,0,0.3)] ${
+                      className={` ${
                         pathname === item.href ? "text-black" : "text-white/80"
                       }`}
                     >
@@ -330,7 +330,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
       }`}
                       >
                         <span
-                          className={`drop-shadow-[0_0_3px_rgba(255,0,0,0.3)] ${
+                          className={` ${
                             pathname.startsWith(item.href)
                               ? "text-black"
                               : "text-white/80"

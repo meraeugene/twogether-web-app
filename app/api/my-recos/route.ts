@@ -1,23 +1,25 @@
-// @desc Get all recommendations
-// @route GET /api/recos
+// /app/api/my-recos/route.ts
 
-import { getRecommendations } from "@/actions/recommendationActions";
+import { getCurrentUser } from "@/actions/authActions";
+import { getMyRecommendations } from "@/actions/recommendationActions";
 import { NextResponse } from "next/server";
 
-// @access Public
 export const GET = async () => {
   try {
-    const recommendations = await getRecommendations();
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
-    // Handle no recommendations found
-    if (!recommendations || recommendations.length === 0) {
+    const data = await getMyRecommendations(user.id);
+    if (!data) {
       return NextResponse.json(
-        { message: "No recommendations found." },
+        { message: "No recommendations found" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(recommendations, { status: 200 });
+    return NextResponse.json({ user, ...data }, { status: 200 });
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Internal Server Error";

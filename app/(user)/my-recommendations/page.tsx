@@ -1,17 +1,51 @@
+"use client";
+
+import useSWR from "swr";
+import { fetcher } from "@/utils/swr/fetcher";
+import FilmCard from "@/components/FilmCard";
+import ErrorMessage from "@/components/ErrorMessage";
+import { Recommendation } from "@/types/recommendation";
+import { CurrentUser } from "@/types/user";
 import Link from "next/link";
-import { getCurrentUser } from "@/actions/authActions";
-import { redirect } from "next/navigation";
-import { getMyRecommendations } from "@/actions/recommendationActions";
-import FilmCard from "../../../components/FilmCard";
-import { FaLock, FaGlobe } from "react-icons/fa";
+import { Section } from "./Section";
 
-export default async function MyRecommendationsPage() {
-  const user = await getCurrentUser();
-  if (!user) redirect("/");
+type MyRecosResponse = {
+  user: CurrentUser;
+  public: Recommendation[];
+  private: Recommendation[];
+};
 
-  const { public: publicRecs, private: privateRecs } =
-    await getMyRecommendations(user.id);
+export default function MyRecommendationsPage() {
+  const { data, error, isLoading } = useSWR<MyRecosResponse>(
+    "/api/my-recos",
+    fetcher
+  );
 
+  if (isLoading)
+    return (
+      <main className="min-h-screen px-7  pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 bg-black text-white">
+        <div className="mb-6">
+          <div className="h-7 w-1/3 bg-white/10 rounded mb-6 animate-pulse" />
+          <div className="h-4 w-1/4 bg-white/5 rounded mb-7 animate-pulse" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
+          {Array.from({ length: 18 }).map((_, i) => (
+            <div
+              key={i}
+              className="animate-pulse bg-white/10 rounded-lg overflow-hidden aspect-[2/3]"
+            >
+              <div className="w-full h-full bg-white/10 rounded-lg" />
+            </div>
+          ))}
+        </div>
+      </main>
+    );
+
+  if (error) return <ErrorMessage />;
+
+  if (!data?.user) return <ErrorMessage />;
+
+  const { user, public: publicRecs, private: privateRecs } = data;
   const hasNoRecs = publicRecs.length === 0 && privateRecs.length === 0;
 
   if (hasNoRecs) {
@@ -78,28 +112,5 @@ export default async function MyRecommendationsPage() {
         </Section>
       )}
     </main>
-  );
-}
-
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  const isPublic = title.toLowerCase() === "public";
-  const Icon = isPublic ? FaGlobe : FaLock;
-
-  return (
-    <section className="mb-12">
-      <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-        <Icon className="text-white/60 text-sm" />
-        <span>{title}</span>
-      </h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
-        {children}
-      </div>
-    </section>
   );
 }
