@@ -9,7 +9,6 @@ import { getSuggestions } from "@/actions/suggestionsActions";
 import { getRecommendationById } from "@/actions/recommendationActions";
 import { checkIfInWatchlist } from "@/actions/watchlistActions";
 import WatchGemeni from "./WatchGemeni";
-import { ArrowLeft } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
 export default async function WatchPage({

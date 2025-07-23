@@ -6,7 +6,7 @@ import WatchGemeni from "@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useEffect, useState } from "react";
 import WatchSkeletonLoading from "@/components/WatchSkeletonLoading";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import ToggleWatchlistButton from "@/app/(user)/watch/[id]/[movieTitle]/ToggleWatchlistButton";
 import { omit } from "@/utils/ai-recommend/omit";
 import RecommendModal from "@/components/RecommendModal";
