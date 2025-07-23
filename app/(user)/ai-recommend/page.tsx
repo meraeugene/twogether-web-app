@@ -232,10 +232,18 @@ export default function AIRecommendForm() {
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                     className="fixed inset-0 z-[100] bg-black/10 backdrop-blur-xs flex flex-col items-center justify-center px-6 overflow-hidden"
                   >
-                    {/* Optional Spinner */}
-                    <div className="w-7 h-7 rounded-full animate-spin mb-4 bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 p-[4px]">
-                      <div className="bg-black w-full h-full rounded-full" />
-                    </div>
+                    {/* Background Video (no absolute) */}
+
+                    <video
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className=" object-cover "
+                    >
+                      <source src="/ai-loading.webm" type="video/webm" />
+                      Your browser does not support the video tag.
+                    </video>
 
                     {/* Foreground Loader Message */}
                     <motion.div
