@@ -30,17 +30,6 @@ const Hero = ({ user }: HeroProps) => {
 
   return (
     <section className="px-6 md:px-12  pt-28 pb-16 md:pb-0 md:pt-8 lg:pt-28 lg:pb-20 xl:pt-48 xl:pb-44 2xl:pt-60 2xl:pb-44 lg:px-24 relative min-h-screen flex items-center justify-center text-center overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle, rgba(220, 38, 38, 0.3) 1px, transparent 1px)`,
-            backgroundSize: "50px 50px",
-          }}
-        />
-      </div>
-
       {/* Red Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 

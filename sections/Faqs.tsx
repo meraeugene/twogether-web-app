@@ -9,17 +9,6 @@ const Faqs = () => {
 
   return (
     <section id="faqs" className="pb-20 pt-16 relative px-7 md:px-12 lg:px-48">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none z-0">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle, rgba(220, 38, 38, 0.3) 1px, transparent 1px)`,
-            backgroundSize: "50px 50px",
-          }}
-        />
-      </div>
-
       {/* Red Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none z-0" />
 
