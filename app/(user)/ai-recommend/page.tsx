@@ -12,6 +12,7 @@ import { useAIRecommendations } from "@/stores/useAIRecommendation";
 import { toast } from "sonner";
 import { uniqueById } from "@/utils/ai-recommend/uniqueById";
 import { FiRefreshCcw } from "react-icons/fi";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function AIRecommendForm() {
   const [loading, setLoading] = useState(false);
@@ -122,7 +123,20 @@ export default function AIRecommendForm() {
             transition={{ duration: 0.4 }}
             className="w-full max-w-xl text-center"
           >
-            <h1 className="text-3xl font-bold mb-6">AI Recommend</h1>
+            <DotLottieReact
+              className="w-44 h-44 mx-auto"
+              src="/ai.lottie"
+              loop
+              autoplay
+            />
+
+            <h1
+              className="text-3xl font-bold mb-6 text-transparent bg-clip-text  bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600
+
+"
+            >
+              AI Recommend
+            </h1>
 
             <form
               onSubmit={(e) => {
@@ -138,20 +152,20 @@ export default function AIRecommendForm() {
                 placeholder="e.g. I want a romantic comedy films 2000 vibes..."
               />
 
-              <div className="bg-white/20 mt-6 backdrop-blur-xl border border-white/10 rounded-xl p-2 flex justify-center items-center">
+              <div className="bg-white/10 mt-6 backdrop-blur-xl border border-white/10 rounded-xl p-2 flex justify-center items-center">
                 <button
                   type="submit"
                   disabled={loading && !prompt.trim()}
-                  className="w-full  py-3 rounded-xl 
-      bg-white text-black 
-      hover:bg-neutral-200 
-      transition font-semibold text-lg 
-      shadow-md flex items-center justify-center gap-2 
-      backdrop-blur-sm 
-      disabled:opacity-60 disabled:cursor-not-allowed 
-      cursor-pointer "
+                  className="w-full py-3 rounded-xl 
+  bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 
+  text-white 
+  hover:brightness-110 transition font-semibold text-lg 
+  shadow-md flex items-center justify-center gap-2 
+  backdrop-blur-sm 
+  disabled:opacity-60 disabled:cursor-not-allowed 
+  cursor-pointer"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 drop-shadow-[0_1px_4px_rgba(255,255,255,0.3)]">
                     {/* Gemini Icon */}
                     <svg
                       fill="currentColor"
@@ -216,27 +230,19 @@ export default function AIRecommendForm() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className=" z-[100] bg-black/10 backdrop-blur-sm flex flex-col items-center justify-center px-6 overflow-hidden"
+                    className="fixed inset-0 z-[100] bg-black/10 backdrop-blur-xs flex flex-col items-center justify-center px-6 overflow-hidden"
                   >
-                    {/* Background Video (no absolute) */}
+                    {/* Optional Spinner */}
+                    <div className="w-7 h-7 rounded-full animate-spin mb-4 bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 p-[4px]">
+                      <div className="bg-black w-full h-full rounded-full" />
+                    </div>
 
-                    <video
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className=" object-cover "
-                    >
-                      <source src="/ai-loading.webm" type="video/webm" />
-                      Your browser does not support the video tag.
-                    </video>
-
-                    {/* Foreground Loader */}
+                    {/* Foreground Loader Message */}
                     <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.4, ease: "easeInOut" }}
-                      className="flex flex-col items-center justify-center pb-4  gap-3 text-center z-10"
+                      className="flex flex-col items-center justify-center  gap-3 text-center z-10"
                     >
                       <motion.p
                         key={loadingMessage}
@@ -255,7 +261,8 @@ export default function AIRecommendForm() {
                       </p>
                     </motion.div>
 
-                    <div className="w-full max-w-sm z-10">
+                    {/* Progress Bar */}
+                    <div className="w-full max-w-sm z-10 mt-4">
                       <div className="h-4 bg-white/10 rounded-full overflow-hidden">
                         <motion.div
                           className="h-full bg-gradient-to-r from-purple-900 via-indigo-500 to-pink-500"
