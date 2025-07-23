@@ -42,7 +42,7 @@ export default function TMDBWatchPage({
   if (!recommendation) {
     return (
       <ErrorMessage
-        title="AI Recommendation not found"
+        title="Movie Not Found"
         message="We could not find the movie you selected. Try searching again."
       />
     );

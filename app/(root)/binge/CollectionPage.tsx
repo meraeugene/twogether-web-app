@@ -5,6 +5,7 @@ import useSWRInfinite from "swr/infinite";
 import FilmCard from "@/components/FilmCard";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import { BingeCollection } from "@/types/binge";
+import ErrorMessage from "@/components/ErrorMessage";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -14,13 +15,18 @@ export default function CollectionPage({ genre }: { genre: string }) {
   const getKey = (pageIndex: number) =>
     `/api/tmdb/collections?genre=${genre}&page=${pageIndex + 1}`;
 
-  const { data, setSize, isValidating } = useSWRInfinite<BingeCollection[]>(
-    getKey,
-    fetcher,
-    {
-      revalidateFirstPage: false,
-    }
-  );
+  const { data, setSize, isValidating, error } = useSWRInfinite<
+    BingeCollection[]
+  >(getKey, fetcher, {
+    revalidateFirstPage: false,
+  });
+
+  if (error) {
+    <ErrorMessage
+      title="Failed to load collections"
+      message="Please try again later."
+    />;
+  }
 
   const collections = data ? data.flat() : [];
 

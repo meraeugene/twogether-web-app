@@ -12,6 +12,7 @@ import { Recommendation } from "@/types/recommendation";
 import { FaPlay } from "react-icons/fa";
 import { useTMDBWatch } from "@/stores/useTMDBWatch";
 import { useRouter } from "next/navigation";
+import ErrorMessage from "@/components/ErrorMessage";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -40,7 +41,7 @@ export default function ChronologicalPage() {
   const { data, error, isLoading } = useSWR<{
     name: string;
     movies: Recommendation[];
-  }>(`/api/tmdb/chronological?franchise=${selectedFranchise}`, fetcher);
+  }>(`/api/tmdba/chronological?franchise=${selectedFranchise}`, fetcher);
 
   if (isLoading)
     return (
@@ -51,9 +52,10 @@ export default function ChronologicalPage() {
 
   if (error || !data)
     return (
-      <div className="p-6 text-red-500 min-h-screen flex items-center justify-center">
-        Failed to load data.
-      </div>
+      <ErrorMessage
+        title="Failed to load chronological movies"
+        message="Please try again later."
+      />
     );
 
   const getSlugFromTitle = (title: string) =>
