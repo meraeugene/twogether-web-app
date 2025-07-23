@@ -98,7 +98,7 @@ export default function AIRecommendForm() {
   const displayPrompt = formatPromptTitle(prompt);
 
   return (
-    <div className="min-h-screen  flex flex-col px-7 md:px-15 items-center justify-center pt-24 pb-16  lg:px-24 xl:px-32 relative 2xl:px-26 xl:pt-32 bg-black text-white font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen  flex flex-col px-7 md:px-15 items-center justify-center   lg:px-24 xl:px-32 relative 2xl:px-26  bg-black text-white font-[family-name:var(--font-geist-sans)]">
       {/* Combined Background Layers */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* Radial Dots */}
@@ -195,7 +195,7 @@ export default function AIRecommendForm() {
           >
             {/* Reset Button */}
             {!loading && (
-              <div className="flex justify-center mt-4">
+              <div className="flex pt-24 xl:pt-32  justify-center mt-4">
                 <button
                   onClick={resetForm}
                   className="px-6 py-2 text-sm lg:text-base rounded-md cursor-pointer bg-white text-black hover:bg-neutral-200 border border-black/10 transition font-medium backdrop-blur-sm flex items-center gap-2"
@@ -208,7 +208,7 @@ export default function AIRecommendForm() {
 
             {/* Heading Section */}
             {!loading && (
-              <header className="mt-6 mb-10 text-center">
+              <header className="mt-6  mb-10 text-center">
                 <h2 className="text-3xl md:text-4xl  font-semibold">
                   <span className="text-red-600">{displayPrompt} </span> AI
                   Picks for You
@@ -277,7 +277,7 @@ export default function AIRecommendForm() {
                     </div>
                   </motion.div>
                 ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 pb-16">
                     {recommendations.map((item) => (
                       <FilmCard key={item.recommendation_id} item={item} />
                     ))}
