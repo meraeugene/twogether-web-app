@@ -19,8 +19,6 @@ export const GET = async () => {
 
     return new NextResponse(JSON.stringify(recommendations), { status: 200 });
   } catch (error: unknown) {
-    console.error("Error getting recommendations:", error);
-
     const message =
       error instanceof Error ? error.message : "Internal Server Error";
 
