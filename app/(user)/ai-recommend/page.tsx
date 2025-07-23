@@ -225,7 +225,7 @@ export default function AIRecommendForm() {
                       muted
                       loop
                       playsInline
-                      className=" object-cover "
+                      className=" object-contain "
                     >
                       <source src="/ai-loading.webm" type="video/webm" />
                       Your browser does not support the video tag.
