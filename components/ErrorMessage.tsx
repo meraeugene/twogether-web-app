@@ -10,8 +10,12 @@ export default function ErrorMessage() {
   return (
     <section className="min-h-screen w-full flex items-center justify-center bg-black px-6 py-20 sm:py-28">
       <div className="max-w-md w-full text-center ">
-        <h1 className="text-4xl font-bold text-red-500 font-mono ">Oops!</h1>
-        <p className="font-mono text-lg text-red-300 mt-1">You are lost</p>
+        <h1 className="text-4xl font-bold text-red-500 font-[family-name:var(--font-geist-mono)] ">
+          Oops!
+        </h1>
+        <p className="font-[family-name:var(--font-geist-mono)] text-lg text-red-300 mt-1">
+          You are lost
+        </p>
 
         <Image
           src="/error.png"

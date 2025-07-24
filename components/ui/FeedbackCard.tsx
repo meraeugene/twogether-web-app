@@ -40,9 +40,9 @@ export const FeedbackColumn = (props: {
                   <div className="text-white  font-medium  text-base leading-relaxed tracking-wide italic">
                     “{text}”
                   </div>
-                  <div className="flex items-center gap-2 mt-6">
+                  <div className="flex items-center gap-2 mt-4">
                     <div className="flex flex-col">
-                      <div className="font-mono text-neutral-300 tracking-tight text-lg">
+                      <div className="font-sans text-base text-neutral-300 tracking-tight md:text-lg">
                         — {name}
                       </div>
                     </div>

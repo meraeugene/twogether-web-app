@@ -120,7 +120,7 @@ export default function ChronologicalPage() {
             {/* Mobile-only play button */}
             <button
               onClick={() => handleWatchNow(movie)}
-              className="lg:hidden w-full cursor-pointer flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-mono text-sm mt-2 mb-4"
+              className="lg:hidden w-full cursor-pointer flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)]text-sm mt-2 mb-4"
             >
               <FaPlay className="text-white text-xs" />
               Watch Now
@@ -132,7 +132,7 @@ export default function ChronologicalPage() {
   });
 
   return (
-    <div className="min-h-screen  relative bg-black text-white pt-28 pb-16 px-6 lg:px-24 xl:px-32 font-sans md:pt-34">
+    <div className="min-h-screen  relative bg-black text-white pt-28 pb-16 px-6 lg:px-24 xl:px-32 font-[family-name:var(--font-geist-sans)] md:pt-34">
       {/* Combined Background Layers */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* Radial Dots */}

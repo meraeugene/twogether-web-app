@@ -20,7 +20,7 @@ const Feedback = () => {
   );
 
   return (
-    <section className="mt-20 py-20 px-7 mb-10 relative min-h-screen flex items-center justify-center text-center overflow-hidden lg:flex-col">
+    <section className="py-20 px-7  relative min-h-screen flex items-center justify-center text-center overflow-hidden lg:flex-col">
       {/* Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div
@@ -42,11 +42,11 @@ const Feedback = () => {
           viewport={{ once: true }}
           className="flex flex-col items-center justify-center max-w-[540px] mx-auto"
         >
-          <h2 className="text-3xl font-bold md:text-4xl font-sans mt-5 text-black dark:text-white max-w-4xl">
+          <h2 className="text-3xl font-bold md:text-4xl font-sans  text-black dark:text-white max-w-4xl">
             <span className="text-red-500">Trusted</span> by Movie Lovers
             Everywhere
           </h2>
-          <p className="text-center font-mono text-sm md:text-base lg:text-lg leading-relaxed max-w-xs lg:max-w-sm mt-5 opacity-75">
+          <p className="text-base md:text-lg text-center xl:text-xl text-gray-300  mx-auto font-[family-name:var(--font-geist-mono)]   lg:text-lg leading-relaxed max-w-xs lg:max-w-sm mt-5 opacity-75">
             Discover how we’ve made a difference for our users.
           </p>
         </motion.div>

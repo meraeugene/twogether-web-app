@@ -4,6 +4,7 @@ import { useTransition, useState } from "react";
 import { toast } from "sonner";
 import { submitFeedback } from "@/actions/feedbackActions";
 import { mutate } from "swr";
+import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
 
 const FeedbackForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -32,15 +33,15 @@ const FeedbackForm = () => {
   };
 
   return (
-    <section className="pb-24 relative pt-20 px-6 md:px-12 lg:px-24">
+    <section className="pb-24 font-[family-name:var(--font-geist-sans)] relative pt-20 px-6 md:px-12 lg:px-24">
       {/* Red Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       <div className="relative z-10 text-center">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-sans text-white">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-[family-name:var(--font-geist-sans)] text-white">
           We Value Your <span className="text-red-500">Feedback</span>
         </h1>
-        <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto font-mono">
+        <p className=" text-base md:text-lg xl:text-xl text-gray-300 max-w-2xl mx-auto font-[family-name:var(--font-geist-mono)] ">
           Let us know how your experience has been with Twogether — your
           suggestions, thoughts, and love help us grow!
         </p>
@@ -64,7 +65,7 @@ const FeedbackForm = () => {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-5 py-3 text-lg rounded-sm border border-white/10 bg-transparent text-white font-sans placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
+            className="w-full px-5 py-3 text-lg rounded-sm border border-white/10 bg-transparent text-white font-[family-name:var(--font-geist-mono)] placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
             placeholder="Joe Goldberg"
           />
         </div>
@@ -83,15 +84,14 @@ const FeedbackForm = () => {
             required
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="w-full font-sans px-5 py-3 text-lg rounded-sm border border-white/10 bg-transparent text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-red-500/50 resize-none transition"
+            className="w-full font-[family-name:var(--font-geist-mono)] px-5 py-3 text-lg rounded-sm border border-white/10 bg-transparent text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-red-500/50 resize-none transition"
             placeholder="Share what you love, or tell us how we can improve..."
           />
         </div>
-
         <button
           type="submit"
           disabled={isPending}
-          className="w-full font-mono flex cursor-pointer items-center justify-center gap-3 bg-red-600 text-white px-6 py-3 text-lg rounded-md font-semibold hover:bg-red-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full font-[family-name:var(--font-geist-mono)] flex cursor-pointer items-center justify-center gap-3 bg-red-600 text-white px-6 py-3 text-lg rounded-md font-semibold hover:bg-red-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {isPending ? (
             <>
@@ -99,7 +99,10 @@ const FeedbackForm = () => {
               Sending...
             </>
           ) : (
-            "Submit Feedback"
+            <>
+              <HiOutlineChatBubbleLeftRight className="h-5 w-5" />
+              Submit Feedback
+            </>
           )}
         </button>
       </form>
