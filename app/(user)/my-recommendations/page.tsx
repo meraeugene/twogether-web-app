@@ -54,7 +54,7 @@ export default function MyRecommendationsPage() {
         <h1 className="text-2xl font-bold mb-4">
           Your Movie/Show Recommendations are Empty
         </h1>
-        <p className="text-gray-400 mb-6 font-[family-name:var(--font-geist-mono)]">
+        <p className="text-gray-600  mb-6 font-[family-name:var(--font-geist-mono)]">
           You haven&apos;t recommended anything yet. Start{" "}
           <Link href="/browse" className="text-white underline">
             browsing

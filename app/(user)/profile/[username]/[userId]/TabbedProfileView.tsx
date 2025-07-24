@@ -217,7 +217,7 @@ export default function TabbedProfileView({
             {currentUser?.id === user.id && (
               <div className="flex items-center gap-3">
                 <Link
-                  href={`/profile/${user.username}`}
+                  href={`/profile/${encodeURIComponent(user.username)}`}
                   className={`group mt-5 relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm hover:bg-white/20
                 `}
                 >
