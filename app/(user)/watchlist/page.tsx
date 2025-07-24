@@ -15,12 +15,12 @@ type WatchlistResponse = {
 };
 
 export default function WatchlistPage() {
-  const { data, error, isLoading } = useSWR<WatchlistResponse>(
+  const { data, error } = useSWR<WatchlistResponse>(
     "/api/my-watchlist",
     fetcher
   );
 
-  if (isLoading)
+  if (!data && !error)
     return (
       <main className="min-h-screen px-7  pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 bg-black text-white">
         <div className="mb-6">

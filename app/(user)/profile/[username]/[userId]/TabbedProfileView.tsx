@@ -364,13 +364,19 @@ export default function TabbedProfileView({
                   </div>
                 </div>
               )}
-              {activeTab === "Recommendations" && (
-                <div className="grid max-w-4xl mx-auto  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 ">
-                  {userRecommendations.map((item) => (
-                    <FilmCard key={item.recommendation_id} item={item} />
-                  ))}
-                </div>
-              )}
+
+              {activeTab === "Recommendations" &&
+                (userRecommendations.length === 0 ? (
+                  <div className="text-center text-white/50  col-span-full">
+                    No recommendations yet!
+                  </div>
+                ) : (
+                  <div className="grid max-w-4xl mx-auto grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    {userRecommendations.map((item) => (
+                      <FilmCard key={item.tmdb_id} item={item} />
+                    ))}
+                  </div>
+                ))}
 
               {activeTab === "Watchlist" &&
                 (userWatchList.length === 0 ? (

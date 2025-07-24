@@ -16,12 +16,9 @@ type MyRecosResponse = {
 };
 
 export default function MyRecommendationsPage() {
-  const { data, error, isLoading } = useSWR<MyRecosResponse>(
-    "/api/my-recos",
-    fetcher
-  );
+  const { data, error } = useSWR<MyRecosResponse>("/api/my-recos", fetcher);
 
-  if (isLoading)
+  if (!data && !error)
     return (
       <main className="min-h-screen px-7  pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 bg-black text-white">
         <div className="mb-6">
@@ -41,14 +38,11 @@ export default function MyRecommendationsPage() {
       </main>
     );
 
-  if (error) return <ErrorMessage />;
-
-  if (!data?.user) return <ErrorMessage />;
+  if (error || !data?.user) return <ErrorMessage />;
 
   const { user, public: publicRecs, private: privateRecs } = data;
-  const hasNoRecs = publicRecs.length === 0 && privateRecs.length === 0;
 
-  if (hasNoRecs) {
+  if (publicRecs.length === 0 && privateRecs.length === 0) {
     return (
       <main className="min-h-screen bg-black px-7  pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)] lg:px-24 xl:px-32 2xl:px-26 xl:pt-32">
         <h1 className="text-2xl font-bold mb-4">
