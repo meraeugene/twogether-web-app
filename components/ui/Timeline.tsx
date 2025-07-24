@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 interface TimelineEntry {
   title: string;
+  order: number;
   content: React.ReactNode;
 }
 
@@ -40,12 +41,19 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
                 <div className="h-4 w-4 rounded-full  bg-gray-900 p-2" />
               </div>
 
-              <h3 className="hidden md:block text-xl md:pl-20 md:text-4xl font-bold  ">
+              <div className="hidden md:block text-xl md:pl-20 md:text-4xl font-bold  ">
+                <h1 className="text-red-500 text-5xl font-sans font-extrabold  mb-2">
+                  {item.order < 10 ? `0${item.order}` : item.order}
+                </h1>
                 {item.title}
-              </h3>
+              </div>
             </div>
 
             <div className="relative pl-20 md:pl-12 w-full">
+              <h2 className="text-red-500 text-5xl font-sans font-extrabold md:hidden mb-2">
+                {item.order < 10 ? `0${item.order}` : item.order}
+              </h2>
+
               <h3 className="md:hidden  block text-2xl mb-4 text-left font-[family-name:var(--font-geist-sans)]  font-semibold">
                 {item.title}
               </h3>

@@ -66,62 +66,66 @@ export default function ChronologicalPage() {
     }
   };
 
-  const timelineData = data.movies.map((movie) => {
+  const timelineData = data.movies.map((movie, index) => {
     return {
+      order: index + 1,
       title: movie.title,
       content: (
-        <div className="flex flex-col gap-3 group relative">
-          {/* Poster image with hover overlay for large screens */}
-          <div className="relative">
-            <Image
-              src={
-                movie.poster_url ||
-                `https://image.tmdb.org/t/p/w500${movie.poster_url}`
-              }
-              alt={movie.title}
-              width={500}
-              height={750}
-              className="rounded-lg object-cover shadow-lg w-full h-auto lg:group-hover:brightness-50 transition duration-300"
-            />
+        <div className="nft   border border-white/10 rounded-lg shadow-[0_7px_20px_5px_rgba(0,0,0,0.5)]bg-gradient-to-t from-[#1e1e1e] to-[#333] backdrop-blur-md">
+          <div className="p-4 flex flex-col gap-3 group relative">
+            {/* Poster */}
+            <div className="relative">
+              <Image
+                src={
+                  movie.poster_url?.startsWith("http")
+                    ? movie.poster_url
+                    : `https://image.tmdb.org/t/p/w500${movie.poster_url}`
+                }
+                alt={movie.title}
+                width={500}
+                height={750}
+                className="rounded-md w-full object-cover lg:group-hover:brightness-50 transition duration-300"
+              />
 
-            {/* Hover Play Button only visible on lg+ */}
-            <div className="hidden lg:flex absolute inset-0 items-center justify-center opacity-0 group-hover:opacity-100  transition-all duration-300 bg-black/5 z-10">
-              <button
-                onClick={() => handleWatchNow(movie)}
-                className="flex cursor-pointer items-center justify-center w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md ring-1 ring-white/10 hover:ring-3 hover:ring-red-100 transition duration-300 ease-in-out transform hover:scale-110"
-              >
-                <FaPlay className="text-xl" />
-              </button>
+              {/* Hover play button */}
+              <div className="hidden lg:flex absolute inset-0 items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/5 z-10">
+                <button
+                  onClick={() => handleWatchNow(movie)}
+                  className="flex cursor-pointer items-center justify-center w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md ring-1 ring-white/10 hover:ring-2 hover:ring-red-100 transition duration-300 ease-in-out transform hover:scale-110"
+                >
+                  <FaPlay className="text-xl" />
+                </button>
+              </div>
             </div>
+
+            {/* Title */}
+            <h2 className="text-white font-bold text-xl">{movie.title}</h2>
+
+            {/* Year + Duration */}
+            {(movie.year || movie.duration) && (
+              <div className="flex items-center gap-2 text-neutral-300 text-sm">
+                {movie.year && (
+                  <span className="text-neutral-200">{movie.year}</span>
+                )}
+                {movie.year && movie.duration && <span>・</span>}
+                {movie.duration && <span>{movie.duration} min</span>}
+              </div>
+            )}
+
+            {/* Description */}
+            {movie.comment && (
+              <p className="text-neutral-300 text-sm">{movie.comment}</p>
+            )}
+
+            {/* Mobile-only play button */}
+            <button
+              onClick={() => handleWatchNow(movie)}
+              className="lg:hidden w-full cursor-pointer flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-mono text-sm mt-2 mb-4"
+            >
+              <FaPlay className="text-white text-xs" />
+              Watch Now
+            </button>
           </div>
-
-          {/* Info below image */}
-          {movie.year && (
-            <div className="flex items-center gap-2 text-neutral-300">
-              <span className="text-neutral-200 text-sm sm:text-base md:text-lg">
-                {movie.year}
-              </span>
-              <span> ・</span>
-              <span className="text-neutral-300 text-sm sm:text-base md:text-lg">
-                {movie.duration} min
-              </span>
-            </div>
-          )}
-
-          {movie.comment && (
-            <span className="text-neutral-300 text-sm sm:text-base md:text-lg break-words leading-snug">
-              {movie.comment}
-            </span>
-          )}
-
-          {/* Mobile-only play button */}
-          <button
-            onClick={() => handleWatchNow(movie)}
-            className="lg:hidden w-full cursor-pointer flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mt-2 mb-4"
-          >
-            <FaPlay className="text-white text-xs" />
-            Watch Now
-          </button>
         </div>
       ),
     };
