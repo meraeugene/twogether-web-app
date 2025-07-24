@@ -20,9 +20,9 @@ const Features = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 font-[family-name:var(--font-geist-sans)]">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 font-[family-name:var(--font-geist-sans)]">
             6 Reasons to <span className="text-red-500">Join</span>
-          </h2>
+          </h1>
           <p className="text-base md:text-lg xl:text-xl text-gray-300 max-w-2xl mx-auto font-[family-name:var(--font-geist-mono)]">
             Experience the future of social streaming with features designed for
             connection and quality.

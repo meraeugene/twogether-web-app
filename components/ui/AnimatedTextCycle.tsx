@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import { easeIn, easeOut } from "framer-motion";
 import { AnimatePresence, motion } from "framer-motion";
