@@ -46,7 +46,7 @@ export default function WatchlistPage() {
 
   if (items.length === 0) {
     return (
-      <main>
+      <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 relative xl:pt-32 text-white">
         <h1 className="text-2xl font-bold mb-4">Your Watchlist is Empty</h1>
         <p className="text-gray-600 mb-6 font-[family-name:var(--font-geist-mono)]">
           You haven&apos;t added any Movies/Shows to your Watchlist yet. Start{" "}
