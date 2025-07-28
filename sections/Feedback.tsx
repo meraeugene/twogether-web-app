@@ -42,7 +42,7 @@ const Feedback = () => {
           viewport={{ once: true }}
           className="flex flex-col items-center justify-center max-w-[540px] mx-auto"
         >
-          <h2 className="text-3xl font-bold md:text-4xl font-sans  text-black dark:text-white max-w-4xl">
+          <h2 className="text-3xl font-bold md:text-4xl font-sans text-white max-w-4xl">
             <span className="text-red-500">Trusted</span> by Movie Lovers
             Everywhere
           </h2>
