@@ -113,6 +113,7 @@ export default function FilmCard({
                   src={item.poster_url}
                   alt={item.title}
                   priority
+                  unoptimized
                   fill
                   className="object-cover w-full h-full transition duration-300 group-hover:brightness-50 rounded-lg"
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
