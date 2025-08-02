@@ -20,7 +20,7 @@ const loading = () => {
           <div className="h-6 w-[40%] bg-white/10 rounded-sm mt-4" />
           <div className="h-5 w-[15%] bg-white/10 rounded-sm mt-4" />
         </div>
-        <div className="w-full md:hidden xl:block  xl:w-[15%] 2xl:w-[10%] xl:space-y-6">
+        <div className="w-full md:hidden xl:block  xl:w-[13%] 2xl:w-[10%] xl:space-y-6">
           {Array.from({ length: 4 }).map((_, index) => (
             <div key={index}>
               <div className="lg:h-[200px] xl:h-[250px]  bg-white/10 rounded-lg" />

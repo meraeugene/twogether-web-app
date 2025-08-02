@@ -61,7 +61,10 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo-title.ico" />
+        <link
+          rel="icon"
+          href="https://raw.githubusercontent.com/meraeugene/twogether-web-app/refs/heads/main/public/logo-title.ico"
+        />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/logo.png" />
         <link
