@@ -21,7 +21,7 @@ const loading = () => {
           <div className="h-5 w-[15%] bg-white/10 rounded-sm mt-4" />
         </div>
         <div className="w-full lg:flex lg:justify-between xl:block  xl:w-[15%] 2xl:w-[10%] space-y-6">
-          {Array.from({ length: 5 }).map((_, index) => (
+          {Array.from({ length: 4 }).map((_, index) => (
             <div key={index}>
               <div className="lg:h-[200px] xl:h-[250px]  bg-white/10 rounded-lg" />
               <div className="h-4 bg-white/10  rounded-sm mt-3" />
