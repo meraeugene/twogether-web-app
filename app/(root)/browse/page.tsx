@@ -60,7 +60,9 @@ export default function BrowsePage() {
         </div>
 
         <div className="flex w-full flex-col md:flex-row justify-between gap-4 mb-10 text-center mt-6">
-          <h1 className="font-semibold text-2xl md:text-3xl ">Latest Movies</h1>
+          <h1 className="font-semibold text-2xl md:text-3xl ">
+            {selectedGenre} Movies
+          </h1>
 
           <select
             className=" border border-white/10 px-4 py-2 rounded-md bg-black text-white text-sm focus:outline-none focus:ring-2 hover:border-red-500 cursor-pointer focus:ring-red-500 transition duration-200"
