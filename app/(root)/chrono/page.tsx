@@ -82,6 +82,7 @@ export default function ChronologicalPage() {
                     : `https://image.tmdb.org/t/p/w500${movie.poster_url}`
                 }
                 alt={movie.title}
+                unoptimized
                 width={500}
                 height={750}
                 className="rounded-md w-full object-cover lg:group-hover:brightness-50 transition duration-300"
