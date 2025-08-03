@@ -16,16 +16,6 @@ export default async function BingeSearchPage({
     decodedQuery
   );
 
-  const sortedResults = [...results].sort((a, b) => {
-    const latestA = Math.max(
-      ...a.movies.map((m) => new Date(m.release_date ?? "1970-01-01").getTime())
-    );
-    const latestB = Math.max(
-      ...b.movies.map((m) => new Date(m.release_date ?? "1970-01-01").getTime())
-    );
-    return latestB - latestA;
-  });
-
   return (
     <main className="min-h-screen bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white relative font-[family-name:var(--font-geist-sans)]">
       {/* Combined Background Layers */}
@@ -49,7 +39,7 @@ export default async function BingeSearchPage({
         <ArrowLeft size={20} />
       </Link>
 
-      {sortedResults.length === 0 ? (
+      {results.length === 0 ? (
         <div className="text-left text-sm md:text-base lg:text-lg text-white/70  space-y-2">
           <p>
             No results found for{" "}
@@ -63,7 +53,7 @@ export default async function BingeSearchPage({
         </div>
       ) : (
         <div className="space-y-10">
-          {sortedResults.map((collection) => (
+          {results.map((collection) => (
             <section key={collection.collection_id}>
               <h2 className="text-2xl lg:text-3xl font-semibold mb-4 text-white">
                 {collection.collection_name}

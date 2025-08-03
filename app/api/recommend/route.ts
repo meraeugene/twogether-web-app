@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
 
   const searchUrl = `${BASE_URL}/search/multi?query=${encodeURIComponent(
     query
-  )}&api_key=${TMDB_API_KEY}&include_adult=false`;
+  )}&api_key=${TMDB_API_KEY}&include_adult=false&language=en-US&region=US`;
 
   const searchRes = await fetch(searchUrl);
   if (!searchRes.ok) {
@@ -129,12 +129,10 @@ export async function GET(req: NextRequest) {
 
   // Remove entries with no poster or 0/missing duration
   const cleanedResults = enrichedResults.filter((item) => {
-    const title = item.title?.toLowerCase() || "";
-    const isStrongMatch = title.includes(query.toLowerCase());
     const hasValidPoster = !!item.poster_url;
     const hasValidDuration = item.duration && item.duration > 0;
 
-    return isStrongMatch && hasValidPoster && hasValidDuration;
+    return hasValidPoster && hasValidDuration;
   });
 
   // Cache it
