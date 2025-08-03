@@ -14,6 +14,7 @@ export const FRANCHISE_GROUPS = [
       { key: "planet-of-the-apes", label: "Planet of the Apes" },
       { key: "monsterverse", label: "MonsterVerse" },
       { key: "transformers", label: "Transformers" },
+      { key: "alienverse", label: "AlienVerse" },
       { key: "maze-runner", label: "Maze Runner" },
       { key: "hunger-games", label: "Hunger Games" },
       { key: "divergent", label: "Divergent" },

@@ -18,6 +18,7 @@ export const chronologicalMovies: {
   divergentMovies: Recommendation[];
   evilDeadMovies: Recommendation[];
   johnWickMovies: Recommendation[];
+  alienverseMovies: Recommendation[];
 } = {
   "mcuMovies": [
     {
@@ -47,7 +48,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.619Z",
+      "created_at": "2025-08-03T02:43:22.590Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -78,7 +79,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.824Z",
+      "created_at": "2025-08-03T02:43:22.933Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -109,7 +110,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.028Z",
+      "created_at": "2025-08-03T02:43:23.166Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -140,7 +141,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.232Z",
+      "created_at": "2025-08-03T02:43:23.422Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -171,7 +172,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.438Z",
+      "created_at": "2025-08-03T02:43:23.645Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -202,7 +203,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.642Z",
+      "created_at": "2025-08-03T02:43:23.865Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -233,7 +234,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.848Z",
+      "created_at": "2025-08-03T02:43:24.095Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -243,7 +244,7 @@ export const chronologicalMovies: {
       "recommendation_id": "thor-the-dark-world",
       "title": "Thor: The Dark World",
       "type": "movie",
-      "poster_url": "https://image.tmdb.org/t/p/w500/bvwWQdMQnsua6dXaCInsPxQG21P.jpg",
+      "poster_url": "https://image.tmdb.org/t/p/w500/wp6OxE4poJ4G7c0U2ZIXasTSMR7.jpg",
       "stream_url": [
         "https://vidlink.pro/movie/76338?title=true&poster=true&autoplay=false",
         "https://vidsrc.cc/v2/embed/movie/76338?autoPlay=false&poster=true",
@@ -264,7 +265,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.055Z",
+      "created_at": "2025-08-03T02:43:24.315Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -295,7 +296,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.258Z",
+      "created_at": "2025-08-03T02:43:24.588Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -326,7 +327,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.462Z",
+      "created_at": "2025-08-03T02:43:24.892Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -357,7 +358,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.665Z",
+      "created_at": "2025-08-03T02:43:25.148Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -388,7 +389,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.868Z",
+      "created_at": "2025-08-03T02:43:25.418Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -419,7 +420,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.073Z",
+      "created_at": "2025-08-03T02:43:25.654Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -450,7 +451,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.276Z",
+      "created_at": "2025-08-03T02:43:25.953Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -481,7 +482,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.478Z",
+      "created_at": "2025-08-03T02:43:26.178Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -512,7 +513,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.780Z",
+      "created_at": "2025-08-03T02:43:26.414Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -543,7 +544,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.983Z",
+      "created_at": "2025-08-03T02:43:26.707Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -566,8 +567,7 @@ export const chronologicalMovies: {
       "genres": [
         "Action",
         "Adventure",
-        "Science Fiction",
-        "Drama"
+        "Science Fiction"
       ],
       "recommended_by": {
         "id": "tmdb",
@@ -575,7 +575,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:45.191Z",
+      "created_at": "2025-08-03T02:43:26.938Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -606,7 +606,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:45.396Z",
+      "created_at": "2025-08-03T02:43:27.175Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -637,7 +637,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:45.602Z",
+      "created_at": "2025-08-03T02:43:27.424Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -668,7 +668,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:45.806Z",
+      "created_at": "2025-08-03T02:43:27.646Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -699,7 +699,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:46.009Z",
+      "created_at": "2025-08-03T02:43:27.902Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -730,7 +730,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:46.215Z",
+      "created_at": "2025-08-03T02:43:28.130Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -761,7 +761,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:46.420Z",
+      "created_at": "2025-08-03T02:43:28.424Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -792,7 +792,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:46.625Z",
+      "created_at": "2025-08-03T02:43:28.677Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -823,7 +823,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:46.829Z",
+      "created_at": "2025-08-03T02:43:28.911Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -854,7 +854,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:47.033Z",
+      "created_at": "2025-08-03T02:43:29.317Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -885,7 +885,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:47.237Z",
+      "created_at": "2025-08-03T02:43:29.619Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -916,7 +916,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:47.441Z",
+      "created_at": "2025-08-03T02:43:29.828Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -947,7 +947,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:47.644Z",
+      "created_at": "2025-08-03T02:43:30.096Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -978,7 +978,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:47.850Z",
+      "created_at": "2025-08-03T02:43:30.382Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1009,7 +1009,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:48.053Z",
+      "created_at": "2025-08-03T02:43:30.700Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1040,7 +1040,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:48.257Z",
+      "created_at": "2025-08-03T02:43:30.936Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1072,7 +1072,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:48.462Z",
+      "created_at": "2025-08-03T02:43:31.160Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1103,7 +1103,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:48.667Z",
+      "created_at": "2025-08-03T02:43:31.380Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1134,7 +1134,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:48.871Z",
+      "created_at": "2025-08-03T02:43:31.575Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1165,7 +1165,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:49.076Z",
+      "created_at": "2025-08-03T02:43:31.800Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1196,7 +1196,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:49.280Z",
+      "created_at": "2025-08-03T02:43:32.058Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -1229,7 +1229,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.617Z",
+      "created_at": "2025-08-03T02:43:22.590Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1261,7 +1261,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.820Z",
+      "created_at": "2025-08-03T02:43:23.022Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1292,7 +1292,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.031Z",
+      "created_at": "2025-08-03T02:43:23.354Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1323,7 +1323,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.233Z",
+      "created_at": "2025-08-03T02:43:23.570Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1354,7 +1354,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.436Z",
+      "created_at": "2025-08-03T02:43:23.775Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1385,7 +1385,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.639Z",
+      "created_at": "2025-08-03T02:43:24.022Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1417,7 +1417,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.840Z",
+      "created_at": "2025-08-03T02:43:24.231Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1448,7 +1448,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.043Z",
+      "created_at": "2025-08-03T02:43:24.460Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1479,7 +1479,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.247Z",
+      "created_at": "2025-08-03T02:43:24.695Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1510,7 +1510,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.449Z",
+      "created_at": "2025-08-03T02:43:24.943Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1541,7 +1541,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.653Z",
+      "created_at": "2025-08-03T02:43:25.247Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1572,7 +1572,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.857Z",
+      "created_at": "2025-08-03T02:43:25.464Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1603,7 +1603,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.060Z",
+      "created_at": "2025-08-03T02:43:25.808Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1634,7 +1634,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.264Z",
+      "created_at": "2025-08-03T02:43:26.102Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -1667,7 +1667,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.605Z",
+      "created_at": "2025-08-03T02:43:22.594Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1698,7 +1698,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.808Z",
+      "created_at": "2025-08-03T02:43:22.937Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1729,7 +1729,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.010Z",
+      "created_at": "2025-08-03T02:43:23.169Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1760,7 +1760,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.210Z",
+      "created_at": "2025-08-03T02:43:23.422Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1791,7 +1791,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.409Z",
+      "created_at": "2025-08-03T02:43:23.648Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1822,7 +1822,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.611Z",
+      "created_at": "2025-08-03T02:43:23.866Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1853,7 +1853,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.811Z",
+      "created_at": "2025-08-03T02:43:24.073Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1884,7 +1884,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.011Z",
+      "created_at": "2025-08-03T02:43:24.262Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1915,7 +1915,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.213Z",
+      "created_at": "2025-08-03T02:43:24.506Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1946,7 +1946,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.413Z",
+      "created_at": "2025-08-03T02:43:24.725Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -1977,7 +1977,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.614Z",
+      "created_at": "2025-08-03T02:43:24.952Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -2010,7 +2010,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.608Z",
+      "created_at": "2025-08-03T02:43:22.595Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2041,7 +2041,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.808Z",
+      "created_at": "2025-08-03T02:43:22.939Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2072,7 +2072,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.011Z",
+      "created_at": "2025-08-03T02:43:23.170Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2103,7 +2103,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.213Z",
+      "created_at": "2025-08-03T02:43:23.421Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2134,7 +2134,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.415Z",
+      "created_at": "2025-08-03T02:43:23.648Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2165,7 +2165,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.617Z",
+      "created_at": "2025-08-03T02:43:23.866Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -2198,7 +2198,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.612Z",
+      "created_at": "2025-08-03T02:43:22.595Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2208,7 +2208,7 @@ export const chronologicalMovies: {
       "recommendation_id": "from-russia-with-love",
       "title": "From Russia with Love",
       "type": "movie",
-      "poster_url": "https://image.tmdb.org/t/p/w500/zx4V17FP8oclNvOpTgs2iCCtiYk.jpg",
+      "poster_url": "https://image.tmdb.org/t/p/w500/v8YXfFwfGMpYLlDQdBQ1jNhehmY.jpg",
       "stream_url": [
         "https://vidlink.pro/movie/657?title=true&poster=true&autoplay=false",
         "https://vidsrc.cc/v2/embed/movie/657?autoPlay=false&poster=true",
@@ -2229,7 +2229,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.816Z",
+      "created_at": "2025-08-03T02:43:22.938Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2239,7 +2239,7 @@ export const chronologicalMovies: {
       "recommendation_id": "goldfinger",
       "title": "Goldfinger",
       "type": "movie",
-      "poster_url": "https://image.tmdb.org/t/p/w500/yNW09AHdvWwIXshiF0tMLr4bAWA.jpg",
+      "poster_url": "https://image.tmdb.org/t/p/w500/laYAUz0xtIHpDYnE4fjUWpvaeX0.jpg",
       "stream_url": [
         "https://vidlink.pro/movie/658?title=true&poster=true&autoplay=false",
         "https://vidsrc.cc/v2/embed/movie/658?autoPlay=false&poster=true",
@@ -2260,7 +2260,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.020Z",
+      "created_at": "2025-08-03T02:43:23.167Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2291,7 +2291,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.227Z",
+      "created_at": "2025-08-03T02:43:23.422Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2322,7 +2322,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.430Z",
+      "created_at": "2025-08-03T02:43:23.644Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2332,7 +2332,7 @@ export const chronologicalMovies: {
       "recommendation_id": "on-her-majestys-secret-service",
       "title": "On Her Majesty's Secret Service",
       "type": "movie",
-      "poster_url": "https://image.tmdb.org/t/p/w500/tXlAyD3gduY9SJVIFnLAVCrXuAP.jpg",
+      "poster_url": "https://image.tmdb.org/t/p/w500/pMOZWDBtvocTVGNIgQZbxn6byyw.jpg",
       "stream_url": [
         "https://vidlink.pro/movie/668?title=true&poster=true&autoplay=false",
         "https://vidsrc.cc/v2/embed/movie/668?autoPlay=false&poster=true",
@@ -2353,7 +2353,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.633Z",
+      "created_at": "2025-08-03T02:43:23.863Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2383,7 +2383,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.838Z",
+      "created_at": "2025-08-03T02:43:24.092Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2414,7 +2414,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.042Z",
+      "created_at": "2025-08-03T02:43:24.315Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2445,7 +2445,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.246Z",
+      "created_at": "2025-08-03T02:43:24.560Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2476,7 +2476,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.449Z",
+      "created_at": "2025-08-03T02:43:24.840Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2507,7 +2507,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.653Z",
+      "created_at": "2025-08-03T02:43:25.169Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2538,7 +2538,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.856Z",
+      "created_at": "2025-08-03T02:43:25.464Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2569,7 +2569,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.060Z",
+      "created_at": "2025-08-03T02:43:25.725Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2600,7 +2600,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.264Z",
+      "created_at": "2025-08-03T02:43:26.067Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2631,7 +2631,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.468Z",
+      "created_at": "2025-08-03T02:43:26.303Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2662,7 +2662,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.674Z",
+      "created_at": "2025-08-03T02:43:26.699Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2693,7 +2693,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.877Z",
+      "created_at": "2025-08-03T02:43:26.921Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2724,7 +2724,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:45.080Z",
+      "created_at": "2025-08-03T02:43:27.162Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2756,7 +2756,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:45.285Z",
+      "created_at": "2025-08-03T02:43:27.393Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2787,7 +2787,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:45.489Z",
+      "created_at": "2025-08-03T02:43:27.606Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2818,7 +2818,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:45.691Z",
+      "created_at": "2025-08-03T02:43:27.819Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2849,7 +2849,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:45.894Z",
+      "created_at": "2025-08-03T02:43:28.028Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -2880,7 +2880,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.599Z",
+      "created_at": "2025-08-03T02:43:22.616Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2909,7 +2909,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.796Z",
+      "created_at": "2025-08-03T02:43:22.940Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2938,7 +2938,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.993Z",
+      "created_at": "2025-08-03T02:43:23.170Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2967,7 +2967,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.189Z",
+      "created_at": "2025-08-03T02:43:23.421Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -2996,7 +2996,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.388Z",
+      "created_at": "2025-08-03T02:43:23.648Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3026,7 +3026,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.584Z",
+      "created_at": "2025-08-03T02:43:23.865Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3055,7 +3055,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.780Z",
+      "created_at": "2025-08-03T02:43:24.094Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3084,7 +3084,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.976Z",
+      "created_at": "2025-08-03T02:43:24.344Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3115,7 +3115,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.172Z",
+      "created_at": "2025-08-03T02:43:24.586Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -3149,7 +3149,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.603Z",
+      "created_at": "2025-08-03T02:43:22.586Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3180,7 +3180,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.803Z",
+      "created_at": "2025-08-03T02:43:22.932Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3211,7 +3211,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.002Z",
+      "created_at": "2025-08-03T02:43:23.167Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3221,7 +3221,7 @@ export const chronologicalMovies: {
       "recommendation_id": "transformers",
       "title": "Transformers",
       "type": "movie",
-      "poster_url": "https://image.tmdb.org/t/p/w500/lkZ9gqCEjzX85lKR6Jjd1uGAXNp.jpg",
+      "poster_url": "https://image.tmdb.org/t/p/w500/1P7w3AImoEOWJX7nn3fdaKDfEQA.jpg",
       "stream_url": [
         "https://vidlink.pro/movie/1858?title=true&poster=true&autoplay=false",
         "https://vidsrc.cc/v2/embed/movie/1858?autoPlay=false&poster=true",
@@ -3242,7 +3242,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.201Z",
+      "created_at": "2025-08-03T02:43:23.422Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3273,7 +3273,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.401Z",
+      "created_at": "2025-08-03T02:43:23.647Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3304,7 +3304,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.602Z",
+      "created_at": "2025-08-03T02:43:23.889Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3335,7 +3335,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.802Z",
+      "created_at": "2025-08-03T02:43:24.101Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3366,7 +3366,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.004Z",
+      "created_at": "2025-08-03T02:43:24.319Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -3399,7 +3399,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.598Z",
+      "created_at": "2025-08-03T02:43:22.585Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3430,7 +3430,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.798Z",
+      "created_at": "2025-08-03T02:43:22.933Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3462,7 +3462,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.997Z",
+      "created_at": "2025-08-03T02:43:23.165Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3494,7 +3494,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.199Z",
+      "created_at": "2025-08-03T02:43:23.421Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3525,7 +3525,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.396Z",
+      "created_at": "2025-08-03T02:43:23.649Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3556,7 +3556,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.597Z",
+      "created_at": "2025-08-03T02:43:23.866Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3587,7 +3587,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.799Z",
+      "created_at": "2025-08-03T02:43:24.094Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3618,7 +3618,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.000Z",
+      "created_at": "2025-08-03T02:43:24.315Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3649,7 +3649,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.200Z",
+      "created_at": "2025-08-03T02:43:24.560Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3680,7 +3680,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.402Z",
+      "created_at": "2025-08-03T02:43:24.835Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3713,7 +3713,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.602Z",
+      "created_at": "2025-08-03T02:43:25.100Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -3746,7 +3746,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.599Z",
+      "created_at": "2025-08-03T02:43:22.594Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3777,7 +3777,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.796Z",
+      "created_at": "2025-08-03T02:43:22.939Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3808,7 +3808,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.993Z",
+      "created_at": "2025-08-03T02:43:23.186Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3839,7 +3839,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.190Z",
+      "created_at": "2025-08-03T02:43:23.437Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3870,7 +3870,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.387Z",
+      "created_at": "2025-08-03T02:43:23.660Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3901,7 +3901,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.583Z",
+      "created_at": "2025-08-03T02:43:23.871Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3932,7 +3932,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.782Z",
+      "created_at": "2025-08-03T02:43:24.134Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3963,7 +3963,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.978Z",
+      "created_at": "2025-08-03T02:43:24.344Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -3994,7 +3994,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.176Z",
+      "created_at": "2025-08-03T02:43:24.590Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4024,7 +4024,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.374Z",
+      "created_at": "2025-08-03T02:43:24.943Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4055,7 +4055,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.571Z",
+      "created_at": "2025-08-03T02:43:25.247Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4086,7 +4086,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.768Z",
+      "created_at": "2025-08-03T02:43:25.467Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4117,7 +4117,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.966Z",
+      "created_at": "2025-08-03T02:43:25.725Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4148,7 +4148,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.165Z",
+      "created_at": "2025-08-03T02:43:26.066Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4179,7 +4179,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:44.364Z",
+      "created_at": "2025-08-03T02:43:26.301Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -4212,7 +4212,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.609Z",
+      "created_at": "2025-08-03T02:43:22.590Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4243,7 +4243,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.810Z",
+      "created_at": "2025-08-03T02:43:22.935Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4273,7 +4273,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.011Z",
+      "created_at": "2025-08-03T02:43:23.167Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4304,7 +4304,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.212Z",
+      "created_at": "2025-08-03T02:43:23.421Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4335,7 +4335,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.414Z",
+      "created_at": "2025-08-03T02:43:23.647Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4366,7 +4366,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.613Z",
+      "created_at": "2025-08-03T02:43:23.865Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -4400,7 +4400,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.596Z",
+      "created_at": "2025-08-03T02:43:22.615Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4432,7 +4432,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.795Z",
+      "created_at": "2025-08-03T02:43:22.941Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4463,7 +4463,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.992Z",
+      "created_at": "2025-08-03T02:43:23.169Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -4495,7 +4495,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.617Z",
+      "created_at": "2025-08-03T02:43:22.702Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4525,7 +4525,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.818Z",
+      "created_at": "2025-08-03T02:43:22.941Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4555,7 +4555,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.021Z",
+      "created_at": "2025-08-03T02:43:23.170Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4585,7 +4585,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.222Z",
+      "created_at": "2025-08-03T02:43:23.422Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4615,7 +4615,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.426Z",
+      "created_at": "2025-08-03T02:43:23.646Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4645,7 +4645,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.631Z",
+      "created_at": "2025-08-03T02:43:23.866Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4675,7 +4675,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.834Z",
+      "created_at": "2025-08-03T02:43:24.094Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4705,7 +4705,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.037Z",
+      "created_at": "2025-08-03T02:43:24.316Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4735,7 +4735,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.241Z",
+      "created_at": "2025-08-03T02:43:24.560Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4765,7 +4765,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.444Z",
+      "created_at": "2025-08-03T02:43:24.834Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4795,7 +4795,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:43.647Z",
+      "created_at": "2025-08-03T02:43:25.100Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -4829,7 +4829,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.608Z",
+      "created_at": "2025-08-03T02:43:22.586Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4861,7 +4861,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.808Z",
+      "created_at": "2025-08-03T02:43:22.933Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4893,7 +4893,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.010Z",
+      "created_at": "2025-08-03T02:43:23.181Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -4927,7 +4927,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.598Z",
+      "created_at": "2025-08-03T02:43:22.615Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4958,7 +4958,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.798Z",
+      "created_at": "2025-08-03T02:43:22.941Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -4989,7 +4989,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.997Z",
+      "created_at": "2025-08-03T02:43:23.169Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5020,7 +5020,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.194Z",
+      "created_at": "2025-08-03T02:43:23.423Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5051,7 +5051,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.391Z",
+      "created_at": "2025-08-03T02:43:23.645Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -5084,7 +5084,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.594Z",
+      "created_at": "2025-08-03T02:43:22.594Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5115,7 +5115,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.796Z",
+      "created_at": "2025-08-03T02:43:22.938Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5147,7 +5147,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.993Z",
+      "created_at": "2025-08-03T02:43:23.167Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -5178,7 +5178,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.621Z",
+      "created_at": "2025-08-03T02:43:22.615Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5209,7 +5209,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.824Z",
+      "created_at": "2025-08-03T02:43:22.940Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5240,7 +5240,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.028Z",
+      "created_at": "2025-08-03T02:43:23.170Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5269,7 +5269,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.231Z",
+      "created_at": "2025-08-03T02:43:23.493Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5299,7 +5299,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.436Z",
+      "created_at": "2025-08-03T02:43:23.708Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }
@@ -5331,7 +5331,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.602Z",
+      "created_at": "2025-08-03T02:43:22.590Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5362,7 +5362,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:41.801Z",
+      "created_at": "2025-08-03T02:43:22.935Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5393,7 +5393,7 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.000Z",
+      "created_at": "2025-08-03T02:43:23.167Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     },
@@ -5424,7 +5424,410 @@ export const chronologicalMovies: {
         "avatar_url": ""
       },
       "visibility": "public",
-      "created_at": "2025-07-22T09:39:42.201Z",
+      "created_at": "2025-08-03T02:43:23.422Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    }
+  ],
+  "alienverseMovies": [
+    {
+      "id": "alien-1",
+      "tmdb_id": 766507,
+      "recommendation_id": "prey",
+      "title": "Prey",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/h58U7d1OZyuWaCWMYvw4mfnv6H3.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/766507?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/766507?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/766507"
+      ],
+      "comment": "In 1719, a skilled Comanche warrior must protect her tribe from a highly evolved Predator.",
+      "year": "2022",
+      "duration": 100,
+      "synopsis": "When danger threatens her camp, the fierce and highly skilled Comanche warrior Naru sets out to protect her people. But the prey she stalks turns out to be a highly evolved alien predator with a technically advanced arsenal.",
+      "genres": [
+        "Thriller",
+        "Action",
+        "Science Fiction"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:22.590Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-2",
+      "tmdb_id": 106,
+      "recommendation_id": "predator",
+      "title": "Predator",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/vQhYhYsOBECkQzvSC3jInKv9CLf.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/106?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/106?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/106"
+      ],
+      "comment": "An elite military team is hunted by an extraterrestrial warrior in the Central American jungle.",
+      "year": "1987",
+      "duration": 107,
+      "synopsis": "A team of elite commandos on a secret mission in a Central American jungle come to find themselves hunted by an extraterrestrial warrior.",
+      "genres": [
+        "Science Fiction",
+        "Action",
+        "Adventure",
+        "Thriller"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:22.933Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-3",
+      "tmdb_id": 169,
+      "recommendation_id": "predator-2",
+      "title": "Predator 2",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/83X4VwY9sdSJykskmsplIVG0a4h.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/169?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/169?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/169"
+      ],
+      "comment": "A Predator stalks the urban battlegrounds of 1990s Los Angeles.",
+      "year": "1990",
+      "duration": 108,
+      "synopsis": "A police chief in the war-torn streets of Los Angeles discovers that an extraterrestrial creature is hunting down residents - and that he is the next target.",
+      "genres": [
+        "Science Fiction",
+        "Action",
+        "Thriller"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:23.255Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-4",
+      "tmdb_id": 346910,
+      "recommendation_id": "the-predator",
+      "title": "The Predator",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/a3eWGF6YPF7No5Rbtjc8QpDvz7l.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/346910?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/346910?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/346910"
+      ],
+      "comment": "A group of ex-soldiers and a scientist confront a hybrid Predator threatening Earth.",
+      "year": "2018",
+      "duration": 107,
+      "synopsis": "When a young boy accidentally triggers the universe's most lethal hunters' return to Earth, only a ragtag crew of ex-soldiers and a disgruntled scientist can prevent the end of the human race.",
+      "genres": [
+        "Science Fiction",
+        "Action",
+        "Thriller"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:23.565Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-5",
+      "tmdb_id": 34851,
+      "recommendation_id": "predators",
+      "title": "Predators",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/sx5EuckP7SBQrlMlxg0PLt282WS.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/34851?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/34851?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/34851"
+      ],
+      "comment": "Humans are abducted and dropped on an alien planet for sport by Predators.",
+      "year": "2010",
+      "duration": 107,
+      "synopsis": "A group of cold-blooded killers find themselves trapped on an alien planet to be hunted by extraterrestrial Predators.",
+      "genres": [
+        "Science Fiction",
+        "Action",
+        "Thriller"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:23.812Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-6",
+      "tmdb_id": 70981,
+      "recommendation_id": "prometheus",
+      "title": "Prometheus",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/m7nZCtHJyDLncBUarfM5h5mrppx.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/70981?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/70981?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/70981"
+      ],
+      "comment": "Explorers search for humanity's origins on an alien world, uncovering dark secrets.",
+      "year": "2012",
+      "duration": 124,
+      "synopsis": "A team of explorers discover a clue to the origins of mankind on Earth, leading them on a journey to the darkest corners of the universe. There, they must fight a terrifying battle to save the future of the human race.",
+      "genres": [
+        "Science Fiction",
+        "Adventure",
+        "Mystery"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:24.021Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-7",
+      "tmdb_id": 126889,
+      "recommendation_id": "alien-covenant",
+      "title": "Alien: Covenant",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/zecMELPbU5YMQpC81Z8ImaaXuf9.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/126889?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/126889?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/126889"
+      ],
+      "comment": "A colonization mission uncovers a deadly threat and the origins of the xenomorph.",
+      "year": "2017",
+      "duration": 122,
+      "synopsis": "The crew of the colony ship Covenant, bound for a remote planet on the far side of the galaxy, discovers what they think is an uncharted paradise but is actually a dark, dangerous world.",
+      "genres": [
+        "Horror",
+        "Science Fiction",
+        "Thriller"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:24.232Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-9",
+      "tmdb_id": 348,
+      "recommendation_id": "alien",
+      "title": "Alien",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/vfrQk5IPloGg1v9Rzbh2Eg3VGyM.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/348?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/348?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/348"
+      ],
+      "comment": "The Nostromo crew battles a deadly alien organism that infiltrated their ship.",
+      "year": "1979",
+      "duration": 117,
+      "synopsis": "During its return to the earth, commercial spaceship Nostromo intercepts a distress signal from a distant planet. When a three-member team of the crew discovers a chamber containing thousands of eggs on the planet, a creature inside one of the eggs attacks an explorer. The entire crew is unaware of the impending nightmare set to descend upon them when the alien parasite planted inside its unfortunate host is birthed.",
+      "genres": [
+        "Horror",
+        "Science Fiction"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:24.455Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-10",
+      "tmdb_id": 945961,
+      "recommendation_id": "alien-romulus",
+      "title": "Alien: Romulus",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/b33nnKl1GSFbao4l3fZDDqsMx0F.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/945961?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/945961?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/945961"
+      ],
+      "comment": "A young crew on a derelict space station encounters the terror of the xenomorphs.",
+      "year": "2024",
+      "duration": 119,
+      "synopsis": "While scavenging the deep ends of a derelict space station, a group of young space colonizers come face to face with the most terrifying life form in the universe.",
+      "genres": [
+        "Horror",
+        "Science Fiction"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:24.934Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-11",
+      "tmdb_id": 679,
+      "recommendation_id": "aliens",
+      "title": "Aliens",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/r1x5JGpyqZU8PYhbs4UcrO1Xb6x.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/679?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/679?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/679"
+      ],
+      "comment": "Ripley returns to LV-426 with Colonial Marines to eliminate the xenomorph infestation.",
+      "year": "1986",
+      "duration": 137,
+      "synopsis": "Ripley, the sole survivor of the Nostromo's deadly encounter with the monstrous Alien, returns to Earth after drifting through space in hypersleep for 57 years. Although her story is initially met with skepticism, she agrees to accompany a team of Colonial Marines back to LV-426.",
+      "genres": [
+        "Action",
+        "Thriller",
+        "Science Fiction"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:25.241Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-12",
+      "tmdb_id": 8077,
+      "recommendation_id": "alien-3",
+      "title": "Alien³",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/xh5wI0UoW7DfS1IyLy3d2CgrCEP.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/8077?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/8077?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/8077"
+      ],
+      "comment": "Trapped in a prison colony, Ripley must face a new alien without weapons or tech.",
+      "year": "1992",
+      "duration": 114,
+      "synopsis": "After escaping with Newt and Hicks from the alien planet, Ripley crash lands on Fiorina 161, a prison planet and host to a correctional facility. Unfortunately, although Newt and Hicks do not survive the crash, a more unwelcome visitor does. The prison does not allow weapons of any kind, and with aid being a long time away, the prisoners must simply survive in any way they can.",
+      "genres": [
+        "Science Fiction",
+        "Action",
+        "Horror"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:25.463Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-13",
+      "tmdb_id": 8078,
+      "recommendation_id": "alien-resurrection",
+      "title": "Alien Resurrection",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/9aRDMlU5Zwpysilm0WCWzU2PCFv.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/8078?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/8078?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/8078"
+      ],
+      "comment": "Two centuries after her death, Ripley is cloned—and so is the xenomorph.",
+      "year": "1997",
+      "duration": 109,
+      "synopsis": "Two hundred years after Lt. Ripley died, a group of scientists clone her, hoping to breed the ultimate weapon. But the new Ripley is full of surprises … as are the new aliens. Ripley must team with a band of smugglers to keep the creatures from reaching Earth.",
+      "genres": [
+        "Science Fiction",
+        "Horror",
+        "Action"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:25.805Z",
+      "is_tmdb_recommendation": true,
+      "generated_by_ai": false
+    },
+    {
+      "id": "alien-14",
+      "tmdb_id": 1242898,
+      "recommendation_id": "predator-badlands",
+      "title": "Predator: Badlands",
+      "type": "movie",
+      "poster_url": "https://image.tmdb.org/t/p/w500/pHpq9yNUIo6aDoCXEBzjSolywgz.jpg",
+      "stream_url": [
+        "https://vidlink.pro/movie/1242898?title=true&poster=true&autoplay=false",
+        "https://vidsrc.cc/v2/embed/movie/1242898?autoPlay=false&poster=true",
+        "https://vidsrc.to/embed/movie/1242898"
+      ],
+      "comment": "A Predator hunts elite soldiers in a remote desert battlefield.",
+      "year": "2025",
+      "duration": 0,
+      "synopsis": "In the future on a remote planet, a young Predator, outcast from his clan, finds an unlikely ally in Thia and embarks on a treacherous journey in search of the ultimate adversary.",
+      "genres": [
+        "Action",
+        "Science Fiction"
+      ],
+      "recommended_by": {
+        "id": "tmdb",
+        "username": "",
+        "avatar_url": ""
+      },
+      "visibility": "public",
+      "created_at": "2025-08-03T02:43:26.251Z",
       "is_tmdb_recommendation": true,
       "generated_by_ai": false
     }

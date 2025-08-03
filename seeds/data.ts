@@ -1102,3 +1102,95 @@ export const JOHNWICK_CHRONOLOGY = [
     comment: "Final showdown in Paris & beyond.",
   },
 ];
+
+export const ALIENVERSE_CHRONOLOGY = [
+  {
+    id: "alien-1",
+    tmdb_id: 766507, // Prey
+    recommendation_id: "prey",
+    comment:
+      "In 1719, a skilled Comanche warrior must protect her tribe from a highly evolved Predator.",
+  },
+  {
+    id: "alien-2",
+    tmdb_id: 106, // Predator
+    recommendation_id: "predator",
+    comment:
+      "An elite military team is hunted by an extraterrestrial warrior in the Central American jungle.",
+  },
+  {
+    id: "alien-3",
+    tmdb_id: 169, // Predator 2
+    recommendation_id: "predator-2",
+    comment: "A Predator stalks the urban battlegrounds of 1990s Los Angeles.",
+  },
+  {
+    id: "alien-4",
+    tmdb_id: 346910, // The Predator
+    recommendation_id: "the-predator",
+    comment:
+      "A group of ex-soldiers and a scientist confront a hybrid Predator threatening Earth.",
+  },
+  {
+    id: "alien-5",
+    tmdb_id: 34851, // Predators
+    recommendation_id: "predators",
+    comment:
+      "Humans are abducted and dropped on an alien planet for sport by Predators.",
+  },
+  {
+    id: "alien-6",
+    tmdb_id: 70981, // Prometheus
+    recommendation_id: "prometheus",
+    comment:
+      "Explorers search for humanity's origins on an alien world, uncovering dark secrets.",
+  },
+  {
+    id: "alien-7",
+    tmdb_id: 126889, // Alien: Covenant
+    recommendation_id: "alien-covenant",
+    comment:
+      "A colonization mission uncovers a deadly threat and the origins of the xenomorph.",
+  },
+  {
+    id: "alien-9",
+    tmdb_id: 348, // Alien
+    recommendation_id: "alien",
+    comment:
+      "The Nostromo crew battles a deadly alien organism that infiltrated their ship.",
+  },
+  {
+    id: "alien-10",
+    tmdb_id: 945961, // Alien: Romulus
+    recommendation_id: "alien-romulus",
+    comment:
+      "A young crew on a derelict space station encounters the terror of the xenomorphs.",
+  },
+  {
+    id: "alien-11",
+    tmdb_id: 679, // Aliens
+    recommendation_id: "aliens",
+    comment:
+      "Ripley returns to LV-426 with Colonial Marines to eliminate the xenomorph infestation.",
+  },
+  {
+    id: "alien-12",
+    tmdb_id: 8077, // Alien 3
+    recommendation_id: "alien-3",
+    comment:
+      "Trapped in a prison colony, Ripley must face a new alien without weapons or tech.",
+  },
+  {
+    id: "alien-13",
+    tmdb_id: 8078, // Alien: Resurrection
+    recommendation_id: "alien-resurrection",
+    comment:
+      "Two centuries after her death, Ripley is cloned—and so is the xenomorph.",
+  },
+  {
+    id: "alien-14",
+    tmdb_id: 1242898,
+    recommendation_id: "predator-badlands",
+    comment: "A Predator hunts elite soldiers in a remote desert battlefield.",
+  },
+];

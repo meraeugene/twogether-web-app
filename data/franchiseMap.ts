@@ -36,6 +36,10 @@ export const franchiseMap: Record<
     name: "Transformers Chronology",
     movies: chronologicalMovies.transformersMovies,
   },
+  alienverse: {
+    name: "AlienVerse Chronology",
+    movies: chronologicalMovies.alienverseMovies,
+  },
   "maze-runner": {
     name: "Maze Runner Chronology",
     movies: chronologicalMovies.mazeRunnerMovies,
