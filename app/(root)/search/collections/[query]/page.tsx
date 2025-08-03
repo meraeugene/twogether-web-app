@@ -54,7 +54,7 @@ export default async function BingeSearchPage({
           <p>
             No results found for{" "}
             <span className="text-white font-semibold italic">
-              "{decodedQuery}"
+              &quot;{decodedQuery}&quot;
             </span>
             .
           </p>
