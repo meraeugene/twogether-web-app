@@ -50,9 +50,17 @@ export default async function BingeSearchPage({
       </Link>
 
       {sortedResults.length === 0 ? (
-        <p className="text-white/60 text-sm md:text-base lg:text-lg text-center lg:text-left">
-          No results found.
-        </p>
+        <div className="text-left text-sm md:text-base lg:text-lg text-white/70  space-y-2">
+          <p>
+            No results found for{" "}
+            <span className="text-white font-semibold italic">
+              "{decodedQuery}"
+            </span>
+            .
+          </p>
+          <p>This might be due to a typo or the collection may not exist.</p>
+          <p>Try refining your search or using different keywords.</p>
+        </div>
       ) : (
         <div className="space-y-10">
           {sortedResults.map((collection) => (

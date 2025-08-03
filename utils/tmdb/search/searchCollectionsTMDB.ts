@@ -35,7 +35,13 @@ export async function getBingeCollectionsByQuery(
       const details: TMDBMovieDetails = await detailsRes.json();
 
       const collection = details.belongs_to_collection;
-      if (!collection || collectionsMap[collection.id]) return;
+      if (
+        !collection ||
+        collectionsMap[collection.id] ||
+        !collection.name.toLowerCase().includes(query.toLowerCase())
+      ) {
+        return;
+      }
 
       const colRes = await fetch(
         `${BASE_URL}/collection/${collection.id}?api_key=${API_KEY}`,

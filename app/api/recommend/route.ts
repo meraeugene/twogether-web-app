@@ -129,9 +129,12 @@ export async function GET(req: NextRequest) {
 
   // Remove entries with no poster or 0/missing duration
   const cleanedResults = enrichedResults.filter((item) => {
-    if (!item.poster_url) return false;
-    if (!item.duration || item.duration === 0) return false;
-    return true;
+    const title = item.title?.toLowerCase() || "";
+    const isStrongMatch = title.includes(query.toLowerCase());
+    const hasValidPoster = !!item.poster_url;
+    const hasValidDuration = item.duration && item.duration > 0;
+
+    return isStrongMatch && hasValidPoster && hasValidDuration;
   });
 
   // Cache it

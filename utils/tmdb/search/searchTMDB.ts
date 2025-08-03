@@ -104,10 +104,17 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
     });
 
   const cleanedResults = enrichedResultsSorted.filter((item) => {
+    const isStrongTitleMatch = item.title
+      ?.toLowerCase()
+      .includes(query.toLowerCase());
+    const isEnglish = item.original_language === "en";
+
     if (item.type === "movie") {
-      return item.duration && item.duration > 0;
+      return (
+        item.duration && item.duration > 0 && isEnglish && isStrongTitleMatch
+      );
     }
-    return true;
+    return isEnglish && isStrongTitleMatch;
   });
 
   return cleanedResults;

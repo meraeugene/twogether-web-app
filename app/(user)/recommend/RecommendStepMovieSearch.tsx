@@ -78,6 +78,11 @@ export default function RecommendStepMovieSearch({
     <div className="space-y-6 font-[family-name:var(--font-geist-mono)]">
       <input
         value={query}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
+        }}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search a movie or show"
         className="w-full p-4  mb-0 rounded-lg bg-black/80 text-white placeholder-white/40 border border-white/10 text-lg"

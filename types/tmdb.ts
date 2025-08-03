@@ -34,6 +34,7 @@ export type TMDBEnrichedResult = TMDBRawResult & {
   seasons?: number; // for TV shows
   episodes?: number; // for TV shows
   episodeTitlesPerSeason?: Record<number, EpisodeTitle[]>;
+  original_language?: string; // e.g. 'en' for English
 };
 
 export type TMDBResponse = {
