@@ -148,6 +148,7 @@ export default function WatchInfo({
               <Image
                 src={recommendation.recommended_by.avatar_url}
                 alt="Avatar"
+                unoptimized
                 width={28}
                 height={28}
                 className="w-[28px] h-[28px] object-cover"
@@ -169,6 +170,7 @@ export default function WatchInfo({
             <Image
               src={recommendation.recommended_by.avatar_url}
               alt="Avatar"
+              unoptimized
               width={28}
               height={28}
               className="rounded-full"

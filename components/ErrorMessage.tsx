@@ -19,6 +19,7 @@ export default function ErrorMessage() {
 
         <Image
           src="/error.png"
+          unoptimized
           alt="error illustration"
           width={400}
           height={400}

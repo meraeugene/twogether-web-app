@@ -135,6 +135,7 @@ export default function MessageThreadView({
             src={otherUserAvatar || "/default-avatar.png"}
             alt={otherUserDisplayName}
             width={36}
+            unoptimized
             height={36}
             className="rounded-full object-cover"
           />

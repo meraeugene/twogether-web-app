@@ -110,6 +110,7 @@ export default function MessageRequestList({
                 src={request.other_user_avatar_url || "/default-avatar.png"}
                 alt="avatar"
                 width={44}
+                unoptimized
                 height={44}
                 className="object-cover w-full h-full"
               />

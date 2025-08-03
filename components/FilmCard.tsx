@@ -272,6 +272,7 @@ export default function FilmCard({
                           src={item.recommended_by.avatar_url}
                           alt={item.recommended_by.username}
                           width={24}
+                          unoptimized
                           height={24}
                           className="rounded-full object-cover"
                         />

@@ -172,6 +172,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                   <Image
                     src={preview}
                     alt="Avatar"
+                    unoptimized
                     fill
                     className="object-cover"
                   />
@@ -179,6 +180,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                   <Image
                     src={preview}
                     alt="Avatar"
+                    unoptimized
                     fill
                     className="object-cover"
                   />

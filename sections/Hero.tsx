@@ -99,6 +99,7 @@ const Hero = ({ user }: HeroProps) => {
           <Image
             src="/hero.webp"
             alt="hero"
+            unoptimized
             fill
             className="object-cover rounded-2xl"
             draggable={false}

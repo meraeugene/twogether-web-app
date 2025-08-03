@@ -107,6 +107,7 @@ export default function RecommendStepMovieSearch({
                       src={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
                       alt={item.title || item.name || "poster"}
                       fill
+                      unoptimized
                       sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
                       className="object-cover"
                     />

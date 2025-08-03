@@ -202,6 +202,7 @@ export default function TabbedProfileView({
             <Image
               src={user.avatar_url || "/default-avatar.png"}
               alt="avatar"
+              unoptimized
               width={96}
               height={96}
               className="rounded-full  shadow-lg  object-cover w-21 h-21"

@@ -12,6 +12,7 @@ export const data = [
         <Image
           src="/demo/step1.png"
           width={500}
+          unoptimized
           height={500}
           alt="Search step"
           className="object-cover w-full h-auto border border-white/10 rounded-md shadow-sm"
@@ -31,6 +32,7 @@ export const data = [
           src="/demo/step2.png"
           width={500}
           height={500}
+          unoptimized
           alt="Comment step"
           className="object-cover w-full h-auto border border-white/10 rounded-md shadow-sm"
         />
@@ -49,6 +51,7 @@ export const data = [
         <Image
           src="/demo/step3.png"
           width={500}
+          unoptimized
           height={500}
           alt="Rating step"
           className="object-cover w-full h-auto border border-white/10 rounded-md shadow-sm"
@@ -66,6 +69,7 @@ export const data = [
         </p>
         <Image
           src="/demo/step4.png"
+          unoptimized
           width={500}
           height={500}
           alt="Visibility step"

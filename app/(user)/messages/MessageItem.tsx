@@ -46,6 +46,7 @@ export function MessageItem({
             key={i}
             src={customEmojis[part]}
             alt={part}
+            unoptimized
             width={72}
             height={72}
             className="inline-block align-middle object-cover w-[72px] h-auto"
@@ -79,6 +80,7 @@ export function MessageItem({
           <div className="w-8 h-8 rounded-full overflow-hidden">
             <Image
               width={32}
+              unoptimized
               height={32}
               src={avatarUrl || "/default-avatar.png"}
               alt="user"

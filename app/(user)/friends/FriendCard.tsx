@@ -149,6 +149,7 @@ export function FriendCard({
       <div className="flex items-start gap-4 mb-5">
         <div className="w-12 h-12 rounded-full overflow-hidden">
           <Image
+            unoptimized
             src={avatarUrl || "/default-avatar.png"}
             alt="avatar"
             width={48}

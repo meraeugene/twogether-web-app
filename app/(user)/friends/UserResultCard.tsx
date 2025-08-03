@@ -45,6 +45,7 @@ export function UserResultCard({
       <div className="flex items-center gap-4">
         <Image
           src={user.avatar_url || "/default-avatar.png"}
+          unoptimized
           alt="avatar"
           width={48}
           height={48}

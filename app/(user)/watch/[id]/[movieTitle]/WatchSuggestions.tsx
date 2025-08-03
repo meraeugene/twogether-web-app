@@ -22,6 +22,7 @@ export default function WatchSuggestions({
               <Image
                 src={rec.poster_url || "/placeholder.png"}
                 alt={rec.title}
+                unoptimized
                 sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
                 fill
                 className="object-cover w-full h-full transition duration-300 group-hover:brightness-50 rounded-lg"
@@ -107,6 +108,7 @@ export default function WatchSuggestions({
                       src={rec.recommended_by.avatar_url}
                       alt={rec.recommended_by.username}
                       width={24}
+                      unoptimized
                       height={24}
                       className="rounded-full object-cover"
                     />

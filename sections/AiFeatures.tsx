@@ -59,6 +59,7 @@ const AiFeatures = () => {
             >
               <Image
                 src={src}
+                unoptimized
                 alt={`Feature ${i + 1}`}
                 width={500}
                 height={300}

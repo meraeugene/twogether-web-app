@@ -109,6 +109,7 @@ const RecommendPage = () => {
                 <Image
                   src={form.poster_url}
                   alt={form.title}
+                  unoptimized
                   fill
                   sizes="(max-width: 768px) 50vw"
                   className="object-cover"

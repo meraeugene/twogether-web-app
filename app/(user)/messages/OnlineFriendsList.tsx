@@ -75,6 +75,7 @@ export default function OnlineFriendsList({
                 src={friend.avatar_url || "/default-avatar.png"}
                 alt={friend.display_name || friend.username}
                 width={44}
+                unoptimized
                 height={44}
                 className="rounded-full object-cover"
               />

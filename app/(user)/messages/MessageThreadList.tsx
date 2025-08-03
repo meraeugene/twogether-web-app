@@ -122,6 +122,7 @@ export default function MessageThreadList({
             <div className="w-11 h-11 rounded-full overflow-hidden">
               <Image
                 width={44}
+                unoptimized
                 height={44}
                 className="rounded-full object-cover"
                 src={thread.other_avatar_url || "/default-avatar.png"}

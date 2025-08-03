@@ -15,7 +15,7 @@ export default function CustomEmojiPicker({
           title={code}
           className="transition-transform transform hover:scale-110 hover:bg-white/10 rounded cursor-pointer p-1"
         >
-          <Image src={url} alt={code} width={44} height={44} />
+          <Image unoptimized src={url} alt={code} width={44} height={44} />
         </button>
       ))}
     </div>

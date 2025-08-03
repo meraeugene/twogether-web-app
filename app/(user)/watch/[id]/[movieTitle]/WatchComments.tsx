@@ -208,6 +208,7 @@ export default function WatchComments({
                         src={comment.user?.avatar_url || "/default-avatar.png"}
                         alt={comment.user?.username || "User"}
                         width={40}
+                        unoptimized
                         height={40}
                         className="rounded-full object-cover aspect-square"
                       />
@@ -281,6 +282,7 @@ export default function WatchComments({
                             src={
                               reply.user?.avatar_url || "/default-avatar.png"
                             }
+                            unoptimized
                             alt={reply.user?.username || "User"}
                             width={32}
                             height={32}

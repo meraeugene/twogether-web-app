@@ -48,6 +48,7 @@ export const ProfileMenu = ({ user }: Props) => {
         <Image
           src={user.avatar_url}
           alt="Avatar"
+          unoptimized
           width={40}
           height={40}
           className="w-full h-full object-cover rounded-full "
