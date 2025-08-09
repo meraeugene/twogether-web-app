@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { FaPlayCircle } from "react-icons/fa";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
 import { AnimatedTextCycle } from "@/components/ui/AnimatedTextCycle";
 import { SiPlayerdotme } from "react-icons/si";
 import { HeroScrollPreview } from "@/components/ui/HeroScrollPreview";
@@ -37,18 +36,8 @@ const Hero = ({ user }: HeroProps) => {
         titleComponent={
           <>
             {/* Headline + Button */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="space-y-8"
-            >
-              <motion.h1
-                className="text-5xl lg:text-7xl font-bold leading-tight"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
+            <div className="space-y-8">
+              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
                 Watch{" "}
                 <span className="text-red-500">
                   <AnimatedTextCycle
@@ -59,24 +48,14 @@ const Hero = ({ user }: HeroProps) => {
                 </span>
                 <br />
                 Wherever You Are
-              </motion.h1>
+              </h1>
 
-              <motion.p
-                className="text-base md:text-lg xl:text-xl text-gray-300 max-w-2xl mx-auto font-[family-name:var(--font-geist-mono)]"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                style={{ fontFamily: "var(--font-geist-mono)" }}
-              >
+              <p className="text-base md:text-lg xl:text-xl text-gray-300 max-w-2xl mx-auto font-[family-name:var(--font-geist-mono)]">
                 Discover, and watch over movies and shows with others. Built for
                 connection, built for fun.
-              </motion.p>
+              </p>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              >
+              <div>
                 <button
                   onClick={handleClick}
                   className="bg-red-600 hover:bg-red-700 hover:shadow-[0_0_20px_rgba(255,0,0,0.4)] text-white px-6 py-3 rounded-lg text-lg font-semibold flex items-center gap-3 justify-center cursor-pointer transition-all duration-300 mx-auto font-[family-name:var(--font-geist-mono)]"
@@ -84,18 +63,13 @@ const Hero = ({ user }: HeroProps) => {
                   <FaPlayCircle className="text-xl" />
                   Start TWOGETHER
                 </button>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </>
         }
       >
         {/* IMAGE BACKGROUND WITH OVERLAY */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="relative w-full h-full"
-        >
+        <div className="relative w-full h-full">
           <Image
             src="/hero.webp"
             alt="hero"
@@ -129,7 +103,7 @@ const Hero = ({ user }: HeroProps) => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </HeroScrollPreview>
     </section>
   );

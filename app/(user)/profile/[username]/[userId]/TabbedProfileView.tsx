@@ -414,6 +414,7 @@ export default function TabbedProfileView({
                             <Image
                               src={friend.avatar_url || "/default-avatar.png"}
                               alt="avatar"
+                              unoptimized
                               width={48}
                               height={48}
                               className="rounded-full object-cover"
