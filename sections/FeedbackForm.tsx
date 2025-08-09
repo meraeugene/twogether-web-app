@@ -65,7 +65,7 @@ const FeedbackForm = () => {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-5 py-3 text-lg rounded-sm border border-white/10 bg-transparent text-white font-[family-name:var(--font-geist-mono)] placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
+            className="w-full px-5 py-3  rounded-sm border border-white/10 bg-transparent text-white font-[family-name:var(--font-geist-mono)] placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
             placeholder="Joe Goldberg"
           />
         </div>
@@ -84,7 +84,7 @@ const FeedbackForm = () => {
             required
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="w-full font-[family-name:var(--font-geist-mono)] px-5 py-3 text-lg rounded-sm border border-white/10 bg-transparent text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-red-500/50 resize-none transition"
+            className="w-full font-[family-name:var(--font-geist-mono)] px-5 py-3 rounded-sm border border-white/10 bg-transparent text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-red-500/50 resize-none transition"
             placeholder="Share what you love, or tell us how we can improve..."
           />
         </div>
