@@ -91,7 +91,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
         ${isExpanded ? "rounded-3xl" : "rounded-full"}`}
     >
       {/* Desktop Menu */}
-      <div className="relative z-10 flex justify-between gap-12 text-nowrap items-center px-4 md:px-8 2xl:px-6 py-3">
+      <div className="relative z-10 flex justify-between gap-10 text-nowrap items-center px-4 md:px-8 2xl:px-6 py-3">
         <Link
           href="/"
           onClick={() => setMenuOpen(false)}
