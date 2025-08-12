@@ -1,8 +1,6 @@
 import { EpisodeTitle } from "./tmdb";
 
 export type Genre =
-  | "Trending"
-  | "Popular"
   | "Action"
   | "Adventure"
   | "Animation"
