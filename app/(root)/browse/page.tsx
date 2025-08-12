@@ -11,7 +11,7 @@ export default function BrowsePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const initialGenre = searchParams.get("genre") || "Action";
+  const initialGenre = searchParams.get("genre") || "Trending";
   const [selectedGenre, setSelectedGenre] = useState(initialGenre);
   const [searchQuery, setSearchQuery] = useState("");
 

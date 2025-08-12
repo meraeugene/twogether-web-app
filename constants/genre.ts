@@ -1,6 +1,8 @@
 import { Genre } from "@/types/formTypes";
 
 export const GENRES: Genre[] = [
+  "Trending",
+  "Popular",
   "Action",
   "Adventure",
   "Animation",

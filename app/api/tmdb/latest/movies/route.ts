@@ -14,13 +14,19 @@ export async function GET(req: NextRequest) {
   const genreParam = req.nextUrl.searchParams.get("genre");
   const page = Number(req.nextUrl.searchParams.get("page") || "1");
 
-  if (!genreParam || !isGenre(genreParam)) {
-    return NextResponse.json({ error: "Invalid genre" }, { status: 400 });
+  let url: string;
+
+  if (genreParam && isGenre(genreParam)) {
+    // Genre-specific movies
+    const genreId = TMDB_GENRE_MAP[genreParam];
+    url = `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&include_adult=false&certification_country=US&certification.lte=PG-13&api_key=${API_KEY}&page=${page}`;
+  } else if (genreParam === "Popular") {
+    // Popular movies
+    url = `${BASE_URL}/movie/popular?language=en-US&region=US&page=${page}&api_key=${API_KEY}`;
+  } else {
+    // Default to trending
+    url = `${BASE_URL}/trending/movie/week?api_key=${API_KEY}&page=${page}`;
   }
-
-  const genreId = TMDB_GENRE_MAP[genreParam];
-
-  const url = `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&include_adult=false&certification_country=US&certification.lte=PG-13&api_key=${API_KEY}&page=${page}`;
 
   const res = await fetch(url, {
     // cache for 24 hours, consider `force-cache` if you want it 100% static

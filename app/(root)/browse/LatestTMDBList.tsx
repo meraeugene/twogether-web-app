@@ -15,7 +15,9 @@ export default function LatestTMDBList({ genre }: { genre: string }) {
   const loaderRef = useRef<HTMLDivElement>(null);
 
   const getKey = (pageIndex: number) =>
-    `/api/tmdb/latest/movies?genre=${genre}&page=${pageIndex + 1}`;
+    `/api/tmdb/latest/movies?${
+      genre && genre !== "Latest" ? `genre=${genre}&` : ""
+    }page=${pageIndex + 1}`;
 
   const { data, size, setSize, isValidating } = useSWRInfinite<
     TMDBEnrichedResult[]
