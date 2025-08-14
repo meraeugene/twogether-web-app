@@ -14,7 +14,7 @@ export async function updateUserProfile(formData: FormData, username: string) {
     "relationship_status",
     "prefers",
   ];
-  const updates: Record<string, any> = {};
+  const updates: Record<string, string | string[]> = {};
 
   fields.forEach((field) => {
     const value = formData.get(field);

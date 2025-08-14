@@ -2,7 +2,6 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { Recommendation } from "@/types/recommendation";
-import { getCurrentUser } from "./authActions";
 
 export async function getSuggestions(
   currentId: number,

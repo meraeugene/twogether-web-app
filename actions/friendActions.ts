@@ -1,5 +1,5 @@
 "use server";
-import { FriendRequestStatus, OnlineFriend } from "@/types/friends";
+import { FriendRequestStatus } from "@/types/friends";
 import { createClient } from "@/utils/supabase/server";
 
 export async function searchUsersByUsernamePrefix(query: string) {

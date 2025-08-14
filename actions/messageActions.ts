@@ -161,7 +161,7 @@ export async function getOrCreateThread(user1Id: string, user2Id: string) {
   const [u1, u2] = [user1Id, user2Id].sort();
 
   // Check if users are friends (before doing anything else)
-  const { data: friendship, error: friendError } = await supabase
+  const { data: friendship } = await supabase
     .from("friend_requests")
     .select("id")
     .or(
