@@ -67,7 +67,7 @@ export default async function RootLayout({
         <link rel="icon" href="/icon.ico" type="image/x-icon" sizes="any" />
         {/* <link rel="manifest" href="/manifest.json" /> */}
         <link rel="apple-touch-icon" href="/logo.png" />
-        <meta name="theme-color" content="#c13c4e" />
+        <meta name="theme-color" content="#010101" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta
