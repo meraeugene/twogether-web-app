@@ -52,7 +52,7 @@ export default function CookieConsentBanner() {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="fixed font-[family-name:var(--font-geist-sans)] bottom-4 left-1/2 -translate-x-1/2 w-[90%] md:w-[450px] bg-white/10 backdrop-blur-lg border border-white/20 text-white px-5 py-4 rounded-xl shadow-xl z-50"
+          className="fixed font-[family-name:var(--font-geist-sans)] bottom-4 left-1/2 -translate-x-1/2 w-[90%] md:w-[450px] bg-white/10 backdrop-blur-lg border border-white/20 text-white px-5 py-4 rounded-xl shadow-xl z-[100]"
         >
           <div className="text-sm md:text-base mb-4">
             We uses cookies to keep you logged in, remember your preferences,
