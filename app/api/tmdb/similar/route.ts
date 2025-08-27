@@ -11,7 +11,6 @@ const BASE_URL = "https://api.themoviedb.org/3";
 export async function GET(req: NextRequest) {
   const tmdbId = req.nextUrl.searchParams.get("id");
   const type = req.nextUrl.searchParams.get("type") || "movie";
-  const page = req.nextUrl.searchParams.get("page") || "1";
 
   if (!tmdbId) {
     return NextResponse.json({ error: "Missing TMDB ID" }, { status: 400 });
@@ -19,7 +18,7 @@ export async function GET(req: NextRequest) {
 
   // Fetch recommendations
   const recRes = await fetch(
-    `${BASE_URL}/${type}/${tmdbId}/recommendations?api_key=${API_KEY}&page=${page}`,
+    `${BASE_URL}/${type}/${tmdbId}/recommendations?api_key=${API_KEY}&page=1`,
     { cache: "no-store" }
   );
   const recData = await recRes.json();
@@ -33,8 +32,8 @@ export async function GET(req: NextRequest) {
     (item: TMDBEnrichedResult) => item.release_date || item.first_air_date
   );
 
-  // only take first 6 per page
-  const sliced = filtered.slice(0, 6);
+  // only take first 18
+  const sliced = filtered.slice(0, 18);
 
   // fetch details for each
   const detailedResults = await Promise.all(
@@ -107,6 +106,6 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     results: detailedResults.filter(Boolean),
-    total_pages: recData.total_pages,
+    total_pages: 1,
   });
 }

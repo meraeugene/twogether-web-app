@@ -18,6 +18,8 @@ type SWRResponse = {
   total_pages: number;
 };
 
+const ITEMS_PER_SLIDE = 6; // client will show 6 per slide
+
 export default function TMDBSuggestions({
   tmdbId,
   type,
@@ -25,20 +27,33 @@ export default function TMDBSuggestions({
   tmdbId: number | string;
   type: string;
 }) {
-  const [page, setPage] = useState(1);
+  const [slide, setSlide] = useState(0); // client slide within 18 items
 
   const { data, isLoading } = useSWR<SWRResponse>(
-    tmdbId ? `/api/tmdb/similar?id=${tmdbId}&type=${type}&page=${page}` : null,
+    tmdbId ? `/api/tmdb/similar?id=${tmdbId}&type=${type}&page=1` : null,
     fetcher
   );
 
   const setCurrentTMDB = useTMDBWatch((s) => s.setCurrentTMDB);
-
   const suggestions = data?.results || [];
-  const totalPages = data?.total_pages || 1;
+  const totalSlides = Math.ceil(suggestions.length / ITEMS_PER_SLIDE);
 
   if (isLoading) return <TMDBSuggestionSkeleton />;
   if (!suggestions || suggestions.length === 0) return null;
+
+  // current 6-item slide
+  const currentItems = suggestions.slice(
+    slide * ITEMS_PER_SLIDE,
+    slide * ITEMS_PER_SLIDE + ITEMS_PER_SLIDE
+  );
+
+  const handleNext = () => {
+    if (slide < totalSlides - 1) setSlide(slide + 1);
+  };
+
+  const handlePrev = () => {
+    if (slide > 0) setSlide(slide - 1);
+  };
 
   return (
     <section className="mt-16">
@@ -47,15 +62,15 @@ export default function TMDBSuggestions({
         <h2 className="text-xl md:text-3xl font-bold">You May Also Like</h2>
         <div className="flex gap-3">
           <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
+            onClick={handlePrev}
+            disabled={slide === 0}
             className="p-2 md:p-3 rounded-full cursor-pointer bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page >= totalPages}
+            onClick={handleNext}
+            disabled={slide >= totalSlides - 1}
             className="p-2 md:p-3 rounded-full cursor-pointer bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 transition-colors"
           >
             <ChevronRight className="w-5 h-5" />
@@ -65,7 +80,7 @@ export default function TMDBSuggestions({
 
       {/* Grid */}
       <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-7">
-        {suggestions.map((rec) => (
+        {currentItems.map((rec) => (
           <div
             key={rec.tmdb_id}
             className="w-full rounded-sm overflow-hidden shadow-lg"
@@ -109,9 +124,7 @@ export default function TMDBSuggestions({
                 Watch Now
               </Link>
 
-              <div className="font-medium text-white">
-                {rec.title}
-              </div>
+              <div className="font-medium text-white">{rec.title}</div>
               <div className="flex mt-1 items-center justify-between flex-wrap gap-2">
                 <div className="text-white/80 text-sm flex gap-2">
                   <span>{rec.year}</span>
