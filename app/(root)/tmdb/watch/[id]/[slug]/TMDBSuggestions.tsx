@@ -109,10 +109,10 @@ export default function TMDBSuggestions({
                 Watch Now
               </Link>
 
-              <div className="font-medium text-white line-clamp-2">
+              <div className="font-medium text-white">
                 {rec.title}
               </div>
-              <div className="flex mt-1 items-center justify-between flex-wrap">
+              <div className="flex mt-1 items-center justify-between flex-wrap gap-2">
                 <div className="text-white/80 text-sm flex gap-2">
                   <span>{rec.year}</span>
                   {rec.media_type === "tv" ? (
