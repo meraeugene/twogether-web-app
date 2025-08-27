@@ -32,6 +32,8 @@ export default function TMDBSuggestions({
     fetcher
   );
 
+  console.log(data);
+
   const setCurrentTMDB = useTMDBWatch((s) => s.setCurrentTMDB);
 
   const suggestions = data?.results || [];
@@ -112,10 +114,10 @@ export default function TMDBSuggestions({
               <div className="font-medium text-white line-clamp-2">
                 {rec.title}
               </div>
-              <div className="flex mt-2 items-center justify-between">
+              <div className="flex mt-1 items-center justify-between">
                 <div className="text-white/80 text-sm flex gap-2">
                   <span>{rec.year}</span>
-                  {rec.type === "tv" ? (
+                  {rec.media_type === "tv" ? (
                     <span className="text-white/50 font-medium">
                       S{rec.seasons || 1} · {rec.episodes || 1}EPS
                     </span>

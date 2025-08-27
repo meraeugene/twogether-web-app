@@ -31,8 +31,8 @@ const TMDBSuggestionSkeleton = () => {
 
             {/* Info */}
             <div className="flex-1 text-sm py-2 space-y-2">
-              <div className="h-4 w-3/4 bg-white/10 rounded" />
-              <div className="flex mt-2 items-center justify-between">
+              <div className="h-4 w-3/4 mt-2 bg-white/10 rounded" />
+              <div className="flex mt-3 items-center justify-between">
                 <div className="flex gap-2">
                   <div className="h-3 w-8 bg-white/10 rounded" />
                   <div className="h-3 w-6 bg-white/10 rounded" />
