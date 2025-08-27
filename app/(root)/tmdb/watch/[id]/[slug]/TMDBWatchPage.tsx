@@ -71,9 +71,11 @@ export default function TMDBWatchPage({
         "Recommendation submitted! Your taste just blessed someone’s watchlist 🎉"
       );
       setOpen(false);
+      document.body.classList.remove("overflow-hidden");
     } else {
       toast.error("Error recommending. Please try again.");
       console.error("Error recommending:", error);
+      document.body.classList.remove("overflow-hidden");
     }
   };
 
@@ -137,7 +139,10 @@ export default function TMDBWatchPage({
 
                 {isTMDBRecommendation && !alreadyRecommended && (
                   <button
-                    onClick={() => setOpen(true)}
+                    onClick={() => {
+                      document.body.classList.add("overflow-hidden");
+                      setOpen(true);
+                    }}
                     className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black transition hover:bg-white/90 text-sm px-4 py-2 rounded-md "
                   >
                     <Sparkles className="w-4 h-4" />
@@ -185,7 +190,10 @@ export default function TMDBWatchPage({
 
       <RecommendModal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          document.body.classList.remove("overflow-hidden");
+          setOpen(false);
+        }}
         onSubmit={handleSubmit}
         loading={loading}
       />
