@@ -18,7 +18,6 @@ import { PrivacyModal } from "./PrivacyModal";
 import { FaLock } from "react-icons/fa";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { useRouter } from "next/navigation";
-import { useTMDBWatch } from "@/stores/useTMDBWatch";
 import { VisualHeartRating } from "./VisualHeartRating";
 import { mutate } from "swr";
 
@@ -69,7 +68,6 @@ export default function FilmCard({
   };
 
   const router = useRouter();
-  const setCurrentTMDB = useTMDBWatch((s) => s.setCurrentTMDB);
 
   const handleClick = () => {
     const slug = getSlugFromTitle(item.title);
@@ -80,8 +78,7 @@ export default function FilmCard({
     }
 
     if (item.is_tmdb_recommendation && item.recommended_by.id === "tmdb") {
-      setCurrentTMDB(item);
-      router.push(`/tmdb/watch/${item.tmdb_id}/${slug}`);
+      router.push(`/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`);
       return;
     }
 

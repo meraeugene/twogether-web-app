@@ -81,7 +81,7 @@ export default function CollectionPage({ genre }: { genre: string }) {
                 const adapted = adaptTMDBToRecommendation(movie);
                 return (
                   <FilmCard
-                    key={`movie-${movie.media_type}-${movie.tmdb_id}-${movie.id}`}
+                    key={`movie-${movie.type}-${movie.tmdb_id}-${movie.id}`}
                     item={adapted}
                   />
                 );

@@ -19,6 +19,7 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
   });
 
   const { results } = (await res.json()) as { results: TMDBRawResult[] };
+
   if (!results) return [];
 
   const filtered = results.filter(
@@ -67,8 +68,7 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
       return {
         ...item,
         tmdb_id: item.id,
-        type: item.media_type,
-        media_type: item.media_type,
+        type: item.media_type as "movie" | "tv",
         poster_url: item.poster_path
           ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
           : null,
@@ -104,7 +104,7 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
     });
 
   const cleanedResults = enrichedResultsSorted.filter((item) => {
-    if (item.type === "movie") {
+    if (item.media_type === "movie") {
       return item.duration && item.duration > 0;
     }
     return true;

@@ -8,10 +8,8 @@ import { FaPlay } from "react-icons/fa";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { fetcher } from "@/utils/swr/fetcher";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
-import TMDBSuggestionSkeleton from "./TMDBSuggestionSkeleton";
-import { useTMDBWatch } from "@/stores/useTMDBWatch";
-import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import { TMDBEnrichedResult } from "@/types/tmdb";
+import TMDBSuggestionSkeleton from "./TMDBSuggestionSkeleton";
 
 type SWRResponse = {
   results: TMDBEnrichedResult[];
@@ -34,7 +32,6 @@ export default function TMDBSuggestions({
     fetcher
   );
 
-  const setCurrentTMDB = useTMDBWatch((s) => s.setCurrentTMDB);
   const suggestions = data?.results || [];
   const totalSlides = Math.ceil(suggestions.length / ITEMS_PER_SLIDE);
 
@@ -100,10 +97,16 @@ export default function TMDBSuggestions({
               {/* Hover Play Button */}
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/50">
                 <Link
-                  href={`/tmdb/watch/${rec.tmdb_id}/${getSlugFromTitle(
-                    rec.title
-                  )}`}
-                  onClick={() => setCurrentTMDB(adaptTMDBToRecommendation(rec))}
+                  href={`/tmdb/watch/${rec.type}/${
+                    rec.tmdb_id
+                  }/${getSlugFromTitle(rec.title)}`}
+                  onClick={() => {
+                    window.scrollTo({
+                      top: 0,
+                      left: 0,
+                      behavior: "smooth",
+                    });
+                  }}
                   className="flex cursor-pointer items-center justify-center w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md ring-1 ring-white/10 hover:ring-3 hover:ring-red-100 transition duration-300 ease-in-out transform hover:scale-110"
                 >
                   <FaPlay className="text-xl" />
@@ -114,10 +117,9 @@ export default function TMDBSuggestions({
             {/* Info */}
             <div className="flex-1 pt-4">
               <Link
-                href={`/tmdb/watch/${rec.tmdb_id}/${getSlugFromTitle(
-                  rec.title
-                )}`}
-                onClick={() => setCurrentTMDB(adaptTMDBToRecommendation(rec))}
+                href={`/tmdb/watch/${rec.type}/${
+                  rec.tmdb_id
+                }/${getSlugFromTitle(rec.title)}`}
                 className="w-full cursor-pointer flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mb-3 lg:hidden"
               >
                 <FaPlay className="text-white text-xs" />
@@ -128,7 +130,7 @@ export default function TMDBSuggestions({
               <div className="flex mt-1 items-center justify-between flex-wrap gap-2">
                 <div className="text-white/80 text-sm flex gap-2">
                   <span>{rec.year}</span>
-                  {rec.media_type === "tv" ? (
+                  {rec.type === "tv" ? (
                     <span className="text-white/50 font-medium">
                       S{rec.seasons || 1} · {rec.episodes || 1}EPS
                     </span>
@@ -139,7 +141,7 @@ export default function TMDBSuggestions({
                   )}
                 </div>
                 <div className="bg-gray-700 rounded-sm px-2 py-1 text-xs capitalize">
-                  {rec.media_type}
+                  {rec.type}
                 </div>
               </div>
             </div>

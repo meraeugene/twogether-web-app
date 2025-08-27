@@ -45,15 +45,15 @@ export async function GET(req: NextRequest) {
 
   const searchData = await searchRes.json();
 
-  const rawResults: TMDBRawResult[] = (searchData.results || [])
-    .filter((item: TMDBRawResult) => ["movie", "tv"].includes(item.media_type))
-    .sort((a: TMDBRawResult, b: TMDBRawResult) => {
+  const rawResults: TMDBRawResult[] = (searchData.results || []).sort(
+    (a: TMDBRawResult, b: TMDBRawResult) => {
       const getYear = (item: TMDBRawResult) =>
         item.media_type === "movie"
           ? parseInt(item.release_date?.slice(0, 4) || "0")
           : parseInt(item.first_air_date?.slice(0, 4) || "0");
       return getYear(b) - getYear(a);
-    });
+    }
+  );
 
   const enrichedResults: TMDBEnrichedResult[] = await Promise.all(
     rawResults.map(async (item): Promise<TMDBEnrichedResult> => {

@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
     sliced.map(async (item: TMDBEnrichedResult) => {
       try {
         const detailsRes = await fetch(
-          `${BASE_URL}/${item.media_type || type}/${
+          `${BASE_URL}/${item.type || type}/${
             item.id
           }?api_key=${API_KEY}&append_to_response=credits,videos`,
           { cache: "no-store" }
@@ -82,7 +82,7 @@ export async function GET(req: NextRequest) {
           year:
             details.release_date?.slice(0, 4) ||
             details.first_air_date?.slice(0, 4),
-          media_type: item.media_type || type,
+          type: item.media_type || type,
           synopsis: details.overview,
           genres:
             details.genres?.map((g: { id: number; name: string }) => g.name) ||

@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
             ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
             : null,
           year: details.release_date?.slice(0, 4),
-          media_type: "movie",
+          type: "movie",
           genres:
             details.genres?.map((g: { id: number; name: string }) => g.name) ||
             [],
@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
         return {
           ...item,
           tmdb_id: item.id,
-          media_type: "movie",
+          type: "movie",
           genres: [],
           poster_url: null,
           year: undefined,

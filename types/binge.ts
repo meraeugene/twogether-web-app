@@ -34,7 +34,7 @@ export type EnrichedMovie = {
   title: string;
   poster_url: string | null;
   year: string | undefined;
-  media_type: "movie";
+  type: "movie";
   genres: string[];
   duration: number;
   release_date?: string;
@@ -56,7 +56,7 @@ export type BingeCollection = {
     title: string;
     poster_url: string | null;
     year?: string;
-    media_type: "movie" | "tv";
+    type: "movie" | "tv";
     genres: string[];
     duration?: number;
     synopsis: string;

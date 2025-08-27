@@ -10,7 +10,6 @@ import { IoClose } from "react-icons/io5";
 import { FRANCHISE_GROUPS } from "./data";
 import { Recommendation } from "@/types/recommendation";
 import { FaPlay } from "react-icons/fa";
-import { useTMDBWatch } from "@/stores/useTMDBWatch";
 import { useRouter } from "next/navigation";
 import ErrorMessage from "@/components/ErrorMessage";
 
@@ -21,8 +20,6 @@ export default function ChronologicalPage() {
     "marvel-cinematic-universe"
   );
   const [isOpen, setIsOpen] = useState(false);
-
-  const setCurrentTMDB = useTMDBWatch((s) => s.setCurrentTMDB);
 
   const router = useRouter();
 
@@ -61,8 +58,7 @@ export default function ChronologicalPage() {
   const handleWatchNow = (movie: Recommendation) => {
     const slug = getSlugFromTitle(movie.title);
     if (movie.is_tmdb_recommendation && movie.recommended_by.id === "tmdb") {
-      setCurrentTMDB(movie);
-      router.push(`/tmdb/watch/${movie.tmdb_id}/${slug}`);
+      router.push(`/tmdb/watch/${movie.type}/${movie.tmdb_id}/${slug}`);
     }
   };
 

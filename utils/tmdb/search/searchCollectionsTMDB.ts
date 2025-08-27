@@ -59,7 +59,7 @@ export async function getBingeCollectionsByQuery(
           : null,
         year: part.release_date?.slice(0, 4),
         release_date: partDetails.release_date || "",
-        media_type: "movie",
+        type: "movie",
         genres: partDetails.genres?.map((g) => g.name) || [],
         duration: partDetails.runtime,
         synopsis: partDetails.overview || "",

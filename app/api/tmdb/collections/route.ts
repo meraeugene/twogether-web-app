@@ -85,7 +85,7 @@ export async function GET(req: NextRequest) {
             ? `https://image.tmdb.org/t/p/w500${part.poster_path}`
             : null,
           year: part.release_date?.slice(0, 4),
-          media_type: "movie",
+          type: "movie",
           genres: partDetails.genres?.map((g) => g.name) || [],
           duration: partDetails.runtime,
           synopsis: partDetails.overview || "",

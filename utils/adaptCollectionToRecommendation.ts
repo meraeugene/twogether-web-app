@@ -1,4 +1,4 @@
-import { EnrichedCollection, EnrichedMovie } from "@/types/binge";
+import { EnrichedCollection } from "@/types/binge";
 import { Recommendation } from "@/types/recommendation";
 
 export function adaptCollectionMoviesToRecommendations(
