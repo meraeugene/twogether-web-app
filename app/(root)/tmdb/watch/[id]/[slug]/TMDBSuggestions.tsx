@@ -115,13 +115,13 @@ export default function TMDBSuggestions({
               <div className="flex mt-2 items-center justify-between">
                 <div className="text-white/80 text-sm flex gap-2">
                   <span>{rec.year}</span>
-                  {rec.media_type === "tv" ? (
+                  {rec.type === "tv" ? (
                     <span className="text-white/50 font-medium">
-                      S{rec.seasons || 1}
+                      S{rec.seasons || 1} · {rec.episodes || 1}EPS
                     </span>
                   ) : (
                     <span className="text-white/50 font-medium">
-                      {rec.duration || "0"}m
+                      {rec.duration || 0}m
                     </span>
                   )}
                 </div>
