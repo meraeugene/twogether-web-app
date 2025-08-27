@@ -112,7 +112,7 @@ export default function TMDBSuggestions({
               <div className="font-medium text-white line-clamp-2">
                 {rec.title}
               </div>
-              <div className="flex mt-1 items-center justify-between">
+              <div className="flex mt-1 items-center justify-between flex-wrap">
                 <div className="text-white/80 text-sm flex gap-2">
                   <span>{rec.year}</span>
                   {rec.media_type === "tv" ? (
