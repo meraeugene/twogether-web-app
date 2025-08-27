@@ -32,8 +32,6 @@ export default function TMDBSuggestions({
     fetcher
   );
 
-  console.log(data);
-
   const setCurrentTMDB = useTMDBWatch((s) => s.setCurrentTMDB);
 
   const suggestions = data?.results || [];
@@ -58,7 +56,7 @@ export default function TMDBSuggestions({
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages}
-            className="p-3 rounded-full cursor-pointer bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 transition-colors"
+            className="p-2 md:p-3 rounded-full cursor-pointer bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 transition-colors"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -111,10 +109,10 @@ export default function TMDBSuggestions({
                 Watch Now
               </Link>
 
-              <div className="font-medium text-white line-clamp-2">
+              <div className="font-medium text-white">
                 {rec.title}
               </div>
-              <div className="flex mt-1 items-center justify-between">
+              <div className="flex mt-1 items-center justify-between flex-wrap gap-2">
                 <div className="text-white/80 text-sm flex gap-2">
                   <span>{rec.year}</span>
                   {rec.media_type === "tv" ? (
