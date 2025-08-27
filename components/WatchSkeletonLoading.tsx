@@ -3,7 +3,7 @@
 const WatchSkeletonLoading = () => {
   return (
     <main className="min-h-screen bg-black flex flex-col  lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 px-7 pt-28  pb-16 text-white">
-      <div className="relative flex flex-col gap-8 overflow-hidden">
+      <div className="relative animate-pulse flex flex-col gap-8 overflow-hidden">
         <div
           className="absolute inset-0 -translate-x-full 
                         bg-gradient-to-r from-transparent via-white/10 to-transparent"
