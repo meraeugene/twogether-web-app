@@ -120,6 +120,13 @@ export default function TMDBSuggestions({
                 href={`/tmdb/watch/${rec.type}/${
                   rec.tmdb_id
                 }/${getSlugFromTitle(rec.title)}`}
+                onClick={() => {
+                    window.scrollTo({
+                      top: 0,
+                      left: 0,
+                      behavior: "smooth",
+                    });
+                  }}
                 className="w-full cursor-pointer flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mb-3 lg:hidden"
               >
                 <FaPlay className="text-white text-xs" />
