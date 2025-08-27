@@ -97,26 +97,28 @@ export default function WatchSuggestions({
 
             {rec.rating && <VisualHeartRating value={rec.rating} />}
 
-            <div className=" mt-3">
-              <Link
-                href={`/profile/${rec.recommended_by.username}/${rec.recommended_by.id}`}
-                className=" text-sm text-white/60 hover:underline flex items-center gap-2"
-              >
-                {rec.recommended_by.avatar_url && (
-                  <div className="w-6 h-6 rounded-full overflow-hidden">
-                    <Image
-                      src={rec.recommended_by.avatar_url}
-                      alt={rec.recommended_by.username}
-                      width={24}
-                      unoptimized
-                      height={24}
-                      className="rounded-full object-cover"
-                    />
-                  </div>
-                )}
-                {rec.recommended_by.username}
-              </Link>
-            </div>
+            {rec.recommended_by && (
+              <div className=" mt-3">
+                <Link
+                  href={`/profile/${rec.recommended_by.username}/${rec.recommended_by.id}`}
+                  className=" text-sm text-white/60 hover:underline flex items-center gap-2"
+                >
+                  {rec.recommended_by.avatar_url && (
+                    <div className="w-6 h-6 rounded-full overflow-hidden">
+                      <Image
+                        src={rec.recommended_by.avatar_url}
+                        alt={rec.recommended_by.username}
+                        width={24}
+                        unoptimized
+                        height={24}
+                        className="rounded-full object-cover"
+                      />
+                    </div>
+                  )}
+                  {rec.recommended_by.username}
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       ))}

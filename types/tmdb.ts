@@ -2,7 +2,7 @@ export type TMDBRawResult = {
   media_type: "movie" | "tv";
   id: number;
   name?: string; // for TV shows
-  title?: string; // for movies
+  title: string; // for movies
   poster_path?: string | null;
   backdrop_path?: string | null;
   overview?: string;

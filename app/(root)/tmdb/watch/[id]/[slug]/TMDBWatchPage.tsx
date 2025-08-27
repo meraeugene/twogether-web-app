@@ -6,13 +6,14 @@ import WatchGemeni from "@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useEffect, useState } from "react";
 import WatchSkeletonLoading from "@/components/WatchSkeletonLoading";
-import { Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 import ToggleWatchlistButton from "@/app/(user)/watch/[id]/[movieTitle]/ToggleWatchlistButton";
 import { omit } from "@/utils/ai-recommend/omit";
 import RecommendModal from "@/components/RecommendModal";
 import { createRecommendation } from "@/actions/recommendationActions";
 import { toast } from "sonner";
-import BackButton from "@/components/BackButton";
+import TMDBSuggestions from "./TMDBSuggestions";
+import Link from "next/link";
 
 export default function TMDBWatchPage({
   currentUserId,
@@ -81,7 +82,12 @@ export default function TMDBWatchPage({
       {/* Gradient */}
       <div className="absolute pointer-events-none   inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
-      <BackButton />
+      <Link
+        href="/browse"
+        className="inline-flex  w-12 h-8   lg:w-16 lg:h-9 cursor-pointer  items-center justify-center rounded-md bg-white text-red-600 hover:bg-red-600 hover:text-white transition mb-6"
+      >
+        <ArrowLeft size={20} />
+      </Link>
 
       <WatchPlayer
         urls={
@@ -167,6 +173,13 @@ export default function TMDBWatchPage({
           </div>
         )}
       </div>
+
+      {recommendation.tmdb_id && (
+        <TMDBSuggestions
+          tmdbId={recommendation.tmdb_id}
+          type={recommendation.type}
+        />
+      )}
 
       <WatchGemeni title={recommendation.title} currentUserId={currentUserId} />
 
