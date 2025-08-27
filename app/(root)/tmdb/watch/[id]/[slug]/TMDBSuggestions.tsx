@@ -49,7 +49,7 @@ export default function TMDBSuggestions({
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="p-3 rounded-full cursor-pointer bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 transition-colors"
+            className="p-2 md:p-3 rounded-full cursor-pointer bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>

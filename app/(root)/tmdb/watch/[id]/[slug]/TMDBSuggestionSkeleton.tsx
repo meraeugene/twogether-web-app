@@ -6,14 +6,14 @@ const TMDBSuggestionSkeleton = () => {
     <section className="mt-16">
       {/* Header with nav buttons */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl md:text-2xl font-bold text-white/40 animate-pulse">
+        <h2 className="text-xl md:text-3xl font-bold text-white/40 animate-pulse">
           You May Also Like
         </h2>
         <div className="flex gap-3">
-          <div className="p-2 rounded-full bg-gray-800/50 text-white/40 animate-pulse">
+          <div className="p-2 md:p-3 rounded-full bg-gray-800/50 text-white/40 animate-pulse">
             <ChevronLeft className="w-5 h-5" />
           </div>
-          <div className="p-2 rounded-full bg-gray-800/50 text-white/40 animate-pulse">
+          <div className="p-2 md:p-3 rounded-full bg-gray-800/50 text-white/40 animate-pulse">
             <ChevronRight className="w-5 h-5" />
           </div>
         </div>
