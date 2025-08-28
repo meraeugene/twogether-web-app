@@ -38,7 +38,7 @@ export default function TMDBMovieReviews({ tmdbId }: { tmdbId: number }) {
             Reviews
           </h3>
         </div>
-        <div className="text-center py-12 border px-8 border-white/10 bg-black/10">
+        <div className="text-center py-6 md:py-12 border px-8 border-white/10 bg-black/10">
           <BiStar className="text-4xl font-light text-gray-600 mx-auto mb-4" />
           <p className="text-gray-400">
             No reviews yet. Be the first to leave one!
