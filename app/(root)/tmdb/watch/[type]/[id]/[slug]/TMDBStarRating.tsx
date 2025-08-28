@@ -36,7 +36,7 @@ const TMDBStarRating = ({
           )}
         </span>
       ))}
-      <span className="ml-2 text-sm text-gray-400">
+      <span className="ml-2  text-gray-400">
         {Number.isInteger(rating) ? rating : rating.toFixed(1)}/10
       </span>
     </div>

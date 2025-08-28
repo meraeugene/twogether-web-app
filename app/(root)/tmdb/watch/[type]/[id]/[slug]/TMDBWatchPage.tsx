@@ -208,6 +208,18 @@ export default function TMDBWatchPage({
 
       <TMDBMovieReviews tmdbId={Number(params.id)} />
 
+      {!currentUserId && (
+        <div className="w-full xl:max-w-1/2 mt-16">
+          <div className="relative mb-8">
+            <div className="absolute -top-2 -left-4 w-12 h-0.5 bg-red-500 transform -rotate-12" />
+            <div className="absolute -top-1 -left-2 w-8 h-0.5 bg-red-300 transform -rotate-12" />
+            <h3 className="text-2xl font-bold text-white tracking-tight">
+              Login to Rate and Review
+            </h3>
+          </div>
+        </div>
+      )}
+
       {currentUserId && recommendation?.tmdb_id && (
         <TMDBReviewForm
           currentUserId={currentUserId}
