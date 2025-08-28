@@ -39,7 +39,7 @@ export function FeatureCard({
       />
       <div className="relative z-10">
         <feature.icon className="text-red-400  mb-4" />
-        <h3 className="text-xl lg:text-2xl font-bold text-white mb-3 font-[family-name:var(--font-geist-sans)]">
+        <h3 className="text-xl lg:text-2xl font-bold  mb-3 font-[family-name:var(--font-geist-sans)]">
           {feature.title}
         </h3>
         <p className="text-gray-300 text-sm  md:text-base leading-relaxed font-[family-name:var(--font-geist-mono)]">

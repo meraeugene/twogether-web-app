@@ -195,10 +195,18 @@ export default function AIRecommendForm() {
           >
             {/* Reset Button */}
             {!loading && (
-              <div className="flex pt-24 xl:pt-32  justify-center mt-4">
+              <div className="flex mt-28 w-fit mx-auto xl:mt-32  justify-center  bg-white/10  backdrop-blur-xl border border-white/10 rounded-xl p-2">
                 <button
                   onClick={resetForm}
-                  className="px-6 py-2 text-sm lg:text-base rounded-md cursor-pointer bg-white text-black hover:bg-neutral-200 border border-black/10 transition font-medium backdrop-blur-sm flex items-center gap-2"
+                  className="w-full py-3 px-6 rounded-xl 
+  bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 
+  text-white 
+  hover:brightness-110 transition font-semibold text-lg 
+  shadow-md flex items-center justify-center gap-2 
+  backdrop-blur-sm 
+  disabled:opacity-60 disabled:cursor-not-allowed 
+  cursor-pointer
+                  "
                 >
                   <FiRefreshCcw className="text-base" />
                   Recommend Me Again
@@ -210,8 +218,13 @@ export default function AIRecommendForm() {
             {!loading && (
               <header className="mt-6  mb-10 text-center">
                 <h2 className="text-3xl md:text-4xl  font-semibold">
-                  <span className="text-red-600">{displayPrompt} </span> AI
-                  Picks for You
+                  <span
+                    className=" mb-6 text-transparent bg-clip-text
+          bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600"
+                  >
+                    {displayPrompt}{" "}
+                  </span>{" "}
+                  AI Picks for You
                 </h2>
                 {reason && (
                   <p className="mt-4 text-sm md:text-base  text-white/70 max-w-2xl mx-auto">

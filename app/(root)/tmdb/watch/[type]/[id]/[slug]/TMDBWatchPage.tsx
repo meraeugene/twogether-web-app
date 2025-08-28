@@ -166,18 +166,29 @@ export default function TMDBWatchPage({
               )}
             </div>
           </div>
-
           {recommendation.synopsis && (
             <p className="text-sm md:text-base text-white/70 max-w-3xl leading-relaxed font-[family-name:var(--font-geist-sans)]">
               {recommendation.synopsis}
             </p>
           )}
+          <div className="flex items-center gap-4 text-xs md:text-sm text-white/60">
+            <span className="text-white/80">{recommendation.year}</span>
 
-          <div className="text-white/60 text-xs md:text-sm">
-            {recommendation.year} · {recommendation.duration}m ·{" "}
-            <span className="uppercase">{recommendation.type}</span>
-          </div>
+            {recommendation.type === "tv" ? (
+              <span className="text-white/50 font-medium">
+                S{recommendation.seasons || 1} · {recommendation.episodes || 1}
+                EPS
+              </span>
+            ) : (
+              <span className="text-white/50 font-medium">
+                {recommendation.duration || 0}m
+              </span>
+            )}
 
+            <span className="bg-gray-700 rounded-sm px-2 py-1 text-xs capitalize">
+              {recommendation.type}
+            </span>
+          </div>{" "}
           {recommendation.genres?.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {recommendation.genres.map((g) => (

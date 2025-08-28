@@ -30,8 +30,11 @@ const AiFeatures = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 font-[family-name:var(--font-geist-sans)] text-red-500">
-            Ai Reco <span className="text-white/80">|</span> Watch Gemeni
+          <h2
+            className="text-4xl md:text-5xl font-bold mb-6 font-[family-name:var(--font-geist-sans)]     text-transparent bg-clip-text
+          bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 "
+          >
+            Ai Reco <span className="text-white/90">|</span> Watch Gemeni
           </h2>
           <p className="text-base md:text-lg xl:text-xl text-gray-300 max-w-2xl mx-auto font-[family-name:var(--font-geist-mono)]">
             Experience the future of social streaming with features designed for
