@@ -1,4 +1,5 @@
 "use client";
+
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const TMDBSuggestionSkeleton = () => {

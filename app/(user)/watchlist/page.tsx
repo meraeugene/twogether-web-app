@@ -20,8 +20,6 @@ export default function WatchlistPage() {
     fetcher
   );
 
-  console.log(data);
-
   if (isLoading)
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">

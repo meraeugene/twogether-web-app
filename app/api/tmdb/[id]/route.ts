@@ -3,10 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const url = new URL(request.url);
-    const tmdbId = url.pathname.split("/").pop(); // or extract from your route
+    const tmdbId = (await params).id;
     const type = url.searchParams.get("type"); // "movie" or "tv"
 
     if (!tmdbId || !type) {

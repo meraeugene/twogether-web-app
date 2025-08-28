@@ -17,6 +17,8 @@ import useSWR from "swr";
 import ErrorMessage from "@/components/ErrorMessage";
 import { Recommendation } from "@/types/recommendation";
 import BackButton from "@/components/BackButton";
+import TMDBReviewForm from "./TMDBReviewForm";
+import TMDBMovieReviews from "./TMDBMovieReviews";
 
 type SWRResponse = {
   recommendation: Recommendation;
@@ -202,6 +204,15 @@ export default function TMDBWatchPage({
             </div>
           )}
         </div>
+      )}
+
+      <TMDBMovieReviews tmdbId={Number(params.id)} />
+
+      {currentUserId && recommendation?.tmdb_id && (
+        <TMDBReviewForm
+          currentUserId={currentUserId}
+          tmdbId={recommendation.tmdb_id}
+        />
       )}
 
       {recommendation?.tmdb_id && (
