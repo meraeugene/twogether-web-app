@@ -198,7 +198,7 @@ export default function TMDBReviewForm({
             type="submit"
             disabled={isPending}
             className="group cursor-pointer relative overflow-hidden bg-black border-2 border-white/20 text-white 
-       px-8 py-3 font-semibold transition-all duration-500 hover:border-red-500
+       px-6 py-3 font-semibold transition-all duration-500 hover:border-red-500
        disabled:opacity-50 disabled:cursor-not-allowed clip-path-button"
           >
             <div
@@ -207,7 +207,7 @@ export default function TMDBReviewForm({
             />
 
             <div className="relative flex items-center gap-2 z-10">
-              <div className="w-5 h-5 flex items-center justify-center">
+              <div className=" flex items-center justify-center">
                 {isPending ? (
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
