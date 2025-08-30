@@ -1,8 +1,6 @@
 import ErrorMessage from "@/components/ErrorMessage";
 import TabbedProfileView from "./TabbedProfileView";
-import { CurrentUser } from "@/types/user";
 import { getCurrentUser, getUserByUsername } from "@/actions/authActions";
-import { redirect } from "next/navigation";
 import { getFollowStatsWithStatus } from "@/actions/followActions";
 import { getWatchlistByUserId } from "@/actions/watchlistActions";
 import { getUserRecommendationsById } from "@/actions/recommendationActions";
@@ -15,17 +13,14 @@ export default async function UserProfile({
   const username = decodeURIComponent((await params).username);
   const userId = (await params).userId;
 
-  const currentUser: CurrentUser | null = await getCurrentUser();
-  if (!currentUser) {
-    redirect("/");
-  }
+  const currentUser = await getCurrentUser();
 
   const [user, userRecommendations, userWatchList, followStats] =
     await Promise.all([
       getUserByUsername(username),
       getUserRecommendationsById(userId),
       getWatchlistByUserId(userId),
-      getFollowStatsWithStatus(userId, currentUser.id),
+      getFollowStatsWithStatus(userId, currentUser?.id ?? ""),
     ]);
 
   if (!user || !userRecommendations || !userWatchList || !followStats) {
@@ -35,7 +30,7 @@ export default async function UserProfile({
   return (
     <TabbedProfileView
       user={user}
-      currentUser={currentUser}
+      currentUser={currentUser ?? undefined}
       userRecommendations={userRecommendations}
       userWatchList={userWatchList}
       followStats={followStats}

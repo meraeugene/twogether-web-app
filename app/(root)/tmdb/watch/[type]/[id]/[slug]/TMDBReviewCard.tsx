@@ -4,6 +4,7 @@
 import { BiUser } from "react-icons/bi";
 import TMDBStarRating from "./TMDBStarRating";
 import { TMDBMovieReview } from "@/types/tmdbMovieReview";
+import Link from "next/link";
 
 const TMDBReviewCard = ({ review }: { review: TMDBMovieReview }) => {
   const createdAt = new Date(review.created_at).toLocaleDateString("en-US", {
@@ -27,11 +28,13 @@ const TMDBReviewCard = ({ review }: { review: TMDBMovieReview }) => {
             {/* Avatar */}
             <div className="w-10 h-10 rounded-full bg-gray-800 border border-white/20 flex items-center justify-center overflow-hidden">
               {review.avatar_url ? (
-                <img
-                  src={review.avatar_url}
-                  alt="User avatar"
-                  className="w-full h-full object-cover"
-                />
+                <Link href={`/profile/${review.username}/${review.user_id}`}>
+                  <img
+                    src={review.avatar_url}
+                    alt="User avatar"
+                    className="w-full h-full object-cover"
+                  />
+                </Link>
               ) : (
                 <BiUser className="text-xl text-gray-400" />
               )}
@@ -39,9 +42,12 @@ const TMDBReviewCard = ({ review }: { review: TMDBMovieReview }) => {
 
             {/* User info */}
             <div>
-              <h4 className="text-white font-medium">
+              <Link
+                href={`/profile/${review.username}/${review.user_id}`}
+                className="text-white font-medium"
+              >
                 @{review.username || review.full_name || "Anonymous User"}
-              </h4>
+              </Link>
               <p className="text-xs text-gray-400">{createdAt}</p>
             </div>
           </div>

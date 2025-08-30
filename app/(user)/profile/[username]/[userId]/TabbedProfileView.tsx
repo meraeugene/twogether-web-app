@@ -47,7 +47,7 @@ export default function TabbedProfileView({
   followStats,
 }: {
   user: User;
-  currentUser: CurrentUser;
+  currentUser?: CurrentUser;
   userRecommendations: Recommendation[];
   userWatchList: Recommendation[];
   followStats: FollowStats;
@@ -76,8 +76,8 @@ export default function TabbedProfileView({
     isLoading: loadingFriendStatus,
     mutate: refetchFriendStatus,
   } = useSWR<FriendRequestStatus>(
-    ["friend-status", currentUser.id, user.id],
-    () => getFriendStats(currentUser.id, user.id),
+    currentUser ? ["friend-status", currentUser.id, user.id] : null,
+    currentUser ? () => getFriendStats(currentUser.id, user.id) : null,
     {
       refreshInterval: 5000, // re-fetch every 5 seconds
       refreshWhenHidden: false,
@@ -107,7 +107,9 @@ export default function TabbedProfileView({
     setTimeout(() => setFollowCooldown(false), 500);
 
     startTransition(() => {
-      toggleFollow(currentUser.id, user.id);
+      if (currentUser) {
+        toggleFollow(currentUser.id, user.id);
+      }
     });
   };
 
@@ -125,9 +127,13 @@ export default function TabbedProfileView({
     (async () => {
       try {
         if (friendStatus === "none") {
-          await sendFriendRequest(currentUser.id, user.id);
+          if (currentUser) {
+            await sendFriendRequest(currentUser.id, user.id);
+          }
         } else if (friendStatus === "pending") {
-          await cancelFriendRequest(currentUser.id, user.id);
+          if (currentUser) {
+            await cancelFriendRequest(currentUser.id, user.id);
+          }
         }
 
         await refetchFriendStatus();
@@ -142,7 +148,8 @@ export default function TabbedProfileView({
 
   const handleSendMessage = (content: string) => {
     startMessageTransition(async () => {
-      if (!user.id || !currentUser.id || !content.trim()) return;
+      if (!user.id || !currentUser || !currentUser.id || !content.trim())
+        return;
 
       try {
         // Step 1: Ensure thread exists
@@ -211,9 +218,11 @@ export default function TabbedProfileView({
             <h1 className="mt-4 text-2xl font-bold">{user.display_name}</h1>
             <p className="text-red-500 ">@{user.username}</p>
 
-            <p className="text-white/60 text-sm mt-1">
-              {followers} follower{followers !== 1 ? "s" : ""}
-            </p>
+            {currentUser && (
+              <p className="text-white/60 text-sm mt-1">
+                {followers} follower{followers !== 1 ? "s" : ""}
+              </p>
+            )}
 
             {currentUser?.id === user.id && (
               <div className="flex items-center gap-3">
@@ -229,7 +238,7 @@ export default function TabbedProfileView({
             )}
 
             {/* Action buttons */}
-            {currentUser?.id !== user.id && (
+            {currentUser && currentUser?.id !== user.id && (
               <div className="mt-4 flex flex-wrap justify-center gap-3">
                 {/* Add Friend */}
                 <button
