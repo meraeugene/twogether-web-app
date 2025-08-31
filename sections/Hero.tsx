@@ -41,7 +41,7 @@ const Hero = ({ user }: HeroProps) => {
                 Watch{" "}
                 <span className="text-red-500">
                   <AnimatedTextCycle
-                    words={["Movies", "Shows"]}
+                    words={["Movies","Anime" "Shows"]}
                     className="text-red-500"
                     interval={3000}
                   />
