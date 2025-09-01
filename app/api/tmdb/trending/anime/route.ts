@@ -45,6 +45,8 @@ export async function GET(req: NextRequest) {
             [],
           duration: details.episode_run_time?.[0],
           synopsis: details.overview || "",
+          seasons: details.number_of_seasons,
+          episodes: details.number_of_episodes,
         };
       } catch (err) {
         console.error(`Failed to enrich Anime TMDB ID ${item.id}:`, err);

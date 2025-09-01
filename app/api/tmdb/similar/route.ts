@@ -1,8 +1,4 @@
-import {
-  EpisodeTitle,
-  TMDBEnrichedResult,
-  TMDBSeasonResponse,
-} from "@/types/tmdb";
+import { TMDBEnrichedResult } from "@/types/tmdb";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
@@ -47,31 +43,6 @@ export async function GET(req: NextRequest) {
         );
         const details = await detailsRes.json();
 
-        let episodeTitlesPerSeason: Record<number, EpisodeTitle[]> | undefined;
-
-        if (item.media_type === "tv") {
-          episodeTitlesPerSeason = {};
-          const totalSeasons = details.number_of_seasons || 0;
-
-          for (let season = 1; season <= totalSeasons; season++) {
-            const seasonUrl = `${BASE_URL}/tv/${item.id}/season/${season}?api_key=${API_KEY}`;
-            const seasonRes = await fetch(seasonUrl, {
-              cache: "force-cache",
-              next: { revalidate: 86400 },
-            });
-
-            if (seasonRes.ok) {
-              const seasonData: TMDBSeasonResponse = await seasonRes.json();
-              episodeTitlesPerSeason[season] = seasonData.episodes.map(
-                (ep) => ({
-                  episode_number: ep.episode_number,
-                  title: ep.name,
-                })
-              );
-            }
-          }
-        }
-
         return {
           id: item.id,
           tmdb_id: item.id,
@@ -95,8 +66,6 @@ export async function GET(req: NextRequest) {
             item.media_type === "tv" ? details.number_of_seasons : undefined,
           episodes:
             item.media_type === "tv" ? details.number_of_episodes : undefined,
-          episodeTitlesPerSeason:
-            item.media_type === "tv" ? episodeTitlesPerSeason : undefined,
         };
       } catch {
         return null;

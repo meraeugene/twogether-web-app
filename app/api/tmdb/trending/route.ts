@@ -62,6 +62,8 @@ export async function GET() {
           duration:
             type === "movie" ? details.runtime : details.episode_run_time?.[0],
           synopsis: details.overview || "",
+          seasons: type === "tv" ? details.number_of_seasons : undefined,
+          episodes: type === "tv" ? details.number_of_episodes : undefined,
         };
       } catch (err) {
         console.error(`Failed to enrich TMDB ID ${item.id}:`, err);
