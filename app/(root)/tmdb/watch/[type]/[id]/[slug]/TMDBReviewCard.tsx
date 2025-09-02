@@ -60,7 +60,7 @@ const TMDBReviewCard = ({ review }: { review: TMDBMovieReview }) => {
 
         {/* Comment */}
         <div className="relative">
-          <div className="absolute top-0 left-0 w-1 h-full bg-red-500/30" />
+          <div className="absolute top-0 left-0 w-1 h-full bg-red-500" />
           <p className="text-gray-300 leading-relaxed pl-4">{review.comment}</p>
         </div>
       </div>
