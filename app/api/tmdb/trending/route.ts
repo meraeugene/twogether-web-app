@@ -8,7 +8,7 @@ export async function GET() {
   try {
     // --- Movies ---
     const moviesRes = await fetch(
-      `${BASE_URL}/discover/movie?language=en-US&region=US&include_adult=false&certification_country=US&certification.lte=PG-13&sort_by=popularity.desc&api_key=${API_KEY}`,
+      `${BASE_URL}/trending/movie/week?language=en-US&api_key=${API_KEY}`,
       { cache: "force-cache", next: { revalidate: 86400 } }
     );
     const moviesData = await moviesRes.json();

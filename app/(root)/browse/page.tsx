@@ -17,8 +17,6 @@ export default function BrowseLandingPage() {
   const anime = data?.anime ?? [];
   const tv = data?.tv ?? [];
 
-  console.log(data);
-
   return (
     <main className="min-h-screen relative bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white">
       {/* Background */}
