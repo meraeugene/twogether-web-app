@@ -1,4 +1,5 @@
 "use client";
+
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import Link from "next/link";
 import FilmCard from "@/components/FilmCard";

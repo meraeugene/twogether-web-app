@@ -6,17 +6,11 @@ import CollectionPage from "./CollectionPage";
 import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
 import { bingePlaceholders } from "@/constants/placeholders";
 
-export default function BingeClient({
-  initialGenre,
-  genres,
-}: {
-  initialGenre: string;
-  genres: string[];
-}) {
+export default function BingeClient({ genres }: { genres: string[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [selectedGenre, setSelectedGenre] = useState(initialGenre);
+  const [selectedGenre, setSelectedGenre] = useState(genres[0]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleGenreChange = (genre: string) => {
