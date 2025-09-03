@@ -3,7 +3,7 @@
 import useSWR from "swr";
 import Image from "next/image";
 import { Timeline } from "@/components/ui/Timeline";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
@@ -22,18 +22,6 @@ export default function ChronologicalPage() {
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
 
   const { data, error, isLoading } = useSWR<{
     name: string;
@@ -155,7 +143,10 @@ export default function ChronologicalPage() {
       {/* Floating Button with Franchise Picker */}
       <div className="fixed bottom-6 right-6 z-[100]">
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => {
+            setIsOpen(!isOpen);
+            document.body.classList.add("overflow-hidden");
+          }}
           className="bg-white transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer text-black p-3 rounded-full shadow-lg flex items-center gap-2 font-semibold"
         >
           <AiOutlineFieldTime className="w-5 h-5 text-red-500 font-extrabold" />
@@ -180,7 +171,10 @@ export default function ChronologicalPage() {
                 </li>
 
                 <li
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false);
+                    document.body.classList.remove("overflow-hidden");
+                  }}
                   className="cursor-pointer  text-right"
                 >
                   <span className="w-10 h-10 inline-flex items-center justify-center rounded-full hover:bg-white/10 transition">
