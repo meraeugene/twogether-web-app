@@ -3,7 +3,6 @@
 import WatchPlayer from "@/app/(user)/watch/[id]/[movieTitle]/WatchPlayer";
 import WatchGemeni from "@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni";
 import { useState } from "react";
-import WatchSkeletonLoading from "@/components/WatchSkeletonLoading";
 import { Sparkles } from "lucide-react";
 import ToggleWatchlistButton from "@/app/(user)/watch/[id]/[movieTitle]/ToggleWatchlistButton";
 import { omit } from "@/utils/ai-recommend/omit";
@@ -41,12 +40,11 @@ export default function TMDBWatchPage({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { data, error, isLoading } = useSWR<SWRResponse>(
+  const { data, error } = useSWR<SWRResponse>(
     `/api/tmdb/${params.id}/?type=${params.type}`,
     fetcher
   );
 
-  if (isLoading) return <WatchSkeletonLoading />;
   if (error) {
     return <ErrorMessage />;
   }
