@@ -6,8 +6,7 @@ import FilmCard from "@/components/FilmCard";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import { BingeCollection } from "@/types/binge";
 import ErrorMessage from "@/components/ErrorMessage";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from "@/utils/swr/fetcher";
 
 export default function CollectionPage({ genre }: { genre: string }) {
   const loaderRef = useRef<HTMLDivElement | null>(null);
