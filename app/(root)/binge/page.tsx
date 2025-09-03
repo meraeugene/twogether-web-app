@@ -2,10 +2,11 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { BINGE_GENRES } from "@/constants/genre";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import CollectionPage from "./CollectionPage";
 import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
 import { bingePlaceholders } from "@/constants/placeholders";
+import Loader from "@/components/Loader";
 
 export default function BingePage() {
   const router = useRouter();
@@ -31,7 +32,11 @@ export default function BingePage() {
   };
 
   const latestList = useMemo(() => {
-    return <CollectionPage genre={selectedGenre} />;
+    return (
+      <Suspense fallback={<Loader />}>
+        <CollectionPage genre={selectedGenre} />;
+      </Suspense>
+    );
   }, [selectedGenre]);
 
   return (
