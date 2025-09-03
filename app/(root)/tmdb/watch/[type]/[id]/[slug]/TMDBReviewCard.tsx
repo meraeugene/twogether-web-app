@@ -28,7 +28,10 @@ const TMDBReviewCard = ({ review }: { review: TMDBMovieReview }) => {
             {/* Avatar */}
             <div className="w-10 h-10 rounded-full bg-gray-800 border border-white/20 flex items-center justify-center overflow-hidden">
               {review.avatar_url ? (
-                <Link href={`/profile/${review.username}/${review.user_id}`}>
+                <Link
+                  href={`/profile/${review.username}/${review.user_id}`}
+                  prefetch
+                >
                   <img
                     src={review.avatar_url}
                     alt="User avatar"
@@ -43,6 +46,7 @@ const TMDBReviewCard = ({ review }: { review: TMDBMovieReview }) => {
             {/* User info */}
             <div>
               <Link
+                prefetch
                 href={`/profile/${review.username}/${review.user_id}`}
                 className="text-white font-medium"
               >

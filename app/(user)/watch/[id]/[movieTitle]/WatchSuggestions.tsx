@@ -39,7 +39,7 @@ export default function WatchSuggestions({
             >
               <Link
                 href={`/watch/${rec.tmdb_id}/${getSlugFromTitle(rec.title)}`}
-                shallow={true}
+                prefetch
                 className="
               flex items-center justify-center
               w-12 h-12 rounded-full
@@ -57,6 +57,7 @@ export default function WatchSuggestions({
 
           <div className="flex-1 text-sm py-2">
             <Link
+              prefetch
               href={`/watch/${rec.tmdb_id}/${getSlugFromTitle(rec.title)}`}
               className="w-full flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mt-2 mb-4 lg:hidden"
             >
@@ -100,6 +101,7 @@ export default function WatchSuggestions({
             {rec.recommended_by && (
               <div className=" mt-3">
                 <Link
+                  prefetch
                   href={`/profile/${rec.recommended_by.username}/${rec.recommended_by.id}`}
                   className=" text-sm text-white/60 hover:underline flex items-center gap-2"
                 >

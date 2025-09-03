@@ -37,7 +37,7 @@ export default function WatchlistPage() {
         <h1 className="text-2xl font-bold mb-4">Your Watchlist is Empty</h1>
         <p className="text-gray-600 mb-6 font-[family-name:var(--font-geist-mono)]">
           You haven&apos;t added any Movies/Shows to your Watchlist yet. Start{" "}
-          <Link href="/browse" className="text-white hover:underline">
+          <Link prefetch href="/browse" className="text-white hover:underline">
             browsing
           </Link>{" "}
           now.

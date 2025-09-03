@@ -1,3 +1,5 @@
+"use client";
+
 import { DemoSteps } from "@/components/ui/DemoSteps";
 import { data } from "@/data/demo";
 

@@ -61,6 +61,7 @@ export function UserResultCard({
 
       <div className="flex gap-3 sm:ml-auto">
         <Link
+          prefetch
           href={`/profile/${user.username}/${user.id}`}
           className="text-sm px-4 py-2 border border-white/20 text-white rounded-md transition hover:border-white/40 hover:text-white flex items-center gap-2"
         >

@@ -155,6 +155,7 @@ export default function WatchInfo({
           </p>
 
           <Link
+            prefetch
             href={`/profile/${recommendation.recommended_by.username}/${recommendation.recommended_by.id}`}
             className="inline-flex items-center gap-3 py-2 px-3 rounded-md transition-colors bg-white/5 hover:bg-white/10 backdrop-blur border border-white/10 w-fit"
           >

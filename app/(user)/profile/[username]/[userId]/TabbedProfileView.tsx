@@ -227,6 +227,7 @@ export default function TabbedProfileView({
             {currentUser?.id === user.id && (
               <div className="flex items-center gap-3">
                 <Link
+                  prefetch
                   href={`/profile/${encodeURIComponent(user.username)}`}
                   className={`group mt-5 relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm hover:bg-white/20
                 `}
@@ -439,6 +440,7 @@ export default function TabbedProfileView({
                           </div>
 
                           <Link
+                            prefetch
                             href={`/profile/${friend.username}/${friend.id}`}
                             className="mt-1 cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center gap-2"
                           >

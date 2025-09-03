@@ -1,9 +1,8 @@
+import BackButton from "@/components/BackButton";
 import FilmCard from "@/components/FilmCard";
 import { EnrichedCollection } from "@/types/binge";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import { getBingeCollectionsByQuery } from "@/utils/tmdb/search/searchCollectionsTMDB";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 
 export default async function BingeSearchPage({
   params,
@@ -32,12 +31,7 @@ export default async function BingeSearchPage({
         <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/10 to-red-900/10" />
       </div>
 
-      <Link
-        href="/binge"
-        className="inline-flex lg:hidden items-center justify-center py-2 px-4 rounded-md bg-white text-red-600 hover:bg-red-600 hover:text-white transition mb-6"
-      >
-        <ArrowLeft size={20} />
-      </Link>
+      <BackButton />
 
       {results.length === 0 ? (
         <div className="text-left text-sm md:text-base lg:text-lg text-white/70  space-y-2">

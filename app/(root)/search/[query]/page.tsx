@@ -31,6 +31,7 @@ export default async function SearchPage({
       </div>
 
       <Link
+        prefetch
         href="/browse"
         className="inline-flex lg:hidden items-center justify-center py-2 px-4 rounded-md bg-white text-red-600 hover:bg-red-600 hover:text-white transition mb-6"
       >

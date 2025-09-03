@@ -24,6 +24,7 @@ export function BrowseCategory({
         <h2 className="text-2xl md:text-3xl font-semibold">{title}</h2>
         <Link
           href={href}
+          prefetch
           className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 transition text-sm px-4 py-2 rounded-md font-[family-name:var(--font-geist-mono)]"
         >
           <span>Browse All</span>

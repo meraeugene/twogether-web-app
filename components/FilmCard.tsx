@@ -260,6 +260,7 @@ export default function FilmCard({
               {item.recommended_by.username && (
                 <div className=" mt-3 ">
                   <Link
+                    prefetch
                     href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
                     className=" text-sm text-white/60 hover:underline flex items-center gap-2"
                   >

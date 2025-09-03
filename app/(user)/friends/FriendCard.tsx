@@ -167,6 +167,7 @@ export function FriendCard({
       {status === "friend" && (
         <div className="flex flex-wrap gap-2 justify-end">
           <Link
+            prefetch
             href={`/profile/${username}/${id}`}
             className="cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
           >
@@ -196,6 +197,7 @@ export function FriendCard({
       {status === "request" && (
         <div className="flex flex-wrap gap-2">
           <Link
+            prefetch
             href={`/profile/${username}/${id}`}
             className=" cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
           >
@@ -230,6 +232,7 @@ export function FriendCard({
           </button>
 
           <Link
+            prefetch
             href={`/profile/${username}/${id}`}
             className=" cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 transition"
           >
