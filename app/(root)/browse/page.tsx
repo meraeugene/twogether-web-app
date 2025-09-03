@@ -5,8 +5,6 @@ import useSWR from "swr";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 import { fetcher } from "@/utils/swr/fetcher";
 import { BrowseCategory } from "./BrowseCategory";
-import { Suspense } from "react";
-import Loader from "@/components/Loader";
 
 export default function BrowseLandingPage() {
   const { data, error, isLoading } = useSWR<{
@@ -33,29 +31,27 @@ export default function BrowseLandingPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/10 to-red-900/10" />
       </div>
 
-      <Suspense fallback={<Loader />}>
-        <BrowseCategory
-          title="Movies"
-          href="/browse/movies"
-          items={movies}
-          error={error}
-          isLoading={isLoading}
-        />
-        <BrowseCategory
-          title="Anime"
-          href="/browse/anime"
-          items={anime}
-          error={error}
-          isLoading={isLoading}
-        />
-        <BrowseCategory
-          title="TV/Shows"
-          href="/browse/tv"
-          items={tv}
-          error={error}
-          isLoading={isLoading}
-        />
-      </Suspense>
+      <BrowseCategory
+        title="Movies"
+        href="/browse/movies"
+        items={movies}
+        error={error}
+        isLoading={isLoading}
+      />
+      <BrowseCategory
+        title="Anime"
+        href="/browse/anime"
+        items={anime}
+        error={error}
+        isLoading={isLoading}
+      />
+      <BrowseCategory
+        title="TV/Shows"
+        href="/browse/tv"
+        items={tv}
+        error={error}
+        isLoading={isLoading}
+      />
     </main>
   );
 }
