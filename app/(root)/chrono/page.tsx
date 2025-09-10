@@ -193,6 +193,7 @@ export default function ChronologicalPage() {
                       onClick={() => {
                         setSelectedFranchise(key);
                         setIsOpen(false);
+                        document.body.classList.remove("overflow-hidden");
                         window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       className={`group cursor-pointer relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3
