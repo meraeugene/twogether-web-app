@@ -12,7 +12,7 @@ const Faqs = () => {
       {/* Red Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none z-0" />
 
-      <div className="relative z-10 max-w-4xl mx-auto">
+      <div className="relative z-10 max-w-3xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-4xl xl:text-5xl font-bold mb-6">
             <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
