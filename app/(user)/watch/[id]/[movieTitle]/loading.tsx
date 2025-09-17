@@ -1,41 +1,37 @@
-const loading = () => {
+const Loading = () => {
   return (
     <main className="min-h-screen bg-black flex flex-col  lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 px-7 pt-28  pb-16 text-white">
-      <div className="flex flex-col xl:flex-row gap-10 animate-pulse">
-        <div className="flex-1 ">
-          <div className="w-full aspect-video bg-white/10 rounded-lg" />
+      <div className="relative animate-pulse flex flex-col gap-8 overflow-hidden">
+        <div
+          className="absolute inset-0 -translate-x-full 
+                        bg-gradient-to-r from-transparent via-white/10 to-transparent"
+        />
 
-          <div className="flex items-center mt-7 gap-3">
-            <div className="h-10 w-[30%] bg-white/10 rounded-lg" />
-            <div className="h-10 w-[30%] bg-white/10 rounded-lg" />
-          </div>
+        {/* Video/Poster Placeholder */}
+        <div className="w-full aspect-video  bg-white/10 rounded-lg relative z-10" />
 
-          <div className="flex justify-between items-center  gap-8 mt-12">
-            <div className="h-10 w-[60%] bg-white/10 rounded-lg" />
-            <div className="h-10 w-[40%] bg-white/10 rounded-lg" />
-          </div>
-
-          <div className="h-4 w-[10%] bg-white/10 rounded-sm mt-6" />
-          <div className="h-5 w-[55%] bg-white/10 rounded-sm mt-3" />
-          <div className="h-6 w-[40%] bg-white/10 rounded-sm mt-4" />
-          <div className="h-5 w-[15%] bg-white/10 rounded-sm mt-4" />
+        {/* Buttons / Tags (3 buttons fixed) */}
+        <div className="flex flex-wrap items-center mt-4 gap-3 relative z-10">
+          <div className="h-10 w-[40%] sm:w-[25%] md:w-[20%] bg-white/10 rounded-lg" />
+          <div className="h-10 w-[40%] sm:w-[25%] md:w-[20%] bg-white/10 rounded-lg" />
+          <div className="h-10 w-[40%] sm:w-[25%] md:w-[20%] bg-white/10 rounded-lg" />
         </div>
-        <div className="w-full md:hidden xl:block  xl:w-[14%] 2xl:w-[10%] xl:space-y-6">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <div key={index}>
-              <div className="lg:h-[200px] xl:h-[250px]  bg-white/10 rounded-lg" />
-              <div className="h-4 bg-white/10  rounded-sm mt-3" />
-              <div className="flex justify-between items-center gap-4">
-                <div className="h-3 bg-white/10 w-[35%]  rounded-sm mt-2" />
-                <div className="h-3 bg-white/10 w-[20%] rounded-sm mt-2" />
-              </div>
-              <div className="h-3 bg-white/10 w-[80%] rounded-sm mt-2" />
-            </div>
-          ))}
+
+        {/* Title + Action */}
+        <div className="h-10 w-[80%] sm:w-[60%] bg-white/10 rounded-lg" />
+
+        {/* Text Lines */}
+        <div className="flex flex-col gap-3 mt-2 relative z-10">
+          <div className="h-4 w-[25%] sm:w-[15%] bg-white/10 rounded-sm" />
+          <div className="h-5 w-[90%] sm:w-[70%] bg-white/10 rounded-sm" />
+          <div className="h-5 w-[85%] sm:w-[65%] bg-white/10 rounded-sm" />
+          <div className="h-5 w-[75%] sm:w-[55%] bg-white/10 rounded-sm" />
+          <div className="h-5 w-[65%] sm:w-[45%] bg-white/10 rounded-sm" />
+          <div className="h-5 w-[40%] sm:w-[25%] bg-white/10 rounded-sm" />
         </div>
       </div>
     </main>
   );
 };
 
-export default loading;
+export default Loading;
