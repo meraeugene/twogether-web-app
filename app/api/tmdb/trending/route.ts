@@ -30,6 +30,14 @@ export async function GET() {
     const tvData = await tvRes.json();
     const tv: TMDBRawResult[] = (tvData.results || []).slice(0, 18);
 
+    // --- K-Dramas (TV, Korean language + Drama genre) ---
+    const kdramaRes = await fetch(
+      `${BASE_URL}/discover/tv?with_original_language=ko&with_genres=18&sort_by=popularity.desc&page=1&api_key=${API_KEY}`,
+      { cache: "force-cache", next: { revalidate: 86400 } }
+    );
+    const kdramaData = await kdramaRes.json();
+    const kdramas: TMDBRawResult[] = (kdramaData.results || []).slice(0, 18);
+
     // --- Enrichment helper ---
     async function enrichItem(
       item: TMDBRawResult,
@@ -80,18 +88,20 @@ export async function GET() {
       }
     }
 
-    const enrichedMovies = await Promise.all(
-      movies.map((i) => enrichItem(i, "movie"))
-    );
-    const enrichedAnime = await Promise.all(
-      anime.map((i) => enrichItem(i, "tv"))
-    );
-    const enrichedTv = await Promise.all(tv.map((i) => enrichItem(i, "tv")));
+    // Run enrichments in parallel
+    const [enrichedMovies, enrichedAnime, enrichedTv, enrichedKdramas] =
+      await Promise.all([
+        Promise.all(movies.map((i) => enrichItem(i, "movie"))),
+        Promise.all(anime.map((i) => enrichItem(i, "tv"))),
+        Promise.all(tv.map((i) => enrichItem(i, "tv"))),
+        Promise.all(kdramas.map((i) => enrichItem(i, "tv"))),
+      ]);
 
     const response = NextResponse.json({
       movies: enrichedMovies,
       anime: enrichedAnime,
       tv: enrichedTv,
+      kdramas: enrichedKdramas, //  Added K-Dramas here
     });
 
     response.headers.set(

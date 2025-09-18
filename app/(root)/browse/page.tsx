@@ -11,11 +11,13 @@ export default function BrowseLandingPage() {
     movies: TMDBEnrichedResult[];
     anime: TMDBEnrichedResult[];
     tv: TMDBEnrichedResult[];
+    kdramas: TMDBEnrichedResult[];
   }>("/api/tmdb/trending", fetcher, { revalidateOnFocus: false });
 
   const movies = data?.movies ?? [];
   const anime = data?.anime ?? [];
   const tv = data?.tv ?? [];
+  const kdrama = data?.kdramas ?? [];
 
   return (
     <main className="min-h-screen relative bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white">
@@ -35,6 +37,13 @@ export default function BrowseLandingPage() {
         title="Movies"
         href="/browse/movies"
         items={movies}
+        error={error}
+        isLoading={isLoading}
+      />
+      <BrowseCategory
+        title="K-Dramas"
+        href="/browse/kdrama"
+        items={kdrama}
         error={error}
         isLoading={isLoading}
       />
