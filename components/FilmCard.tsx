@@ -238,9 +238,11 @@ export default function FilmCard({
                       S{item.seasons || 1} · {item.episodes || 1}EPS
                     </span>
                   ) : (
-                    <span className="text-white/50 font-medium">
-                      {item.duration || 0}m
-                    </span>
+                    item.duration !== 0 && (
+                      <span className="text-white/50 font-medium">
+                        {item.duration}m
+                      </span>
+                    )
                   )}
                 </span>
 

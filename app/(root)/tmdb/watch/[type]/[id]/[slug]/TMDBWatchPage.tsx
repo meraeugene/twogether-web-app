@@ -46,6 +46,8 @@ export default function TMDBWatchPage({
     fetcher
   );
 
+  console.log(data);
+
   if (isLoading) return <WatchSkeletonLoading />;
   if (error) {
     return <ErrorMessage />;
@@ -182,9 +184,11 @@ export default function TMDBWatchPage({
                 EPS
               </span>
             ) : (
-              <span className="text-white/50 font-medium">
-                {recommendation.duration || 0}m
-              </span>
+              recommendation.duration !== 0 && (
+                <span className="text-white/50 font-medium">
+                  {recommendation.duration}m
+                </span>
+              )
             )}
 
             <span className="bg-gray-700 rounded-sm px-2 py-1 text-xs capitalize">

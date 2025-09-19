@@ -26,6 +26,8 @@ export async function GET(
 
     const details = await res.json();
 
+    console.log(details);
+
     // TV-specific logic
     let episodeTitlesPerSeason: Record<number, EpisodeTitle[]> | undefined;
     if (type === "tv") {
