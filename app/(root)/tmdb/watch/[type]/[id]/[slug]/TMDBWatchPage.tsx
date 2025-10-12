@@ -41,6 +41,9 @@ export async function generateMetadata({
     );
 
     const details = await res.json();
+
+    console.log("🎬 Movie details from TMDB:", details);
+
     const title = details.title || details.name || "Watch";
     const overview = details.overview ?? "";
     const poster = details.poster_path
