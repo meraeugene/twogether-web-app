@@ -46,6 +46,8 @@ export default function TMDBWatchPage({
     fetcher
   );
 
+  console.log(data);
+
   if (isLoading) return <WatchSkeletonLoading />;
   if (error) {
     return <ErrorMessage />;
