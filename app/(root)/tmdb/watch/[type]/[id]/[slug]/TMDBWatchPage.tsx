@@ -46,9 +46,9 @@ export async function generateMetadata({
 
     const title = details.title || details.name || "Watch";
     const overview = details.overview ?? "";
-    const poster = details.poster_path
-      ? `https://image.tmdb.org/t/p/w780${details.poster_path}`
-      : "/thumbnail-new.png";
+    const poster =
+      details.poster_path ??
+      `https://image.tmdb.org/t/p/w780${details.poster_path}`;
 
     return {
       title: `${title} | Twogether - Watch & Recommend Movies Socially`,
