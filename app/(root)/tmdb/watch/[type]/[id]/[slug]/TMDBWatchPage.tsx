@@ -19,10 +19,57 @@ import { Recommendation } from "@/types/recommendation";
 import BackButton from "@/components/BackButton";
 import TMDBReviewForm from "./TMDBReviewForm";
 import TMDBMovieReviews from "./TMDBMovieReviews";
+import { Metadata } from "next";
 
 type SWRResponse = {
   recommendation: Recommendation;
 };
+
+const API_KEY = process.env.TMDB_API_KEY!;
+const BASE_URL = "https://api.themoviedb.org/3";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { type: string; id: string };
+}): Promise<Metadata> {
+  const tmdbId = await params.id;
+
+  try {
+    const res = await fetch(
+      `${BASE_URL}/${params.type}/${tmdbId}?api_key=${API_KEY}`
+    );
+
+    const details = await res.json();
+    const title = details.title || details.name || "Watch";
+    const overview = details.overview ?? "";
+    const poster = details.poster_path
+      ? `https://image.tmdb.org/t/p/w780${details.poster_path}`
+      : "/thumbnail-new.png";
+
+    return {
+      title: `${title} | Twogether - Watch & Recommend Movies Socially`,
+      description: overview,
+      openGraph: {
+        title,
+        description: overview,
+        images: [poster],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description: overview,
+        images: [poster],
+      },
+    };
+  } catch {
+    return {
+      title: "Twogether | Watch & Recommend Movies Socially",
+      description:
+        "Stream and recommend movies with friends. Twogether is your cozy social movie space to discover what couples and friends are watching together.",
+    };
+  }
+}
 
 export default function TMDBWatchPage({
   currentUserId,
@@ -45,8 +92,6 @@ export default function TMDBWatchPage({
     `/api/tmdb/${params.id}/?type=${params.type}`,
     fetcher
   );
-
-  console.log(data);
 
   if (isLoading) return <WatchSkeletonLoading />;
   if (error) {
