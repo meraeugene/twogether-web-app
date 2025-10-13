@@ -19,24 +19,25 @@ export async function generateMetadata({
     const details = await res.json();
 
     const title = details.title || details.name || "Watch";
-    const overview = details.overview ?? "";
-    const poster =
-      details.backdrop_path ??
-      `https://image.tmdb.org/t/p/original${details.backdrop_path}`;
+    const poster = details.backdrop_path
+      ? `https://image.tmdb.org/t/p/original${details.backdrop_path}`
+      : details.poster_path
+      ? `https://image.tmdb.org/t/p/w780${details.poster_path}`
+      : "/thumbnail-new.png";
 
     return {
       title,
-      description: overview,
+      description: `Stream "${title}" on Twogether — no ads, just great movies. Watch and recommend with friends effortlessly using the Brave browser.`,
       openGraph: {
         title,
-        description: overview,
+        description: `Watch "${title}" now on Twogether — your cozy space to stream, rate, and share movies with friends. Enjoy seamless, ad-free viewing using the Brave browser!`,
         images: [poster],
         siteName: "Twogether",
       },
       twitter: {
         card: "summary_large_image",
         title,
-        description: overview,
+        description: `Discover "${title}" on Twogether — watch and recommend movies with zero ads using Brave browser for a smooth experience.`,
         images: [poster],
       },
     };
