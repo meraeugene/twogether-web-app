@@ -27,16 +27,16 @@ export async function generateMetadata({
       : "/thumbnail-new.png";
 
     return {
-      title: `${title} | Twogether - Watch & Recommend Movies Socially`,
+      title,
       description: overview,
       openGraph: {
-        title: `${title} | Twogether - Watch & Recommend Movies Socially`,
+        title,
         description: overview,
         images: [poster],
       },
       twitter: {
         card: "summary_large_image",
-        title: `${title} | Twogether - Watch & Recommend Movies Socially`,
+        title,
         description: overview,
         images: [poster],
       },
