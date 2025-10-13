@@ -20,22 +20,24 @@ export async function generateMetadata({
 
     const title = details.title || details.name || "Watch";
     const overview = details.overview ?? "";
-    const poster = details.poster_path
+    const poster = details.backdrop_path
+      ? `https://image.tmdb.org/t/p/w1280${details.backdrop_path}`
+      : details.poster_path
       ? `https://image.tmdb.org/t/p/w780${details.poster_path}`
       : "/thumbnail-new.png";
 
     return {
       title: `${title} | Twogether - Watch & Recommend Movies Socially`,
-      description: overview,
+      description: `${overview} Stream and recommend movies with friends. Twogether is your cozy social movie space to discover what couples and friends are watching together.`,
       openGraph: {
-        title,
-        description: overview,
+        title: `${title} | Twogether - Watch & Recommend Movies Socially`,
+        description: `${overview} Stream and recommend movies with friends. Twogether is your cozy social movie space to discover what couples and friends are watching together.`,
         images: [poster],
       },
       twitter: {
         card: "summary_large_image",
-        title,
-        description: overview,
+        title: `${title} | Twogether - Watch & Recommend Movies Socially`,
+        description: `${overview} Stream and recommend movies with friends. Twogether is your cozy social movie space to discover what couples and friends are watching together.`,
         images: [poster],
       },
     };
