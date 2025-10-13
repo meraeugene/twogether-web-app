@@ -15,50 +15,27 @@ export async function generateMetadata({
   const { id, type } = await params;
 
   try {
-    // Fetch movie/TV details
-    const [detailsRes, videosRes] = await Promise.all([
-      fetch(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}`),
-      fetch(`${BASE_URL}/${type}/${id}/videos?api_key=${API_KEY}`),
-    ]);
-
-    const details = await detailsRes.json();
-    const videos = await videosRes.json();
+    const res = await fetch(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}`);
+    const details = await res.json();
 
     const title = details.title || details.name || "Watch";
     const overview = details.overview ?? "";
-
-    // Try to find a YouTube trailer
-    const trailer = videos.results?.find(
-      (v: { type: string; site: string; key: string }) =>
-        v.type === "Trailer" && v.site === "YouTube"
-    );
-
-    // If found, use the YouTube thumbnail
-    const trailerThumbnail = trailer
-      ? `https://img.youtube.com/vi/${trailer.key}/maxresdefault.jpg`
-      : null;
-
-    // Fallbacks
     const poster =
-      trailerThumbnail ||
-      (details.backdrop_path
-        ? `https://image.tmdb.org/t/p/original${details.backdrop_path}`
-        : details.poster_path
-        ? `https://image.tmdb.org/t/p/w780${details.poster_path}`
-        : "/thumbnail-new.png");
+      details.backdrop_path ??
+      `https://image.tmdb.org/t/p/original${details.backdrop_path}`;
 
     return {
-      title: `${title} | Twogether`,
+      title,
       description: overview,
       openGraph: {
-        title: `Twogether | ${title}`,
+        title,
         description: overview,
         images: [poster],
         siteName: "Twogether",
       },
       twitter: {
         card: "summary_large_image",
-        title: `Twogether | ${title}`,
+        title,
         description: overview,
         images: [poster],
       },
@@ -71,6 +48,7 @@ export async function generateMetadata({
     };
   }
 }
+
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const tmdbId = (await params).id;
   const currentUser = await getCurrentUser();
