@@ -10,14 +10,12 @@ const BASE_URL = "https://api.themoviedb.org/3";
 export async function generateMetadata({
   params,
 }: {
-  params: { type: string; id: string };
+  params: Promise<{ type: string; id: string }>;
 }): Promise<Metadata> {
-  const { id } = await params;
+  const { id, type } = await params;
 
   try {
-    const res = await fetch(
-      `${BASE_URL}/${params.type}/${id}?api_key=${API_KEY}`
-    );
+    const res = await fetch(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}`);
     const details = await res.json();
 
     const title = details.title || details.name || "Watch";
