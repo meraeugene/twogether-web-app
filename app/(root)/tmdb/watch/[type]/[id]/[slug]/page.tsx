@@ -27,17 +27,20 @@ export async function generateMetadata({
 
     return {
       title,
-      description: `Stream "${title}" on Twogether — no ads, just great movies. Watch and recommend with friends effortlessly using the Brave browser.`,
+      description:
+        "Stream now on Twogether — watch and recommend movies with no ads using Brave browser for a smooth experience.",
       openGraph: {
         title,
-        description: `Watch "${title}" now on Twogether — your cozy space to stream, rate, and share movies with friends. Enjoy seamless, ad-free viewing using the Brave browser!`,
+        description:
+          "Stream now on Twogether — watch and recommend movies with no ads using Brave browser for a smooth experience.",
         images: [poster],
         siteName: "Twogether",
       },
       twitter: {
         card: "summary_large_image",
         title,
-        description: `Discover "${title}" on Twogether — watch and recommend movies with zero ads using Brave browser for a smooth experience.`,
+        description:
+          "Stream now on Twogether — watch and recommend movies with no ads using Brave browser for a smooth experience.",
         images: [poster],
       },
     };
