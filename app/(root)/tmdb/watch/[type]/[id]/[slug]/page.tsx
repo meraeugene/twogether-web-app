@@ -2,6 +2,53 @@ import { getCurrentUser } from "@/actions/authActions";
 import TMDBWatchPage from "./TMDBWatchPage";
 import { hasUserRecommendedFilm } from "@/actions/recommendationActions";
 import { checkIfInWatchlist } from "@/actions/watchlistActions";
+import { Metadata } from "next";
+
+const API_KEY = process.env.TMDB_API_KEY!;
+const BASE_URL = "https://api.themoviedb.org/3";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { type: string; id: string };
+}): Promise<Metadata> {
+  const { id } = await params;
+
+  try {
+    const res = await fetch(
+      `${BASE_URL}/${params.type}/${id}?api_key=${API_KEY}`
+    );
+    const details = await res.json();
+
+    const title = details.title || details.name || "Watch";
+    const overview = details.overview ?? "";
+    const poster = details.poster_path
+      ? `https://image.tmdb.org/t/p/w780${details.poster_path}`
+      : "/thumbnail-new.png";
+
+    return {
+      title: `${title} | Twogether - Watch & Recommend Movies Socially`,
+      description: overview,
+      openGraph: {
+        title,
+        description: overview,
+        images: [poster],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description: overview,
+        images: [poster],
+      },
+    };
+  } catch {
+    return {
+      title: "Twogether | Watch & Recommend Movies Socially",
+      description:
+        "Stream and recommend movies with friends. Twogether is your cozy social movie space to discover what couples and friends are watching together.",
+    };
+  }
+}
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const tmdbId = (await params).id;
