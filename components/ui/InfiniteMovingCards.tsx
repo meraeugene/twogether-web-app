@@ -71,10 +71,6 @@ export const InfiniteMovingCards: React.FC<InfiniteMovingCardsProps> = ({
     <div
       ref={containerRef}
       className={`relative z-20  overflow-hidden ${className}`}
-      style={{
-        maskImage:
-          "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
-      }}
     >
       <style>{`
         @keyframes scroll {
