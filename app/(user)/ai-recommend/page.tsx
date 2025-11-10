@@ -99,7 +99,7 @@ export default function AIRecommendForm() {
 
   return (
     <div className="min-h-screen  flex flex-col px-7 md:px-15 items-center justify-center   lg:px-24 xl:px-32 relative 2xl:px-26  bg-black text-white font-[family-name:var(--font-geist-sans)]">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
 
       <AnimatePresence mode="wait">
         {!loading && recommendations.length === 0 && (

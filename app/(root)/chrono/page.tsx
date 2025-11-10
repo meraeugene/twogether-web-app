@@ -118,7 +118,7 @@ export default function ChronologicalPage() {
 
   return (
     <div className="min-h-screen  relative bg-black text-white pt-28 pb-16 px-6 lg:px-24 xl:px-32 font-[family-name:var(--font-geist-sans)] md:pt-34">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
 
       {/* Timeline Section */}
       <div className="mb-24   mx-auto">

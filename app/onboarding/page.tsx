@@ -273,7 +273,9 @@ export default function OnboardingPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center  bg-black text-white  pb-16  pt-28 px-7 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 overflow-hidden">
+    <main className="min-h-screen flex flex-col justify-center items-center  bg-black text-white  pb-16  pt-28 relative px-7 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+
       {/* STEPS PROGESS */}
       <div className="flex flex-wrap justify-center gap-2 mb-8 text-sm">
         {steps.map((s, i) => (

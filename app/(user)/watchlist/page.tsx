@@ -48,8 +48,7 @@ export default function WatchlistPage() {
 
   return (
     <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 relative xl:pt-32 text-white">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
-
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
       <div>
         <h1 className="text-2xl font-bold mb-4">Your Watchlist</h1>
         <p className="text-gray-600 mb-6 font-[family-name:var(--font-geist-mono)]">

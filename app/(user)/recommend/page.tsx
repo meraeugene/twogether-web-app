@@ -157,8 +157,7 @@ const RecommendPage = () => {
       onSubmit={handleSubmit}
       className="min-h-screen flex flex-col justify-center items-center pt-28 pb-16 bg-black text-white px-7 relative overflow-hidden lg:pt-32 "
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
-
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
       {/* Steps Progress */}
       <div className="flex flex-wrap justify-center gap-2 mb-8 text-sm">
         {steps.map((s, i) => (
