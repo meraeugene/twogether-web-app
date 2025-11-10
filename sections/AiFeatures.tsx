@@ -10,14 +10,6 @@ const AiFeatures = () => {
     >
       {/* Combined Background Layers */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Radial Dots */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle, rgba(220,38,38,0.2) 1px, transparent 1px)`,
-            backgroundSize: "40px 40px",
-          }}
-        />
         {/* Red Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/10 to-red-900/10" />
       </div>
@@ -31,7 +23,7 @@ const AiFeatures = () => {
           viewport={{ once: true }}
         >
           <h2
-            className="text-4xl md:text-5xl font-bold mb-6 font-[family-name:var(--font-geist-sans)]     text-transparent bg-clip-text
+            className="text-4xl md:text-6xl font-extrabold mb-6 font-[family-name:var(--font-geist-sans)]     text-transparent bg-clip-text
           bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 "
           >
             Ai Reco <span className="text-white/90">|</span> Watch Gemeni

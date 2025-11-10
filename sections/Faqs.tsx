@@ -14,7 +14,7 @@ const Faqs = () => {
 
       <div className="relative z-10 max-w-3xl mx-auto">
         <div className="text-center mb-10">
-          <h2 className="text-4xl xl:text-5xl font-bold mb-6">
+          <h2 className="text-4xl xl:text-5xl font-extrabold mb-6">
             <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               Frequently Asked <span className="text-red-500">Questions</span>
             </span>

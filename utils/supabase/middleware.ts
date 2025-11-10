@@ -52,6 +52,7 @@ export async function updateSession(request: NextRequest) {
     "/watchlist",
     "/profile",
     "/friends",
+    "/messages",
     "/my-recommendations",
     "/ai-recommend",
   ];

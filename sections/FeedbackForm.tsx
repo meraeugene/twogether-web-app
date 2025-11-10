@@ -38,7 +38,7 @@ const FeedbackForm = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       <div className="relative z-10 text-center">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-[family-name:var(--font-geist-sans)] text-white">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 font-[family-name:var(--font-geist-sans)] text-white">
           We Value Your <span className="text-red-500">Feedback</span>
         </h1>
         <p className=" text-base md:text-lg xl:text-xl text-gray-300 max-w-2xl mx-auto font-[family-name:var(--font-geist-mono)] ">

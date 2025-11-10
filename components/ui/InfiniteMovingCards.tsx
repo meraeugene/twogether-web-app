@@ -94,7 +94,7 @@ export const InfiniteMovingCards: React.FC<InfiniteMovingCardsProps> = ({
       >
         {items.map((item, idx) => (
           <li
-            className="relative w-64 h-40 shrink-0 rounded-xl border-2 border-white bg-white/90 flex items-center justify-center overflow-hidden transition-all duration-300  hover:scale-105 "
+            className="relative w-64 h-40 shrink-0 rounded-xl  bg-white/80 flex items-center justify-center overflow-hidden transition-all duration-300  hover:scale-105 "
             key={`${item.name}-${idx}`}
           >
             <img

@@ -23,13 +23,6 @@ const Feedback = () => {
     <section className="py-20 px-7  relative min-h-screen flex items-center justify-center text-center overflow-hidden lg:flex-col">
       {/* Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle, rgba(220,38,38,0.2) 1px, transparent 1px)`,
-            backgroundSize: "40px 40px",
-          }}
-        />
         <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/5 to-red-900/10" />
       </div>
 
@@ -40,13 +33,13 @@ const Feedback = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="flex flex-col items-center justify-center max-w-[540px] mx-auto"
+          className="flex flex-col items-center justify-center  mx-auto"
         >
-          <h2 className="text-3xl font-bold md:text-4xl font-sans text-white max-w-4xl">
+          <h2 className="text-3xl font-extrabold md:text-5xl max-w-3xl font-sans text-white ">
             <span className="text-red-500">Trusted</span> by Movie Lovers
             Everywhere
           </h2>
-          <p className="text-base md:text-lg text-center xl:text-xl text-gray-300  mx-auto font-[family-name:var(--font-geist-mono)]   lg:text-lg leading-relaxed max-w-xs lg:max-w-sm mt-5 opacity-75">
+          <p className="text-base md:text-lg text-center xl:text-xl text-gray-300  mx-auto font-[family-name:var(--font-geist-mono)]   lg:text-lg leading-relaxed  mt-5 opacity-75">
             Discover how we’ve made a difference for our users.
           </p>
         </motion.div>
