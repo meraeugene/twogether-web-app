@@ -48,7 +48,7 @@ export default function TwogetherHero({
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-black overflow-hidden py-20 lg:py-0">
+    <div className="relative w-full min-h-screen bg-black/10 overflow-hidden pt-20 pb-6 lg:py-0">
       {/* Animated Movie Grid Background */}
       <div className="absolute inset-0 opacity-20">
         <div
