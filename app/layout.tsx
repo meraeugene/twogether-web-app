@@ -34,9 +34,11 @@ export const metadata: Metadata = {
     siteName: "Twogether",
     images: [
       {
-        url: "/thumbnail-new.png", // replace with your actual OG image URL
-        width: 1200,
-        height: 630,
+        url: "/thumbnail.png", // replace with your actual OG image URL
+        // width: 1200,
+        // height: 630,
+        width: 2400,
+        height: 1260,
         alt: "Twogether – Watch & Recommend Movies Socially",
       },
     ],
@@ -47,7 +49,7 @@ export const metadata: Metadata = {
     title: "Twogether – Watch & Recommend Movies Socially",
     description:
       "Stream and recommend movies with friends. Twogether is your cozy social movie space to discover what couples and friends are watching together.",
-    images: ["/thumbnail-new.png"], // replace with your actual image
+    images: ["/thumbnail.png"], // replace with your actual image
   },
 };
 
