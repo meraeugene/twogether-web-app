@@ -21,10 +21,7 @@ const Feedback = () => {
 
   return (
     <section className="py-20 px-7  relative min-h-screen flex items-center justify-center text-center overflow-hidden lg:flex-col">
-      {/* Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/5 to-red-900/10" />
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       <div className="container z-10 mx-auto">
         {/* Title */}

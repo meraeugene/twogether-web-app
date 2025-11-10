@@ -10,7 +10,6 @@ const Features = () => {
       id="features"
       className="pb-20 relative pt-16 px-7 md:px-12 lg:px-24"
     >
-      {/* Red Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       <div className="max-w-7xl mx-auto">

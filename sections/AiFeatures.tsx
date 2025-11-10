@@ -8,11 +8,7 @@ const AiFeatures = () => {
       id="features"
       className="relative pb-20 pt-16 px-7 md:px-12 lg:px-24 overflow-hidden"
     >
-      {/* Combined Background Layers */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Red Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/10 to-red-900/10" />
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto">

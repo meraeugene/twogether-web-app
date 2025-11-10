@@ -98,8 +98,7 @@ export default function TMDBWatchPage({
 
   return (
     <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 relative lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 text-white">
-      {/* Gradient */}
-      <div className="absolute pointer-events-none   inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       <BackButton />
 

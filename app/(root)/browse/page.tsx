@@ -36,11 +36,7 @@ export default function BrowseLandingPage() {
 
   return (
     <main className="min-h-screen relative bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white">
-      {/* Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/10 to-red-900/10" />
-      </div>
-
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
       <div className="max-w-2xl mx-auto w-full mb-8">
         <PlaceholdersAndVanishInput
           placeholders={browsePlaceholders}

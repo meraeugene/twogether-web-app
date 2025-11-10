@@ -48,7 +48,7 @@ export default function TwogetherHero({
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-black overflow-hidden py-8 lg:py-0">
+    <div className="relative w-full min-h-screen bg-black overflow-hidden py-16 lg:py-0">
       {/* Animated Movie Grid Background */}
       <div className="absolute inset-0 opacity-20">
         <div
@@ -81,7 +81,7 @@ export default function TwogetherHero({
       <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-90 z-10"></div>
       <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black opacity-80 z-10"></div>
       {/* Glow Effect */}
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-red-600/20 rounded-full blur-3xl z-10"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-red-600/20 rounded-full blur-3xl z-10 hidden md:block"></div>
 
       {/* Hero Content */}
       <div className="relative z-20 flex flex-col items-center justify-center h-screen px-8">

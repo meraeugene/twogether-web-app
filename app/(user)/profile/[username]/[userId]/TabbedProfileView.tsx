@@ -179,11 +179,7 @@ export default function TabbedProfileView({
       className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col   pt-28 lg:px-24 relative xl:px-32 2xl:px-26 xl:pt-32 pb-16 text-white px-7
 "
     >
-      {/* Combined Background Layers */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Red Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/10 to-red-900/10" />
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       {/* Banner */}
       <div

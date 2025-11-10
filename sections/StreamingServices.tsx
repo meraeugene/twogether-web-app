@@ -5,9 +5,7 @@ export default function StreamingServices() {
   return (
     <div className="py-14   relative">
       {/* Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/5 to-red-900/10" />
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       <div className="relative z-10 w-full px-4">
         <h2 className="text-3xl font-extrabold md:text-6xl font-sans text-white text-center">

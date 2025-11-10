@@ -67,11 +67,7 @@ export default function FriendsPage({
 
   return (
     <div className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black text-white px-7  pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 relative">
-      {/* Combined Background Layers */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Red Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-800/10 via-black/10 to-red-900/10" />
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       {/* Hero Banner */}
       <motion.div
