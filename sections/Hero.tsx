@@ -87,7 +87,7 @@ export default function TwogetherHero({
       <div className="relative z-20 flex flex-col items-center justify-center h-screen px-8">
         <div className="max-w-4xl mx-auto text-center">
           {/* Main Heading */}
-          <h1 className="text-5xl md:text-7xl  lg:text-8xl font-black mb-6 leading-tight">
+          <h1 className="text-5xl md:text-7xl 2xl:text-8xl  font-black mb-6 leading-tight">
             <span className="bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
               Watch Shows
             </span>
