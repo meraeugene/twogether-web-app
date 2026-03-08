@@ -1,5 +1,4 @@
 import { getCurrentUser } from "@/actions/authActions";
-import { getTotalActiveUser } from "@/actions/countActions";
 import AiFeatures from "@/sections/AiFeatures";
 import Demo from "@/sections/Demo";
 import Faqs from "@/sections/Faqs";
@@ -10,14 +9,11 @@ import Hero from "@/sections/Hero";
 import StreamingServices from "@/sections/StreamingServices";
 
 export default async function Home() {
-  const [user, totalActiveUsers] = await Promise.all([
-    getCurrentUser(),
-    getTotalActiveUser(),
-  ]);
+  const user = await getCurrentUser();
 
   return (
     <main className="relative w-full min-h-screen  text-white bg-black">
-      <Hero user={user ?? null} totalActiveUsers={totalActiveUsers} />
+      <Hero user={user ?? null} />
       <StreamingServices />
       <Feedback />
       <Demo />
