@@ -17,7 +17,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function ChronologicalPage() {
   const [selectedFranchise, setSelectedFranchise] = useState<string>(
-    "marvel-cinematic-universe"
+    "marvel-cinematic-universe",
   );
   const [isOpen, setIsOpen] = useState(false);
 

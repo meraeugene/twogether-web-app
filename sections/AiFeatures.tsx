@@ -14,18 +14,19 @@ const AiFeatures = () => {
   return (
     <section
       id="features"
-      className="relative pt-24 pb-64 px-7 border-t border-white/5 md:px-12 lg:px-24 overflow-hidden bg-[#030303]"
+      className="relative pt-20 md:pt-24 pb-28 md:pb-40 lg:pb-64 px-6 sm:px-8 md:px-12 lg:px-20 border-t border-white/5 overflow-hidden bg-[#030303]"
     >
-      {/* --- BACKGROUND AMBIENCE --- */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#fb2c36_1px,transparent_1px)] [background-size:32px_32px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-600/5 blur-[120px] rounded-full" />
+
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] md:w-[500px] lg:w-[600px] h-[400px] md:h-[500px] lg:h-[600px] bg-red-600/5 blur-[120px] rounded-full" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto">
-        {/* --- HEADER (UNTOUCHED) --- */}
-        <div className=" flex flex-col md:flex-row items-end justify-between gap-8 mb-24">
-          <div className="w-full">
+      <div className="relative z-10 max-w-7xl mx-auto sm:px-8">
+        {/* HEADER */}
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16 md:mb-20 lg:mb-24">
+          <div className="w-full max-w-2xl">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -41,7 +42,7 @@ const AiFeatures = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-5xl md:text-7xl font-medium tracking-tighter text-white leading-[0.85] "
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-medium tracking-tighter text-white leading-[0.9]"
             >
               Ai Reco <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
@@ -50,22 +51,20 @@ const AiFeatures = () => {
             </motion.h2>
           </div>
 
-          <div>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              viewport={{ once: true }}
-              className="text-neutral-400 text-lg  font-light max-w-lg leading-relaxed"
-            >
-              Experience the future of social streaming with features designed
-              for deep connection and cinematic quality.
-            </motion.p>
-          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            viewport={{ once: true }}
+            className="text-neutral-400 text-sm sm:text-base md:text-lg font-light max-w-md lg:max-w-lg leading-relaxed"
+          >
+            Experience the future of social streaming with features designed for
+            deep connection and cinematic quality.
+          </motion.p>
         </div>
 
-        {/* --- IPHONE 17 PRO MAX GRID --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
+        {/* PHONE GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {images.map((src, i) => (
             <motion.div
               key={i}
@@ -78,14 +77,16 @@ const AiFeatures = () => {
                 stiffness: 40,
               }}
               viewport={{ once: true }}
-              className={`relative flex justify-center ${i % 2 === 0 ? "lg:translate-y-16" : ""}`}
+              className={`relative flex justify-center ${
+                i % 2 === 0 ? "lg:translate-y-16" : ""
+              }`}
             >
-              {/* THE DEVICE: 19.5:9 Aspect Ratio */}
-              <div className="relative w-full max-w-[320px] aspect-[9/19.5] rounded-[3.5rem] border-[6px] border-[#1a1a1a] bg-[#000] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.9)] ring-1 ring-white/10 overflow-hidden">
-                {/* Dynamic Island (Thinner/Refined) */}
-                <div className="absolute top-4 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-black rounded-full z-40 border border-white/5" />
+              {/* DEVICE */}
+              <div className="relative w-full max-w-[240px] sm:max-w-[260px] md:max-w-[280px] lg:max-w-[300px] aspect-[9/19.5] rounded-[3rem] md:rounded-[3.5rem] border-[5px] md:border-[6px] border-[#1a1a1a] bg-[#000] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)] ring-1 ring-white/10 overflow-hidden">
+                {/* Dynamic Island */}
+                <div className="absolute top-4 left-1/2 -translate-x-1/2 w-12 md:w-14 h-3 bg-black rounded-full z-40 border border-white/5" />
 
-                {/* SCREEN CONTAINER */}
+                {/* SCREEN */}
                 <div className="relative w-full h-full z-10">
                   <Image
                     src={src}
@@ -95,21 +96,18 @@ const AiFeatures = () => {
                     className="object-cover"
                   />
 
-                  {/* High-End Glass Reflection */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent opacity-40 pointer-events-none" />
 
-                  {/* Subtle Top Ambient Light */}
-                  <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/40 to-transparent pointer-events-none" />
+                  <div className="absolute top-0 left-0 right-0 h-16 md:h-20 bg-gradient-to-b from-black/40 to-transparent pointer-events-none" />
                 </div>
 
-                {/* Titanium Hardware Shadow/Depth */}
                 <div className="absolute inset-0 rounded-[3rem] shadow-[inset_0_0_2px_1px_rgba(255,255,255,0.1)] pointer-events-none z-30" />
               </div>
 
-              {/* External Buttons (Floating outside the chassis) */}
-              <div className="absolute -left-1 top-[22%] w-[3px] h-8 bg-neutral-800 rounded-l-sm z-0" />
-              <div className="absolute -left-1 top-[30%] w-[3px] h-14 bg-neutral-800 rounded-l-sm z-0" />
-              <div className="absolute -right-1 top-[28%] w-[3px] h-16 bg-neutral-800 rounded-r-sm z-0" />
+              {/* HARDWARE BUTTONS */}
+              <div className="absolute hidden md:block -left-1 top-[22%] w-[3px] h-8 bg-neutral-800 rounded-l-sm" />
+              <div className="absolute hidden md:block -left-1 top-[30%] w-[3px] h-14 bg-neutral-800 rounded-l-sm" />
+              <div className="absolute hidden md:block -right-1 top-[28%] w-[3px] h-16 bg-neutral-800 rounded-r-sm" />
             </motion.div>
           ))}
         </div>
