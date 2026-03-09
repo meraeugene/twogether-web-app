@@ -7,6 +7,7 @@ import Feedback from "@/sections/Feedback";
 import FeedbackForm from "@/sections/FeedbackForm";
 import Hero from "@/sections/Hero";
 import StreamingServices from "@/sections/StreamingServices";
+import InteractiveCinema from "@/sections/Top10";
 
 export default async function Home() {
   const user = await getCurrentUser();
@@ -14,6 +15,7 @@ export default async function Home() {
   return (
     <main className="relative w-full min-h-screen  text-white bg-black">
       <Hero user={user ?? null} />
+      <InteractiveCinema />
       <StreamingServices />
       <Feedback />
       <Demo />

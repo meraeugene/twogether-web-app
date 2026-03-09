@@ -2,7 +2,10 @@ export async function fetcher<T = unknown>(url: string): Promise<T> {
   const res = await fetch(url);
 
   if (!res.ok) {
-    const error = new Error("Failed to fetch") as any;
+    const error = new Error("Failed to fetch") as Error & {
+      status?: number;
+      details?: unknown;
+    };
     error.status = res.status;
 
     try {

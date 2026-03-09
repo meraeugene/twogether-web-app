@@ -7,7 +7,7 @@ import { Toaster } from "sonner";
 import { getCurrentUser } from "@/actions/authActions";
 import PresenceManager from "@/components/PresenceManager";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
-import BackToTopButton from "@/components/BackToTopButton";
+// import BackToTopButton from "@/components/BackToTopButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -83,7 +83,7 @@ export default async function RootLayout({
         <Header />
         {currentUser?.id && <PresenceManager userId={currentUser.id} />}
         {children}
-        <BackToTopButton />
+        {/* <BackToTopButton /> */}
         {currentUser?.id && <CookieConsentBanner />}
         <Footer />
       </body>
