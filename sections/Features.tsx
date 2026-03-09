@@ -61,14 +61,14 @@ const Features = () => {
               >
                 {/* LEFT SIDE */}
                 <div className="flex items-center gap-5 md:gap-8 z-10">
-                  <span className="text-xs font-mono text-neutral-600 group-hover:text-red-500 transition-colors">
+                  <span className="text-xs font-mono text-red-500 md:text-neutral-600 group-hover:text-red-500 transition-colors">
                     /0{index + 1}
                   </span>
 
                   <div className="relative">
                     <div className="absolute inset-0 bg-red-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                     <Icon
-                      className="text-white group-hover:text-red-500 transition-colors relative"
+                      className="md:text-white text-red-500 group-hover:text-red-500 transition-colors relative"
                       size={26}
                       strokeWidth={1.5}
                     />
