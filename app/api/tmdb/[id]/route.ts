@@ -5,7 +5,7 @@ const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const url = new URL(request.url);
@@ -15,7 +15,7 @@ export async function GET(
     if (!tmdbId || !type) {
       return NextResponse.json(
         { error: "Missing TMDB ID or type" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -34,7 +34,7 @@ export async function GET(
       for (let season = 1; season <= totalSeasons; season++) {
         const seasonRes = await fetch(
           `${BASE_URL}/tv/${details.id}/season/${season}?api_key=${API_KEY}`,
-          { next: { revalidate: 86400 } }
+          { next: { revalidate: 86400 } },
         );
         if (seasonRes.ok) {
           const seasonData: TMDBSeasonResponse = await seasonRes.json();
@@ -61,12 +61,12 @@ export async function GET(
       stream_url:
         type === "tv"
           ? [
-              `https://vidlink.pro/tv/${details.id}/1/1?title=true&poster=true&autoplay=false`,
+              // `https://vidlink.pro/tv/${details.id}/1/1?title=true&poster=true&autoplay=false`,
               `https://vidsrc.cc/v2/embed/tv/${details.id}/1/1?autoPlay=false&poster=true`,
               `https://vidsrc.to/embed/tv/${details.id}/1/1`,
             ]
           : [
-              `https://vidlink.pro/movie/${details.id}?title=true&poster=true&autoplay=false`,
+              // `https://vidlink.pro/movie/${details.id}?title=true&poster=true&autoplay=false`,
               `https://vidsrc.cc/v2/embed/movie/${details.id}?autoPlay=false&poster=true`,
               `https://vidsrc.to/embed/movie/${details.id}`,
             ],
@@ -88,7 +88,7 @@ export async function GET(
     console.error("TMDB API Error:", err);
     return NextResponse.json(
       { error: "Failed to fetch movie/TV" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

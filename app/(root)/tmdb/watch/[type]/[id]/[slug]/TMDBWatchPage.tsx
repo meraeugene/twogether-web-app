@@ -43,7 +43,7 @@ export default function TMDBWatchPage({
 
   const { data, error, isLoading } = useSWR<SWRResponse>(
     `/api/tmdb/${params.id}/?type=${params.type}`,
-    fetcher
+    fetcher,
   );
 
   if (isLoading) return <WatchSkeletonLoading />;
@@ -85,7 +85,7 @@ export default function TMDBWatchPage({
     setLoading(false);
     if (!error) {
       toast.success(
-        "Recommendation submitted! Your taste just blessed someone’s watchlist 🎉"
+        "Recommendation submitted! Your taste just blessed someone’s watchlist 🎉",
       );
       setOpen(false);
       document.body.classList.remove("overflow-hidden");
@@ -117,8 +117,8 @@ export default function TMDBWatchPage({
                     ([season, episodes]) => [
                       Number(season),
                       episodes.map((ep) => ep.title),
-                    ]
-                  )
+                    ],
+                  ),
                 )
               : undefined
           }

@@ -2,7 +2,7 @@ import { EnrichedCollection } from "@/types/binge";
 import { Recommendation } from "@/types/recommendation";
 
 export function adaptCollectionMoviesToRecommendations(
-  collection: EnrichedCollection
+  collection: EnrichedCollection,
 ): Recommendation[] {
   return collection.movies.map((movie) => {
     const baseId = `movie-${movie.tmdb_id}`;
@@ -15,7 +15,7 @@ export function adaptCollectionMoviesToRecommendations(
       poster_url: movie.poster_url ?? undefined,
       type: "movie",
       stream_url: [
-        `https://vidlink.pro/movie/${movie.tmdb_id}?title=true&poster=true&autoplay=false`,
+        // `https://vidlink.pro/movie/${movie.tmdb_id}?title=true&poster=true&autoplay=false`,
         `https://vidsrc.cc/v2/embed/movie/${movie.tmdb_id}?autoPlay=false&poster=true`,
         `https://vidsrc.to/embed/movie/${movie.tmdb_id}`,
       ],

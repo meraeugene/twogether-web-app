@@ -2,7 +2,7 @@ import { Recommendation } from "@/types/recommendation";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 
 export function adaptTMDBToRecommendation(
-  tmdb: TMDBEnrichedResult
+  tmdb: TMDBEnrichedResult,
 ): Recommendation {
   const baseId = `${tmdb.type}-${tmdb.id}`; // deterministic
 
@@ -16,12 +16,12 @@ export function adaptTMDBToRecommendation(
     stream_url:
       tmdb.type === "tv"
         ? [
-            `https://vidlink.pro/tv/${tmdb.id}/1/1?title=true&poster=true&autoplay=false`,
+            // `https://vidlink.pro/tv/${tmdb.id}/1/1?title=true&poster=true&autoplay=false`,
             `https://vidsrc.cc/v2/embed/tv/${tmdb.id}/1/1?autoPlay=false&poster=true`,
             `https://vidsrc.to/embed/tv/${tmdb.id}/1/1`,
           ]
         : [
-            `https://vidlink.pro/movie/${tmdb.id}?title=true&poster=true&autoplay=false`,
+            // `https://vidlink.pro/movie/${tmdb.id}?title=true&poster=true&autoplay=false`,
             `https://vidsrc.cc/v2/embed/movie/${tmdb.id}?autoPlay=false&poster=true`,
             `https://vidsrc.to/embed/movie/${tmdb.id}`,
           ],

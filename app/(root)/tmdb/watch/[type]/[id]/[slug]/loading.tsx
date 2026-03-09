@@ -14,7 +14,6 @@ const Loading = () => {
         <div className="flex flex-wrap items-center mt-4 gap-3 relative z-10">
           <div className="h-10 w-[40%] sm:w-[25%] md:w-[20%] bg-white/10 rounded-lg" />
           <div className="h-10 w-[40%] sm:w-[25%] md:w-[20%] bg-white/10 rounded-lg" />
-          <div className="h-10 w-[40%] sm:w-[25%] md:w-[20%] bg-white/10 rounded-lg" />
         </div>
 
         {/* Title + Action */}
