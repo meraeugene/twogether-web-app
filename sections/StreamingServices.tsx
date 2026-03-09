@@ -34,9 +34,9 @@ export default function StreamingServices() {
   const { data: trailers } = useSWR<Trailer[]>("/api/top-trailers", fetcher);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [powerOn, setPowerOn] = useState(false);
+  const [powerOn, setPowerOn] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [repeat, setRepeat] = useState(false);
 
   const playerRef = useRef<YouTubePlayer | null>(null);
@@ -140,16 +140,27 @@ export default function StreamingServices() {
                         height: "100%",
                         playerVars: {
                           autoplay: 1,
-                          controls: 0,
+                          controls: 1,
                           modestbranding: 1,
                           rel: 0,
                           mute: isMuted ? 1 : 0,
+                          playsinline: 0,
+                          fs: 1,
                         },
                       }}
                       onReady={(event) => {
                         playerRef.current = event.target;
+
+                        event.target.playVideo();
                       }}
-                      onEnd={nextTrailer}
+                      onEnd={() => {
+                        if (repeat) {
+                          playerRef.current?.seekTo(0);
+                          playerRef.current?.playVideo();
+                        } else {
+                          nextTrailer();
+                        }
+                      }}
                     />
                   )}
 
@@ -249,7 +260,7 @@ export default function StreamingServices() {
                   <button
                     onClick={toggleMute}
                     className={`w-8 h-8 sm:w-10 cursor-pointer sm:h-10 rounded-2xl border flex items-center justify-center transition hover:text-white ${
-                      isMuted
+                      !isMuted
                         ? "bg-red-500/20 text-red-400 border-red-500/30"
                         : "bg-white/5 border-white/5 text-neutral-400"
                     }`}
@@ -297,7 +308,7 @@ export default function StreamingServices() {
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
           </div>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-6">
+          <div className="grid grid-cols-2  md:grid-cols-4 lg:grid-cols-8 gap-6">
             {featuredServices.map((item, idx) => (
               <div
                 key={idx}
