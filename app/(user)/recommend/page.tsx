@@ -58,18 +58,18 @@ const RecommendPage = () => {
       return;
     }
 
-    toast.success("Boom! Your recommendation just hit the screen 🎬✨");
+    toast.success("Boom! Your recommendation just hit the screen ");
     router.push("/recos");
   };
 
   const nextStepCheck = () => {
     if (currentKey === "movie" && !form.tmdb_id) {
-      toast.error("No title? No tale! Pick a film to start the magic ✨");
+      toast.error("No title? No tale! Pick a film to start the magic ");
       return;
     }
 
     if (currentKey === "comment" && !form.comment.trim()) {
-      toast.error("Say something! Your thoughts deserve the spotlight 💬✨");
+      toast.error("Say something! Your thoughts deserve the spotlight ");
       return;
     }
 
@@ -169,8 +169,8 @@ const RecommendPage = () => {
               i === step
                 ? "bg-gray-100 text-black hover:bg-gray-200"
                 : i < step
-                ? "bg-gray-400 text-black hover:bg-gray-300"
-                : "text-gray-600 cursor-not-allowed"
+                  ? "bg-gray-400 text-black hover:bg-gray-300"
+                  : "text-gray-600 cursor-not-allowed"
             }`}
             disabled={i > step}
           >

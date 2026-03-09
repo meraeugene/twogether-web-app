@@ -23,7 +23,7 @@ export default function RecommendStepMovieSearch({
     debouncedQuery
       ? `/api/recommend?query=${encodeURIComponent(debouncedQuery)}`
       : null,
-    fetcher
+    fetcher,
   );
 
   const results: TMDBEnrichedResult[] = data || [];
@@ -44,12 +44,12 @@ export default function RecommendStepMovieSearch({
     const stream_url =
       type === "tv"
         ? [
-            `https://vidlink.pro/tv/${item.id}/1/1?title=true&poster=true&autoplay=false`,
+            // `https://vidlink.pro/tv/${item.id}/1/1?title=true&poster=true&autoplay=false`,
             `https://vidsrc.cc/v2/embed/tv/${item.id}/1/1?autoPlay=false&poster=true`,
             `https://vidsrc.to/embed/tv/${item.id}/1/1`,
           ]
         : [
-            `https://vidlink.pro/movie/${item.id}?title=true&poster=true&autoplay=false`,
+            // `https://vidlink.pro/movie/${item.id}?title=true&poster=true&autoplay=false`,
             `https://vidsrc.cc/v2/embed/movie/${item.id}?autoPlay=false&poster=true`,
             `https://vidsrc.to/embed/movie/${item.id}`,
           ];
