@@ -6,12 +6,12 @@ import useSWR from "swr";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetcher } from "@/utils/swr/fetcher";
 import {
-  Volume2,
-  VolumeX,
   Play,
   ChevronLeft,
   ChevronRight,
   Disc,
+  VolumeX,
+  Volume2,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -53,7 +53,7 @@ export default function UltraWideCinema() {
   return (
     <div className="relative w-full min-h-screen bg-black text-white overflow-hidden font-sans flex flex-col">
       {/* TRAILER SECTION */}
-      <div className="relative w-full h-[45vh]  lg:h-screen lg:absolute lg:inset-0 z-0">
+      <div className="relative w-full h-[45vh]   lg:h-screen lg:absolute lg:inset-0 z-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeMovie.id}
@@ -102,14 +102,30 @@ export default function UltraWideCinema() {
               exit={{ y: -30, opacity: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="flex items-center gap-4 mb-4 flex-wrap">
-                <span className="text-xs font-mono px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20">
-                  {activeMovie.releaseDate?.split("-")[0] || "2026"}
-                </span>
+              <div className="flex items-center lg:hidden justify-between mb-4">
+                <div className="flex items-end gap-4 ">
+                  <span className="text-4xl md:text-5xl font-black opacity-20 italic">
+                    0{index + 1}
+                  </span>
 
-                <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest">
-                  Featured_Archive_{index + 1}
-                </span>
+                  <div className="w-24 md:w-32 h-0.5 bg-zinc-800 mb-2 overflow-hidden">
+                    <motion.div
+                      className="h-full bg-white"
+                      initial={{ x: "-100%" }}
+                      animate={{
+                        x: `${((index + 1) / movies.length) * 100 - 100}%`,
+                      }}
+                      transition={{ duration: 1 }}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsMuted(!isMuted)}
+                  className="p-3 md:p-4 cursor-pointer rounded-full border border-white/10 hover:bg-white hover:text-black transition-all"
+                >
+                  {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                </button>
               </div>
 
               <h2 className="text-3xl sm:text-5xl md:text-7xl  font-black uppercase tracking-tighter mb-6 leading-none italic">
@@ -149,8 +165,7 @@ export default function UltraWideCinema() {
           </AnimatePresence>
         </div>
 
-        {/* FOOTER */}
-        <footer className="flex flex-col items-end">
+        <footer className="lg:flex flex-col hidden  items-end">
           <button
             onClick={() => setIsMuted(!isMuted)}
             className="p-3 md:p-4 cursor-pointer rounded-full border border-white/10 hover:bg-white hover:text-black transition-all"

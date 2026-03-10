@@ -31,7 +31,7 @@ export default function TwogetherHero({ user }: TwogetherHeroProps) {
   };
 
   return (
-    <div className="relative min-h-[90vh] md:min-h-screen w-full bg-[#030303] flex flex-col items-center justify-center overflow-hidden font-sans selection:bg-red-500/30">
+    <div className="relative min-h-screen w-full bg-[#030303] flex flex-col items-center justify-center overflow-hidden font-sans selection:bg-red-500/30">
       {/* BACKGROUND */}
       <div className="absolute inset-0 z-0">
         <div className="absolute hidden md:block inset-0 opacity-[0.12] pointer-events-none bg-[radial-gradient(#fb2c36_0.8px,transparent_0.8px)] bg-size-[32px_32px]" />
