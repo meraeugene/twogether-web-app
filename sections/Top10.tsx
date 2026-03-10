@@ -40,14 +40,18 @@ export default function UltraWideCinema() {
 
   if (isLoading)
     return (
-      <div className="h-screen bg-black flex flex-col items-center justify-center gap-4">
-        <Disc className="animate-spin text-white" size={40} strokeWidth={1} />
-        <span className="text-[10px] tracking-[0.5em] text-zinc-500 uppercase">
-          Calibrating_Stream
+      <div className="h-screen bg-black flex flex-col items-center justify-center">
+        <Disc
+          className="animate-spin text-white mb-6"
+          size={40}
+          strokeWidth={1}
+        />
+
+        <span className="text-xs tracking-[0.35em] text-zinc-500 uppercase">
+          Calibrating Stream
         </span>
       </div>
     );
-
   if (!activeMovie) return null;
 
   return (
@@ -128,11 +132,11 @@ export default function UltraWideCinema() {
                 </button>
               </div>
 
-              <h2 className="text-3xl sm:text-5xl md:text-7xl  font-black uppercase tracking-tighter mb-6 leading-none italic">
+              <h2 className="text-3xl sm:text-5xl md:text-6xl xl:text-7xl  font-black uppercase tracking-tighter mb-6 leading-none italic">
                 {activeMovie.title}
               </h2>
 
-              <p className="text-zinc-300 text-sm sm:text-base md:text-lg max-w-xl md:max-w-2xl mb-8 line-clamp-4 leading-relaxed">
+              <p className="text-zinc-300 text-sm sm:text-base md:text-lg max-w-xl md:max-w-2xl mb-8 md:line-clamp-3 leading-relaxed">
                 {activeMovie.overview}
               </p>
 
