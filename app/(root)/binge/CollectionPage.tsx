@@ -27,7 +27,7 @@ export default function CollectionPage({ genre }: { genre: string }) {
   const collections = data ? data.flat() : [];
 
   const uniqueCollections = Array.from(
-    new Map(collections.map((c) => [c.collection_id, c])).values()
+    new Map(collections.map((c) => [c.collection_id, c])).values(),
   );
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function CollectionPage({ genre }: { genre: string }) {
           setSize((prev) => prev + 1);
         }
       },
-      { threshold: 1 }
+      { threshold: 1 },
     );
 
     const current = loaderRef.current;
@@ -62,7 +62,7 @@ export default function CollectionPage({ genre }: { genre: string }) {
                 {Array.from({ length: 6 }).map((_, j) => (
                   <div
                     key={`skeleton-card-${i}-${j}`}
-                    className="aspect-[2/3] w-full rounded-md bg-white/10 animate-pulse"
+                    className="aspect-2/3 w-full rounded-md bg-white/10 animate-pulse"
                   />
                 ))}
               </div>

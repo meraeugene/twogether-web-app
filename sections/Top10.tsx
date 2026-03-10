@@ -72,7 +72,7 @@ export default function UltraWideCinema() {
                     activeMovie.trailerKey
                   }&vq=hd1080`}
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-                  w-[180vw] h-[180vh] md:w-[115vw] md:h-[115vh] object-cover"
+                 h-[180vh] w-full  md:h-[115vh] object-cover"
                   allow="autoplay; encrypted-media"
                 />
               </div>
@@ -84,14 +84,14 @@ export default function UltraWideCinema() {
               />
             )}
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent md:block hidden" />
+            <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black/40" />
+            <div className="absolute inset-0 bg-linear-to-r from-black/60 via-transparent to-transparent md:block hidden" />
           </motion.div>
         </AnimatePresence>
       </div>
 
       {/* CONTENT SECTION */}
-      <div className="relative z-20 flex flex-col gap-12 lg:gap-0 lg:flex-row  lg:items-end justify-between  px-6 sm:px-8 lg:px-16 md:py-10   lg:h-screen">
+      <div className="relative z-20 flex flex-col gap-12 lg:gap-0 lg:flex-row  lg:items-end justify-between  px-6 sm:px-8 lg:px-20 md:py-10   lg:h-screen">
         {/* MOVIE CONTENT */}
         <div className="max-w-4xl ">
           <AnimatePresence mode="wait">
@@ -125,11 +125,7 @@ export default function UltraWideCinema() {
                   href={`/tmdb/watch/movie/${activeMovie.id}/${activeMovie.slug}`}
                   className="flex items-center gap-2 sm:gap-4 h-10 sm:h-12 md:h-14 px-4 sm:px-6 md:px-10 bg-white text-black font-black uppercase text-xs sm:text-sm tracking-widest hover:bg-white/90 transition-transform"
                 >
-                  <Play
-                    size={18}
-                    className="sm:w-[20px] sm:h-[20px]"
-                    fill="black"
-                  />
+                  <Play size={18} className="sm:w-5 sm:h-5" fill="black" />
                   Watch Feature
                 </Link>
 
@@ -138,20 +134,14 @@ export default function UltraWideCinema() {
                     onClick={handlePrev}
                     className="h-10 cursor-pointer w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 flex items-center justify-center border border-white/20 hover:bg-white/10"
                   >
-                    <ChevronLeft
-                      size={18}
-                      className="sm:w-[20px] sm:h-[20px]"
-                    />
+                    <ChevronLeft size={18} className="sm:w-5 sm:h-5" />
                   </button>
 
                   <button
                     onClick={handleNext}
                     className="h-10 cursor-pointer w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 flex items-center justify-center border border-white/20 hover:bg-white/10"
                   >
-                    <ChevronRight
-                      size={18}
-                      className="sm:w-[20px] sm:h-[20px]"
-                    />
+                    <ChevronRight size={18} className="sm:w-5 sm:h-5" />
                   </button>
                 </div>
               </div>
@@ -172,7 +162,7 @@ export default function UltraWideCinema() {
               0{index + 1}
             </span>
 
-            <div className="w-24 md:w-32 h-[2px] bg-zinc-800 mb-2 overflow-hidden">
+            <div className="w-24 md:w-32 h-0.5 bg-zinc-800 mb-2 overflow-hidden">
               <motion.div
                 className="h-full bg-white"
                 initial={{ x: "-100%" }}

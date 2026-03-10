@@ -34,9 +34,9 @@ export default function TwogetherHero({ user }: TwogetherHeroProps) {
     <div className="relative min-h-[90vh] md:min-h-screen w-full bg-[#030303] flex flex-col items-center justify-center overflow-hidden font-sans selection:bg-red-500/30">
       {/* BACKGROUND */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute hidden md:block inset-0 opacity-[0.12] pointer-events-none bg-[radial-gradient(#fb2c36_0.8px,transparent_0.8px)] [background-size:32px_32px]" />
+        <div className="absolute hidden md:block inset-0 opacity-[0.12] pointer-events-none bg-[radial-gradient(#fb2c36_0.8px,transparent_0.8px)] bg-size-[32px_32px]" />
 
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] md:w-[700px] md:h-[400px] xl:w-[1000px] xl:h-[600px] bg-red-900/10 blur-[160px] rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-75 md:w-175 md:h-100 xl:w-250 xl:h-150 bg-red-900/10 blur-[160px] rounded-full" />
       </div>
 
       {/* FLOATING UI */}
@@ -66,13 +66,13 @@ export default function TwogetherHero({ user }: TwogetherHeroProps) {
           >
             {/* POSTER */}
             {el.type === "poster" && movieCovers?.[idx] && (
-              <div className="w-[60px] h-[90px] sm:w-[75px] sm:h-[110px] md:w-[110px] md:h-[160px] xl:w-[140px] xl:h-[200px] rounded-xl md:rounded-2xl border border-white/10 overflow-hidden shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] bg-neutral-900">
+              <div className="w-15 h-22.5 sm:w-[75px] sm:h-[110px] md:w-[110px] md:h-[160px] xl:w-[140px] xl:h-[200px] rounded-xl md:rounded-2xl border border-white/10 overflow-hidden shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] bg-neutral-900">
                 <img
                   src={movieCovers[idx]}
                   alt=""
                   className="w-full h-full object-cover  "
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
               </div>
             )}
 
@@ -148,12 +148,12 @@ export default function TwogetherHero({ user }: TwogetherHeroProps) {
         >
           <div className="absolute inset-0 bg-red-500/25 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-          <button className="relative p-[1px] inline-flex items-center justify-center rounded-full overflow-hidden transition-all duration-300">
+          <button className="relative cursor-pointer p-[1px] inline-flex items-center justify-center rounded-full overflow-hidden transition-all duration-300">
             <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0%,transparent_70%,#fb2c36_85%,transparent_100%)]" />
 
             <div className="relative flex items-center gap-2 md:gap-3 px-6 py-3 md:px-10 md:py-4 bg-black/60 rounded-full text-white backdrop-blur-2xl border border-white/5">
-              <span className="text-sm md:text-base font-semibold tracking-tight text-red-400">
-                Start TWOGETHER
+              <span className="text-sm uppercase md:text-base font-bold text-red-400">
+                START TWOGETHER
               </span>
 
               <ChevronRight
