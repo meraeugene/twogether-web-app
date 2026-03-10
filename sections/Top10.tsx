@@ -72,7 +72,7 @@ export default function UltraWideCinema() {
                     activeMovie.trailerKey
                   }&vq=hd1080`}
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-                 h-[180vh] w-full  md:h-[115vh] object-cover"
+                 h-[180vh] lg:w-full  w-[180vw]  md:w-[115vw]   md:h-[115vh] object-cover"
                   allow="autoplay; encrypted-media"
                 />
               </div>
