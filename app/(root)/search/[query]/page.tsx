@@ -6,9 +6,10 @@ import { searchTMDB } from "@/utils/tmdb/search/searchTMDB";
 export default async function SearchPage({
   params,
 }: {
-  params: { query: string };
+  params: Promise<{ query: string }>;
 }) {
-  const decodedQuery = decodeURIComponent(params.query);
+  const { query } = await params;
+  const decodedQuery = decodeURIComponent(query);
 
   const results: TMDBEnrichedResult[] = await searchTMDB(decodedQuery);
 
