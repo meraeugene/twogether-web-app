@@ -308,10 +308,18 @@ export default function StreamingServices() {
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
           </div>
 
-          <div className="grid grid-cols-2  md:grid-cols-4 lg:grid-cols-8 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
             {featuredServices.map((item, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.4,
+                  delay: idx * 0.08,
+                }}
+                whileHover={{ scale: 1.08 }}
+                viewport={{ once: true }}
                 className="aspect-square rounded-xl bg-white border border-white/5 flex items-center justify-center p-4 hover:border-white/20"
               >
                 <img
@@ -319,7 +327,7 @@ export default function StreamingServices() {
                   alt={item.name}
                   className="w-full h-full object-contain"
                 />
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
