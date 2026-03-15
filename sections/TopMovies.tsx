@@ -25,8 +25,8 @@ interface Movie {
   slug: string;
 }
 
-export default function UltraWideCinema() {
-  const { data, isLoading } = useSWR<Movie[]>("/api/top-ten", fetcher);
+export default function TopMovies() {
+  const { data, isLoading } = useSWR<Movie[]>("/api/top-movies", fetcher);
   const movies = data || [];
 
   const [index, setIndex] = useState(0);

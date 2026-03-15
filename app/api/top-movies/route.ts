@@ -31,7 +31,7 @@ export async function GET() {
 
     const data: { results: TMDBMovie[] } = await res.json();
 
-    const movies = data.results.slice(0, 10);
+    const movies = data.results;
 
     const moviesWithTrailers = await Promise.all(
       movies.map(async (movie) => {

@@ -23,6 +23,8 @@ export const metadata: Metadata = {
   title: "Twogether | Watch & Recommend Movies Socially",
   icons: {
     icon: "/icon.ico",
+    shortcut: "/icon.ico",
+    apple: "/icon.ico",
   },
   description:
     "Twogether is a social movie and TV show platform where users can stream, recommend, and discuss their favorite films. Watch together, chat privately, and discover what others love — all in one place.",
