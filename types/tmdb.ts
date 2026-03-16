@@ -36,12 +36,6 @@ export type TMDBEnrichedResult = TMDBRawResult & {
   episodeTitlesPerSeason?: Record<number, EpisodeTitle[]>;
   original_language?: string; // e.g. 'en' for English
   trailer_key?: string | null; // YouTube video key for the trailer
-  cast: {
-    id: number;
-    name: string;
-    role: string;
-    profile_path: string | null;
-  }[];
 };
 
 export type TMDBResponse = {

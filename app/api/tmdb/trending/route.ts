@@ -45,7 +45,7 @@ export async function GET() {
     ): Promise<TMDBEnrichedResult> {
       try {
         const detailsRes = await fetch(
-          `${BASE_URL}/${type}/${item.id}?api_key=${API_KEY}&append_to_response=videos,credits`,
+          `${BASE_URL}/${type}/${item.id}?api_key=${API_KEY}&append_to_response=videos`,
           { cache: "force-cache", next: { revalidate: 86400 } },
         );
 
@@ -94,22 +94,6 @@ export async function GET() {
           seasons: type === "tv" ? details.number_of_seasons : undefined,
           episodes: type === "tv" ? details.number_of_episodes : undefined,
           trailer_key: trailer?.key || null,
-          cast:
-            details.credits?.cast
-              ?.slice(0, 8)
-              .map(
-                (person: {
-                  id: number;
-                  name: string;
-                  character?: string;
-                  profile_path?: string | null;
-                }) => ({
-                  id: person.id,
-                  name: person.name,
-                  role: person.character || "",
-                  profile_path: person.profile_path || null,
-                }),
-              ) || [],
         };
       } catch (err) {
         console.error(`Failed to enrich TMDB ID ${item.id}:`, err);
@@ -123,7 +107,6 @@ export async function GET() {
           duration: undefined,
           synopsis: "",
           trailer_key: null,
-          cast: [],
         };
       }
     }

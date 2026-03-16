@@ -26,6 +26,27 @@ export async function GET(
 
     const details = await res.json();
 
+    const trailer =
+      details.videos?.results?.find(
+        (video: {
+          key: string;
+          site: string;
+          type: string;
+          official?: boolean;
+        }) =>
+          video.site === "YouTube" &&
+          video.type === "Trailer" &&
+          video.official,
+      ) ||
+      details.videos?.results?.find(
+        (video: { key: string; site: string; type: string }) =>
+          video.site === "YouTube" && video.type === "Trailer",
+      ) ||
+      details.videos?.results?.find(
+        (video: { key: string; site: string; type: string }) =>
+          video.site === "YouTube",
+      );
+
     // TV-specific logic
     let episodeTitlesPerSeason: Record<number, EpisodeTitle[]> | undefined;
     if (type === "tv") {
@@ -58,6 +79,7 @@ export async function GET(
         details.release_date?.slice(0, 4) ||
         details.first_air_date?.slice(0, 4),
       synopsis: details.overview ?? "",
+      trailer_key: trailer?.key,
       stream_url:
         type === "tv"
           ? [

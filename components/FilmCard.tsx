@@ -1,21 +1,12 @@
 "use client";
 
-import { useState, useTransition, useEffect, useRef } from "react";
+import React, { useState, useTransition, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
 import { createPortal } from "react-dom";
-import {
-  Play,
-  Plus,
-  Trash2,
-  ChevronDown,
-  X,
-  Clock,
-  Calendar,
-  Tv2,
-} from "lucide-react";
+import { Play, X, Clock, Calendar } from "lucide-react";
 
 import { Recommendation } from "@/types/recommendation";
 import {
@@ -26,33 +17,18 @@ import ConfirmModal from "@/components/ConfirmModal";
 import { removeFromWatchlist } from "@/actions/watchlistActions";
 import { PrivacyModal } from "./PrivacyModal";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
+import { MdDelete } from "react-icons/md";
+import { FaLock } from "react-icons/fa";
+import Link from "next/link";
+import { VisualHeartRating } from "./VisualHeartRating";
 
-// ─── Chip ─────────────────────────────────────────────────────────────────────
-function Chip({
-  children,
-  glow,
-}: {
-  children: React.ReactNode;
-  glow?: boolean;
-}) {
-  return (
-    <span
-      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium tracking-wide select-none"
-      style={{
-        background: glow ? "rgba(220,38,38,0.15)" : "rgba(255,255,255,0.07)",
-        border: glow
-          ? "1px solid rgba(220,38,38,0.45)"
-          : "1px solid rgba(255,255,255,0.12)",
-        color: glow ? "#fca5a5" : "rgba(255,255,255,0.55)",
-      }}
-    >
-      {children}
-    </span>
-  );
-}
+type MyRecosCache = {
+  public: Recommendation[];
+  private: Recommendation[];
+};
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-export default function FilmCard({
+function FilmCard({
   item,
   userId,
   isDeleteRecommendation,
@@ -73,41 +49,9 @@ export default function FilmCard({
   const [isHovered, setIsHovered] = useState(false);
   const [cinemaOpen, setCinemaOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"overview" | "cast">("overview");
-  const [hoverProgress, setHoverProgress] = useState(false);
   const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-
-  const openCinema = () => {
-    setActiveTab("overview");
-    setCinemaOpen(true);
-  };
-
-  const HOVER_OPEN_DELAY = 1000;
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    setHoverProgress(true);
-    hoverTimer.current = setTimeout(() => {
-      setHoverProgress(false);
-      openCinema();
-    }, HOVER_OPEN_DELAY);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    setHoverProgress(false);
-
-    if (hoverTimer.current) clearTimeout(hoverTimer.current);
-    hoverTimer.current = setTimeout(() => setCinemaOpen(false), 150);
-  };
-  const handleOverlayMouseEnter = () => {
-    if (hoverTimer.current) clearTimeout(hoverTimer.current);
-  };
-  const handleOverlayMouseLeave = () => {
-    setCinemaOpen(false);
-    setIsHovered(false);
-  };
 
   useEffect(() => {
     const fn = (e: KeyboardEvent) => {
@@ -117,38 +61,118 @@ export default function FilmCard({
     return () => window.removeEventListener("keydown", fn);
   }, []);
 
+  useEffect(() => {
+    if (cinemaOpen) {
+      const scrollBarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
+
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    };
+  }, [cinemaOpen]);
+
+  const openCinema = () => {
+    setActiveTab("overview");
+    setCinemaOpen(true);
+  };
+
+  const handleMouseEnter = () => setIsHovered(true);
+
+  const handleMouseLeave = () => setIsHovered(false);
+
+  const handleOverlayMouseEnter = () => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+  };
+
+  const handleOverlayMouseLeave = () => {
+    setCinemaOpen(false);
+    setIsHovered(false);
+  };
+
   const confirmDelete = () => {
     setShowConfirm(false);
     setIsVisible(false);
-    setCinemaOpen(false);
     startTransition(async () => {
-      if (isDeleteRecommendation) {
-        await deleteRecommendation(userId!, item.recommendation_id);
-        mutate("/api/recos");
-      } else if (isRemoveFromWatchlist && watchlistItemId) {
-        await removeFromWatchlist(watchlistItemId, userId!);
-        mutate("/api/my-watchlist");
+      try {
+        if (isDeleteRecommendation) {
+          mutate<Recommendation[]>(
+            "/api/recos",
+            (current) =>
+              current?.filter(
+                (reco) => reco.recommendation_id !== item.recommendation_id,
+              ),
+            false,
+          );
+          mutate<MyRecosCache>(
+            "/api/my-recos",
+            (current) =>
+              current
+                ? {
+                    ...current,
+                    public: current.public.filter(
+                      (reco) =>
+                        reco.recommendation_id !== item.recommendation_id,
+                    ),
+                    private: current.private.filter(
+                      (reco) =>
+                        reco.recommendation_id !== item.recommendation_id,
+                    ),
+                  }
+                : current,
+            false,
+          );
+
+          await deleteRecommendation(userId!, item.recommendation_id);
+          mutate("/api/recos"); // Refresh recommendations cache
+          mutate("/api/my-recos"); // Refresh my recommendations cache
+        } else if (isRemoveFromWatchlist && watchlistItemId) {
+          await removeFromWatchlist(watchlistItemId, userId!);
+          mutate("/api/my-watchlist"); // Refresh watchlist cache
+        }
+      } catch {
+        // Roll back local hide if the action fails.
+        setIsVisible(true);
       }
     });
   };
 
-  const handleVisibilityChange = (v: "public" | "private") => {
+  const handleVisibilityChange = (newVisibility: "public" | "private") => {
     startPrivacyTransition(async () => {
-      await toggleRecommendationVisibility(userId!, item.recommendation_id, v);
-      mutate("/api/my-recos");
+      await toggleRecommendationVisibility(
+        userId!,
+        item.recommendation_id,
+        newVisibility,
+      );
+      mutate("/api/my-recos"); // Refresh my recommendations cache
       setShowPrivacyModal(false);
     });
   };
 
   const handleClick = () => {
     const slug = getSlugFromTitle(item.title);
-    router.push(
-      item.generated_by_ai
-        ? `/ai-recommend/watch/${item.tmdb_id}/${slug}`
-        : item.is_tmdb_recommendation
-          ? `/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`
-          : `/watch/${item.tmdb_id}/${slug}`,
-    );
+
+    if (item.generated_by_ai && item.recommended_by.id === "ai-generated") {
+      router.push(`/ai-recommend/watch/${item.tmdb_id}/${slug}`);
+      return;
+    }
+
+    if (item.is_tmdb_recommendation && item.recommended_by.id === "tmdb") {
+      router.push(`/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`);
+      return;
+    }
+
+    if (item.recommendation_id) {
+      router.push(`/watch/${item.tmdb_id}/${slug}`);
+      return;
+    }
   };
 
   const stagger = (i: number) => ({
@@ -157,12 +181,9 @@ export default function FilmCard({
     transition: { delay: 0.07 * i, duration: 0.28 },
   });
 
-  const TABS = ["overview", "cast"] as const;
-
   const trailerUrl = item.trailer_key
     ? `https://www.youtube.com/embed/${item.trailer_key}?autoplay=1&mute=0&controls=0&loop=1&playlist=${item.trailer_key}&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&vq=hd1080`
     : null;
-
   const runtimeLabel =
     item.type === "movie"
       ? item.duration
@@ -173,12 +194,8 @@ export default function FilmCard({
         : item.seasons
           ? `${item.seasons} Season${item.seasons > 1 ? "s" : ""}`
           : null;
-
   const synopsis = item.synopsis || item.comment || "No synopsis available.";
-
-  const genres = item.genres?.slice(0, 2) || [];
-
-  const cast = item.cast?.slice(0, 4) || [];
+  const genres = item.genres.slice(0, 3); // Show up to 3 genres for brevity
 
   const cinemaOverlay =
     cinemaOpen && typeof document !== "undefined"
@@ -200,274 +217,240 @@ export default function FilmCard({
               {/* ══════════════════════════════════════════
                   FULLSCREEN TRAILER  (flex-1 = fills all remaining height)
               ══════════════════════════════════════════ */}
-              <div className="relative w-full flex-1 bg-black overflow-hidden">
+              <div className="relative w-full flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
+                {/* 1. Ambient Glow / Backlight Effect */}
+                <div className="absolute inset-0 opacity-40 blur-[120px] pointer-events-none">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 via-transparent to-blue-500/20" />
+                </div>
+
                 {trailerUrl ? (
-                  /* scale-[1.15] crops YouTube top/bottom chrome */
-                  <div className="absolute inset-0 scale-[1.15] origin-center">
-                    <iframe
-                      loading="eager"
-                      src={trailerUrl}
-                      className="w-full h-full pointer-events-none"
-                      allow="autoplay; encrypted-media; fullscreen"
-                      title=""
-                    />
+                  <div className="relative w-full aspect-video lg:aspect-[21/9] z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
+                    {/* The Video Container with "Zoomed-Out" Letterbox Feel */}
+                    <div className="absolute inset-0 overflow-hidden">
+                      <iframe
+                        loading="eager"
+                        src={`${trailerUrl}&controls=0&modestbranding=1&rel=0`}
+                        className="w-full h-[120%] -translate-y-[8%] pointer-events-none scale-[1.1]"
+                        allow="autoplay; encrypted-media; fullscreen"
+                        title=""
+                      />
+                    </div>
+
+                    {/* 2. Glassy "Screen" Overlay (Adds texture/depth) */}
+                    <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.4)]" />
                   </div>
                 ) : (
                   <Image
                     src={item.poster_url || ""}
                     alt={item.title}
                     fill
-                    className="object-cover"
+                    className="object-cover brightness-50"
                   />
                 )}
 
-                {/* ── Overlay layer stack ── */}
-                <div className="absolute inset-0 pointer-events-none">
-                  {/* Solid top bar — kills YouTube title overlay */}
-                  <div
-                    className="absolute top-0 inset-x-0 bg-[#06030a]"
-                    style={{ height: "8%" }}
-                  />
-                  {/* Solid bottom bar — kills YouTube controls */}
-                  <div
-                    className="absolute bottom-0 inset-x-0 bg-[#06030a]"
-                    style={{ height: "8%" }}
-                  />
-                  {/* Dark vignette sides */}
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse at center, transparent 35%, rgba(6,3,10,0.75) 100%)",
-                    }}
-                  />
-                  {/* Strong bottom fade → info panel */}
-                  <div
-                    className="absolute bottom-0 inset-x-0"
-                    style={{
-                      height: "55%",
-                      background:
-                        "linear-gradient(to bottom, transparent 0%, rgba(6,3,10,0.6) 50%, #06030a 100%)",
-                    }}
-                  />
+                {/* ── Cinema Overlays ── */}
+                <div className="absolute inset-0 pointer-events-none z-20">
+                  {/* Cinematic Grain/Noise (Subtle) */}
+                  <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" />
+
+                  {/* Deep Vertical Vignette */}
+                  <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#06030a] to-transparent" />
+                  <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#06030a] to-transparent" />
+
+                  {/* Bottom Title Fade */}
+                  <div className="absolute bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-[#06030a] via-[#06030a]/40 to-transparent" />
                 </div>
 
-                {/* ── Title block — bottom left of video ── */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-center pointer-events-none">
-                  <motion.h1
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className=" text-transparent  font-bold tracking-tighter bg-clip-text bg-linear-to-b from-white to-white/40 "
-                    style={{
-                      fontSize: "clamp(2rem, 4vw, 2.2rem)",
-                      textShadow: "0 4px 32px rgba(0,0,0,0.95)",
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    {item.title}
-                  </motion.h1>
-                </div>
+                {/* ── Title block ── */}
 
-                {/* Close button */}
-                <div className="absolute top-5 right-6 z-20 flex items-center gap-2">
-                  <span
-                    className="text-[10px] tracking-wider uppercase text-white/40 select-none"
-                    style={{ letterSpacing: "0.12em" }}
-                  >
+                <motion.div
+                  key={item.title}
+                  className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none w-full"
+                >
+                  <div className="flex flex-col items-center gap-3">
+                    <span className="text-[10px] tracking-[0.3em] uppercase text-white/40 font-medium">
+                      Trailer Preview
+                    </span>
+
+                    <h1
+                      className="text-white font-black italic uppercase tracking-tighter"
+                      style={{
+                        fontSize: "clamp(2rem,6vw,4rem)",
+                        lineHeight: "1.1",
+                        filter: "drop-shadow(0 0 20px rgba(255,255,255,0.2))",
+                      }}
+                    >
+                      {item.title}
+                    </h1>
+                  </div>
+                </motion.div>
+
+                {/* Close Button (Modern Minimalist) */}
+
+                <button
+                  onClick={() => setCinemaOpen(false)}
+                  className="absolute cursor-pointer top-4 right-4 md:top-6 md:right-8 z-50 flex items-center gap-3 group"
+                >
+                  <span className="text-[9px] hidden lg:block tracking-wider uppercase text-white/40">
                     ESC
                   </span>
 
-                  <button
-                    onClick={() => setCinemaOpen(false)}
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-white/80 transition-all duration-200 hover:text-white cursor-pointer"
-                    style={{
-                      background: "rgba(0,0,0,0.35)",
-                      border: "1px solid rgba(255,255,255,0.12)",
-                      backdropFilter: "blur(10px)",
-                      boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
-                    }}
-                  >
-                    <X size={17} strokeWidth={2.3} />
-                  </button>
-                </div>
+                  <div className="flex h-9 w-9 md:h-11 md:w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-md transition-all group-hover:scale-110 group-hover:bg-white/10">
+                    <X
+                      size={18}
+                      className="text-white/70 group-hover:text-white"
+                    />
+                  </div>
+                </button>
               </div>
 
               {/* ══════════════════════════════════════════
                   INFO PANEL  (fixed height, no scroll)
               ══════════════════════════════════════════ */}
               <div
-                className="shrink-0  w-full flex items-center justify-center"
-                style={{ height: 210, background: "#06030a" }}
+                className="shrink-0 w-full flex flex-col pb-12 px-4  items-center justify-center relative"
+                style={{ minHeight: 230, background: "#040404" }}
               >
-                <div className="w-full max-w-2xl flex flex-col items-center gap-3 px-6">
-                  {/* Row 1 — meta chips */}
-                  <motion.div
-                    {...stagger(0)}
-                    className="flex items-center justify-center gap-2 flex-wrap"
-                  >
-                    <Chip>
-                      <Calendar size={10} />
-                      {item.year}
-                    </Chip>
-                    <Chip>
-                      <Tv2 size={10} />
-                      {item.type?.toUpperCase()}
-                    </Chip>
-                    <Chip>
-                      <Clock size={10} />
-                      {item.duration}m
-                    </Chip>
-                  </motion.div>
+                {/* Radar Background */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  <div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+    w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] lg:w-[600px] lg:h-[600px]
+    bg-[radial-gradient(circle,rgba(220,38,38,0.03)_0%,transparent_70%)]"
+                  />
+                </div>
 
-                  {/* Row 2 — tabs + genre pills */}
-                  <motion.div
-                    {...stagger(1)}
-                    className="flex items-center justify-center gap-5 w-full flex-wrap"
-                  >
-                    {/* Tabs */}
-                    <div
-                      className="flex border-b"
-                      style={{ borderColor: "rgba(255,255,255,0.06)" }}
+                <div className="w-full max-w-3xl flex flex-col items-center justify-center px-4 sm:px-6 relative z-10">
+                  {/* HEADER SECTION */}
+                  <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-6 mb-6">
+                    {/* LEFT — YEAR */}
+                    <motion.div
+                      {...stagger(0)}
+                      className="flex items-center gap-4 lg:flex-1 lg:justify-end"
                     >
-                      {TABS.map((tab) => (
-                        <button
-                          key={tab}
-                          onClick={() => setActiveTab(tab)}
-                          className="relative px-4 py-1 text-[11px] font-semibold uppercase tracking-widest transition-colors"
-                          style={{
-                            color:
-                              activeTab === tab
-                                ? "#f87171"
-                                : "rgba(255,255,255,0.28)",
-                          }}
-                        >
-                          {tab}
-                          {activeTab === tab && (
-                            <motion.div
-                              layoutId="tab-line"
-                              className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                              style={{
-                                background:
-                                  "linear-gradient(to right, #dc2626, #7f1d1d)",
-                              }}
-                            />
-                          )}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Genre pills */}
-                    <div className="flex gap-1.5 flex-wrap justify-center">
-                      {genres.map((g) => (
-                        <span
-                          key={g}
-                          className="px-2.5 py-0.5 rounded-full text-[10px] font-medium uppercase tracking-wide"
-                          style={{
-                            background: "rgba(220,30,30,0.08)",
-                            border: "1px solid rgba(220,30,30,0.25)",
-                            color: "rgba(252,165,165,0.7)",
-                          }}
-                        >
-                          {g}
+                      <div className="flex flex-col items-center lg:items-end">
+                        <span className="text-[9px] sm:text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-1">
+                          Year
                         </span>
-                      ))}
-                    </div>
-                  </motion.div>
 
-                  {/* Row 3 — tab content (fixed height) */}
-                  <div className="w-full" style={{ height: 56 }}>
+                        <div className="flex items-center gap-2">
+                          <Calendar size={12} className="text-white/60" />
+                          <span className="text-[13px] sm:text-[14px] font-mono text-white/60">
+                            {item.year}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="hidden lg:block h-8 w-px bg-white/5 rotate-[20deg]" />
+                    </motion.div>
+
+                    {/* CENTER — GENRES */}
+                    <motion.div
+                      {...stagger(0)}
+                      className="flex flex-wrap items-center justify-center gap-3 sm:gap-4"
+                    >
+                      <div className="hidden sm:block h-[1px] w-6 bg-red-600/30" />
+
+                      <div className="flex flex-wrap justify-center gap-3">
+                        {genres.map((g) => (
+                          <span
+                            key={g}
+                            className="text-[9px] sm:text-[10px] font-black text-red-600 uppercase tracking-[0.3em]
+              drop-shadow-[0_0_8px_rgba(220,38,38,0.4)]"
+                          >
+                            {g}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="hidden sm:block h-[1px] w-6 bg-red-600/30" />
+                    </motion.div>
+
+                    {/* RIGHT — RUNTIME */}
+                    <motion.div
+                      {...stagger(0)}
+                      className="flex items-center gap-4 lg:flex-1 lg:justify-start"
+                    >
+                      <div className="hidden lg:block h-8 w-px bg-white/5 rotate-[20deg]" />
+
+                      <div className="flex flex-col items-center lg:items-start">
+                        <span className="text-[9px] sm:text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-1">
+                          Duration
+                        </span>
+
+                        <div className="flex items-center gap-2">
+                          <Clock size={12} className="text-white/60" />
+                          <span className="text-[13px] sm:text-[14px] font-mono text-white/60">
+                            {runtimeLabel}
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* SYNOPSIS */}
+                  <div className="w-full mb-6 sm:mb-8 min-h-[44px]">
                     <AnimatePresence mode="wait">
                       {activeTab === "overview" && (
-                        <motion.div
+                        <motion.p
                           key="ov"
-                          initial={{ opacity: 0, y: 5 }}
+                          initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -5 }}
-                          transition={{ duration: 0.16 }}
-                          className="flex items-center justify-center h-full"
+                          className="text-[14px] sm:text-[15px] leading-relaxed text-center
+            text-white/60 max-w-sm mx-auto  line-clamp-3 sm:line-clamp-2"
                         >
-                          <p
-                            className="text-[12.5px] leading-relaxed text-center line-clamp-2 max-w-xl"
-                            style={{
-                              color: "rgba(255,255,255,0.5)",
-                              fontStyle: "normal",
-                            }}
-                          >
-                            {synopsis}
-                          </p>
-                        </motion.div>
-                      )}
-
-                      {activeTab === "cast" && (
-                        <motion.div
-                          key="ca"
-                          initial={{ opacity: 0, y: 5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -5 }}
-                          transition={{ duration: 0.16 }}
-                          className="flex justify-center gap-6"
-                        >
-                          {cast.map((m) => (
-                            <div
-                              key={m.name}
-                              className="flex flex-col items-center text-center"
-                            >
-                              <div
-                                className="flex h-8 w-8 items-center justify-center rounded-full text-[10px] font-semibold text-white"
-                                style={{
-                                  background: "rgba(255,255,255,0.12)",
-                                }}
-                              >
-                                {/* cast profile image */}
-                              </div>
-
-                              <p className="mt-1 text-[10px] text-white/80">
-                                {m.name}
-                              </p>
-                            </div>
-                          ))}
-                        </motion.div>
+                          {synopsis}
+                        </motion.p>
                       )}
                     </AnimatePresence>
                   </div>
 
-                  {/* Row 4 — actions */}
+                  {/* WATCH BUTTON */}
                   <motion.div
                     {...stagger(2)}
-                    className="flex items-center justify-center gap-2.5"
+                    className="flex items-center gap-4 w-full justify-center"
                   >
                     <button
                       onClick={handleClick}
-                      className="flex items-center cursor-pointer gap-2 px-6 py-2 rounded-full text-[13px] font-semibold bg-red-500/70 hover:bg-red-500/80 text-white "
+                      className="relative group h-12 sm:h-14 px-8 sm:px-12
+        flex items-center gap-4 sm:gap-6
+        bg-red-600/5 border border-red-600/30
+        transition-colors cursor-pointer overflow-hidden"
                     >
-                      <Play size={12} fill="white" strokeWidth={0} />
-                      Watch Now
-                    </button>
+                      {/* Laser Sweep */}
+                      <div
+                        className="absolute inset-y-0 left-0 w-px bg-red-600 shadow-[0_0_12px_red]
+        -translate-x-full group-hover:translate-x-[350px] sm:group-hover:translate-x-[420px]
+        transition-transform duration-1000 ease-in-out"
+                      />
 
-                    <button
-                      className="flex h-9 w-9 items-center cursor-pointer justify-center rounded-full text-white/60 transition  hover:text-white"
-                      style={{ border: "1px solid rgba(255,255,255,0.12)" }}
-                    >
-                      <Plus size={15} strokeWidth={2} />
-                    </button>
+                      <div className="relative z-10 flex items-center gap-3 sm:gap-4">
+                        {/* Animated Bars */}
+                        <div className="flex gap-1 items-end h-3">
+                          {[0.1, 0.2, 0.3].map((delay, i) => (
+                            <motion.div
+                              key={i}
+                              animate={{ height: [3, 12, 3] }}
+                              transition={{
+                                repeat: Infinity,
+                                duration: 1.5,
+                                delay,
+                              }}
+                              className="w-[2px] bg-red-600"
+                            />
+                          ))}
+                        </div>
 
-                    {userId && (
-                      <button
-                        onClick={() => setShowConfirm(true)}
-                        className="flex h-9 w-9 items-center justify-center rounded-full text-white/60 transition  hover:text-red-400"
-                        style={{ border: "1px solid rgba(255,255,255,0.12)" }}
-                      >
-                        <Trash2 size={14} strokeWidth={2} />
-                      </button>
-                    )}
+                        <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.4em] text-white/90">
+                          Watch Now
+                        </span>
 
-                    <button
-                      onClick={() => setShowPrivacyModal(true)}
-                      className="flex h-9 w-9 items-center justify-center rounded-full text-white/60 transition lg:hidden hover:text-white"
-                      style={{ border: "1px solid rgba(255,255,255,0.12)" }}
-                    >
-                      <ChevronDown size={15} strokeWidth={2} />
+                        <Play
+                          size={12}
+                          fill="currentColor"
+                          className="text-red-600 ml-1"
+                        />
+                      </div>
                     </button>
                   </motion.div>
                 </div>
@@ -478,17 +461,19 @@ export default function FilmCard({
         )
       : null;
 
+  if (!isVisible) return null;
+
   // ─── Card (poster) ────────────────────────────────────────────────────────
   return (
     <>
       <div
         ref={cardRef}
-        className="relative w-full font-(family-name:--font-geist-sans)"
+        onClick={openCinema}
+        className="relative w-full font-(family-name:--font-geist-sans) group"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        style={{ zIndex: isHovered ? 10 : 1 }}
       >
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           {isVisible && (
             <motion.div layout className="w-full">
               <div className="relative aspect-2/3 w-full overflow-hidden rounded-md bg-[#141414] shadow-md cursor-pointer">
@@ -508,62 +493,31 @@ export default function FilmCard({
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="absolute inset-0 flex items-center justify-center"
+                      className="absolute inset-0 flex items-center justify-center "
                       style={{
                         background:
                           "linear-gradient(to top, rgba(100,0,0,0.8) 0%, transparent 60%)",
                       }}
                     >
-                      <div className="relative flex items-center justify-center">
-                        {hoverProgress && (
-                          <svg
-                            className="absolute -inset-2 -rotate-90"
-                            width="68"
-                            height="68"
-                            viewBox="0 0 68 68"
-                          >
-                            <circle
-                              cx="34"
-                              cy="34"
-                              r="30"
-                              fill="none"
-                              stroke="rgba(255,255,255,0.10)"
-                              strokeWidth="2"
-                            />
-                            <motion.circle
-                              cx="34"
-                              cy="34"
-                              r="30"
-                              fill="none"
-                              stroke="rgba(248,113,113,0.95)"
-                              strokeWidth="2.5"
-                              strokeLinecap="round"
-                              initial={{ pathLength: 0 }}
-                              animate={{ pathLength: 1 }}
-                              transition={{
-                                duration: HOVER_OPEN_DELAY / 1000,
-                                ease: "linear",
-                              }}
-                            />
-                          </svg>
-                        )}
-
-                        <div
-                          className="flex items-center justify-center rounded-full"
-                          style={{
-                            width: 52,
-                            height: 52,
-                            background: "rgba(220,38,38,0.9)",
-                            boxShadow: "0 0 30px rgba(220,38,38,0.55)",
-                          }}
-                        >
-                          <Play
-                            size={18}
-                            fill="white"
-                            strokeWidth={0}
-                            className="ml-0.5"
-                          />
-                        </div>
+                      <div
+                        className="flex items-center justify-center rounded-full  cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openCinema();
+                        }}
+                        style={{
+                          width: 52,
+                          height: 52,
+                          background: "rgba(220,38,38,0.9)",
+                          boxShadow: "0 0 30px rgba(220,38,38,0.55)",
+                        }}
+                      >
+                        <Play
+                          size={18}
+                          fill="white"
+                          strokeWidth={0}
+                          className="ml-0.5"
+                        />
                       </div>
                     </motion.div>
                   )}
@@ -597,6 +551,147 @@ export default function FilmCard({
             </motion.div>
           )}
         </AnimatePresence>
+
+        {isVisible && userId && isDeleteRecommendation && (
+          <div
+            className="absolute top-4 right-4 z-30 
+                    -translate-y-4 opacity-0 
+                    group-hover:translate-y-0 group-hover:opacity-100 
+                    transition-all duration-500 ease-out"
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowConfirm(true);
+              }}
+              disabled={isPending}
+              className="px-3 py-1 flex cursor-pointer items-center gap-1 text-xs rounded-full bg-red-600 hover:bg-red-700 text-white shadow"
+            >
+              <MdDelete className="text-base" />
+              {isPending ? "Deleting..." : "Delete Recommendation"}
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowPrivacyModal(true);
+              }}
+              className="mt-2 w-full cursor-pointer px-3 py-1 flex items-center gap-2 text-xs rounded-full 
+  bg-white/10 border border-white/20 
+  hover:bg-white/20 hover:border-white/40
+  text-white hover:text-white
+  backdrop-blur-sm
+  transition"
+            >
+              <FaLock className="text-xs opacity-80" />
+              <span>Edit Privacy</span>
+            </button>
+          </div>
+        )}
+
+        {isVisible && userId && isRemoveFromWatchlist && (
+          <div
+            className="absolute top-4 right-4 z-30 
+                    -translate-y-4 opacity-0 
+                    group-hover:translate-y-0 group-hover:opacity-100 
+                    transition-all duration-500 ease-out"
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowConfirm(true);
+              }}
+              disabled={isPending}
+              className="px-3 py-1 flex cursor-pointer items-center gap-1 text-xs rounded-full bg-red-600 hover:bg-red-700 text-white shadow"
+            >
+              <MdDelete className="text-base" />
+              {isPending ? "Removing..." : "Remove from Watchlist"}
+            </button>
+          </div>
+        )}
+
+        {/* Mobile action buttons - Delete & Privacy */}
+        {isVisible && userId && isDeleteRecommendation && (
+          <div className="lg:hidden flex gap-3 mt-4 ">
+            {/* Delete Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowConfirm(true);
+              }}
+              disabled={isPending}
+              className="flex-1 p-2 rounded-md flex items-center justify-center
+    text-white/90 bg-red-500/20 hover:bg-red-600/30 transition-all
+    backdrop-blur border border-red-400/40 shadow-md disabled:opacity-60"
+              title="Delete Recommendation"
+            >
+              <MdDelete className="text-base" />
+            </button>
+
+            {/* Privacy Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowPrivacyModal(true);
+              }}
+              className="flex-1 p-2 rounded-md flex items-center justify-center 
+      text-white/90 bg-white/10 hover:bg-white/20 transition-all 
+      backdrop-blur border border-white/20 shadow-sm"
+              title="Edit Privacy"
+            >
+              <FaLock className="text-sm" />
+            </button>
+          </div>
+        )}
+
+        {isVisible && userId && isRemoveFromWatchlist && (
+          <button
+            onClick={() => setShowConfirm(true)}
+            disabled={isPending}
+            className="mt-4  lg:hidden w-full   gap-2 rounded-md 
+       px-1 py-2 text-xs font-medium  
+       hover:text-red-200 font-[family-name:var(--font-geist-mono)] 
+       disabled:cursor-not-allowed 
+      text-white/90 bg-red-500/20  hover:bg-red-600/30 transition-all
+    backdrop-blur border border-red-400/40 shadow-md disabled:opacity-60"
+          >
+            {isPending ? "Removing..." : "Remove from Watchlist"}
+          </button>
+        )}
+
+        {isVisible && item.recommendation_id && item.comment && (
+          <p className="text-sm text-white/80 border-l-4 border-red-500 pl-2 my-3 italic">
+            &quot;{item.comment}&quot;
+          </p>
+        )}
+
+        {isVisible && item.rating && <VisualHeartRating value={item.rating} />}
+
+        {isVisible && item.recommended_by.username && (
+          <div className=" mt-3 ">
+            <Link
+              prefetch
+              href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
+              className=" text-sm text-white/60 hover:underline flex items-center gap-2"
+            >
+              {item.recommended_by.avatar_url && (
+                <div className="w-6 h-6 rounded-full overflow-hidden">
+                  <Image
+                    src={item.recommended_by.avatar_url}
+                    alt={item.recommended_by.username}
+                    width={24}
+                    unoptimized
+                    height={24}
+                    className="rounded-full object-cover"
+                  />
+                </div>
+              )}
+              {item.generated_by_ai
+                ? "AI Assistant"
+                : item.recommended_by.username}
+            </Link>
+          </div>
+        )}
       </div>
 
       {cinemaOverlay}
@@ -621,3 +716,5 @@ export default function FilmCard({
     </>
   );
 }
+
+export default React.memo(FilmCard);

@@ -47,10 +47,4 @@ export type Recommendation = {
     { episode_number: number; title: string }[]
   >;
   rating?: number;
-  cast: {
-    id: number;
-    name: string;
-    role: string;
-    profile_path: string | null;
-  }[];
 };
