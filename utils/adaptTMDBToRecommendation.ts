@@ -32,6 +32,7 @@ export function adaptTMDBToRecommendation(
     seasons: tmdb.seasons ?? undefined,
     episodes: tmdb.episodes ?? undefined,
     episode_titles_per_season: tmdb.episodeTitlesPerSeason ?? undefined,
+    trailer_key: tmdb.trailer_key ?? null,
     visibility: "public",
     comment: "",
     is_tmdb_recommendation: true,

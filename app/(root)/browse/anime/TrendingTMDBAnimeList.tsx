@@ -52,7 +52,7 @@ export default function TrendingTMDBAnimeList() {
           setSize((s) => s + 1);
         }
       },
-      { threshold: 1.0 }
+      { threshold: 1.0 },
     );
 
     observer.observe(target);
@@ -69,7 +69,7 @@ export default function TrendingTMDBAnimeList() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-8">
           {Array.from({ length: 18 }).map((_, i) => (
             <div key={i}>
-              <div className="aspect-[2/3] w-full rounded-md bg-white/10 animate-pulse" />
+              <div className="aspect-2/3 w-full rounded-md bg-white/10 animate-pulse" />
             </div>
           ))}
         </div>

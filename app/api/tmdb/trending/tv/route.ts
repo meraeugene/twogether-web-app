@@ -21,15 +21,37 @@ export async function GET(req: NextRequest) {
     rawItems.map(async (item): Promise<TMDBEnrichedResult> => {
       try {
         const detailsRes = await fetch(
-          `${BASE_URL}/tv/${item.id}?api_key=${API_KEY}`,
+          `${BASE_URL}/tv/${item.id}?api_key=${API_KEY}&append_to_response=videos`,
           {
             cache: "force-cache",
             next: { revalidate: 86400 },
-          }
+          },
         );
 
         if (!detailsRes.ok) throw new Error("Details fetch failed");
+
         const details = await detailsRes.json();
+
+        const trailer =
+          details.videos?.results?.find(
+            (video: {
+              key: string;
+              site: string;
+              type: string;
+              official?: boolean;
+            }) =>
+              video.site === "YouTube" &&
+              video.type === "Trailer" &&
+              video.official,
+          ) ||
+          details.videos?.results?.find(
+            (video: { key: string; site: string; type: string }) =>
+              video.site === "YouTube" && video.type === "Trailer",
+          ) ||
+          details.videos?.results?.find(
+            (video: { key: string; site: string; type: string }) =>
+              video.site === "YouTube",
+          );
 
         return {
           ...item,
@@ -46,6 +68,7 @@ export async function GET(req: NextRequest) {
           synopsis: details.overview || "",
           seasons: details.number_of_seasons,
           episodes: details.number_of_episodes,
+          trailer_key: trailer?.key || null,
         };
       } catch (err) {
         console.error(`Failed to enrich TV TMDB ID ${item.id}:`, err);
@@ -58,15 +81,16 @@ export async function GET(req: NextRequest) {
           year: undefined,
           duration: undefined,
           synopsis: "",
+          trailer_key: null,
         };
       }
-    })
+    }),
   );
 
   const response = NextResponse.json(enriched);
   response.headers.set(
     "Cache-Control",
-    "public, max-age=86400, stale-while-revalidate=60"
+    "public, max-age=86400, stale-while-revalidate=60",
   );
   return response;
 }

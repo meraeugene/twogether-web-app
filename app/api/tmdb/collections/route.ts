@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
   await Promise.all(
     (json.results || []).map(async (movie) => {
       const detailsRes = await fetch(
-        `${BASE_URL}/movie/${movie.id}?api_key=${API_KEY}`
+        `${BASE_URL}/movie/${movie.id}?api_key=${API_KEY}`,
       );
       const details: TMDBMovieDetails = await detailsRes.json();
       const collection = details.belongs_to_collection;
@@ -62,7 +62,7 @@ export async function GET(req: NextRequest) {
       if (!collection || collectionsMap[collection.id]) return;
 
       const colRes = await fetch(
-        `${BASE_URL}/collection/${collection.id}?api_key=${API_KEY}`
+        `${BASE_URL}/collection/${collection.id}?api_key=${API_KEY}`,
       );
       const colData: TMDBCollection = await colRes.json();
 
@@ -70,9 +70,30 @@ export async function GET(req: NextRequest) {
 
       for (const part of colData.parts || []) {
         const partDetailsRes = await fetch(
-          `${BASE_URL}/movie/${part.id}?api_key=${API_KEY}`
+          `${BASE_URL}/movie/${part.id}?api_key=${API_KEY}&append_to_response=videos`,
         );
         const partDetails: TMDBMovieDetails = await partDetailsRes.json();
+
+        const trailer =
+          partDetails.videos?.results?.find(
+            (video: {
+              key: string;
+              site: string;
+              type: string;
+              official?: boolean;
+            }) =>
+              video.site === "YouTube" &&
+              video.type === "Trailer" &&
+              video.official,
+          ) ||
+          partDetails.videos?.results?.find(
+            (video: { key: string; site: string; type: string }) =>
+              video.site === "YouTube" && video.type === "Trailer",
+          ) ||
+          partDetails.videos?.results?.find(
+            (video: { key: string; site: string; type: string }) =>
+              video.site === "YouTube",
+          );
 
         // Skip movies with 0 or missing runtime
         if (!partDetails.runtime || partDetails.runtime === 0) continue;
@@ -89,6 +110,7 @@ export async function GET(req: NextRequest) {
           genres: partDetails.genres?.map((g) => g.name) || [],
           duration: partDetails.runtime,
           synopsis: partDetails.overview || "",
+          trailer_key: trailer?.key || null,
         });
       }
 
@@ -97,11 +119,11 @@ export async function GET(req: NextRequest) {
           collection_id: collection.id,
           collection_name: collection.name,
           movies: parts.sort((a, b) =>
-            (a.year || "").localeCompare(b.year || "")
+            (a.year || "").localeCompare(b.year || ""),
           ),
         };
       }
-    })
+    }),
   );
 
   return NextResponse.json(Object.values(collectionsMap), {

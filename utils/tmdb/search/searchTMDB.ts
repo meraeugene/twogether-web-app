@@ -10,7 +10,7 @@ const BASE_URL = "https://api.themoviedb.org/3";
 
 export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
   const searchUrl = `${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(
-    query
+    query,
   )}&include_adult=false&language=en-US&region=US`;
 
   const res = await fetch(searchUrl, {
@@ -25,15 +25,15 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
   const filtered = results.filter(
     (item): item is TMDBRawResult =>
       (item.media_type === "movie" || item.media_type === "tv") &&
-      !!item.poster_path
+      !!item.poster_path,
   );
 
   const enrichedResults: TMDBEnrichedResult[] = await Promise.all(
     filtered.map(async (item) => {
       const detailUrl =
         item.media_type === "movie"
-          ? `${BASE_URL}/movie/${item.id}?api_key=${API_KEY}`
-          : `${BASE_URL}/tv/${item.id}?api_key=${API_KEY}`;
+          ? `${BASE_URL}/movie/${item.id}?api_key=${API_KEY}&append_to_response=videos`
+          : `${BASE_URL}/tv/${item.id}?api_key=${API_KEY}&append_to_response=videos`;
 
       const detailRes = await fetch(detailUrl, {
         cache: "force-cache",
@@ -41,6 +41,27 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
       });
 
       const details = await detailRes.json();
+
+      const trailer =
+        details.videos?.results?.find(
+          (video: {
+            key: string;
+            site: string;
+            type: string;
+            official?: boolean;
+          }) =>
+            video.site === "YouTube" &&
+            video.type === "Trailer" &&
+            video.official,
+        ) ||
+        details.videos?.results?.find(
+          (video: { key: string; site: string; type: string }) =>
+            video.site === "YouTube" && video.type === "Trailer",
+        ) ||
+        details.videos?.results?.find(
+          (video: { key: string; site: string; type: string }) =>
+            video.site === "YouTube",
+        );
 
       let episodeTitlesPerSeason: Record<number, EpisodeTitle[]> | undefined;
 
@@ -82,8 +103,8 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
             : [],
         duration:
           item.media_type === "movie"
-            ? details.runtime ?? null
-            : details.episode_run_time?.[0] ?? null,
+            ? (details.runtime ?? null)
+            : (details.episode_run_time?.[0] ?? null),
         synopsis: details.overview || "",
         seasons:
           item.media_type === "tv" ? details.number_of_seasons : undefined,
@@ -91,8 +112,9 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
           item.media_type === "tv" ? details.number_of_episodes : undefined,
         episodeTitlesPerSeason:
           item.media_type === "tv" ? episodeTitlesPerSeason : undefined,
+        trailer_key: trailer?.key || null,
       };
-    })
+    }),
   );
 
   const enrichedResultsSorted = enrichedResults

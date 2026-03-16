@@ -29,6 +29,7 @@ export type Recommendation = {
   duration?: number;
   synopsis?: string;
   genres: string[];
+  trailer_key?: string | null;
   recommended_by: {
     id: string;
     username: string;
@@ -46,4 +47,10 @@ export type Recommendation = {
     { episode_number: number; title: string }[]
   >;
   rating?: number;
+  cast: {
+    id: number;
+    name: string;
+    role: string;
+    profile_path: string | null;
+  }[];
 };

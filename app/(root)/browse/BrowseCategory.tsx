@@ -26,7 +26,7 @@ export function BrowseCategory({
         <Link
           href={href}
           prefetch
-          className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 transition text-sm px-4 py-2 rounded-md font-[family-name:var(--font-geist-mono)]"
+          className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 transition text-sm px-4 py-2 rounded-md font-(family-name:--font-geist-mono)"
         >
           <span>Browse All</span>
           <FiArrowRight />
@@ -35,10 +35,10 @@ export function BrowseCategory({
 
       {isLoading ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
-          {Array.from({ length: 18 }).map((_, i) => (
+          {Array.from({ length: 15 }).map((_, i) => (
             <div
               key={i}
-              className="aspect-[2/3] rounded-md bg-white/10 animate-pulse"
+              className="aspect-2/3 rounded-md bg-white/10 animate-pulse"
             />
           ))}
         </div>

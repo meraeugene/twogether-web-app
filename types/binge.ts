@@ -20,6 +20,14 @@ export type TMDBMovieDetails = {
     id: number;
     name: string;
   } | null;
+  videos?: {
+    results: {
+      key: string;
+      site: string;
+      type: string;
+      official?: boolean;
+    }[];
+  };
 };
 
 export type TMDBCollection = {
@@ -39,6 +47,7 @@ export type EnrichedMovie = {
   duration: number;
   release_date?: string;
   synopsis: string;
+  trailer_key: string | null;
 };
 
 export type EnrichedCollection = {

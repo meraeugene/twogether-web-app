@@ -36,12 +36,12 @@ export default function SearchClient({
 
   return (
     <>
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
 
       <Link
         prefetch
         href="/browse"
-        className="inline-flex lg:hidden items-center justify-center py-2 px-4 rounded-md bg-white text-red-600 hover:bg-red-600 hover:text-white transition mb-6"
+        className="inline-flex  items-center justify-center py-2 px-4 rounded-md bg-white text-red-600 hover:bg-red-600 hover:text-white transition mb-6"
       >
         <ArrowLeft size={20} />
       </Link>
@@ -61,12 +61,12 @@ export default function SearchClient({
       )}
 
       {isPending ? (
-        <div className="text-white py-8 font-[family-name:var(--font-geist-sans)]">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-8">
+        <div className="text-white py-8 font-(family-name:--font-geist-sans)">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 xl:grid-cols-5 gap-8">
             {Array.from({ length: 12 }).map((_, i) => (
               <div
                 key={i}
-                className="aspect-[2/3] w-full bg-white/10 animate-pulse rounded-lg"
+                className="aspect-2/3 w-full bg-white/10 animate-pulse rounded-lg"
               />
             ))}
           </div>
@@ -76,7 +76,7 @@ export default function SearchClient({
           No results found.
         </p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 xl:grid-cols-5 gap-8">
           {results.map((item) => (
             <FilmCard key={item.id} item={item} />
           ))}

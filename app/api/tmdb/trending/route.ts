@@ -9,7 +9,7 @@ export async function GET() {
     // --- Movies ---
     const moviesRes = await fetch(
       `${BASE_URL}/trending/movie/week?language=en-US&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: 86400 } }
+      { cache: "force-cache", next: { revalidate: 86400 } },
     );
     const moviesData = await moviesRes.json();
     const movies: TMDBRawResult[] = (moviesData.results || []).slice(0, 18);
@@ -17,7 +17,7 @@ export async function GET() {
     // --- Anime (TV with Animation genre 16) ---
     const animeRes = await fetch(
       `${BASE_URL}/discover/tv?with_genres=16&sort_by=popularity.desc&language=en-US&page=1&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: 86400 } }
+      { cache: "force-cache", next: { revalidate: 86400 } },
     );
     const animeData = await animeRes.json();
     const anime: TMDBRawResult[] = (animeData.results || []).slice(0, 18);
@@ -25,7 +25,7 @@ export async function GET() {
     // --- TV Shows (non-anime) ---
     const tvRes = await fetch(
       `${BASE_URL}/tv/popular?language=en-US&page=1&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: 86400 } }
+      { cache: "force-cache", next: { revalidate: 86400 } },
     );
     const tvData = await tvRes.json();
     const tv: TMDBRawResult[] = (tvData.results || []).slice(0, 18);
@@ -33,7 +33,7 @@ export async function GET() {
     // --- K-Dramas (TV, Korean language + Drama genre) ---
     const kdramaRes = await fetch(
       `${BASE_URL}/discover/tv?with_original_language=ko&with_genres=18&sort_by=popularity.desc&page=1&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: 86400 } }
+      { cache: "force-cache", next: { revalidate: 86400 } },
     );
     const kdramaData = await kdramaRes.json();
     const kdramas: TMDBRawResult[] = (kdramaData.results || []).slice(0, 18);
@@ -41,17 +41,38 @@ export async function GET() {
     // --- Enrichment helper ---
     async function enrichItem(
       item: TMDBRawResult,
-      type: "movie" | "tv"
+      type: "movie" | "tv",
     ): Promise<TMDBEnrichedResult> {
       try {
         const detailsRes = await fetch(
-          `${BASE_URL}/${type}/${item.id}?api_key=${API_KEY}`,
-          { cache: "force-cache", next: { revalidate: 86400 } }
+          `${BASE_URL}/${type}/${item.id}?api_key=${API_KEY}&append_to_response=videos,credits`,
+          { cache: "force-cache", next: { revalidate: 86400 } },
         );
 
         if (!detailsRes.ok) throw new Error("Details fetch failed");
 
         const details = await detailsRes.json();
+
+        const trailer =
+          details.videos?.results?.find(
+            (video: {
+              key: string;
+              site: string;
+              type: string;
+              official?: boolean;
+            }) =>
+              video.site === "YouTube" &&
+              video.type === "Trailer" &&
+              video.official,
+          ) ||
+          details.videos?.results?.find(
+            (video: { key: string; site: string; type: string }) =>
+              video.site === "YouTube" && video.type === "Trailer",
+          ) ||
+          details.videos?.results?.find(
+            (video: { key: string; site: string; type: string }) =>
+              video.site === "YouTube",
+          );
 
         return {
           ...item,
@@ -72,6 +93,23 @@ export async function GET() {
           synopsis: details.overview || "",
           seasons: type === "tv" ? details.number_of_seasons : undefined,
           episodes: type === "tv" ? details.number_of_episodes : undefined,
+          trailer_key: trailer?.key || null,
+          cast:
+            details.credits?.cast
+              ?.slice(0, 8)
+              .map(
+                (person: {
+                  id: number;
+                  name: string;
+                  character?: string;
+                  profile_path?: string | null;
+                }) => ({
+                  id: person.id,
+                  name: person.name,
+                  role: person.character || "",
+                  profile_path: person.profile_path || null,
+                }),
+              ) || [],
         };
       } catch (err) {
         console.error(`Failed to enrich TMDB ID ${item.id}:`, err);
@@ -84,6 +122,8 @@ export async function GET() {
           year: undefined,
           duration: undefined,
           synopsis: "",
+          trailer_key: null,
+          cast: [],
         };
       }
     }
@@ -106,14 +146,14 @@ export async function GET() {
 
     response.headers.set(
       "Cache-Control",
-      "public, max-age=86400, stale-while-revalidate=60"
+      "public, max-age=86400, stale-while-revalidate=60",
     );
     return response;
   } catch (error) {
     console.error("API Error:", error);
     return NextResponse.json(
       { error: "Failed to fetch data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

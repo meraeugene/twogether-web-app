@@ -1,11 +1,21 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { FaPlay } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { useState, useTransition, useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { mutate } from "swr";
+import { createPortal } from "react-dom";
+import {
+  Play,
+  Plus,
+  Trash2,
+  ChevronDown,
+  X,
+  Clock,
+  Calendar,
+  Tv2,
+} from "lucide-react";
 
 import { Recommendation } from "@/types/recommendation";
 import {
@@ -15,12 +25,33 @@ import {
 import ConfirmModal from "@/components/ConfirmModal";
 import { removeFromWatchlist } from "@/actions/watchlistActions";
 import { PrivacyModal } from "./PrivacyModal";
-import { FaLock } from "react-icons/fa";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
-import { useRouter } from "next/navigation";
-import { VisualHeartRating } from "./VisualHeartRating";
-import { mutate } from "swr";
 
+// ─── Chip ─────────────────────────────────────────────────────────────────────
+function Chip({
+  children,
+  glow,
+}: {
+  children: React.ReactNode;
+  glow?: boolean;
+}) {
+  return (
+    <span
+      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium tracking-wide select-none"
+      style={{
+        background: glow ? "rgba(220,38,38,0.15)" : "rgba(255,255,255,0.07)",
+        border: glow
+          ? "1px solid rgba(220,38,38,0.45)"
+          : "1px solid rgba(255,255,255,0.12)",
+        color: glow ? "#fca5a5" : "rgba(255,255,255,0.55)",
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
 export default function FilmCard({
   item,
   userId,
@@ -37,274 +68,546 @@ export default function FilmCard({
   const [isPending, startTransition] = useTransition();
   const [isVisible, setIsVisible] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [isUpdatingPrivacy, startPrivacyTransition] = useTransition();
+  const [isHovered, setIsHovered] = useState(false);
+  const [cinemaOpen, setCinemaOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"overview" | "cast">("overview");
+  const [hoverProgress, setHoverProgress] = useState(false);
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const openCinema = () => {
+    setActiveTab("overview");
+    setCinemaOpen(true);
+  };
+
+  const HOVER_OPEN_DELAY = 1000;
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    setHoverProgress(true);
+    hoverTimer.current = setTimeout(() => {
+      setHoverProgress(false);
+      openCinema();
+    }, HOVER_OPEN_DELAY);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setHoverProgress(false);
+
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    hoverTimer.current = setTimeout(() => setCinemaOpen(false), 150);
+  };
+  const handleOverlayMouseEnter = () => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+  };
+  const handleOverlayMouseLeave = () => {
+    setCinemaOpen(false);
+    setIsHovered(false);
+  };
+
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setCinemaOpen(false);
+    };
+    window.addEventListener("keydown", fn);
+    return () => window.removeEventListener("keydown", fn);
+  }, []);
 
   const confirmDelete = () => {
     setShowConfirm(false);
     setIsVisible(false);
+    setCinemaOpen(false);
     startTransition(async () => {
       if (isDeleteRecommendation) {
         await deleteRecommendation(userId!, item.recommendation_id);
-        mutate("/api/recos"); // Refresh recommendations cache
+        mutate("/api/recos");
       } else if (isRemoveFromWatchlist && watchlistItemId) {
         await removeFromWatchlist(watchlistItemId, userId!);
-        mutate("/api/my-watchlist"); // Refresh watchlist cache
+        mutate("/api/my-watchlist");
       }
     });
   };
 
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
-  const [isUpdatingPrivacy, startPrivacyTransition] = useTransition();
-
-  const handleVisibilityChange = (newVisibility: "public" | "private") => {
+  const handleVisibilityChange = (v: "public" | "private") => {
     startPrivacyTransition(async () => {
-      await toggleRecommendationVisibility(
-        userId!,
-        item.recommendation_id,
-        newVisibility
-      );
-      mutate("/api/my-recos"); // Refresh my recommendations cache
+      await toggleRecommendationVisibility(userId!, item.recommendation_id, v);
+      mutate("/api/my-recos");
       setShowPrivacyModal(false);
     });
   };
 
-  const router = useRouter();
-
   const handleClick = () => {
     const slug = getSlugFromTitle(item.title);
-
-    if (item.generated_by_ai && item.recommended_by.id === "ai-generated") {
-      router.push(`/ai-recommend/watch/${item.tmdb_id}/${slug}`);
-      return;
-    }
-
-    if (item.is_tmdb_recommendation && item.recommended_by.id === "tmdb") {
-      router.push(`/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`);
-      return;
-    }
-
-    if (item.recommendation_id) {
-      router.push(`/watch/${item.tmdb_id}/${slug}`);
-      return;
-    }
+    router.push(
+      item.generated_by_ai
+        ? `/ai-recommend/watch/${item.tmdb_id}/${slug}`
+        : item.is_tmdb_recommendation
+          ? `/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`
+          : `/watch/${item.tmdb_id}/${slug}`,
+    );
   };
 
+  const stagger = (i: number) => ({
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 },
+    transition: { delay: 0.07 * i, duration: 0.28 },
+  });
+
+  const TABS = ["overview", "cast"] as const;
+
+  const trailerUrl = item.trailer_key
+    ? `https://www.youtube.com/embed/${item.trailer_key}?autoplay=1&mute=0&controls=0&loop=1&playlist=${item.trailer_key}&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&vq=hd1080`
+    : null;
+
+  const runtimeLabel =
+    item.type === "movie"
+      ? item.duration
+        ? `${Math.floor(item.duration / 60)}h ${item.duration % 60}m`
+        : null
+      : item.duration
+        ? `${item.duration}m / ep`
+        : item.seasons
+          ? `${item.seasons} Season${item.seasons > 1 ? "s" : ""}`
+          : null;
+
+  const synopsis = item.synopsis || item.comment || "No synopsis available.";
+
+  const genres = item.genres?.slice(0, 2) || [];
+
+  const cast = item.cast?.slice(0, 4) || [];
+
+  const cinemaOverlay =
+    cinemaOpen && typeof document !== "undefined"
+      ? createPortal(
+          <AnimatePresence>
+            <motion.div
+              key="cinema"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-9999 flex flex-col overflow-hidden"
+              style={{
+                background: "#06030a",
+              }}
+              onMouseEnter={handleOverlayMouseEnter}
+              onMouseLeave={handleOverlayMouseLeave}
+            >
+              {/* ══════════════════════════════════════════
+                  FULLSCREEN TRAILER  (flex-1 = fills all remaining height)
+              ══════════════════════════════════════════ */}
+              <div className="relative w-full flex-1 bg-black overflow-hidden">
+                {trailerUrl ? (
+                  /* scale-[1.15] crops YouTube top/bottom chrome */
+                  <div className="absolute inset-0 scale-[1.15] origin-center">
+                    <iframe
+                      loading="eager"
+                      src={trailerUrl}
+                      className="w-full h-full pointer-events-none"
+                      allow="autoplay; encrypted-media; fullscreen"
+                      title=""
+                    />
+                  </div>
+                ) : (
+                  <Image
+                    src={item.poster_url || ""}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                  />
+                )}
+
+                {/* ── Overlay layer stack ── */}
+                <div className="absolute inset-0 pointer-events-none">
+                  {/* Solid top bar — kills YouTube title overlay */}
+                  <div
+                    className="absolute top-0 inset-x-0 bg-[#06030a]"
+                    style={{ height: "8%" }}
+                  />
+                  {/* Solid bottom bar — kills YouTube controls */}
+                  <div
+                    className="absolute bottom-0 inset-x-0 bg-[#06030a]"
+                    style={{ height: "8%" }}
+                  />
+                  {/* Dark vignette sides */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at center, transparent 35%, rgba(6,3,10,0.75) 100%)",
+                    }}
+                  />
+                  {/* Strong bottom fade → info panel */}
+                  <div
+                    className="absolute bottom-0 inset-x-0"
+                    style={{
+                      height: "55%",
+                      background:
+                        "linear-gradient(to bottom, transparent 0%, rgba(6,3,10,0.6) 50%, #06030a 100%)",
+                    }}
+                  />
+                </div>
+
+                {/* ── Title block — bottom left of video ── */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-center pointer-events-none">
+                  <motion.h1
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className=" text-transparent  font-bold tracking-tighter bg-clip-text bg-linear-to-b from-white to-white/40 "
+                    style={{
+                      fontSize: "clamp(2rem, 4vw, 2.2rem)",
+                      textShadow: "0 4px 32px rgba(0,0,0,0.95)",
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    {item.title}
+                  </motion.h1>
+                </div>
+
+                {/* Close button */}
+                <div className="absolute top-5 right-6 z-20 flex items-center gap-2">
+                  <span
+                    className="text-[10px] tracking-wider uppercase text-white/40 select-none"
+                    style={{ letterSpacing: "0.12em" }}
+                  >
+                    ESC
+                  </span>
+
+                  <button
+                    onClick={() => setCinemaOpen(false)}
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-white/80 transition-all duration-200 hover:text-white cursor-pointer"
+                    style={{
+                      background: "rgba(0,0,0,0.35)",
+                      border: "1px solid rgba(255,255,255,0.12)",
+                      backdropFilter: "blur(10px)",
+                      boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
+                    }}
+                  >
+                    <X size={17} strokeWidth={2.3} />
+                  </button>
+                </div>
+              </div>
+
+              {/* ══════════════════════════════════════════
+                  INFO PANEL  (fixed height, no scroll)
+              ══════════════════════════════════════════ */}
+              <div
+                className="shrink-0  w-full flex items-center justify-center"
+                style={{ height: 210, background: "#06030a" }}
+              >
+                <div className="w-full max-w-2xl flex flex-col items-center gap-3 px-6">
+                  {/* Row 1 — meta chips */}
+                  <motion.div
+                    {...stagger(0)}
+                    className="flex items-center justify-center gap-2 flex-wrap"
+                  >
+                    <Chip>
+                      <Calendar size={10} />
+                      {item.year}
+                    </Chip>
+                    <Chip>
+                      <Tv2 size={10} />
+                      {item.type?.toUpperCase()}
+                    </Chip>
+                    <Chip>
+                      <Clock size={10} />
+                      {item.duration}m
+                    </Chip>
+                  </motion.div>
+
+                  {/* Row 2 — tabs + genre pills */}
+                  <motion.div
+                    {...stagger(1)}
+                    className="flex items-center justify-center gap-5 w-full flex-wrap"
+                  >
+                    {/* Tabs */}
+                    <div
+                      className="flex border-b"
+                      style={{ borderColor: "rgba(255,255,255,0.06)" }}
+                    >
+                      {TABS.map((tab) => (
+                        <button
+                          key={tab}
+                          onClick={() => setActiveTab(tab)}
+                          className="relative px-4 py-1 text-[11px] font-semibold uppercase tracking-widest transition-colors"
+                          style={{
+                            color:
+                              activeTab === tab
+                                ? "#f87171"
+                                : "rgba(255,255,255,0.28)",
+                          }}
+                        >
+                          {tab}
+                          {activeTab === tab && (
+                            <motion.div
+                              layoutId="tab-line"
+                              className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
+                              style={{
+                                background:
+                                  "linear-gradient(to right, #dc2626, #7f1d1d)",
+                              }}
+                            />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Genre pills */}
+                    <div className="flex gap-1.5 flex-wrap justify-center">
+                      {genres.map((g) => (
+                        <span
+                          key={g}
+                          className="px-2.5 py-0.5 rounded-full text-[10px] font-medium uppercase tracking-wide"
+                          style={{
+                            background: "rgba(220,30,30,0.08)",
+                            border: "1px solid rgba(220,30,30,0.25)",
+                            color: "rgba(252,165,165,0.7)",
+                          }}
+                        >
+                          {g}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* Row 3 — tab content (fixed height) */}
+                  <div className="w-full" style={{ height: 56 }}>
+                    <AnimatePresence mode="wait">
+                      {activeTab === "overview" && (
+                        <motion.div
+                          key="ov"
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -5 }}
+                          transition={{ duration: 0.16 }}
+                          className="flex items-center justify-center h-full"
+                        >
+                          <p
+                            className="text-[12.5px] leading-relaxed text-center line-clamp-2 max-w-xl"
+                            style={{
+                              color: "rgba(255,255,255,0.5)",
+                              fontStyle: "normal",
+                            }}
+                          >
+                            {synopsis}
+                          </p>
+                        </motion.div>
+                      )}
+
+                      {activeTab === "cast" && (
+                        <motion.div
+                          key="ca"
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -5 }}
+                          transition={{ duration: 0.16 }}
+                          className="flex justify-center gap-6"
+                        >
+                          {cast.map((m) => (
+                            <div
+                              key={m.name}
+                              className="flex flex-col items-center text-center"
+                            >
+                              <div
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-[10px] font-semibold text-white"
+                                style={{
+                                  background: "rgba(255,255,255,0.12)",
+                                }}
+                              >
+                                {/* cast profile image */}
+                              </div>
+
+                              <p className="mt-1 text-[10px] text-white/80">
+                                {m.name}
+                              </p>
+                            </div>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Row 4 — actions */}
+                  <motion.div
+                    {...stagger(2)}
+                    className="flex items-center justify-center gap-2.5"
+                  >
+                    <button
+                      onClick={handleClick}
+                      className="flex items-center cursor-pointer gap-2 px-6 py-2 rounded-full text-[13px] font-semibold bg-red-500/70 hover:bg-red-500/80 text-white "
+                    >
+                      <Play size={12} fill="white" strokeWidth={0} />
+                      Watch Now
+                    </button>
+
+                    <button
+                      className="flex h-9 w-9 items-center cursor-pointer justify-center rounded-full text-white/60 transition  hover:text-white"
+                      style={{ border: "1px solid rgba(255,255,255,0.12)" }}
+                    >
+                      <Plus size={15} strokeWidth={2} />
+                    </button>
+
+                    {userId && (
+                      <button
+                        onClick={() => setShowConfirm(true)}
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-white/60 transition  hover:text-red-400"
+                        style={{ border: "1px solid rgba(255,255,255,0.12)" }}
+                      >
+                        <Trash2 size={14} strokeWidth={2} />
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() => setShowPrivacyModal(true)}
+                      className="flex h-9 w-9 items-center justify-center rounded-full text-white/60 transition lg:hidden hover:text-white"
+                      style={{ border: "1px solid rgba(255,255,255,0.12)" }}
+                    >
+                      <ChevronDown size={15} strokeWidth={2} />
+                    </button>
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>,
+          document.body,
+        )
+      : null;
+
+  // ─── Card (poster) ────────────────────────────────────────────────────────
   return (
     <>
-      <AnimatePresence mode="popLayout">
-        {isVisible && (
-          <motion.div
-            initial={{ opacity: 1, scale: 1 }}
-            exit={{
-              opacity: 0,
-              y: 40,
-              skewY: 6,
-              filter: "blur(3px)",
-            }}
-            transition={{ duration: 0.45, ease: "easeInOut" }}
-            layout
-            className="group relative w-full rounded-lg font-[family-name:var(--font-geist-sans)] overflow-hidden shadow-lg"
-          >
-            <div className="relative aspect-[2/3] w-full">
-              {item.poster_url ? (
+      <div
+        ref={cardRef}
+        className="relative w-full font-(family-name:--font-geist-sans)"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        style={{ zIndex: isHovered ? 10 : 1 }}
+      >
+        <AnimatePresence mode="popLayout">
+          {isVisible && (
+            <motion.div layout className="w-full">
+              <div className="relative aspect-2/3 w-full overflow-hidden rounded-md bg-[#141414] shadow-md cursor-pointer">
                 <Image
-                  src={item.poster_url}
+                  src={item.poster_url || "/placeholder.jpg"}
                   alt={item.title}
-                  priority
-                  unoptimized
                   fill
-                  className="object-cover w-full h-full transition duration-300 group-hover:brightness-50 rounded-lg"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                  className={`object-cover transition-all duration-300 ${
+                    isHovered ? "opacity-50 scale-105" : "opacity-100 scale-100"
+                  }`}
+                  sizes="(max-width: 768px) 50vw, 20vw"
                 />
-              ) : (
-                <div className="flex items-center justify-center w-full h-full bg-white/10 text-white text-xs p-2 text-center rounded-lg font-[family-name:var(--font-geist-sans)]">
-                  No Image Available
-                </div>
-              )}
 
-              <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 bg-black/50 ">
-                <button
-                  onClick={handleClick}
-                  className="flex cursor-pointer items-center justify-center w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md ring-1 ring-white/10 hover:ring-3 hover:ring-red-100 transition duration-300 ease-in-out transform hover:scale-110"
-                >
-                  <FaPlay className="text-xl" />
-                </button>
-              </div>
+                <AnimatePresence>
+                  {isHovered && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 flex items-center justify-center"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgba(100,0,0,0.8) 0%, transparent 60%)",
+                      }}
+                    >
+                      <div className="relative flex items-center justify-center">
+                        {hoverProgress && (
+                          <svg
+                            className="absolute -inset-2 -rotate-90"
+                            width="68"
+                            height="68"
+                            viewBox="0 0 68 68"
+                          >
+                            <circle
+                              cx="34"
+                              cy="34"
+                              r="30"
+                              fill="none"
+                              stroke="rgba(255,255,255,0.10)"
+                              strokeWidth="2"
+                            />
+                            <motion.circle
+                              cx="34"
+                              cy="34"
+                              r="30"
+                              fill="none"
+                              stroke="rgba(248,113,113,0.95)"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              initial={{ pathLength: 0 }}
+                              animate={{ pathLength: 1 }}
+                              transition={{
+                                duration: HOVER_OPEN_DELAY / 1000,
+                                ease: "linear",
+                              }}
+                            />
+                          </svg>
+                        )}
 
-              {userId && isDeleteRecommendation && (
-                <div
-                  className="absolute top-4 right-4 z-30 
-                    -translate-y-4 opacity-0 
-                    group-hover:translate-y-0 group-hover:opacity-100 
-                    transition-all duration-500 ease-out"
-                >
-                  <button
-                    onClick={() => setShowConfirm(true)}
-                    disabled={isPending}
-                    className="px-3 py-1 flex cursor-pointer items-center gap-1 text-xs rounded-full bg-red-600 hover:bg-red-700 text-white shadow"
-                  >
-                    <MdDelete className="text-base" />
-                    {isPending ? "Deleting..." : "Delete Recommendation"}
-                  </button>
-
-                  <button
-                    onClick={() => setShowPrivacyModal(true)}
-                    className="mt-2 w-full cursor-pointer px-3 py-1 flex items-center gap-2 text-xs rounded-full border border-white/20 hover:border-white/40 hover:bg-white/5 text-white/80 hover:text-white transition"
-                  >
-                    <FaLock className="text-xs" />
-                    <span>Edit Privacy</span>
-                  </button>
-                </div>
-              )}
-
-              {userId && isRemoveFromWatchlist && (
-                <div
-                  className="absolute top-4 right-4 z-30 
-                    -translate-y-4 opacity-0 
-                    group-hover:translate-y-0 group-hover:opacity-100 
-                    transition-all duration-500 ease-out"
-                >
-                  <button
-                    onClick={() => setShowConfirm(true)}
-                    disabled={isPending}
-                    className="px-3 py-1 flex cursor-pointer items-center gap-1 text-xs rounded-full bg-red-600 hover:bg-red-700 text-white shadow"
-                  >
-                    <MdDelete className="text-base" />
-                    {isPending ? "Removing..." : "Remove from Watchlist"}
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Mobile action buttons - Delete & Privacy */}
-            {userId && isDeleteRecommendation && (
-              <div className="lg:hidden flex gap-3 mt-4 ">
-                {/* Delete Button */}
-                <button
-                  onClick={() => setShowConfirm(true)}
-                  disabled={isPending}
-                  className="flex-1 p-2 rounded-md flex items-center justify-center
-    text-white/90 bg-red-500/20 hover:bg-red-600/30 transition-all
-    backdrop-blur border border-red-400/40 shadow-md disabled:opacity-60"
-                  title="Delete Recommendation"
-                >
-                  <MdDelete className="text-base" />
-                </button>
-
-                {/* Privacy Button */}
-                <button
-                  onClick={() => setShowPrivacyModal(true)}
-                  className="flex-1 p-2 rounded-md flex items-center justify-center 
-      text-white/90 bg-white/10 hover:bg-white/20 transition-all 
-      backdrop-blur border border-white/20 shadow-sm"
-                  title="Edit Privacy"
-                >
-                  <FaLock className="text-sm" />
-                </button>
-              </div>
-            )}
-
-            {userId && isRemoveFromWatchlist && (
-              <button
-                onClick={() => setShowConfirm(true)}
-                disabled={isPending}
-                className="mt-4  lg:hidden w-full   gap-2 rounded-md 
-       px-1 py-2 text-xs font-medium  
-       hover:text-red-200 font-[family-name:var(--font-geist-mono)] 
-       disabled:cursor-not-allowed 
-      text-white/90 bg-red-500/20  hover:bg-red-600/30 transition-all
-    backdrop-blur border border-red-400/40 shadow-md disabled:opacity-60"
-              >
-                {isPending ? "Removing..." : "Remove from Watchlist"}
-              </button>
-            )}
-
-            <div className="py-4 text-white ">
-              <button
-                onClick={handleClick}
-                className="w-full cursor-pointer flex items-center gap-3 text-white bg-red-600 hover:bg-red-700 transition p-2 rounded-md font-[family-name:var(--font-geist-mono)] text-sm mt-2 mb-4 lg:hidden"
-              >
-                <FaPlay className="text-white text-xs" />
-                Watch Now
-              </button>
-
-              <div className="text-base font-semibold  ">{item.title}</div>
-
-              <div className="flex items-center justify-between flex-wrap gap-2 text-sm text-white/60 mt-1">
-                <span className="flex items-center gap-2">
-                  <span className="text-white/80">{item.year}</span>
-
-                  {item.type === "tv" ? (
-                    <span className="text-white/50 font-medium">
-                      S{item.seasons || 1} · {item.episodes || 1}EPS
-                    </span>
-                  ) : (
-                    item.duration !== 0 && (
-                      <span className="text-white/50 font-medium">
-                        {item.duration}m
-                      </span>
-                    )
-                  )}
-                </span>
-
-                <span className="bg-gray-700 rounded-sm px-2 py-1 text-xs capitalize">
-                  {item.type}
-                </span>
-              </div>
-
-              {item.recommendation_id && item.comment && (
-                <p className="text-sm text-white/80 border-l-4 border-red-500 pl-2 my-3 italic">
-                  &quot;{item.comment}&quot;
-                </p>
-              )}
-
-              {item.rating && <VisualHeartRating value={item.rating} />}
-
-              {item.recommended_by.username && (
-                <div className=" mt-3 ">
-                  <Link
-                    prefetch
-                    href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
-                    className=" text-sm text-white/60 hover:underline flex items-center gap-2"
-                  >
-                    {item.recommended_by.avatar_url && (
-                      <div className="w-6 h-6 rounded-full overflow-hidden">
-                        <Image
-                          src={item.recommended_by.avatar_url}
-                          alt={item.recommended_by.username}
-                          width={24}
-                          unoptimized
-                          height={24}
-                          className="rounded-full object-cover"
-                        />
+                        <div
+                          className="flex items-center justify-center rounded-full"
+                          style={{
+                            width: 52,
+                            height: 52,
+                            background: "rgba(220,38,38,0.9)",
+                            boxShadow: "0 0 30px rgba(220,38,38,0.55)",
+                          }}
+                        >
+                          <Play
+                            size={18}
+                            fill="white"
+                            strokeWidth={0}
+                            className="ml-0.5"
+                          />
+                        </div>
                       </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+              <div className="mt-4 mb-3">
+                <div className="text-base font-semibold  ">{item.title}</div>
+
+                <div className="flex items-center justify-between flex-wrap gap-2 text-sm text-white/60 mt-1">
+                  <span className="flex items-center gap-2">
+                    <span className="text-white/80">{item.year}</span>
+
+                    {item.type === "tv" ? (
+                      <span className="text-white/50 font-medium">
+                        S{item.seasons || 1} · {item.episodes || 1}EPS
+                      </span>
+                    ) : (
+                      item.duration !== 0 && (
+                        <span className="text-white/50 font-medium">
+                          {item.duration}m
+                        </span>
+                      )
                     )}
-                    {item.generated_by_ai
-                      ? "AI Assistant"
-                      : item.recommended_by.username}
-                  </Link>
+                  </span>
+
+                  <span className="bg-gray-700 rounded-sm px-2 py-1 text-xs capitalize">
+                    {item.type}
+                  </span>
                 </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {cinemaOverlay}
 
       <ConfirmModal
         open={showConfirm}
         onClose={() => setShowConfirm(false)}
         onConfirm={confirmDelete}
-        title={
-          isDeleteRecommendation
-            ? `Delete "${item.title}" recommendation?`
-            : `Remove "${item.title}" from Watchlist?`
-        }
-        description={
-          isDeleteRecommendation
-            ? "This recommendation will no longer appear on your profile or others' feeds."
-            : "It will be removed from your watchlist, but you can add it again later."
-        }
-        confirmText={isDeleteRecommendation ? "Delete" : "Remove"}
-        cancelText="Cancel"
+        title={`Remove ${item.title}?`}
+        description="Are you sure you want to remove this from your list?"
+        confirmText="Remove"
         loading={isPending}
       />
 
