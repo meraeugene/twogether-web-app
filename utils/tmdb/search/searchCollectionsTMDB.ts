@@ -9,13 +9,13 @@ const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
 
 export async function getBingeCollectionsByQuery(
-  query: string
+  query: string,
 ): Promise<EnrichedCollection[]> {
   const collectionsMap: Record<number, EnrichedCollection> = {};
 
   // 🔍 Search directly for collections matching the query
   const collectionSearchUrl = `${BASE_URL}/search/collection?query=${encodeURIComponent(
-    query
+    query,
   )}&api_key=${API_KEY}&language=en-US`;
 
   const collectionRes = await fetch(collectionSearchUrl, {
@@ -32,7 +32,7 @@ export async function getBingeCollectionsByQuery(
       {
         cache: "force-cache",
         next: { revalidate: 86400 },
-      }
+      },
     );
     const colData: TMDBCollection = await colRes.json();
 
@@ -40,13 +40,34 @@ export async function getBingeCollectionsByQuery(
 
     for (const part of colData.parts || []) {
       const partDetailsRes = await fetch(
-        `${BASE_URL}/movie/${part.id}?api_key=${API_KEY}`,
+        `${BASE_URL}/movie/${part.id}?api_key=${API_KEY}&append_to_response=videos`,
         {
           cache: "force-cache",
           next: { revalidate: 86400 },
-        }
+        },
       );
       const partDetails: TMDBMovieDetails = await partDetailsRes.json();
+
+      const trailer =
+        partDetails.videos?.results?.find(
+          (video: {
+            key: string;
+            site: string;
+            type: string;
+            official?: boolean;
+          }) =>
+            video.site === "YouTube" &&
+            video.type === "Trailer" &&
+            video.official,
+        ) ||
+        partDetails.videos?.results?.find(
+          (video: { key: string; site: string; type: string }) =>
+            video.site === "YouTube" && video.type === "Trailer",
+        ) ||
+        partDetails.videos?.results?.find(
+          (video: { key: string; site: string; type: string }) =>
+            video.site === "YouTube",
+        );
 
       if (!partDetails.runtime || partDetails.runtime === 0) continue;
 
@@ -63,6 +84,7 @@ export async function getBingeCollectionsByQuery(
         genres: partDetails.genres?.map((g) => g.name) || [],
         duration: partDetails.runtime,
         synopsis: partDetails.overview || "",
+        trailer_key: trailer?.key || null,
       });
     }
 
@@ -71,7 +93,7 @@ export async function getBingeCollectionsByQuery(
         collection_id: col.id,
         collection_name: col.name,
         movies: parts.sort((a, b) =>
-          (a.year || "").localeCompare(b.year || "")
+          (a.year || "").localeCompare(b.year || ""),
         ),
       };
     }
