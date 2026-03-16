@@ -666,9 +666,9 @@ function FilmCard({
 
         {isVisible && userId && isRemoveFromWatchlist && (
           <button
-            onClick={() => {
+            onClick={(e) => {
 e.stopPropagation();
- setShowConfirm(true)
+ setShowConfirm(true);
 }}
             disabled={isPending}
             className="mt-4  lg:hidden w-full   gap-2 rounded-md 
