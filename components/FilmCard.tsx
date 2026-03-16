@@ -194,8 +194,6 @@ function FilmCard({
         : item.seasons
           ? `${item.seasons} Season${item.seasons > 1 ? "s" : ""}`
           : null;
-  const synopsis = item.synopsis || item.comment || "No synopsis available.";
-  const genres = item.genres.slice(0, 3); // Show up to 3 genres for brevity
 
   const cinemaOverlay =
     cinemaOpen && typeof document !== "undefined"
@@ -217,7 +215,7 @@ function FilmCard({
               {/* ══════════════════════════════════════════
                   FULLSCREEN TRAILER  (flex-1 = fills all remaining height)
               ══════════════════════════════════════════ */}
-              <div className="relative w-full flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
+              <div className="relative w-full flex-1/2 md:flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
                 {/* 1. Ambient Glow / Backlight Effect */}
                 <div className="absolute inset-0 opacity-40 blur-[120px] pointer-events-none">
                   <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 via-transparent to-blue-500/20" />
@@ -265,17 +263,17 @@ function FilmCard({
 
                 <motion.div
                   key={item.title}
-                  className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none w-full"
+                  className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none w-full "
                 >
-                  <div className="flex flex-col items-center gap-3">
-                    <span className="text-[10px] tracking-[0.3em] uppercase text-white/40 font-medium">
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="text-[8px] md:text-[10px] tracking-[0.3em] uppercase text-white/40 font-medium">
                       Trailer Preview
                     </span>
 
                     <h1
                       className="text-white font-black italic uppercase tracking-tighter"
                       style={{
-                        fontSize: "clamp(2rem,6vw,4rem)",
+                        fontSize: "clamp(1.7rem,5vw,4rem)",
                         lineHeight: "1.1",
                         filter: "drop-shadow(0 0 20px rgba(255,255,255,0.2))",
                       }}
@@ -308,7 +306,7 @@ function FilmCard({
                   INFO PANEL  (fixed height, no scroll)
               ══════════════════════════════════════════ */}
               <div
-                className="shrink-0 w-full flex flex-col pb-12 px-4  items-center justify-center relative"
+                className="shrink-0 w-full flex flex-col pb-12   items-center justify-center relative"
                 style={{ minHeight: 230, background: "#040404" }}
               >
                 {/* Radar Background */}
@@ -320,42 +318,42 @@ function FilmCard({
                   />
                 </div>
 
-                <div className="w-full max-w-3xl flex flex-col items-center justify-center px-4 sm:px-6 relative z-10">
+                <div className="w-full md:max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center px-4 sm:px-6 relative z-10">
                   {/* HEADER SECTION */}
-                  <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-6 mb-6">
+                  <div className="w-full flex  items-center justify-center gap-3 md:gap-6 mb-6">
                     {/* LEFT — YEAR */}
                     <motion.div
                       {...stagger(0)}
                       className="flex items-center gap-4 lg:flex-1 lg:justify-end"
                     >
                       <div className="flex flex-col items-center lg:items-end">
-                        <span className="text-[9px] sm:text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-1">
+                        <span className="text-[10px] hidden md:block sm:text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-1">
                           Year
                         </span>
 
                         <div className="flex items-center gap-2">
-                          <Calendar size={12} className="text-white/60" />
-                          <span className="text-[13px] sm:text-[14px] font-mono text-white/60">
+                          <Calendar size={10} className="text-white/60" />
+                          <span className="text-[10px] sm:text-[14px] font-mono text-white/60">
                             {item.year}
                           </span>
                         </div>
                       </div>
 
-                      <div className="hidden lg:block h-8 w-px bg-white/5 rotate-[20deg]" />
+                      <div className=" h-8 w-px bg-white/5 rotate-[20deg]" />
                     </motion.div>
 
-                    {/* CENTER — GENRES */}
+                    {/* MOBILE — GENRES */}
                     <motion.div
                       {...stagger(0)}
-                      className="flex flex-wrap items-center justify-center gap-3 sm:gap-4"
+                      className="flex flex-wrap md:hidden items-center justify-center gap-3 sm:gap-4"
                     >
-                      <div className="hidden sm:block h-[1px] w-6 bg-red-600/30" />
+                      <div className=" h-[1px] w-6 bg-red-600/30" />
 
                       <div className="flex flex-wrap justify-center gap-3">
-                        {genres.map((g) => (
+                        {item.genres.slice(0, 1).map((g) => (
                           <span
                             key={g}
-                            className="text-[9px] sm:text-[10px] font-black text-red-600 uppercase tracking-[0.3em]
+                            className="text-[8px] sm:text-[11px] font-black text-red-600 uppercase tracking-[0.3em]
               drop-shadow-[0_0_8px_rgba(220,38,38,0.4)]"
                           >
                             {g}
@@ -363,7 +361,29 @@ function FilmCard({
                         ))}
                       </div>
 
-                      <div className="hidden sm:block h-[1px] w-6 bg-red-600/30" />
+                      <div className="h-[1px] w-6  bg-red-600/30" />
+                    </motion.div>
+
+                    {/* DESKTOP — GENRES */}
+                    <motion.div
+                      {...stagger(0)}
+                      className="md:flex flex-wrap hidden items-center justify-center gap-3 sm:gap-4"
+                    >
+                      <div className=" h-[1px] w-6 bg-red-600/30" />
+
+                      <div className="flex flex-wrap justify-center gap-3">
+                        {item.genres.map((g) => (
+                          <span
+                            key={g}
+                            className="text-[8px] sm:text-[11px] font-black text-red-600 uppercase tracking-[0.3em]
+              drop-shadow-[0_0_8px_rgba(220,38,38,0.4)]"
+                          >
+                            {g}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="h-[1px] w-6 bg-red-600/30" />
                     </motion.div>
 
                     {/* RIGHT — RUNTIME */}
@@ -371,16 +391,16 @@ function FilmCard({
                       {...stagger(0)}
                       className="flex items-center gap-4 lg:flex-1 lg:justify-start"
                     >
-                      <div className="hidden lg:block h-8 w-px bg-white/5 rotate-[20deg]" />
+                      <div className="h-8 w-px bg-white/5 rotate-[20deg]" />
 
                       <div className="flex flex-col items-center lg:items-start">
-                        <span className="text-[9px] sm:text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-1">
+                        <span className="text-[10px] hidden md:block sm:text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-1">
                           Duration
                         </span>
 
                         <div className="flex items-center gap-2">
-                          <Clock size={12} className="text-white/60" />
-                          <span className="text-[13px] sm:text-[14px] font-mono text-white/60">
+                          <Clock size={10} className="text-white/60" />
+                          <span className="text-[10px] sm:text-[14px] font-mono text-white/60">
                             {runtimeLabel}
                           </span>
                         </div>
@@ -396,10 +416,10 @@ function FilmCard({
                           key="ov"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="text-[14px] sm:text-[15px] leading-relaxed text-center
-            text-white/60 max-w-sm mx-auto  line-clamp-3 sm:line-clamp-2"
+                          className="text-[12px] sm:text-[15px] leading-relaxed text-center
+            text-white/60 max-w-sm md:max-w-lg mx-auto  line-clamp-2"
                         >
-                          {synopsis}
+                          {item.synopsis}
                         </motion.p>
                       )}
                     </AnimatePresence>
