@@ -215,7 +215,7 @@ function FilmCard({
               {/* ══════════════════════════════════════════
                   FULLSCREEN TRAILER  (flex-1 = fills all remaining height)
               ══════════════════════════════════════════ */}
-              <div className="relative w-full flex-1/2 md:flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
+              <div className="relative w-full flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
                 {trailerUrl ? (
                   <div className="relative w-full aspect-[9/12] md:aspect-video z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
                     {/* The Video Container with "Zoomed-Out" Letterbox Feel */}
@@ -241,11 +241,11 @@ function FilmCard({
                 {/* ── Cinema Overlays ── */}
                 <div className="absolute inset-0 pointer-events-none z-20">
                   {/* Deep Vertical Vignette */}
-                  <div className="md:block absolute hidden  inset-y-0 left-0 w-32 bg-gradient-to-r from-[#06030a] to-transparent" />
-                  <div className="md:block absolute hidden  inset-y-0 right-0 w-32 bg-gradient-to-l from-[#06030a] to-transparent" />
+                  <div className=" absolute hidden md:block  inset-y-0 left-0 w-32 bg-gradient-to-r from-[#06030a] to-transparent" />
+                  <div className=" absolute hidden md:block  inset-y-0 right-0 w-32 bg-gradient-to-l from-[#06030a] to-transparent" />
 
                   {/* Bottom Title Fade */}
-                  <div className="md:block absolute hidden bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-[#06030a] via-[#06030a]/40 to-transparent" />
+                  <div className="absolute  bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-[#06030a] via-[#06030a]/40 to-transparent" />
                 </div>
 
                 {/* ── Title block ── */}
