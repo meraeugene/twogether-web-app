@@ -192,7 +192,7 @@ function FilmCard({
       : item.duration
         ? `${item.duration}m / ep`
         : item.seasons
-          ? `${item.seasons} Season${item.seasons > 1 ? "s" : ""}`
+          ? `S${item.seasons}`
           : null;
 
   const cinemaOverlay =
@@ -216,25 +216,18 @@ function FilmCard({
                   FULLSCREEN TRAILER  (flex-1 = fills all remaining height)
               ══════════════════════════════════════════ */}
               <div className="relative w-full flex-1/2 md:flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
-                {/* 1. Ambient Glow / Backlight Effect */}
-                <div className="absolute inset-0 opacity-40 blur-[120px] pointer-events-none">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 via-transparent to-blue-500/20" />
-                </div>
-
                 {trailerUrl ? (
-                  <div className="relative w-full aspect-[9/12] md:aspect-video lg:aspect-[21/9] z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
+                  <div className="relative w-full aspect-[9/12] md:aspect-video z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
                     {/* The Video Container with "Zoomed-Out" Letterbox Feel */}
                     <div className="absolute inset-0 overflow-hidden">
                       <iframe
                         loading="eager"
                         src={`${trailerUrl}&controls=0&modestbranding=1&rel=0`}
-                        className="w-[150%] h-[110%] ml-[-25%] mt-[-5%] lg:mt-[0%]  md:w-full md:h-[120%] md:ml-0 md:-translate-y-[8%] pointer-events-none scale-[1.1]"
+                        className="w-[150%] h-[110%] ml-[-25%] mt-[-5%] lg:mt-[0%]  md:w-full md:h-[100%] md:ml-0  pointer-events-none "
                         allow="autoplay; encrypted-media; fullscreen"
                         title=""
                       />
                     </div>
-                    {/* 2. Glassy "Screen" Overlay (Adds texture/depth) */}
-                    <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.4)]" />
                   </div>
                 ) : (
                   <Image
@@ -247,15 +240,12 @@ function FilmCard({
 
                 {/* ── Cinema Overlays ── */}
                 <div className="absolute inset-0 pointer-events-none z-20">
-                  {/* Cinematic Grain/Noise (Subtle) */}
-                  <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" />
-
                   {/* Deep Vertical Vignette */}
-                  <div className="md:absolute hidden  inset-y-0 left-0 w-32 bg-gradient-to-r from-[#06030a] to-transparent" />
-                  <div className="md:absolute hidden  inset-y-0 right-0 w-32 bg-gradient-to-l from-[#06030a] to-transparent" />
+                  <div className="md:block absolute hidden  inset-y-0 left-0 w-32 bg-gradient-to-r from-[#06030a] to-transparent" />
+                  <div className="md:block absolute hidden  inset-y-0 right-0 w-32 bg-gradient-to-l from-[#06030a] to-transparent" />
 
                   {/* Bottom Title Fade */}
-                  <div className="md:absolute hidden bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-[#06030a] via-[#06030a]/40 to-transparent" />
+                  <div className="md:block absolute hidden bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-[#06030a] via-[#06030a]/40 to-transparent" />
                 </div>
 
                 {/* ── Title block ── */}
@@ -312,7 +302,7 @@ function FilmCard({
                   INFO PANEL  (fixed height, no scroll)
               ══════════════════════════════════════════ */}
               <div
-                className="shrink-0 w-full flex flex-col pb-12   items-center justify-center relative"
+                className="shrink-0 w-full flex flex-col pb-12 lg:pb-8  items-center justify-center relative"
                 style={{ minHeight: 230, background: "#040404" }}
               >
                 {/* Radar Background */}
@@ -324,7 +314,7 @@ function FilmCard({
                   />
                 </div>
 
-                <div className="w-full md:max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center px-4 sm:px-6 relative z-10">
+                <div className="w-full md:max-w-3xl lg:max-w-4xl flex flex-col items-center justify-center px-4 sm:px-6 relative z-10">
                   {/* HEADER SECTION */}
                   <div className="w-full flex  items-center justify-center gap-3 md:gap-6 mb-6">
                     {/* LEFT — YEAR */}
@@ -353,7 +343,7 @@ function FilmCard({
                       {...stagger(0)}
                       className="flex flex-wrap md:hidden items-center justify-center gap-3 sm:gap-4"
                     >
-                      <div className=" h-[1px] w-6 bg-red-600/30" />
+                      <div className=" h-[1px] w-3 bg-red-600/30" />
 
                       <div className="flex flex-wrap justify-center gap-3">
                         {item.genres.slice(0, 1).map((g) => (
@@ -367,7 +357,7 @@ function FilmCard({
                         ))}
                       </div>
 
-                      <div className="h-[1px] w-6  bg-red-600/30" />
+                      <div className="h-[1px] w-3  bg-red-600/30" />
                     </motion.div>
 
                     {/* DESKTOP — GENRES */}
@@ -378,7 +368,7 @@ function FilmCard({
                       <div className=" h-[1px] w-6 bg-red-600/30" />
 
                       <div className="flex flex-wrap justify-center gap-3">
-                        {item.genres.map((g) => (
+                        {item.genres.slice(0, 3).map((g) => (
                           <span
                             key={g}
                             className="text-[8px] sm:text-[11px] font-black text-red-600 uppercase tracking-[0.3em]
