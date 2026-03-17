@@ -222,18 +222,17 @@ function FilmCard({
                 </div>
 
                 {trailerUrl ? (
-                  <div className="relative w-full aspect-video lg:aspect-[21/9] z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
+                  <div className="relative w-full aspect-[9/12] md:aspect-video lg:aspect-[21/9] z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
                     {/* The Video Container with "Zoomed-Out" Letterbox Feel */}
                     <div className="absolute inset-0 overflow-hidden">
                       <iframe
                         loading="eager"
                         src={`${trailerUrl}&controls=0&modestbranding=1&rel=0`}
-                        className="w-full h-[120%] -translate-y-[8%] pointer-events-none scale-[1.1]"
+                        className="w-[150%] h-[110%] ml-[-25%] mt-[-5%] lg:mt-[0%]  md:w-full md:h-[120%] md:ml-0 md:-translate-y-[8%] pointer-events-none scale-[1.1]"
                         allow="autoplay; encrypted-media; fullscreen"
                         title=""
                       />
                     </div>
-
                     {/* 2. Glassy "Screen" Overlay (Adds texture/depth) */}
                     <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.4)]" />
                   </div>
@@ -252,18 +251,25 @@ function FilmCard({
                   <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" />
 
                   {/* Deep Vertical Vignette */}
-                  <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#06030a] to-transparent" />
-                  <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#06030a] to-transparent" />
+                  <div className="md:absolute hidden  inset-y-0 left-0 w-32 bg-gradient-to-r from-[#06030a] to-transparent" />
+                  <div className="md:absolute hidden  inset-y-0 right-0 w-32 bg-gradient-to-l from-[#06030a] to-transparent" />
 
                   {/* Bottom Title Fade */}
-                  <div className="absolute bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-[#06030a] via-[#06030a]/40 to-transparent" />
+                  <div className="md:absolute hidden bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-[#06030a] via-[#06030a]/40 to-transparent" />
                 </div>
 
                 {/* ── Title block ── */}
 
                 <motion.div
                   key={item.title}
-                  className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none w-full "
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: [0, 1, 1, 0], y: [20, 0, 0, -10] }}
+                  transition={{
+                    duration: 4, // total timeline
+                    times: [0, 0.15, 0.9, 1], // control phases
+                    ease: "easeInOut",
+                  }}
+                  className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none max-w-xs md:max-w-full w-full  "
                 >
                   <div className="flex flex-col items-center gap-2">
                     <span className="text-[8px] md:text-[10px] tracking-[0.3em] uppercase text-white/40 font-medium">
@@ -273,7 +279,7 @@ function FilmCard({
                     <h1
                       className="text-white font-black italic uppercase tracking-tighter"
                       style={{
-                        fontSize: "clamp(1.7rem,5vw,4rem)",
+                        fontSize: "clamp(1.3rem,3vw,4rem)",
                         lineHeight: "1.1",
                         filter: "drop-shadow(0 0 20px rgba(255,255,255,0.2))",
                       }}
@@ -339,7 +345,7 @@ function FilmCard({
                         </div>
                       </div>
 
-                      <div className=" h-8 w-px bg-white/5 rotate-[20deg]" />
+                      <div className=" h-8 w-px bg-white/15 rotate-[20deg]" />
                     </motion.div>
 
                     {/* MOBILE — GENRES */}
@@ -391,7 +397,7 @@ function FilmCard({
                       {...stagger(0)}
                       className="flex items-center gap-4 lg:flex-1 lg:justify-start"
                     >
-                      <div className="h-8 w-px bg-white/5 rotate-[20deg]" />
+                      <div className="h-8 w-px bg-white/15 rotate-[20deg]" />
 
                       <div className="flex flex-col items-center lg:items-start">
                         <span className="text-[10px] hidden md:block sm:text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-1">
@@ -667,9 +673,9 @@ function FilmCard({
         {isVisible && userId && isRemoveFromWatchlist && (
           <button
             onClick={(e) => {
-e.stopPropagation();
- setShowConfirm(true);
-}}
+              e.stopPropagation();
+              setShowConfirm(true);
+            }}
             disabled={isPending}
             className="mt-4  lg:hidden w-full   gap-2 rounded-md 
        px-1 py-2 text-xs font-medium  
