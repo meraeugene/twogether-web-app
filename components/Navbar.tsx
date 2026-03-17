@@ -265,7 +265,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
         <Link
           href="/"
           onClick={close}
-          className="text-xl font-black uppercase tracking-[-0.02em] text-white font-[family-name:var(--font-geist-mono)] leading-none"
+          className="text-xl font-extrabold uppercase tracking-[-0.02em] text-white font-[family-name:var(--font-geist-mono)] leading-none"
         >
           <span className="text-red-500">Two</span>gether
         </Link>

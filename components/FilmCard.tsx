@@ -223,7 +223,7 @@ function FilmCard({
                       <iframe
                         loading="eager"
                         src={`${trailerUrl}&controls=0&modestbranding=1&rel=0`}
-                        className="w-[150%] h-[110%] ml-[-25%] mt-[-5%] lg:mt-[0%]  md:w-full md:h-[100%] md:ml-0  pointer-events-none "
+                        className="w-full h-[120%] -translate-y-[8%] pointer-events-none scale-[1.1]"
                         allow="autoplay; encrypted-media; fullscreen"
                         title=""
                       />
@@ -248,8 +248,30 @@ function FilmCard({
                   <div className="absolute  bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-[#06030a] via-[#06030a]/40 to-transparent" />
                 </div>
 
-                {/* ── Title block ── */}
+                {/* Mobile Title Block */}
+                <div
+                  key={item.title}
+                  className="absolute lg:hidden bottom-8 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none max-w-xs md:max-w-full w-full  "
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="text-[8px] md:text-[10px] tracking-[0.3em] uppercase text-white/40 font-medium">
+                      Trailer Preview
+                    </span>
 
+                    <h1
+                      className="text-white font-black italic uppercase tracking-tighter"
+                      style={{
+                        fontSize: "clamp(1.3rem,3vw,4rem)",
+                        lineHeight: "1.1",
+                        filter: "drop-shadow(0 0 20px rgba(255,255,255,0.2))",
+                      }}
+                    >
+                      {item.title}
+                    </h1>
+                  </div>
+                </div>
+
+                {/* ── Desktop Title block ── */}
                 <motion.div
                   key={item.title}
                   initial={{ opacity: 0, y: 20 }}
@@ -259,7 +281,7 @@ function FilmCard({
                     times: [0, 0.15, 0.9, 1], // control phases
                     ease: "easeInOut",
                   }}
-                  className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none max-w-xs md:max-w-full w-full  "
+                  className="hidden lg:block absolute bottom-12 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none max-w-xs md:max-w-full w-full  "
                 >
                   <div className="flex flex-col items-center gap-2">
                     <span className="text-[8px] md:text-[10px] tracking-[0.3em] uppercase text-white/40 font-medium">
