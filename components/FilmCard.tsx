@@ -250,7 +250,7 @@ function FilmCard({
 
                 {/* Mobile Title Block */}
                 <div
-                  key={item.title}
+                  key={`${item.tmdb_id}-${item.type}-mobile`}
                   className="absolute lg:hidden bottom-8 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none max-w-xs md:max-w-full w-full  "
                 >
                   <div className="flex flex-col items-center gap-2">
@@ -273,7 +273,7 @@ function FilmCard({
 
                 {/* ── Desktop Title block ── */}
                 <motion.div
-                  key={item.title}
+                  key={`${item.tmdb_id}-${item.type}-desktop`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: [0, 1, 1, 0], y: [20, 0, 0, -10] }}
                   transition={{

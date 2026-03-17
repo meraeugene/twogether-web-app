@@ -124,7 +124,9 @@ function LoginButton({
 }
 
 const Sep = () => (
-  <span className="w-px h-[20px] bg-white/[0.09] mx-[6px] shrink-0" />
+  <div className="w-[12px] flex items-center justify-center">
+    <span className="w-px h-[20px] bg-white/[0.09]" />
+  </div>
 );
 
 function MobileLink({

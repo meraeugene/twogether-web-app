@@ -41,5 +41,6 @@ export function adaptAIGeneratedToRecommendation(
       username: "AI Recommendation",
       avatar_url: "/gemini-color.svg",
     },
+    trailer_key: tmdb.trailer_key ?? undefined,
   };
 }
