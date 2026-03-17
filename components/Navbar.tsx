@@ -1,273 +1,285 @@
 "use client";
 
-import { useEffect, useState, useRef, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import LoginButton from "./LoginButton";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import { primaryNavItems, secondaryNavItems } from "./NavItems";
 import { RiLogoutCircleLine, RiMovieAiLine } from "react-icons/ri";
-import type { Variants } from "framer-motion";
-import { usePathname } from "next/navigation";
-import { CurrentUser } from "@/types/user";
 import { BiMoviePlay } from "react-icons/bi";
 import { AiOutlineFieldTime } from "react-icons/ai";
+import { usePathname } from "next/navigation";
+import { CurrentUser } from "@/types/user";
 import { signOut } from "@/actions/authActions";
+import type { Variants } from "framer-motion";
+import { createClient } from "@/utils/supabase/client";
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 12 },
   show: {
     opacity: 1,
     y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 25,
-      mass: 0.8,
-    },
+    transition: { type: "spring", stiffness: 320, damping: 26 },
   },
 };
 
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } },
+};
+
+const guestLinks = [
+  { href: "/browse", icon: <RiMovieAiLine />, label: "Browse" },
+  { href: "/binge", icon: <BiMoviePlay />, label: "Binge" },
+  { href: "/chrono", icon: <AiOutlineFieldTime />, label: "Chrono" },
+];
+
+const shell =
+  "bg-[#161618]/92 backdrop-blur-2xl border border-white/[0.09] " +
+  "shadow-[0_0_0_0.5px_rgba(255,255,255,0.04)_inset,0_16px_48px_rgba(0,0,0,0.75)]";
+
+function Tip({ label }: { label: string }) {
+  return (
+    <span className="pointer-events-none absolute top-[calc(100%+10px)] left-1/2 -translate-x-1/2 z-[9999] whitespace-nowrap rounded-[8px] px-[10px] py-[5px] text-[11.5px] font-medium text-white/80 bg-[#141416]/97 border border-white/[0.11] shadow-[0_8px_24px_rgba(0,0,0,0.65)] opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-[130ms] ease-out">
+      {label}
+    </span>
+  );
+}
+
+function NavIcon({
+  href,
+  icon,
+  label,
+  active,
+  onClick,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  active: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      prefetch
+      className={`group relative flex items-center justify-center w-[40px] h-[40px] rounded-[11px] text-[20px] transition-all duration-150 ${
+        active
+          ? "bg-white/[0.12] text-white ring-1 ring-inset ring-white/[0.14]"
+          : "text-white/40 hover:text-white/90 hover:bg-white/[0.08]"
+      }`}
+    >
+      {icon}
+      <Tip label={label} />
+    </Link>
+  );
+}
+
+function GoogleIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+    >
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+    </svg>
+  );
+}
+
+// Desktop: matches NavIcon ghost style (no background, muted text, hover glow)
+// Mobile: matches MobileLink ghost style (bordered card row)
+function LoginButton({
+  onClick,
+  mobile,
+}: {
+  onClick: () => void;
+  mobile?: boolean;
+}) {
+  if (mobile) {
+    return (
+      <button
+        onClick={onClick}
+        className="text-lg font-semibold tracking-wide text-white/90 px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3 w-full"
+      >
+        <GoogleIcon className="w-5 h-5 text-white/60" />
+        Sign in
+      </button>
+    );
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      className="group cursor-pointer relative flex items-center justify-center gap-2 h-[40px] px-4 rounded-[11px] text-sm font-semibold text-white/40 hover:text-white/90 hover:bg-white/[0.08] transition-all duration-150"
+    >
+      <GoogleIcon className="w-[18px] h-[18px]" />
+    </button>
+  );
+}
+
+const Sep = () => (
+  <span className="w-px h-[20px] bg-white/[0.09] mx-[6px] shrink-0" />
+);
+
+function MobileLink({
+  href,
+  icon,
+  label,
+  active,
+  onClick,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <motion.div variants={fadeUp}>
+      <Link
+        href={href}
+        onClick={onClick}
+        className={`text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3 ${
+          active
+            ? "bg-white text-black border-white/20"
+            : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
+        }`}
+      >
+        <span className={active ? "text-black" : "text-white/80"}>{icon}</span>
+        {label}
+      </Link>
+    </motion.div>
+  );
+}
+
 export function Navbar({ user }: { user: CurrentUser | null }) {
   const [isPending, startTransition] = useTransition();
-
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [hide, setHide] = useState(false);
+  const lastY = useRef(0);
+  const pathname = usePathname();
 
-  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
-  const lastScrollY = useRef(0);
+  const logout = () => startTransition(async () => await signOut());
+  const close = () => setMenuOpen(false);
+  const profileHref = user ? `/profile/${user.username}/${user.id}` : "#";
 
-  const toggleMenu = () => {
-    if (!menuOpen) setIsExpanded(true);
-    setMenuOpen((prev) => !prev);
-  };
-
-  const handleLogout = () => {
-    startTransition(async () => {
-      await signOut();
+  const handleLogin = async () => {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=/recos`,
+      },
     });
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (Math.abs(currentScrollY - lastScrollY.current) < 10) return; // optional threshold
-
-      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-        setScrollDirection("down");
-      } else {
-        setScrollDirection("up");
-      }
-
-      lastScrollY.current = currentScrollY;
+    const fn = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - lastY.current) < 10) return;
+      setHide(y > lastY.current && y > 80);
+      lastY.current = y;
     };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  const pathname = usePathname();
-
   return (
-    <motion.header
-      initial={{ y: 0, opacity: 1 }}
-      animate={{
-        y: scrollDirection === "down" ? -100 : 0,
-        opacity: scrollDirection === "down" ? 0 : 1,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-        duration: 0.35,
-      }}
-      className={` overflow-hidden fixed  max-w-full w-[90%] md:w-[60%] lg:w-fit   top-6  left-1/2 -translate-x-1/2  z-[60] 
-        bg-black/60 backdrop-blur-3xl border border-white/10 shadow-xl
-        font-[family-name:var(--font-geist-sans)]
-        ${isExpanded ? "rounded-3xl" : "rounded-full"}`}
+    <motion.div
+      animate={{ y: hide ? -100 : 0, opacity: hide ? 0 : 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className={`fixed top-5 left-1/2 -translate-x-1/2 z-[60] overflow-visible w-[calc(100%-32px)] max-w-[440px] 2xl:w-auto 2xl:max-w-none font-[family-name:var(--font-geist-sans)] ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
     >
-      {/* Desktop Menu */}
-      <div className="relative z-10 flex justify-between gap-10 text-nowrap items-center px-4 md:px-8 2xl:px-6 py-3">
+      {/* ── DESKTOP BAR ── */}
+      <div
+        className={`hidden bg-black 2xl:inline-flex items-center space-x-2 px-[8px] py-[6px] rounded-full ${shell}`}
+      >
         <Link
           href="/"
-          onClick={() => setMenuOpen(false)}
-          className="text-xl font-extrabold font-[family-name:var(--font-geist-mono)] uppercase text-white"
+          className="text-md font-black uppercase tracking-[-0.02em] text-white font-[family-name:var(--font-geist-mono)] px-3 mr-1 leading-none hover:opacity-80 transition-opacity"
         >
-          <span className="text-red-600">Two</span>gether
+          <span className="text-red-500">Two</span>gether
         </Link>
 
+        <Sep />
+
+        {(user ? primaryNavItems : guestLinks).map((item) => (
+          <NavIcon
+            key={item.href}
+            href={item.href}
+            icon={item.icon}
+            label={item.label}
+            active={pathname === item.href}
+          />
+        ))}
+
+        {user ? (
+          <>
+            <Sep />
+            {secondaryNavItems.map((item) => (
+              <NavIcon
+                key={item.href}
+                href={item.href}
+                icon={item.icon}
+                label={item.label}
+                active={pathname.startsWith(item.href)}
+              />
+            ))}
+            <Sep />
+            <NavIcon
+              href={profileHref}
+              icon={<HiOutlineUserCircle />}
+              label="Profile"
+              active={pathname === profileHref}
+            />
+            <div
+              onClick={logout}
+              className="group relative flex items-center justify-center w-[40px] h-[40px] rounded-[11px] text-[20px] text-white/40 hover:text-red-400 hover:bg-red-500/[0.12] transition-all duration-150 cursor-pointer"
+            >
+              {isPending ? (
+                <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <RiLogoutCircleLine />
+              )}
+              <Tip label={isPending ? "Logging out…" : "Logout"} />
+            </div>
+          </>
+        ) : (
+          <>
+            <Sep />
+            <LoginButton onClick={handleLogin} />
+          </>
+        )}
+      </div>
+
+      {/* ── MOBILE TOP BAR ── */}
+      <div
+        className={`lg:hidden bg-black flex items-center justify-between px-5 p-3 ${shell} ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
+      >
+        <Link
+          href="/"
+          onClick={close}
+          className="text-xl font-black uppercase tracking-[-0.02em] text-white font-[family-name:var(--font-geist-mono)] leading-none"
+        >
+          <span className="text-red-500">Two</span>gether
+        </Link>
         <button
-          className="2xl:hidden text-white text-2xl"
-          onClick={toggleMenu}
+          onClick={() => setMenuOpen((p) => !p)}
           aria-label="Toggle menu"
+          className="text-white lg:hidden text-2xl p-1 -mr-1"
         >
           {menuOpen ? <HiX /> : <HiOutlineMenuAlt3 />}
         </button>
-
-        <nav className="hidden 2xl:flex items-center gap-3">
-          {user ? (
-            <>
-              {primaryNavItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`group relative px-4 2xl:px-3 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
-    ${
-      pathname === item.href
-        ? "bg-white text-black font-semibold"
-        : "text-white bg-white/10 hover:bg-white/20"
-    }`}
-                >
-                  <span
-                    className={` ${
-                      pathname === item.href ? "text-black" : "text-white/80"
-                    }`}
-                  >
-                    {item.icon}
-                  </span>
-                  {item.label}
-                </Link>
-              ))}
-              {secondaryNavItems.map((item) => (
-                <motion.div key={item.href} variants={fadeUp}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setMenuOpen(false)}
-                    className={`group relative px-4 py-2 2xl:px-3  rounded-lg flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
-      ${
-        pathname === item.href
-          ? "bg-white text-black font-semibold"
-          : "text-white bg-white/10 hover:bg-white/20"
-      }`}
-                  >
-                    <span
-                      className={` ${
-                        pathname === item.href ? "text-black" : "text-white/80"
-                      }`}
-                    >
-                      {item.icon}
-                    </span>
-                    {item.label}
-                  </Link>
-                </motion.div>
-              ))}
-
-              <motion.div variants={fadeUp}>
-                <Link
-                  href={`/profile/${user.username}/${user.id}`}
-                  onClick={() => setMenuOpen(false)}
-                  className={`group relative px-4 py-2 2xl:px-3  rounded-lg flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm
-      ${
-        pathname === `/profile/${user.username}/${user.id}`
-          ? "bg-white text-black font-semibold"
-          : "text-white bg-white/10 hover:bg-white/20"
-      }`}
-                >
-                  <HiOutlineUserCircle />
-                  Profile
-                </Link>
-              </motion.div>
-
-              {/* Logout Button */}
-              <motion.div variants={fadeUp}>
-                <button
-                  onClick={handleLogout}
-                  disabled={isPending}
-                  className="group cursor-pointer 2xl:px-3  relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide text-white bg-white/10 backdrop-blur border border-white/20 shadow-sm hover:bg-white/20 transition"
-                >
-                  {isPending ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Logging out
-                    </>
-                  ) : (
-                    <>
-                      <RiLogoutCircleLine />
-                      Logout
-                    </>
-                  )}
-                </button>
-              </motion.div>
-            </>
-          ) : (
-            <>
-              <motion.div variants={fadeUp}>
-                <Link
-                  href="/browse"
-                  onClick={() => setMenuOpen(false)}
-                  className={`group cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur border border-white/20 shadow-sm transition ${
-                    pathname === "/browse"
-                      ? "bg-white text-black font-semibold"
-                      : "text-white bg-white/10 hover:bg-white/20"
-                  }`}
-                >
-                  <RiMovieAiLine className="text-xl" />
-                  <span
-                    className={` ${
-                      pathname === "/browse" ? "text-black" : "text-white/80"
-                    }`}
-                  >
-                    Browse
-                  </span>
-                </Link>
-              </motion.div>
-
-              <motion.div variants={fadeUp}>
-                <Link
-                  href="/binge"
-                  onClick={() => setMenuOpen(false)}
-                  className={`group cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur border border-white/20 shadow-sm transition ${
-                    pathname === "/binge"
-                      ? "bg-white text-black font-semibold"
-                      : "text-white bg-white/10 hover:bg-white/20"
-                  }`}
-                >
-                  <BiMoviePlay className="text-xl" />
-                  <span
-                    className={` ${
-                      pathname === "/binge" ? "text-black" : "text-white/80"
-                    }`}
-                  >
-                    Binge
-                  </span>
-                </Link>
-              </motion.div>
-
-              <motion.div variants={fadeUp}>
-                <Link
-                  href="/chrono"
-                  onClick={() => setMenuOpen(false)}
-                  className={`group cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur border border-white/20 shadow-sm transition ${
-                    pathname === "/chrono"
-                      ? "bg-white text-black font-semibold"
-                      : "text-white bg-white/10 hover:bg-white/20"
-                  }`}
-                >
-                  <AiOutlineFieldTime className="text-xl" />
-                  <span
-                    className={` ${
-                      pathname === "/chrono" ? "text-black" : "text-white/80"
-                    }`}
-                  >
-                    Chrono
-                  </span>
-                </Link>
-              </motion.div>
-
-              <motion.div variants={fadeUp}>
-                <LoginButton />
-              </motion.div>
-            </>
-          )}
-        </nav>
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence onExitComplete={() => setIsExpanded(false)}>
+      {/* ── MOBILE DRAWER ── */}
+      <AnimatePresence>
         {menuOpen && (
           <motion.div
             key="mobile-menu"
@@ -275,21 +287,13 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="relative 2xl:hidden border-t border-white/10 p-4 flex flex-col text-white rounded-b-3xl   max-h-[75vh] overflow-y-auto"
+            className="relative 2xl:hidden border-t border-white/10 p-4 flex flex-col text-white rounded-b-3xl bg-black max-h-[75vh] overflow-y-auto"
           >
             <motion.div
               initial="hidden"
               animate="show"
               exit="hidden"
-              variants={{
-                hidden: {},
-                show: {
-                  transition: {
-                    staggerChildren: 0.05,
-                    delayChildren: 0.05,
-                  },
-                },
-              }}
+              variants={stagger}
               className="relative z-10 flex flex-col gap-4"
             >
               {user ? (
@@ -298,75 +302,42 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                     Discover
                   </h3>
                   {primaryNavItems.map((item) => (
-                    <motion.div key={item.href} variants={fadeUp}>
-                      <Link
-                        href={item.href}
-                        onClick={() => setMenuOpen(false)}
-                        className={`group relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3
-      ${
-        pathname === item.href
-          ? "bg-white text-black border-white/20"
-          : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
-      }`}
-                      >
-                        <span>{item.icon}</span>
-                        {item.label}
-                      </Link>
-                    </motion.div>
+                    <MobileLink
+                      key={item.href}
+                      {...item}
+                      active={pathname === item.href}
+                      onClick={close}
+                    />
                   ))}
+
                   <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
                     My Space
                   </h3>
                   {secondaryNavItems.map((item) => (
-                    <motion.div key={item.href} variants={fadeUp}>
-                      <Link
-                        href={item.href}
-                        onClick={() => setMenuOpen(false)}
-                        className={`group relative text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3
-      ${
-        pathname.startsWith(item.href)
-          ? "bg-white text-black border-white/20"
-          : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
-      }`}
-                      >
-                        <span
-                          className={` ${
-                            pathname.startsWith(item.href)
-                              ? "text-black"
-                              : "text-white/80"
-                          }`}
-                        >
-                          {item.icon}
-                        </span>
-                        {item.label}
-                      </Link>
-                    </motion.div>
+                    <MobileLink
+                      key={item.href}
+                      {...item}
+                      active={pathname.startsWith(item.href)}
+                      onClick={close}
+                    />
                   ))}
+
                   <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
                     Account
                   </h3>
+                  <MobileLink
+                    href={profileHref}
+                    icon={<HiOutlineUserCircle />}
+                    label="Profile"
+                    active={pathname === profileHref}
+                    onClick={close}
+                  />
 
-                  <motion.div variants={fadeUp}>
-                    <Link
-                      href={`/profile/${user.username}/${user.id}`}
-                      onClick={() => setMenuOpen(false)}
-                      className={`group relative  text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg backdrop-blur-xl border transition-all flex items-center gap-3 ${
-                        pathname === `/profile/${user.username}/${user.id}`
-                          ? "bg-white text-black border-white/20"
-                          : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
-                      }`}
-                    >
-                      <HiOutlineUserCircle />
-                      Profile
-                    </Link>
-                  </motion.div>
-
-                  {/* Logout Button */}
                   <motion.div variants={fadeUp}>
                     <button
-                      onClick={handleLogout}
+                      onClick={logout}
                       disabled={isPending}
-                      className="group relative text-lg font-semibold tracking-wide text-white/90  px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3 w-full"
+                      className="text-lg font-semibold tracking-wide text-white/90 px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3 w-full"
                     >
                       {isPending ? (
                         <>
@@ -384,75 +355,25 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
                 </>
               ) : (
                 <>
-                  <motion.div variants={fadeUp}>
-                    <Link
-                      href="/browse"
-                      onClick={() => setMenuOpen(false)}
-                      className={`group border border-white/20 cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
-                        pathname === "/browse"
-                          ? "bg-white text-black  font-semibold"
-                          : "text-white/ bg-white/5 hover:bg-white/20"
-                      }`}
-                    >
-                      <RiMovieAiLine />
-                      <span
-                        className={` ${
-                          pathname === "/browse"
-                            ? "text-black"
-                            : "text-white/80"
-                        }`}
-                      >
-                        Browse
-                      </span>
-                    </Link>
-                  </motion.div>
+                  {guestLinks.map(({ href, icon, label }) => (
+                    <MobileLink
+                      key={href}
+                      href={href}
+                      icon={icon}
+                      label={label}
+                      active={pathname === href}
+                      onClick={close}
+                    />
+                  ))}
 
                   <motion.div variants={fadeUp}>
-                    <Link
-                      href="/binge"
-                      onClick={() => setMenuOpen(false)}
-                      className={`group border border-white/20 cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
-                        pathname === "/binge"
-                          ? "bg-white text-black  font-semibold"
-                          : "text-white/ bg-white/5 hover:bg-white/20"
-                      }`}
-                    >
-                      <BiMoviePlay />
-                      <span
-                        className={` ${
-                          pathname === "/binge" ? "text-black" : "text-white/80"
-                        }`}
-                      >
-                        Binge
-                      </span>
-                    </Link>
-                  </motion.div>
-
-                  <motion.div variants={fadeUp}>
-                    <Link
-                      href="/chrono"
-                      onClick={() => setMenuOpen(false)}
-                      className={`group border border-white/20 cursor-pointer relative px-4 py-2 rounded-lg flex items-center gap-2 text-base font-medium tracking-wide backdrop-blur shadow-sm transition ${
-                        pathname === "/chrono"
-                          ? "bg-white text-black  font-semibold"
-                          : "text-white/ bg-white/5 hover:bg-white/20"
-                      }`}
-                    >
-                      <AiOutlineFieldTime />
-                      <span
-                        className={` ${
-                          pathname === "/chrono"
-                            ? "text-black"
-                            : "text-white/80"
-                        }`}
-                      >
-                        Chrono
-                      </span>
-                    </Link>
-                  </motion.div>
-
-                  <motion.div variants={fadeUp}>
-                    <LoginButton />
+                    <LoginButton
+                      mobile
+                      onClick={() => {
+                        close();
+                        handleLogin();
+                      }}
+                    />
                   </motion.div>
                 </>
               )}
@@ -460,6 +381,6 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </motion.div>
   );
 }
