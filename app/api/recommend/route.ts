@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
   }
 
   const searchUrl = `${BASE_URL}/search/multi?query=${encodeURIComponent(
-    query
+    query,
   )}&api_key=${TMDB_API_KEY}&include_adult=false&language=en-US&region=US`;
 
   const searchRes = await fetch(searchUrl);
@@ -52,25 +52,46 @@ export async function GET(req: NextRequest) {
           ? parseInt(item.release_date?.slice(0, 4) || "0")
           : parseInt(item.first_air_date?.slice(0, 4) || "0");
       return getYear(b) - getYear(a);
-    }
+    },
   );
 
   const enrichedResults: TMDBEnrichedResult[] = await Promise.all(
     rawResults.map(async (item): Promise<TMDBEnrichedResult> => {
       try {
         const detailsRes = await fetch(
-          `${BASE_URL}/${item.media_type}/${item.id}?api_key=${TMDB_API_KEY}`
+          `${BASE_URL}/${item.media_type}/${item.id}?api_key=${TMDB_API_KEY}`,
         );
         if (!detailsRes.ok) throw new Error("Details fetch failed");
 
         const details = await detailsRes.json();
+
+        const trailer =
+          details.videos?.results?.find(
+            (video: {
+              key: string;
+              site: string;
+              type: string;
+              official?: boolean;
+            }) =>
+              video.site === "YouTube" &&
+              video.type === "Trailer" &&
+              video.official,
+          ) ||
+          details.videos?.results?.find(
+            (video: { key: string; site: string; type: string }) =>
+              video.site === "YouTube" && video.type === "Trailer",
+          ) ||
+          details.videos?.results?.find(
+            (video: { key: string; site: string; type: string }) =>
+              video.site === "YouTube",
+          );
 
         const episodeTitlesPerSeason: Record<number, EpisodeTitle[]> = {};
 
         if (item.media_type === "tv") {
           for (let season = 1; season <= details.number_of_seasons; season++) {
             const seasonRes = await fetch(
-              `${BASE_URL}/tv/${item.id}/season/${season}?api_key=${TMDB_API_KEY}`
+              `${BASE_URL}/tv/${item.id}/season/${season}?api_key=${TMDB_API_KEY}`,
             );
 
             if (seasonRes.ok) {
@@ -79,7 +100,7 @@ export async function GET(req: NextRequest) {
                 (ep): EpisodeTitle => ({
                   episode_number: ep.episode_number,
                   title: ep.name,
-                })
+                }),
               );
             }
           }
@@ -112,6 +133,7 @@ export async function GET(req: NextRequest) {
             item.media_type === "tv" ? details.number_of_episodes : undefined,
           episodeTitlesPerSeason:
             item.media_type === "tv" ? episodeTitlesPerSeason : undefined,
+          trailer_key: trailer?.key || null,
         };
       } catch (err) {
         console.error(`Failed to fetch details for ID ${item.id}:`, err);
@@ -122,9 +144,13 @@ export async function GET(req: NextRequest) {
           year: undefined,
           duration: undefined,
           synopsis: "",
+          seasons: undefined,
+          episodes: undefined,
+          episodeTitlesPerSeason: undefined,
+          trailer_key: null,
         };
       }
-    })
+    }),
   );
 
   // Remove entries with no poster or 0/missing duration

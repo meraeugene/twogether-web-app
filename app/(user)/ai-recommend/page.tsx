@@ -59,7 +59,7 @@ export default function AIRecommendForm() {
 
         try {
           const res = await fetch(
-            `/api/recommend?query=${encodeURIComponent(title)}`
+            `/api/recommend?query=${encodeURIComponent(title)}`,
           );
           const data: TMDBEnrichedResult[] = await res.json();
           if (data[0]) results.push(data[0]);
@@ -78,11 +78,11 @@ export default function AIRecommendForm() {
         filtered.map((m) => ({
           ...adaptAIGeneratedToRecommendation(m),
           generated_by_ai: true,
-        }))
+        })),
       );
 
       setReason(reason);
-      setLoadingMessage("✅ Ready! Enjoy your curated list.");
+      setLoadingMessage("Ready! Enjoy your curated list.");
     } catch (err) {
       console.error(err);
     } finally {
