@@ -215,7 +215,7 @@ function FilmCard({
               {/* ══════════════════════════════════════════
                   FULLSCREEN TRAILER  (flex-1 = fills all remaining height)
               ══════════════════════════════════════════ */}
-              <div className="relative w-full flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
+              <div className="relative w-full h-full flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
                 {trailerUrl ? (
                   <div className="relative w-full aspect-[9/12] md:aspect-video z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
                     {/* The Video Container with "Zoomed-Out" Letterbox Feel */}
