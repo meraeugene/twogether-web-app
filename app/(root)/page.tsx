@@ -8,6 +8,7 @@ import FeedbackForm from "@/sections/FeedbackForm";
 import Hero from "@/sections/Hero";
 import StreamingServices from "@/sections/StreamingServices";
 import { buildMetadata } from "@/app/seo";
+import ReviewBotPrompt from "@/components/ReviewBotPrompt";
 
 export const metadata: Metadata = buildMetadata({
   title: "Watch and Recommend Movies Socially",
@@ -27,6 +28,7 @@ export default function Home() {
       <Features />
       <FeedbackForm />
       <Faqs />
+      <ReviewBotPrompt />
     </main>
   );
 }

@@ -74,7 +74,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Toaster position="top-right" />
+        <Toaster position="bottom-right" />
         <Header />
         {children}
         <Footer />
