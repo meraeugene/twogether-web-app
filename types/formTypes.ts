@@ -42,5 +42,6 @@ export type RecommendationForm = {
   comment: string;
   rating: number;
   visibility: "public" | "private";
+  trailer_key?: string | null;
   episodeTitlesPerSeason?: Record<number, EpisodeTitle[]>;
 };

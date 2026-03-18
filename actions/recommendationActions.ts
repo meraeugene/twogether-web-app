@@ -17,6 +17,7 @@ interface RecommendationFormData {
   genres?: string[];
   visibility?: "public" | "private";
   synopsis?: string;
+  trailer_key?: string | null;
   seasons?: number | null;
   episodes?: number | null;
   episode_titles_per_season?: Record<

@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
     rawResults.map(async (item): Promise<TMDBEnrichedResult> => {
       try {
         const detailsRes = await fetch(
-          `${BASE_URL}/${item.media_type}/${item.id}?api_key=${TMDB_API_KEY}`,
+          `${BASE_URL}/${item.media_type}/${item.id}?api_key=${TMDB_API_KEY}&append_to_response=videos`,
         );
         if (!detailsRes.ok) throw new Error("Details fetch failed");
 

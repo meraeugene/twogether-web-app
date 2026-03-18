@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import useSWR from "swr";
 import { motion, AnimatePresence } from "framer-motion";
 import YouTube, { YouTubePlayer } from "react-youtube";
@@ -31,7 +31,11 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function StreamingServices() {
   const featuredServices = streamingServices;
-  const { data: trailers } = useSWR<Trailer[]>("/api/top-trailers", fetcher);
+  const { data: trailers } = useSWR<Trailer[]>("/api/top-trailers", fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    dedupingInterval: 86400000,
+  });
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [powerOn, setPowerOn] = useState(true);
@@ -40,6 +44,22 @@ export default function StreamingServices() {
   const [repeat, setRepeat] = useState(false);
 
   const playerRef = useRef<YouTubePlayer | null>(null);
+  const playerOptions = useMemo(
+    () => ({
+      width: "100%",
+      height: "100%",
+      playerVars: {
+        autoplay: 1,
+        controls: 1,
+        modestbranding: 1,
+        rel: 0,
+        mute: isMuted ? 1 : 0,
+        playsinline: 1,
+        fs: 1,
+      },
+    }),
+    [isMuted],
+  );
 
   const currentTrailer = trailers?.[currentIndex];
 
@@ -135,19 +155,7 @@ export default function StreamingServices() {
                       videoId={currentTrailer.trailerKey}
                       className="w-full h-full"
                       iframeClassName="w-full h-full"
-                      opts={{
-                        width: "100%",
-                        height: "100%",
-                        playerVars: {
-                          autoplay: 1,
-                          controls: 1,
-                          modestbranding: 1,
-                          rel: 0,
-                          mute: isMuted ? 1 : 0,
-                          playsinline: 0,
-                          fs: 1,
-                        },
-                      }}
+                      opts={playerOptions}
                       onReady={(event) => {
                         playerRef.current = event.target;
 

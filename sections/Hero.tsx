@@ -2,31 +2,34 @@
 "use client";
 
 import { ChevronRight, Star } from "lucide-react";
-import { CurrentUser } from "@/types/user";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { fetcher } from "@/utils/swr/fetcher";
 import { motion } from "framer-motion";
 import { FLOATING_DATA } from "@/data/floatingData";
+import { createClient } from "@/utils/supabase/client";
 
-interface TwogetherHeroProps {
-  user: CurrentUser | null;
-}
-
-export default function TwogetherHero({ user }: TwogetherHeroProps) {
+export default function TwogetherHero() {
   const router = useRouter();
 
   const { data: movieCovers } = useSWR<string[]>("/api/tmdb/popular", fetcher, {
     revalidateOnFocus: false,
+    revalidateOnReconnect: false,
     dedupingInterval: 86400000,
   });
 
-  const handleClick = () => {
-    if (!user) {
+  const handleClick = async () => {
+    const supabase = createClient();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
       toast.error("Please sign in to start TWOGETHER.");
       return;
     }
+
     router.push("/recos");
   };
 

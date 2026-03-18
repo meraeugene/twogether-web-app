@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition, useEffect, useRef } from "react";
+import React, { useState, useTransition, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -21,6 +21,7 @@ import { MdDelete } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import Link from "next/link";
 import { VisualHeartRating } from "./VisualHeartRating";
+import { toast } from "sonner";
 
 type MyRecosCache = {
   public: Recommendation[];
@@ -43,23 +44,23 @@ function FilmCard({
 }) {
   const [isPending, startTransition] = useTransition();
   const [isVisible, setIsVisible] = useState(true);
+  const [isExiting, setIsExiting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [isUpdatingPrivacy, startPrivacyTransition] = useTransition();
   const [isHovered, setIsHovered] = useState(false);
   const [cinemaOpen, setCinemaOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"overview" | "cast">("overview");
-  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   useEffect(() => {
+    if (!cinemaOpen) return;
+
     const fn = (e: KeyboardEvent) => {
       if (e.key === "Escape") setCinemaOpen(false);
     };
     window.addEventListener("keydown", fn);
     return () => window.removeEventListener("keydown", fn);
-  }, []);
+  }, [cinemaOpen]);
 
   useEffect(() => {
     if (cinemaOpen) {
@@ -80,7 +81,6 @@ function FilmCard({
   }, [cinemaOpen]);
 
   const openCinema = () => {
-    setActiveTab("overview");
     setCinemaOpen(true);
   };
 
@@ -88,18 +88,9 @@ function FilmCard({
 
   const handleMouseLeave = () => setIsHovered(false);
 
-  const handleOverlayMouseEnter = () => {
-    if (hoverTimer.current) clearTimeout(hoverTimer.current);
-  };
-
-  const handleOverlayMouseLeave = () => {
-    setCinemaOpen(false);
-    setIsHovered(false);
-  };
-
   const confirmDelete = () => {
     setShowConfirm(false);
-    setIsVisible(false);
+    setIsExiting(true);
     startTransition(async () => {
       try {
         if (isDeleteRecommendation) {
@@ -133,13 +124,17 @@ function FilmCard({
           await deleteRecommendation(userId!, item.recommendation_id);
           mutate("/api/recos"); // Refresh recommendations cache
           mutate("/api/my-recos"); // Refresh my recommendations cache
+          toast.success(`Deleted "${item.title}" from recos.`);
         } else if (isRemoveFromWatchlist && watchlistItemId) {
           await removeFromWatchlist(watchlistItemId, userId!);
           mutate("/api/my-watchlist"); // Refresh watchlist cache
+          toast.success(`Removed "${item.title}" from watchlist.`);
         }
+        setTimeout(() => setIsVisible(false), 220);
       } catch {
         // Roll back local hide if the action fails.
-        setIsVisible(true);
+        setIsExiting(false);
+        toast.error("Action failed. Please try again.");
       }
     });
   };
@@ -158,13 +153,14 @@ function FilmCard({
 
   const handleClick = () => {
     const slug = getSlugFromTitle(item.title);
+    const recommenderId = item.recommended_by?.id;
 
-    if (item.generated_by_ai && item.recommended_by.id === "ai-generated") {
+    if (item.generated_by_ai && recommenderId === "ai-generated") {
       router.push(`/ai-recommend/watch/${item.tmdb_id}/${slug}`);
       return;
     }
 
-    if (item.is_tmdb_recommendation && item.recommended_by.id === "tmdb") {
+    if (item.is_tmdb_recommendation && recommenderId === "tmdb") {
       router.push(`/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`);
       return;
     }
@@ -209,8 +205,6 @@ function FilmCard({
               style={{
                 background: "#06030a",
               }}
-              onMouseEnter={handleOverlayMouseEnter}
-              onMouseLeave={handleOverlayMouseLeave}
             >
               {/* ══════════════════════════════════════════
                   FULLSCREEN TRAILER  (flex-1 = fills all remaining height)
@@ -428,19 +422,14 @@ function FilmCard({
 
                   {/* SYNOPSIS */}
                   <div className="w-full mb-6 sm:mb-8 min-h-[44px]">
-                    <AnimatePresence mode="wait">
-                      {activeTab === "overview" && (
-                        <motion.p
-                          key="ov"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-[12px] sm:text-[15px] leading-relaxed text-center
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-[12px] sm:text-[15px] leading-relaxed text-center
             text-white/60 max-w-sm md:max-w-lg mx-auto  line-clamp-2"
-                        >
-                          {item.synopsis}
-                        </motion.p>
-                      )}
-                    </AnimatePresence>
+                    >
+                      {item.synopsis}
+                    </motion.p>
                   </div>
 
                   {/* WATCH BUTTON */}
@@ -504,8 +493,14 @@ function FilmCard({
   // ─── Card (poster) ────────────────────────────────────────────────────────
   return (
     <>
-      <div
-        ref={cardRef}
+      <motion.div
+        layout
+        animate={{
+          opacity: isExiting ? 0 : 1,
+          scale: isExiting ? 0.97 : 1,
+          y: isExiting ? 12 : 0,
+        }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         onClick={openCinema}
         className="relative w-full font-(family-name:--font-geist-sans) group"
         onMouseEnter={handleMouseEnter}
@@ -513,7 +508,7 @@ function FilmCard({
       >
         <AnimatePresence>
           {isVisible && (
-            <motion.div layout className="w-full">
+            <motion.div className="w-full">
               <div className="relative aspect-2/3 w-full overflow-hidden rounded-md bg-[#141414] shadow-md cursor-pointer">
                 <Image
                   src={item.poster_url || "/placeholder.jpg"}
@@ -708,10 +703,9 @@ function FilmCard({
 
         {isVisible && item.rating && <VisualHeartRating value={item.rating} />}
 
-        {isVisible && item.recommended_by.username && (
+        {isVisible && item.recommended_by?.username && (
           <div className=" mt-3 ">
             <Link
-              prefetch
               href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
               className=" text-sm text-white/60 hover:underline flex items-center gap-2"
             >
@@ -733,27 +727,31 @@ function FilmCard({
             </Link>
           </div>
         )}
-      </div>
+      </motion.div>
 
       {cinemaOverlay}
 
-      <ConfirmModal
-        open={showConfirm}
-        onClose={() => setShowConfirm(false)}
-        onConfirm={confirmDelete}
-        title={`Remove ${item.title}?`}
-        description="Are you sure you want to remove this from your list?"
-        confirmText="Remove"
-        loading={isPending}
-      />
+      {showConfirm && (
+        <ConfirmModal
+          open={showConfirm}
+          onClose={() => setShowConfirm(false)}
+          onConfirm={confirmDelete}
+          title={`Remove ${item.title}?`}
+          description="Are you sure you want to remove this from your list?"
+          confirmText="Remove"
+          loading={isPending}
+        />
+      )}
 
-      <PrivacyModal
-        open={showPrivacyModal}
-        currentVisibility={item.visibility || "public"}
-        onClose={() => setShowPrivacyModal(false)}
-        onChange={handleVisibilityChange}
-        loading={isUpdatingPrivacy}
-      />
+      {showPrivacyModal && (
+        <PrivacyModal
+          open={showPrivacyModal}
+          currentVisibility={item.visibility || "public"}
+          onClose={() => setShowPrivacyModal(false)}
+          onChange={handleVisibilityChange}
+          loading={isUpdatingPrivacy}
+        />
+      )}
     </>
   );
 }

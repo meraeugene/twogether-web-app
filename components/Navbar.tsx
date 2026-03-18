@@ -64,14 +64,14 @@ function NavIcon({
       href={href}
       onClick={onClick}
       prefetch
-      className={`group relative flex items-center justify-center w-[40px] h-[40px] rounded-[11px] text-[20px] transition-all duration-150 ${
+      className={`group relative inline-flex items-center gap-2 px-3 h-[40px] rounded-[11px] text-sm font-medium transition-all duration-150 ${
         active
           ? "bg-white/[0.12] text-white ring-1 ring-inset ring-white/[0.14]"
-          : "text-white/40 hover:text-white/90 hover:bg-white/[0.08]"
+          : "text-white/55 hover:text-white/90 hover:bg-white/[0.08]"
       }`}
     >
-      {icon}
-      <Tip label={label} />
+      <span className="text-[18px]">{icon}</span>
+      <span className="leading-none whitespace-nowrap">{label}</span>
     </Link>
   );
 }

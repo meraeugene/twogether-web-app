@@ -37,6 +37,7 @@ export default function RecommendStepMovieSearch({
     const year = item.year || "Unknown Year";
     const duration = item.duration || null;
     const synopsis = item.overview || "No synopsis available";
+    const trailer_key = item.trailer_key ?? null;
     const seasons = item.seasons ?? null;
     const episodes = item.episodes ?? null;
     const episodeTitlesPerSeason = item.episodeTitlesPerSeason ?? undefined;
@@ -64,6 +65,7 @@ export default function RecommendStepMovieSearch({
       year,
       duration,
       synopsis,
+      trailer_key,
       seasons,
       episodes,
       episode_titles_per_season: episodeTitlesPerSeason,

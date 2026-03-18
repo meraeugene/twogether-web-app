@@ -32,29 +32,26 @@ export default function ToggleWatchlistButton({
   const [isPending, startTransition] = useTransition();
 
   const handleToggle = () => {
-    // Optimistically update UI first
     const optimisticInList = !isInList;
     setIsInList(optimisticInList);
 
     startTransition(async () => {
       try {
         if (!optimisticInList && watchlistId) {
-          toast.info("Poof! Gone from your watchlist 🎬💨");
           await removeFromWatchlist(watchlistId, currentUserId);
           setWatchlistId(null);
-        } else {
-          toast.success("Nice pick! Now starring on your watchlist 🌟");
-          const id =
-            recommendationId && !isAiRecommendation && !isTMDBRecommendation
-              ? await addToWatchlist(recommendationId, currentUserId)
-              : await addToWatchlistWithMetadata(
-                  currentUserId,
-                  fallbackMetadata
-                );
-          setWatchlistId(id);
+          toast.success("Removed from your watchlist.");
+          return;
         }
+
+        const id =
+          recommendationId && !isAiRecommendation && !isTMDBRecommendation
+            ? await addToWatchlist(recommendationId, currentUserId)
+            : await addToWatchlistWithMetadata(currentUserId, fallbackMetadata);
+
+        setWatchlistId(id);
+        toast.success("Added to your watchlist.");
       } catch {
-        // Revert state if failed
         setIsInList(!optimisticInList);
         toast.error("Something went wrong.");
       }
@@ -65,18 +62,16 @@ export default function ToggleWatchlistButton({
     <button
       onClick={handleToggle}
       disabled={isPending}
-      className={`w-fit flex items-center gap-2 px-4 py-2 rounded-md text-sm transition
+      className={`w-fit flex items-center gap-2 px-4 py-2 rounded-md text-sm transition-all duration-200
         ${
           isInList
             ? "bg-red-600 hover:bg-red-500"
             : "bg-white text-black hover:bg-white/90"
         }
-         ${isPending ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-
-      `}
+        ${isPending ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
     >
       <MdMovieFilter />
-      {isInList ? "✗ Remove from Watchlist" : "✔ Add to Watchlist"}
+      {isInList ? "Remove from Watchlist" : "Add to Watchlist"}
     </button>
   );
 }

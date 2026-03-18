@@ -7,10 +7,11 @@ import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { createRecommendation } from "@/actions/recommendationActions";
-import RecommendModal from "@/components/RecommendModal";
 import { toast } from "sonner";
 import { omit } from "@/utils/ai-recommend/omit";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import RecommendModal from "@/components/RecommendModal";
 
 export default function WatchInfo({
   recommendation,
@@ -28,9 +29,13 @@ export default function WatchInfo({
   isAiRecommendation?: boolean;
 }) {
   const router = useRouter();
+  const recommender = recommendation.recommended_by;
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [hasRecommended, setHasRecommended] = useState(
+    alreadyRecommended ?? false,
+  );
 
   const handleSubmit = async (formData: {
     comment: string;
@@ -39,7 +44,6 @@ export default function WatchInfo({
   }) => {
     setLoading(true);
 
-    // Omit unnecessary fields from the recommendation data to prevent sending AI-generated metadata
     const aiRecommendData = omit(recommendation, [
       "id",
       "generated_by_ai",
@@ -56,9 +60,8 @@ export default function WatchInfo({
 
     setLoading(false);
     if (!error) {
-      toast.success(
-        "Recommendation submitted! Your taste just blessed someone’s watchlist 🎉"
-      );
+      toast.success("Recommendation submitted successfully.");
+      setHasRecommended(true);
       setOpen(false);
       router.refresh();
     } else {
@@ -77,7 +80,7 @@ export default function WatchInfo({
 
           <div className="flex gap-3 md:flex-row flex-col ">
             <ToggleWatchlistButton
-              currentUserId={currentUserId || ""}
+              currentUserId={currentUserId}
               initialInWatchlist={initialInWatchlist}
               initialWatchlistId={initialWatchlistId}
               recommendationId={recommendation.recommendation_id}
@@ -91,15 +94,21 @@ export default function WatchInfo({
               ])}
             />
 
-            {isAiRecommendation && !alreadyRecommended && (
-              <button
-                onClick={() => setOpen(true)}
-                className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 transition text-sm  px-4 py-2 rounded-md "
-              >
-                <Sparkles className="w-4 h-4" />
-                Recommend This!
-              </button>
-            )}
+            <AnimatePresence initial={false}>
+              {isAiRecommendation && !hasRecommended && (
+                <motion.button
+                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  onClick={() => setOpen(true)}
+                  className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 transition text-sm  px-4 py-2 rounded-md "
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Recommend This!
+                </motion.button>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -144,11 +153,11 @@ export default function WatchInfo({
 
       {recommendation.comment && (
         <blockquote className="text-white/80 italic border-l-4 border-red-500 pl-4 mt-2 text-sm md:text-base">
-          “{recommendation.comment}”
+          &quot;{recommendation.comment}&quot;
         </blockquote>
       )}
 
-      {!isAiRecommendation && recommendation.recommended_by ? (
+      {!isAiRecommendation && recommender ? (
         <div className="space-y-1 mt-4">
           <p className="text-white/60 uppercase text-xs mb-2 tracking-wide">
             Recommended by
@@ -156,12 +165,12 @@ export default function WatchInfo({
 
           <Link
             prefetch
-            href={`/profile/${recommendation.recommended_by.username}/${recommendation.recommended_by.id}`}
+            href={`/profile/${recommender.username}/${recommender.id}`}
             className="inline-flex items-center gap-3 py-2 px-3 rounded-md transition-colors bg-white/5 hover:bg-white/10 backdrop-blur border border-white/10 w-fit"
           >
             <div className="w-7 h-7 rounded-full overflow-hidden">
               <Image
-                src={recommendation.recommended_by.avatar_url}
+                src={recommender.avatar_url}
                 alt="Avatar"
                 unoptimized
                 width={28}
@@ -171,7 +180,7 @@ export default function WatchInfo({
             </div>
 
             <strong className="capitalize text-sm md:text-base">
-              {recommendation.recommended_by.username}
+              {recommender.username}
             </strong>
           </Link>
         </div>
@@ -182,16 +191,8 @@ export default function WatchInfo({
           </p>
 
           <div className="inline-flex items-center gap-3 py-2 px-3 rounded-md transition-colors bg-white/5 hover:bg-white/10 backdrop-blur border border-white/10 w-fit">
-            <Image
-              src={recommendation.recommended_by.avatar_url}
-              alt="Avatar"
-              unoptimized
-              width={28}
-              height={28}
-              className="rounded-full"
-            />
             <strong className="capitalize text-sm md:text-base">
-              {recommendation.recommended_by.username}
+              {recommender?.username || "Twogether"}
             </strong>
           </div>
         </div>

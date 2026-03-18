@@ -8,6 +8,7 @@ export type PartialRecommendation = {
   year: string;
   duration: number | null;
   synopsis?: string;
+  trailer_key?: string | null;
   seasons?: number | null;
   episodes?: number | null;
   episode_titles_per_season?: Record<
@@ -34,7 +35,7 @@ export type Recommendation = {
     id: string;
     username: string;
     avatar_url: string;
-  };
+  } | null;
   visibility: "public" | "private";
   created_at: string;
   generated_by_ai?: boolean;

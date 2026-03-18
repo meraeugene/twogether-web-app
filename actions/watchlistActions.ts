@@ -90,13 +90,27 @@ export async function addToWatchlistWithMetadata(
   metadata: WatchlistMetadata
 ) {
   const supabase = await createClient();
+  const watchlistPayload = {
+    tmdb_id: metadata.tmdb_id,
+    title: metadata.title,
+    poster_url: metadata.poster_url,
+    type: metadata.type,
+    stream_url: metadata.stream_url,
+    year: metadata.year,
+    duration: metadata.duration,
+    synopsis: metadata.synopsis,
+    genres: metadata.genres,
+    seasons: metadata.seasons,
+    episodes: metadata.episodes,
+    episode_titles_per_season: metadata.episode_titles_per_season,
+  };
 
   const { data, error } = await supabase
     .from("watchlist_items")
     .insert({
       user_id: currentUserId,
       recommendation_id: null,
-      ...metadata,
+      ...watchlistPayload,
     })
     .select("id")
     .single();

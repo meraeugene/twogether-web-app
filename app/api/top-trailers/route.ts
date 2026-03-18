@@ -21,17 +21,30 @@ export async function GET() {
   try {
     const moviesRes = await fetch(
       `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`,
-      { cache: "no-store" },
+      {
+        next: { revalidate: 86400 },
+      },
     );
 
+    if (!moviesRes.ok) {
+      throw new Error("Failed to fetch now playing movies");
+    }
+
     const moviesData: { results: TMDBMovie[] } = await moviesRes.json();
-    const movies = moviesData.results.slice(0, 10);
+    const movies = moviesData.results.slice(0, 6);
 
     const trailers = await Promise.all(
       movies.map(async (movie) => {
         const res = await fetch(
           `${BASE_URL}/movie/${movie.id}/videos?api_key=${API_KEY}`,
+          {
+            next: { revalidate: 86400 },
+          },
         );
+
+        if (!res.ok) {
+          return null;
+        }
 
         const data: { results: TMDBVideo[] } = await res.json();
 
@@ -58,7 +71,15 @@ export async function GET() {
       }),
     );
 
-    return NextResponse.json(trailers.filter((t) => t.trailerKey));
+    const response = NextResponse.json(
+      trailers.filter((t): t is NonNullable<typeof t> => Boolean(t?.trailerKey)),
+    );
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=86400, stale-while-revalidate=300",
+    );
+
+    return response;
   } catch (error) {
     console.error(error);
 

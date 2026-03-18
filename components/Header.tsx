@@ -1,8 +1,6 @@
-import { getCurrentUser } from "@/actions/authActions";
 import { Navbar } from "./Navbar";
+import { CurrentUser } from "@/types/user";
 
-export default async function Header() {
-  const user = await getCurrentUser();
-
+export default function Header({ user }: { user: CurrentUser | null }) {
   return <Navbar user={user} />;
 }

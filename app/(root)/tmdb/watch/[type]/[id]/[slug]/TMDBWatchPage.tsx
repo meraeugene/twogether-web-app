@@ -19,6 +19,7 @@ import { Recommendation } from "@/types/recommendation";
 import BackButton from "@/components/BackButton";
 import TMDBReviewForm from "./TMDBReviewForm";
 import TMDBMovieReviews from "./TMDBMovieReviews";
+import { AnimatePresence, motion } from "framer-motion";
 
 type SWRResponse = {
   recommendation: Recommendation;
@@ -40,6 +41,7 @@ export default function TMDBWatchPage({
   const params = useParams<{ type: string; id: string }>();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [hasRecommended, setHasRecommended] = useState(alreadyRecommended);
 
   const { data, error, isLoading } = useSWR<SWRResponse>(
     `/api/tmdb/${params.id}/?type=${params.type}`,
@@ -47,9 +49,7 @@ export default function TMDBWatchPage({
   );
 
   if (isLoading) return <WatchSkeletonLoading />;
-  if (error) {
-    return <ErrorMessage />;
-  }
+  if (error) return <ErrorMessage />;
 
   const recommendation = data?.recommendation;
 
@@ -75,7 +75,7 @@ export default function TMDBWatchPage({
       "recommendation_created_at",
     ]);
 
-    const { error } = await createRecommendation({
+    const { error: submitError } = await createRecommendation({
       ...safeData,
       comment: formData.comment,
       rating: formData.rating,
@@ -83,17 +83,17 @@ export default function TMDBWatchPage({
     });
 
     setLoading(false);
-    if (!error) {
-      toast.success(
-        "Recommendation submitted! Your taste just blessed someone’s watchlist 🎉",
-      );
+    document.body.classList.remove("overflow-hidden");
+
+    if (!submitError) {
+      toast.success("Recommendation submitted successfully.");
+      setHasRecommended(true);
       setOpen(false);
-      document.body.classList.remove("overflow-hidden");
-    } else {
-      toast.error("Error recommending. Please try again.");
-      console.error("Error recommending:", error);
-      document.body.classList.remove("overflow-hidden");
+      return;
     }
+
+    toast.error("Error recommending. Please try again.");
+    console.error("Error recommending:", submitError);
   };
 
   return (
@@ -136,7 +136,7 @@ export default function TMDBWatchPage({
               {currentUserId && (
                 <div className="flex gap-3 md:flex-row flex-col ">
                   <ToggleWatchlistButton
-                    currentUserId={currentUserId || ""}
+                    currentUserId={currentUserId}
                     initialInWatchlist={initialInWatchlist}
                     initialWatchlistId={initialWatchlistId}
                     recommendationId={recommendation.recommendation_id}
@@ -151,18 +151,24 @@ export default function TMDBWatchPage({
                     ])}
                   />
 
-                  {isTMDBRecommendation && !alreadyRecommended && (
-                    <button
-                      onClick={() => {
-                        document.body.classList.add("overflow-hidden");
-                        setOpen(true);
-                      }}
-                      className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black transition hover:bg-white/90 text-sm px-4 py-2 rounded-md "
-                    >
-                      <Sparkles className="w-4 h-4" />
-                      Recommend This!
-                    </button>
-                  )}
+                  <AnimatePresence initial={false}>
+                    {isTMDBRecommendation && !hasRecommended && (
+                      <motion.button
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        onClick={() => {
+                          document.body.classList.add("overflow-hidden");
+                          setOpen(true);
+                        }}
+                        className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black transition hover:bg-white/90 text-sm px-4 py-2 rounded-md "
+                      >
+                        <Sparkles className="w-4 h-4" />
+                        Recommend This!
+                      </motion.button>
+                    )}
+                  </AnimatePresence>
                 </div>
               )}
             </div>
@@ -191,7 +197,7 @@ export default function TMDBWatchPage({
             <span className="bg-gray-700 rounded-sm px-2 py-1 text-xs capitalize">
               {recommendation.type}
             </span>
-          </div>{" "}
+          </div>
           {recommendation.genres?.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {recommendation.genres.map((g) => (

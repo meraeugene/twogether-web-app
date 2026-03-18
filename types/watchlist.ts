@@ -1,4 +1,5 @@
 export type WatchlistMetadata = {
+  tmdb_id: number;
   title: string;
   poster_url?: string;
   type: "movie" | "tv";
@@ -13,10 +14,4 @@ export type WatchlistMetadata = {
     number,
     { episode_number: number; title: string }[]
   >;
-  comment: string;
-  recommended_by: {
-    id: string;
-    username: string;
-    avatar_url: string;
-  };
 };

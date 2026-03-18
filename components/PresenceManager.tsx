@@ -6,9 +6,11 @@ import { createClient } from "@/utils/supabase/client";
 export default function PresenceManager({ userId }: { userId: string }) {
   useEffect(() => {
     const supabase = createClient();
+    let isActive = true;
 
-    // Mark user as online immediately
     const setOnline = async () => {
+      if (!isActive || document.visibilityState !== "visible") return;
+
       await supabase.from("user_status").upsert({
         user_id: userId,
         is_online: true,
@@ -16,8 +18,7 @@ export default function PresenceManager({ userId }: { userId: string }) {
       });
     };
 
-    // Mark user offline on tab close
-    const handleUnload = async () => {
+    const setOffline = async () => {
       await supabase.from("user_status").upsert({
         user_id: userId,
         is_online: false,
@@ -25,19 +26,34 @@ export default function PresenceManager({ userId }: { userId: string }) {
       });
     };
 
-    // Heartbeat every 30s
-    const interval = setInterval(setOnline, 30_000);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        void setOnline();
+        return;
+      }
 
-    // Initial online mark
-    setOnline();
+      void setOffline();
+    };
 
-    // Unload listener
-    window.addEventListener("beforeunload", handleUnload);
+    const handlePageHide = () => {
+      isActive = false;
+      void setOffline();
+    };
+
+    const interval = setInterval(() => {
+      void setOnline();
+    }, 60_000);
+
+    void setOnline();
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", handlePageHide);
 
     return () => {
+      isActive = false;
       clearInterval(interval);
-      window.removeEventListener("beforeunload", handleUnload);
-      handleUnload(); // just in case
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", handlePageHide);
     };
   }, [userId]);
 
