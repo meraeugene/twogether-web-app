@@ -201,7 +201,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
     >
       {/* ── DESKTOP BAR ── */}
       <div
-        className={`hidden bg-black 2xl:inline-flex items-center space-x-2 px-[8px] py-[6px] rounded-full ${shell}`}
+        className={`hidden  bg-black 2xl:inline-flex items-center space-x-2 px-[8px] py-[6px] rounded-full ${shell}`}
       >
         <Link
           href="/"

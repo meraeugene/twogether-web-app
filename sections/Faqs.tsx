@@ -57,7 +57,7 @@ const Faqs = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.08 }}
-                  className={`relative overflow-hidden rounded-2xl md:rounded-3xl border transition-all duration-700 ${
+                  className={`relative  overflow-hidden rounded-2xl md:rounded-3xl border hover:bg-neutral-900/60 transition-all duration-700 ${
                     isOpen
                       ? "bg-neutral-900/40 border-red-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
                       : "bg-[#080808] border-white/5 hover:border-white/10"
@@ -65,7 +65,7 @@ const Faqs = () => {
                 >
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : index)}
-                    className="w-full text-left p-5 sm:p-6 md:p-8 flex items-center justify-between gap-4 sm:gap-6"
+                    className="w-full  cursor-pointer  text-left p-5 sm:p-6 md:p-8 flex items-center justify-between gap-4 sm:gap-6"
                   >
                     <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
                       {/* INDEX */}
