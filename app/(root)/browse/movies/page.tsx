@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/app/seo";
 import BrowseMoviesClient from "./BrowseMoviesClient";
@@ -10,5 +11,9 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function BrowseMoviesPage() {
-  return <BrowseMoviesClient />;
+  return (
+    <Suspense fallback={null}>
+      <BrowseMoviesClient />
+    </Suspense>
+  );
 }
