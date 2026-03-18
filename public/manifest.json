@@ -1,22 +1,39 @@
 {
   "name": "Twogether",
   "short_name": "Twogether",
-  "description": "Watch, recommend, and discover movies socially.",
+  "description": "Watch, recommend, and discover movies socially with a cinematic mobile-first experience.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#c13c4e",
-  "theme_color": "#c13c4e",
-  "orientation": "portrait",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "background_color": "#010101",
+  "theme_color": "#010101",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "dir": "ltr",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/icons/icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/logo.png",
+      "src": "/icons/icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
+    },
+    {
+      "src": "/icons/icon-192-maskable.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512-maskable.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "categories": ["entertainment", "social", "lifestyle"]
 }
