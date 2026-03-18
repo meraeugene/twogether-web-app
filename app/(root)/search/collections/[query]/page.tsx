@@ -1,8 +1,25 @@
+import type { Metadata } from "next";
 import BackButton from "@/components/BackButton";
 import FilmCard from "@/components/FilmCard";
 import { EnrichedCollection } from "@/types/binge";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import { getBingeCollectionsByQuery } from "@/utils/tmdb/search/searchCollectionsTMDB";
+import { buildMetadata } from "@/app/seo";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ query: string }>;
+}): Promise<Metadata> {
+  const { query } = await params;
+  const decodedQuery = decodeURIComponent(query);
+
+  return buildMetadata({
+    title: `Collection results for ${decodedQuery}`,
+    description: `Browse binge-worthy collection results for ${decodedQuery} on Twogether.`,
+    path: `/search/collections/${encodeURIComponent(decodedQuery)}`,
+  });
+}
 
 export default async function BingeSearchPage({
   params,
@@ -37,9 +54,9 @@ export default async function BingeSearchPage({
         <div className="space-y-10">
           {results.map((collection) => (
             <section key={collection.collection_id}>
-              <h2 className="text-2xl lg:text-3xl font-semibold mb-4 text-white">
+              <h1 className="text-2xl lg:text-3xl font-semibold mb-4 text-white">
                 {collection.collection_name}
-              </h2>
+              </h1>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-6">
                 {collection.movies.map((movie) => {
                   const adapted = adaptTMDBToRecommendation(movie);

@@ -48,7 +48,6 @@ function FilmCard({
   const [showConfirm, setShowConfirm] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [isUpdatingPrivacy, startPrivacyTransition] = useTransition();
-  const [isHovered, setIsHovered] = useState(false);
   const [cinemaOpen, setCinemaOpen] = useState(false);
   const router = useRouter();
 
@@ -83,10 +82,6 @@ function FilmCard({
   const openCinema = () => {
     setCinemaOpen(true);
   };
-
-  const handleMouseEnter = () => setIsHovered(true);
-
-  const handleMouseLeave = () => setIsHovered(false);
 
   const confirmDelete = () => {
     setShowConfirm(false);
@@ -503,8 +498,6 @@ function FilmCard({
         transition={{ duration: 0.2, ease: "easeOut" }}
         onClick={openCinema}
         className="relative w-full font-(family-name:--font-geist-sans) group"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
       >
         <AnimatePresence>
           {isVisible && (
@@ -514,47 +507,38 @@ function FilmCard({
                   src={item.poster_url || "/placeholder.jpg"}
                   alt={item.title}
                   fill
-                  className={`object-cover transition-all duration-300 ${
-                    isHovered ? "opacity-50 scale-105" : "opacity-100 scale-100"
-                  }`}
+                  className="object-cover transition-all duration-300 group-hover:opacity-50 group-hover:scale-105"
                   sizes="(max-width: 768px) 50vw, 20vw"
                 />
 
-                <AnimatePresence>
-                  {isHovered && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="absolute inset-0 flex items-center justify-center "
-                      style={{
-                        background:
-                          "linear-gradient(to top, rgba(100,0,0,0.8) 0%, transparent 60%)",
-                      }}
-                    >
-                      <div
-                        className="flex items-center justify-center rounded-full  cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openCinema();
-                        }}
-                        style={{
-                          width: 52,
-                          height: 52,
-                          background: "rgba(220,38,38,0.9)",
-                          boxShadow: "0 0 30px rgba(220,38,38,0.55)",
-                        }}
-                      >
-                        <Play
-                          size={18}
-                          fill="white"
-                          strokeWidth={0}
-                          className="ml-0.5"
-                        />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div
+                  className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(100,0,0,0.8) 0%, transparent 60%)",
+                  }}
+                >
+                  <div
+                    className="flex items-center justify-center rounded-full  cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openCinema();
+                    }}
+                    style={{
+                      width: 52,
+                      height: 52,
+                      background: "rgba(220,38,38,0.9)",
+                      boxShadow: "0 0 30px rgba(220,38,38,0.55)",
+                    }}
+                  >
+                    <Play
+                      size={18}
+                      fill="white"
+                      strokeWidth={0}
+                      className="ml-0.5"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="mt-4 mb-3">
                 <div className="text-base font-semibold  ">{item.title}</div>
@@ -587,7 +571,7 @@ function FilmCard({
 
         {isVisible && userId && isDeleteRecommendation && (
           <div
-            className="absolute top-4 right-4 z-30 
+            className="absolute top-4 right-2  z-30 
                     -translate-y-4 opacity-0 
                     group-hover:translate-y-0 group-hover:opacity-100 
                     transition-all duration-500 ease-out"
@@ -598,7 +582,7 @@ function FilmCard({
                 setShowConfirm(true);
               }}
               disabled={isPending}
-              className="px-3 py-1 flex cursor-pointer items-center gap-1 text-xs rounded-full bg-red-600 hover:bg-red-700 text-white shadow"
+              className="px-3 py-1  flex cursor-pointer items-center gap-1 text-xs rounded-full bg-red-600 hover:bg-red-700 text-white shadow"
             >
               <MdDelete className="text-base" />
               {isPending ? "Deleting..." : "Delete Recommendation"}
@@ -624,7 +608,7 @@ function FilmCard({
 
         {isVisible && userId && isRemoveFromWatchlist && (
           <div
-            className="absolute top-4 right-4 z-30 
+            className="absolute top-4 right-3 z-30 
                     -translate-y-4 opacity-0 
                     group-hover:translate-y-0 group-hover:opacity-100 
                     transition-all duration-500 ease-out"
@@ -707,6 +691,7 @@ function FilmCard({
           <div className=" mt-3 ">
             <Link
               href={`/profile/${item.recommended_by.username}/${item.recommended_by.id}`}
+              onClick={(e) => e.stopPropagation()}
               className=" text-sm text-white/60 hover:underline flex items-center gap-2"
             >
               {item.recommended_by.avatar_url && (

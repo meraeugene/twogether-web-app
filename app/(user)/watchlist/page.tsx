@@ -8,6 +8,7 @@ import FilmCard from "@/components/FilmCard";
 import Link from "next/link";
 import { CurrentUser } from "@/types/user";
 import { Recommendation } from "@/types/recommendation";
+import FilmGridSkeleton from "@/components/FilmGridSkeleton";
 
 type WatchlistResponse = {
   user: CurrentUser;
@@ -22,9 +23,14 @@ export default function WatchlistPage() {
 
   if (isLoading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin" />
-      </div>
+      <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 relative xl:pt-32 text-white">
+        <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+        <FilmGridSkeleton
+          titleWidth="w-44"
+          count={12}
+          showDescription
+        />
+      </main>
     );
 
   if (error || !data?.user) return <ErrorMessage />;

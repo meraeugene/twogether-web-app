@@ -22,7 +22,7 @@ export async function GET() {
   try {
     const res = await fetch(
       `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`,
-      { cache: "no-store" },
+      { next: { revalidate: 21600 } },
     );
 
     if (!res.ok) {
@@ -31,12 +31,13 @@ export async function GET() {
 
     const data: { results: TMDBMovie[] } = await res.json();
 
-    const movies = data.results;
+    const movies = data.results.slice(0, 8);
 
     const moviesWithTrailers = await Promise.all(
       movies.map(async (movie) => {
         const videoRes = await fetch(
           `${BASE_URL}/movie/${movie.id}/videos?api_key=${API_KEY}`,
+          { next: { revalidate: 21600 } },
         );
 
         const videoData: { results: TMDBVideo[] } = await videoRes.json();
@@ -64,7 +65,15 @@ export async function GET() {
       }),
     );
 
-    return NextResponse.json(moviesWithTrailers.filter((m) => m.trailerKey));
+    const response = NextResponse.json(
+      moviesWithTrailers.filter((m) => m.trailerKey),
+    );
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=21600, stale-while-revalidate=300",
+    );
+
+    return response;
   } catch (error) {
     console.error("TMDB API Error:", error);
 

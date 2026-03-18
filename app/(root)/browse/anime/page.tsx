@@ -1,49 +1,14 @@
-"use client";
+import type { Metadata } from "next";
+import { buildMetadata } from "@/app/seo";
+import BrowseAnimeClient from "./BrowseAnimeClient";
 
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
-import { browsePlaceholders } from "@/constants/placeholders";
-import TrendingTMDBAnimeList from "./TrendingTMDBAnimeList";
-import BackButton from "@/components/BackButton";
+export const metadata: Metadata = buildMetadata({
+  title: "Browse Trending Anime",
+  description:
+    "Explore trending anime titles and discover what to watch next on Twogether.",
+  path: "/browse/anime",
+});
 
 export default function BrowseAnimePage() {
-  const router = useRouter();
-
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSubmit = (e?: React.FormEvent) => {
-    e?.preventDefault();
-    const trimmed = searchQuery.trim();
-    if (trimmed) {
-      router.push(`/search/${encodeURIComponent(trimmed)}`);
-    }
-  };
-
-  const trendingList = useMemo(() => {
-    return <TrendingTMDBAnimeList />;
-  }, []);
-
-  return (
-    <main className="min-h-screen relative bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white font-(family-name:--font-geist-sans)">
-      <div className="absolute inset-0 bg-linear-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
-      <section className="mb-16">
-        <BackButton />
-
-        <div className="max-w-2xl mx-auto w-full mt-2">
-          <PlaceholdersAndVanishInput
-            placeholders={browsePlaceholders}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onSubmit={handleSubmit}
-          />
-        </div>
-
-        <h1 className="font-semibold text-center lg:text-left text-2xl md:text-3xl mb-10 mt-6 ">
-          Trending Anime
-        </h1>
-
-        {trendingList}
-      </section>
-    </main>
-  );
+  return <BrowseAnimeClient />;
 }

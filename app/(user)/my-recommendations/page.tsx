@@ -8,6 +8,7 @@ import { Recommendation } from "@/types/recommendation";
 import { CurrentUser } from "@/types/user";
 import Link from "next/link";
 import { Section } from "./Section";
+import FilmGridSkeleton from "@/components/FilmGridSkeleton";
 
 type MyRecosResponse = {
   user: CurrentUser;
@@ -23,9 +24,18 @@ export default function MyRecommendationsPage() {
 
   if (isLoading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin" />
-      </div>
+      <main className="min-h-screen relative bg-black px-7 pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)] lg:px-24 xl:px-32 2xl:px-26 xl:pt-32">
+        <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+        <div className="space-y-12">
+          <FilmGridSkeleton
+            titleWidth="w-56"
+            count={6}
+            showDescription
+          />
+          <FilmGridSkeleton titleWidth="w-32" count={6} />
+          <FilmGridSkeleton titleWidth="w-32" count={6} />
+        </div>
+      </main>
     );
 
   if (error || !data?.user) return <ErrorMessage />;

@@ -1,7 +1,24 @@
+import type { Metadata } from "next";
 import SearchClient from "./SearchClient";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import { searchTMDB } from "@/utils/tmdb/search/searchTMDB";
+import { buildMetadata } from "@/app/seo";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ query: string }>;
+}): Promise<Metadata> {
+  const { query } = await params;
+  const decodedQuery = decodeURIComponent(query);
+
+  return buildMetadata({
+    title: `Search results for ${decodedQuery}`,
+    description: `Browse movie and TV search results for ${decodedQuery} on Twogether.`,
+    path: `/search/${encodeURIComponent(decodedQuery)}`,
+  });
+}
 
 export default async function SearchPage({
   params,

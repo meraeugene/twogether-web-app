@@ -72,14 +72,18 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  const profile = user
+    ? (
+        await supabase
+          .from("users")
+          .select("onboarding_complete")
+          .eq("id", user.id)
+          .single()
+      ).data
+    : null;
+
   // 2. Redirect authenticated users trying to access onboarding again
   if (user && pathname === "/onboarding") {
-    const { data: profile } = await supabase
-      .from("users")
-      .select("onboarding_complete")
-      .eq("id", user.id)
-      .single();
-
     if (profile?.onboarding_complete) {
       url.pathname = "/recos";
       return NextResponse.redirect(url);
@@ -88,12 +92,6 @@ export async function updateSession(request: NextRequest) {
 
   // 3. Redirect authenticated users who haven't completed onboarding (when accessing other pages)
   if (user && pathname !== "/onboarding") {
-    const { data: profile } = await supabase
-      .from("users")
-      .select("onboarding_complete")
-      .eq("id", user.id)
-      .single();
-
     if (!profile?.onboarding_complete) {
       url.pathname = "/onboarding";
       return NextResponse.redirect(url);

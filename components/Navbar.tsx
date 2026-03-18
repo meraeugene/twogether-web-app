@@ -119,6 +119,7 @@ function LoginButton({
       className="group cursor-pointer relative flex items-center justify-center gap-2 h-[40px] px-4 rounded-[11px] text-sm font-semibold text-white/40 hover:text-white/90 hover:bg-white/[0.08] transition-all duration-150"
     >
       <GoogleIcon className="w-[18px] h-[18px]" />
+      Sign in
     </button>
   );
 }

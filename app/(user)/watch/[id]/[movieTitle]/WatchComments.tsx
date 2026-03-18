@@ -37,7 +37,7 @@ export default function WatchComments({
   } | null>(null);
   const [isPostingComment, setIsPostingComment] = useState(false);
   const [replySubmittingId, setReplySubmittingId] = useState<string | null>(
-    null
+    null,
   );
 
   const {
@@ -51,7 +51,7 @@ export default function WatchComments({
     {
       refreshInterval: 1000, // Auto-refresh every 5 seconds
       refreshWhenHidden: false,
-    }
+    },
   );
 
   const handlePostComment = async () => {
@@ -71,7 +71,7 @@ export default function WatchComments({
       recId,
       `@${replyTo.username} ${replyText.trim()}`,
       replyTo.commentId,
-      currentUserId
+      currentUserId,
     );
     setReplyText("");
     setReplyTo(null);
@@ -81,7 +81,7 @@ export default function WatchComments({
 
   const handleReaction = async (
     commentId: string,
-    type: "like" | "dislike"
+    type: "like" | "dislike",
   ) => {
     // Optimistically update the UI by modifying the local state
     const updated = comments.map((comment) => {
@@ -156,7 +156,7 @@ export default function WatchComments({
 
         <button
           onClick={handlePostComment}
-          className="px-5 py-2 flex items-center justify-center gap-2 text-sm font-medium
+          className="px-5 py-2 flex cursor-pointer items-center justify-center gap-2 text-sm font-medium
                rounded-lg bg-red-600 hover:bg-red-700 text-white transition
                shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={!newComment.trim()}
@@ -193,7 +193,7 @@ export default function WatchComments({
             .filter((c) => !c.parent_comment_id)
             .map((comment) => {
               const replies = comments.filter(
-                (r) => r.parent_comment_id === comment.id
+                (r) => r.parent_comment_id === comment.id,
               );
 
               return (

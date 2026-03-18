@@ -4,9 +4,12 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Toaster } from "sonner";
-import { getCurrentUser } from "@/actions/authActions";
-import PresenceManager from "@/components/PresenceManager";
-import CookieConsentBanner from "@/components/CookieConsentBanner";
+import {
+  buildMetadata,
+  defaultDescription,
+  siteName,
+  siteUrl,
+} from "@/app/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,38 +22,39 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Twogether | Watch & Recommend Movies Socially",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: `${siteName} | Watch and Recommend Movies Socially`,
+    template: `%s | ${siteName}`,
+  },
+  applicationName: siteName,
   icons: {
     icon: "/icon.ico",
     shortcut: "/icon.ico",
     apple: "/icon.ico",
   },
-  description:
-    "Twogether is a social movie and TV show platform where users can stream, recommend, and discuss their favorite films. Watch together, chat privately, and discover what others love — all in one place.",
-  openGraph: {
-    title: "Twogether | Watch & Recommend Movies Socially",
-    description:
-      "Stream and recommend movies with friends. Twogether is your cozy social movie space to discover what couples and friends are watching together.",
-    url: "https://twogether-live.vercel.app/", // replace with your actual domain
-    siteName: "Twogether",
-    images: [
-      {
-        url: "/thumbnail.png", // replace with your actual OG image URL
-        // width: 1200,
-        // height: 630,
-        width: 2400,
-        height: 1260,
-        alt: "Twogether – Watch & Recommend Movies Socially",
-      },
-    ],
-    type: "website",
+  description: defaultDescription,
+  keywords: [
+    "movie recommendations",
+    "watchlist app",
+    "social movie app",
+    "tv show recommendations",
+    "what to watch",
+    "movie community",
+  ],
+  manifest: "/manifest.json",
+  category: "entertainment",
+  ...buildMetadata({
+    title: `${siteName} | Watch and Recommend Movies Socially`,
+    description: defaultDescription,
+  }),
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: siteName,
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Twogether – Watch & Recommend Movies Socially",
-    description:
-      "Stream and recommend movies with friends. Twogether is your cozy social movie space to discover what couples and friends are watching together.",
-    images: ["/thumbnail.png"], // replace with your actual image
+  other: {
+    "mobile-web-app-capable": "yes",
   },
 };
 
@@ -59,33 +63,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currentUser = await getCurrentUser();
-
   return (
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/icon.ico" type="image/x-icon" sizes="any" />
-        {/* <link rel="manifest" href="/manifest.json" /> */}
         <link rel="apple-touch-icon" href="/logo.png" />
         <meta name="theme-color" content="#010101" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent"
-        />
-        <meta name="apple-mobile-web-app-title" content="Twogether" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster position="top-right" />
-        <Header user={currentUser} />
-        {currentUser?.id && <PresenceManager userId={currentUser.id} />}
+        <Header />
         {children}
-        {/* <BackToTopButton /> */}
-        {currentUser?.id && <CookieConsentBanner />}
         <Footer />
       </body>
     </html>
