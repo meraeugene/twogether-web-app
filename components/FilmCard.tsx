@@ -14,11 +14,7 @@ import {
   toggleRecommendationVisibility,
 } from "@/actions/recommendationActions";
 import ConfirmModal from "@/components/ConfirmModal";
-import {
-  addToWatchlistWithMetadata,
-  checkIfInWatchlist,
-  removeFromWatchlist,
-} from "@/actions/watchlistActions";
+import { removeFromWatchlist } from "@/actions/watchlistActions";
 import { PrivacyModal } from "./PrivacyModal";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { MdDelete } from "react-icons/md";
@@ -26,7 +22,6 @@ import { FaLock } from "react-icons/fa";
 import Link from "next/link";
 import { VisualHeartRating } from "./VisualHeartRating";
 import { toast } from "sonner";
-import { WatchlistMetadata } from "@/types/watchlist";
 
 type MyRecosCache = {
   public: Recommendation[];
@@ -52,7 +47,7 @@ function FilmCard({
   const [showConfirm, setShowConfirm] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [isUpdatingPrivacy, startPrivacyTransition] = useTransition();
-  const [isWatchlistPending, startWatchlistTransition] = useTransition();
+
   const [cinemaOpen, setCinemaOpen] = useState(false);
   const router = useRouter();
 
@@ -188,48 +183,6 @@ function FilmCard({
         : null
       : tvMetaLabel;
 
-  const handleWatchlistToggle = () => {
-    if (!userId) {
-      toast.error("Please sign in to manage your watchlist.");
-      return;
-    }
-
-    startWatchlistTransition(async () => {
-      try {
-        const { inWatchlist, id } = await checkIfInWatchlist(item.tmdb_id, userId);
-
-        if (inWatchlist && id) {
-          await removeFromWatchlist(id, userId);
-          toast.success(`Removed "${item.title}" from watchlist.`);
-        } else {
-          const metadata: WatchlistMetadata = {
-            tmdb_id: item.tmdb_id,
-            title: item.title,
-            poster_url: item.poster_url,
-            type: item.type,
-            stream_url: Array.isArray(item.stream_url)
-              ? item.stream_url
-              : [item.stream_url],
-            year: item.year,
-            duration: item.duration,
-            synopsis: item.synopsis,
-            genres: item.genres || [],
-            seasons: item.seasons,
-            episodes: item.episodes,
-            episode_titles_per_season: item.episode_titles_per_season,
-          };
-
-          await addToWatchlistWithMetadata(userId, metadata);
-          toast.success(`Added "${item.title}" to watchlist.`);
-        }
-
-        mutate("/api/my-watchlist");
-      } catch {
-        toast.error("Could not update watchlist. Please try again.");
-      }
-    });
-  };
-
   const cinemaOverlay =
     cinemaOpen && typeof document !== "undefined"
       ? createPortal(
@@ -250,7 +203,7 @@ function FilmCard({
               â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
               <div className="relative w-full h-full flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
                 {trailerUrl ? (
-                  <div className="relative w-full aspect-[9/12] md:aspect-video z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
+                  <div className="relative w-full aspect-9/12 md:aspect-video z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
                     {/* The Video Container with "Zoomed-Out" Letterbox Feel */}
                     <div className="absolute inset-0 overflow-hidden">
                       <iframe
@@ -274,11 +227,11 @@ function FilmCard({
                 {/* â”€â”€ Cinema Overlays â”€â”€ */}
                 <div className="absolute inset-0 pointer-events-none z-20">
                   {/* Deep Vertical Vignette */}
-                  <div className=" absolute hidden md:block  inset-y-0 left-0 w-32 bg-gradient-to-r from-[#06030a] to-transparent" />
-                  <div className=" absolute hidden md:block  inset-y-0 right-0 w-32 bg-gradient-to-l from-[#06030a] to-transparent" />
+                  <div className=" absolute hidden md:block  inset-y-0 left-0 w-32 bg-linear-to-r from-[#06030a] to-transparent" />
+                  <div className=" absolute hidden md:block  inset-y-0 right-0 w-32 bg-linear-to-l from-[#06030a] to-transparent" />
 
                   {/* Bottom Title Fade */}
-                  <div className="absolute  bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-[#06030a] via-[#06030a]/40 to-transparent" />
+                  <div className="absolute  bottom-0 inset-x-0 h-1/2 bg-linear-to-t from-[#06030a] via-[#06030a]/40 to-transparent" />
                 </div>
 
                 {/* Mobile Title Block */}
@@ -353,9 +306,9 @@ function FilmCard({
                 </button>
               </div>
 
-              {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+              {/* 
                   INFO PANEL  (fixed height, no scroll)
-              â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+             */}
               <div
                 className="shrink-0 w-full flex flex-col pb-12 lg:pb-8  items-center justify-center relative"
                 style={{ minHeight: 230, background: "#040404" }}
@@ -372,7 +325,7 @@ function FilmCard({
                 <div className="w-full md:max-w-3xl lg:max-w-4xl flex flex-col items-center justify-center px-4 sm:px-6 relative z-10">
                   {/* HEADER SECTION */}
                   <div className="w-full flex  items-center justify-center gap-3 md:gap-6 mb-6">
-                    {/* LEFT â€” YEAR */}
+                    {/* LEFT  YEAR */}
                     <motion.div
                       {...stagger(0)}
                       className="flex items-center gap-4 lg:flex-1 lg:justify-end"
@@ -390,15 +343,15 @@ function FilmCard({
                         </div>
                       </div>
 
-                      <div className=" h-8 w-px bg-white/15 rotate-[20deg]" />
+                      <div className=" h-8 w-px bg-white/15 rotate-20" />
                     </motion.div>
 
-                    {/* MOBILE â€” GENRES */}
+                    {/* MOBILE GENRES */}
                     <motion.div
                       {...stagger(0)}
                       className="flex flex-wrap md:hidden items-center justify-center gap-3 sm:gap-4"
                     >
-                      <div className=" h-[1px] w-3 bg-red-600/30" />
+                      <div className=" h-px w-3 bg-red-600/30" />
 
                       <div className="flex flex-wrap justify-center gap-3">
                         {item.genres.slice(0, 1).map((g) => (
@@ -415,7 +368,7 @@ function FilmCard({
                       <div className="h-[1px] w-3  bg-red-600/30" />
                     </motion.div>
 
-                    {/* DESKTOP â€” GENRES */}
+                    {/* DESKTOP ” GENRES */}
                     <motion.div
                       {...stagger(0)}
                       className="md:flex flex-wrap hidden items-center justify-center gap-3 sm:gap-4"
@@ -434,15 +387,15 @@ function FilmCard({
                         ))}
                       </div>
 
-                      <div className="h-[1px] w-6 bg-red-600/30" />
+                      <div className="h-px w-6 bg-red-600/30" />
                     </motion.div>
 
-                    {/* RIGHT â€” RUNTIME */}
+                    {/* RIGHT ” RUNTIME */}
                     <motion.div
                       {...stagger(0)}
                       className="flex items-center gap-4 lg:flex-1 lg:justify-start"
                     >
-                      <div className="h-8 w-px bg-white/15 rotate-[20deg]" />
+                      <div className="h-8 w-px bg-white/15 rotate-20" />
 
                       <div className="flex flex-col items-center lg:items-start">
                         <span className="text-[10px] hidden md:block sm:text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-1">
@@ -518,14 +471,6 @@ function FilmCard({
                         />
                       </div>
                     </button>
-
-                    <button
-                      onClick={handleWatchlistToggle}
-                      disabled={isWatchlistPending}
-                      className="h-12 sm:h-14 px-4 sm:px-6 border border-white/20 bg-white/5 text-white text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      {isWatchlistPending ? "Saving" : "Watchlist"}
-                    </button>
                   </motion.div>
                 </div>
               </div>
@@ -537,7 +482,6 @@ function FilmCard({
 
   if (!isVisible) return null;
 
-  // â”€â”€â”€ Card (poster) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   return (
     <>
       <motion.div

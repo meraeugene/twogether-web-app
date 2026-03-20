@@ -310,7 +310,7 @@ export default function StreamingServices() {
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
             <h3 className="text-[10px] uppercase tracking-[0.3em] text-neutral-500 font-bold">
-              Integrated Partners
+              Integrated Streaming Services
             </h3>
 
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
