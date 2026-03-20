@@ -18,7 +18,12 @@ type WatchlistResponse = {
 export default function WatchlistPage() {
   const { data, error, isLoading } = useSWR<WatchlistResponse>(
     "/api/my-watchlist",
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
+      keepPreviousData: true,
+    },
   );
 
   if (isLoading)

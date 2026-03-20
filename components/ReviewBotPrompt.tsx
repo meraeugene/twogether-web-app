@@ -75,6 +75,12 @@ export default function ReviewBotPrompt() {
     return () => clearTimeout(timeout);
   }, [open]);
 
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, []);
+
   const handleSubmit = () => {
     const trimmedName = name.trim() || "Guest Viewer";
     const trimmedComment = comment.trim();
@@ -213,7 +219,7 @@ export default function ReviewBotPrompt() {
             type="button"
             onClick={openPanel}
             aria-label="Open feedback panel"
-            className="group fixed z-50 cursor-pointer bottom-4 right-4  h-12 w-12  overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] sm:h-14 sm:w-14"
+            className="pointer-events-auto group fixed z-50 cursor-pointer bottom-4 right-4  h-12 w-12  overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] sm:h-14 sm:w-14"
           >
             <div className="relative flex h-full w-full items-center justify-center">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500/16 text-red-300 ring-1 ring-inset ring-red-400/30 sm:h-10 sm:w-10">

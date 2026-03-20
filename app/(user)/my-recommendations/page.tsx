@@ -19,7 +19,12 @@ type MyRecosResponse = {
 export default function MyRecommendationsPage() {
   const { data, error, isLoading } = useSWR<MyRecosResponse>(
     "/api/my-recos",
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
+      keepPreviousData: true,
+    },
   );
 
   if (isLoading)

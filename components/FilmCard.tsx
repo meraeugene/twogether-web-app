@@ -14,7 +14,11 @@ import {
   toggleRecommendationVisibility,
 } from "@/actions/recommendationActions";
 import ConfirmModal from "@/components/ConfirmModal";
-import { removeFromWatchlist } from "@/actions/watchlistActions";
+import {
+  addToWatchlistWithMetadata,
+  checkIfInWatchlist,
+  removeFromWatchlist,
+} from "@/actions/watchlistActions";
 import { PrivacyModal } from "./PrivacyModal";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { MdDelete } from "react-icons/md";
@@ -22,6 +26,7 @@ import { FaLock } from "react-icons/fa";
 import Link from "next/link";
 import { VisualHeartRating } from "./VisualHeartRating";
 import { toast } from "sonner";
+import { WatchlistMetadata } from "@/types/watchlist";
 
 type MyRecosCache = {
   public: Recommendation[];
@@ -47,6 +52,7 @@ function FilmCard({
   const [showConfirm, setShowConfirm] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [isUpdatingPrivacy, startPrivacyTransition] = useTransition();
+  const [isWatchlistPending, startWatchlistTransition] = useTransition();
   const [cinemaOpen, setCinemaOpen] = useState(false);
   const router = useRouter();
 
@@ -174,13 +180,55 @@ function FilmCard({
   const trailerUrl = item.trailer_key
     ? `https://www.youtube.com/embed/${item.trailer_key}?autoplay=1&mute=0&controls=0&loop=1&playlist=${item.trailer_key}&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&vq=hd1080`
     : null;
-  const tvMetaLabel = `${item.episodes || 1}EPS`;
+  const tvMetaLabel = `S${item.seasons || 1} · ${item.episodes || 1}EPS`;
   const runtimeLabel =
     item.type === "movie"
       ? item.duration
         ? `${Math.floor(item.duration / 60)}h ${item.duration % 60}m`
         : null
       : tvMetaLabel;
+
+  const handleWatchlistToggle = () => {
+    if (!userId) {
+      toast.error("Please sign in to manage your watchlist.");
+      return;
+    }
+
+    startWatchlistTransition(async () => {
+      try {
+        const { inWatchlist, id } = await checkIfInWatchlist(item.tmdb_id, userId);
+
+        if (inWatchlist && id) {
+          await removeFromWatchlist(id, userId);
+          toast.success(`Removed "${item.title}" from watchlist.`);
+        } else {
+          const metadata: WatchlistMetadata = {
+            tmdb_id: item.tmdb_id,
+            title: item.title,
+            poster_url: item.poster_url,
+            type: item.type,
+            stream_url: Array.isArray(item.stream_url)
+              ? item.stream_url
+              : [item.stream_url],
+            year: item.year,
+            duration: item.duration,
+            synopsis: item.synopsis,
+            genres: item.genres || [],
+            seasons: item.seasons,
+            episodes: item.episodes,
+            episode_titles_per_season: item.episode_titles_per_season,
+          };
+
+          await addToWatchlistWithMetadata(userId, metadata);
+          toast.success(`Added "${item.title}" to watchlist.`);
+        }
+
+        mutate("/api/my-watchlist");
+      } catch {
+        toast.error("Could not update watchlist. Please try again.");
+      }
+    });
+  };
 
   const cinemaOverlay =
     cinemaOpen && typeof document !== "undefined"
@@ -469,6 +517,14 @@ function FilmCard({
                           className="text-red-600 ml-1"
                         />
                       </div>
+                    </button>
+
+                    <button
+                      onClick={handleWatchlistToggle}
+                      disabled={isWatchlistPending}
+                      className="h-12 sm:h-14 px-4 sm:px-6 border border-white/20 bg-white/5 text-white text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {isWatchlistPending ? "Saving" : "Watchlist"}
                     </button>
                   </motion.div>
                 </div>

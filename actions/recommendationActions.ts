@@ -88,20 +88,32 @@ export async function getMyRecommendations(userId: string): Promise<{
 }> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from("recommendations_flattened")
-    .select("*")
-    .eq("recommended_by->>id", userId)
-    .order("created_at", { ascending: false });
+  const [publicResult, privateResult] = await Promise.all([
+    supabase
+      .from("recommendations_flattened")
+      .select("*")
+      .eq("recommended_by->>id", userId)
+      .eq("visibility", "public")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("recommendations_flattened")
+      .select("*")
+      .eq("recommended_by->>id", userId)
+      .eq("visibility", "private")
+      .order("created_at", { ascending: false }),
+  ]);
 
-  if (error || !data) {
-    console.error("Error fetching recommendation:", error);
+  if (publicResult.error || privateResult.error) {
+    console.error(
+      "Error fetching recommendation:",
+      publicResult.error || privateResult.error,
+    );
     return { public: [], private: [] };
   }
 
   return {
-    public: data.filter((item) => item.visibility === "public"),
-    private: data.filter((item) => item.visibility === "private"),
+    public: publicResult.data || [],
+    private: privateResult.data || [],
   };
 }
 
