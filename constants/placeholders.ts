@@ -12,6 +12,11 @@ export const bingePlaceholders = [
 ];
 
 export const browsePlaceholders = [
+  "Search by artist: Theo James...",
+  "Search by artist: Zendaya...",
+  "Search by artist: Cillian Murphy...",
+  "Search by artist: Florence Pugh...",
+  "Search by artist: Timothee Chalamet...",
   "Search for Inception...",
   "Search for Interstellar...",
   "Search for The Dark Knight...",

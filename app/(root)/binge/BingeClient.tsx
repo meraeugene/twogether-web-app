@@ -21,9 +21,9 @@ export default function BingeClient() {
     router.replace(`?${newParams.toString()}`);
   };
 
-  const handleSubmit = (e?: React.FormEvent) => {
+  const handleSubmit = (e?: React.FormEvent, submittedValue?: string) => {
     e?.preventDefault();
-    const trimmed = searchQuery.trim();
+    const trimmed = (submittedValue ?? searchQuery).trim();
     if (trimmed) {
       router.push(`/search/collections/${encodeURIComponent(trimmed)}`);
     }
@@ -42,6 +42,7 @@ export default function BingeClient() {
             placeholders={bingePlaceholders}
             onChange={(e) => setSearchQuery(e.target.value)}
             onSubmit={handleSubmit}
+            autocompleteEndpoint="/api/tmdb/search/collections"
           />
         </div>
         <div className="flex w-full flex-col md:flex-row justify-between gap-4 mb-10 text-center mt-6">

@@ -23,9 +23,9 @@ export default function BrowseMoviesClient() {
     router.replace(`?${newParams.toString()}`);
   };
 
-  const handleSubmit = (e?: React.FormEvent) => {
+  const handleSubmit = (e?: React.FormEvent, submittedValue?: string) => {
     e?.preventDefault();
-    const trimmed = searchQuery.trim();
+    const trimmed = (submittedValue ?? searchQuery).trim();
     if (trimmed) {
       router.push(`/search/${encodeURIComponent(trimmed)}`);
     }
