@@ -43,7 +43,7 @@ export default function WatchGemeni({
     startTransition(async () => {
       const reply = await askGemini(
         question,
-        useMovieContext ? title : undefined
+        useMovieContext ? title : undefined,
       );
       setMessages((prev) => [...prev, { role: "gemini", content: reply }]);
     });
@@ -53,22 +53,26 @@ export default function WatchGemeni({
     <div className="font-[family-name:var(--font-geist-sans)]">
       {/* Floating Button */}
       <motion.button
-        onClick={() => setIsOpen(true)}
-        className="fixed z-50 cursor-pointer bottom-6 right-6 bg-red-600 hover:bg-red-700 text-white p-3 rounded-full shadow-lg"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ type: "spring", stiffness: 180, damping: 18 }}
+        onClick={() => {
+          setIsOpen(true);
+        }}
+        aria-label="Open feedback panel"
+        className="group fixed z-50 cursor-pointer bottom-4 right-4  h-12 w-12  overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] sm:h-14 sm:w-14"
       >
-        {/* Gemini Icon */}
-        <svg
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          width="1.25rem"
-          height="1.25rem"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />
-        </svg>
+        <div className="relative flex h-full w-full items-center justify-center">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500/16 text-red-300 ring-1 ring-inset ring-red-400/30 sm:h-10 sm:w-10">
+            {/* Gemini Icon */}
+            <svg
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              width="1.25rem"
+              height="1.25rem"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />
+            </svg>{" "}
+          </div>
+        </div>
       </motion.button>
 
       {/* Chat Panel */}
@@ -115,7 +119,9 @@ export default function WatchGemeni({
               </div>
 
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setIsOpen(false);
+                }}
                 className="cursor-pointer lg:p-2 rounded-full hover:bg-white/10 transition"
               >
                 <RxCross2 className="text-white text-xl" />

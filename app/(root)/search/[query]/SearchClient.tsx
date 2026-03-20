@@ -109,21 +109,43 @@ export default function SearchClient({
       )}
 
       {isPending ? (
-        <div className="space-y-8 py-4">
-          <div className="h-12 w-56 animate-pulse rounded-full bg-white/10" />
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div
-                key={i}
-                className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-2"
-              >
-                <div className="aspect-2/3 w-full animate-pulse rounded-lg bg-white/10" />
-                <div className="h-4 w-4/5 animate-pulse rounded bg-white/10" />
-                <div className="h-3 w-1/2 animate-pulse rounded bg-white/10" />
+        <section className="relative text-white">
+          <div className="container mx-auto px-0 py-8 sm:py-12 lg:py-16">
+            <div className="flex flex-col gap-8 sm:gap-10 lg:flex-row lg:items-end lg:gap-12">
+              <div className="relative z-10 w-full shrink-0 max-w-[250px] sm:max-w-[300px] md:max-w-[320px]">
+                <div className="aspect-[3/4] animate-pulse overflow-hidden rounded-sm bg-white/10 ring-1 ring-white/10" />
               </div>
-            ))}
+
+              <div className="relative z-20 flex-1 space-y-5">
+                <div className="h-12 w-3/4 animate-pulse rounded-md bg-white/10 sm:h-14" />
+                <div className="flex flex-wrap gap-2">
+                  <div className="h-6 w-24 animate-pulse rounded-full bg-white/10" />
+                  <div className="h-6 w-40 animate-pulse rounded-full bg-white/10" />
+                </div>
+                <div className="space-y-3">
+                  <div className="h-4 w-full max-w-2xl animate-pulse rounded bg-white/10" />
+                  <div className="h-4 w-[90%] max-w-2xl animate-pulse rounded bg-white/10" />
+                  <div className="h-4 w-[70%] max-w-xl animate-pulse rounded bg-white/10" />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-16 flex items-center flex-wrap gap-2 sm:gap-3">
+              <div className="h-7 w-60 animate-pulse rounded-md bg-white/10" />
+              <div className="h-6 w-20 animate-pulse rounded-full bg-white/10" />
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-4 sm:gap-6 lg:gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div key={i} className="space-y-3">
+                  <div className="aspect-2/3 w-full animate-pulse rounded-lg bg-white/10" />
+                  <div className="h-4 w-3/4 animate-pulse rounded bg-white/10" />
+                  <div className="h-3 w-1/2 animate-pulse rounded bg-white/10" />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
       ) : hasArtistResults && artist ? (
         <section className="relative text-white">
           {/* 1. Large Background Typography (Watermark Effect) */}

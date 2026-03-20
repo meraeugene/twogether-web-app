@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useTransition, useEffect } from "react";
 import Image from "next/image";
@@ -28,7 +28,6 @@ type MyRecosCache = {
   private: Recommendation[];
 };
 
-// ─── Main ─────────────────────────────────────────────────────────────────────
 function FilmCard({
   item,
   userId,
@@ -175,16 +174,13 @@ function FilmCard({
   const trailerUrl = item.trailer_key
     ? `https://www.youtube.com/embed/${item.trailer_key}?autoplay=1&mute=0&controls=0&loop=1&playlist=${item.trailer_key}&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&vq=hd1080`
     : null;
+  const tvMetaLabel = `${item.episodes || 1}EPS`;
   const runtimeLabel =
     item.type === "movie"
       ? item.duration
         ? `${Math.floor(item.duration / 60)}h ${item.duration % 60}m`
         : null
-      : item.duration
-        ? `${item.duration}m / ep`
-        : item.seasons
-          ? `S${item.seasons}`
-          : null;
+      : tvMetaLabel;
 
   const cinemaOverlay =
     cinemaOpen && typeof document !== "undefined"
@@ -201,9 +197,9 @@ function FilmCard({
                 background: "#06030a",
               }}
             >
-              {/* ══════════════════════════════════════════
+              {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
                   FULLSCREEN TRAILER  (flex-1 = fills all remaining height)
-              ══════════════════════════════════════════ */}
+              â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
               <div className="relative w-full h-full flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
                 {trailerUrl ? (
                   <div className="relative w-full aspect-[9/12] md:aspect-video z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
@@ -227,7 +223,7 @@ function FilmCard({
                   />
                 )}
 
-                {/* ── Cinema Overlays ── */}
+                {/* â”€â”€ Cinema Overlays â”€â”€ */}
                 <div className="absolute inset-0 pointer-events-none z-20">
                   {/* Deep Vertical Vignette */}
                   <div className=" absolute hidden md:block  inset-y-0 left-0 w-32 bg-gradient-to-r from-[#06030a] to-transparent" />
@@ -260,7 +256,7 @@ function FilmCard({
                   </div>
                 </div>
 
-                {/* ── Desktop Title block ── */}
+                {/* â”€â”€ Desktop Title block â”€â”€ */}
                 <motion.div
                   key={`${item.tmdb_id}-${item.type}-desktop`}
                   initial={{ opacity: 0, y: 20 }}
@@ -309,9 +305,9 @@ function FilmCard({
                 </button>
               </div>
 
-              {/* ══════════════════════════════════════════
+              {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
                   INFO PANEL  (fixed height, no scroll)
-              ══════════════════════════════════════════ */}
+              â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
               <div
                 className="shrink-0 w-full flex flex-col pb-12 lg:pb-8  items-center justify-center relative"
                 style={{ minHeight: 230, background: "#040404" }}
@@ -328,7 +324,7 @@ function FilmCard({
                 <div className="w-full md:max-w-3xl lg:max-w-4xl flex flex-col items-center justify-center px-4 sm:px-6 relative z-10">
                   {/* HEADER SECTION */}
                   <div className="w-full flex  items-center justify-center gap-3 md:gap-6 mb-6">
-                    {/* LEFT — YEAR */}
+                    {/* LEFT â€” YEAR */}
                     <motion.div
                       {...stagger(0)}
                       className="flex items-center gap-4 lg:flex-1 lg:justify-end"
@@ -349,7 +345,7 @@ function FilmCard({
                       <div className=" h-8 w-px bg-white/15 rotate-[20deg]" />
                     </motion.div>
 
-                    {/* MOBILE — GENRES */}
+                    {/* MOBILE â€” GENRES */}
                     <motion.div
                       {...stagger(0)}
                       className="flex flex-wrap md:hidden items-center justify-center gap-3 sm:gap-4"
@@ -371,7 +367,7 @@ function FilmCard({
                       <div className="h-[1px] w-3  bg-red-600/30" />
                     </motion.div>
 
-                    {/* DESKTOP — GENRES */}
+                    {/* DESKTOP â€” GENRES */}
                     <motion.div
                       {...stagger(0)}
                       className="md:flex flex-wrap hidden items-center justify-center gap-3 sm:gap-4"
@@ -393,7 +389,7 @@ function FilmCard({
                       <div className="h-[1px] w-6 bg-red-600/30" />
                     </motion.div>
 
-                    {/* RIGHT — RUNTIME */}
+                    {/* RIGHT â€” RUNTIME */}
                     <motion.div
                       {...stagger(0)}
                       className="flex items-center gap-4 lg:flex-1 lg:justify-start"
@@ -402,7 +398,7 @@ function FilmCard({
 
                       <div className="flex flex-col items-center lg:items-start">
                         <span className="text-[10px] hidden md:block sm:text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-1">
-                          Duration
+                          {item.type === "tv" ? "Series" : "Duration"}
                         </span>
 
                         <div className="flex items-center gap-2">
@@ -485,7 +481,7 @@ function FilmCard({
 
   if (!isVisible) return null;
 
-  // ─── Card (poster) ────────────────────────────────────────────────────────
+  // â”€â”€â”€ Card (poster) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   return (
     <>
       <motion.div

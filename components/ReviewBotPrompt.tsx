@@ -54,10 +54,12 @@ export default function ReviewBotPrompt() {
 
   const closePanel = () => {
     setOpen(false);
+    document.body.classList.remove("overflow-hidden");
   };
 
   const openPanel = () => {
     setOpen(true);
+    document.body.classList.add("overflow-hidden");
   };
 
   useEffect(() => {
@@ -121,9 +123,7 @@ export default function ReviewBotPrompt() {
         {panelMounted && (
           <div
             className={`pointer-events-auto absolute left-1/2 top-1/2 w-[calc(100vw-2rem)] max-w-[22rem] -translate-x-1/2 -translate-y-1/2 transform transition-all duration-200 ease-out sm:max-w-[28rem] ${
-              open
-                ? "opacity-100 scale-100"
-                : "opacity-0 scale-[0.97]"
+              open ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"
             }`}
           >
             <div className="absolute -inset-2 rounded-[30px] bg-red-500/10 blur-2xl" />
@@ -209,22 +209,18 @@ export default function ReviewBotPrompt() {
         )}
 
         {!open && (
-          <div className="pointer-events-auto absolute bottom-4 right-4 flex justify-end sm:bottom-6 sm:right-6">
-            <button
-              type="button"
-              onClick={openPanel}
-              aria-label="Open feedback panel"
-              className="group relative h-12 w-12 cursor-pointer overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] sm:h-14 sm:w-14"
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,44,54,0.22),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.05),transparent_60%)]" />
-
-              <div className="relative flex h-full w-full items-center justify-center">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500/16 text-red-300 ring-1 ring-inset ring-red-400/30 sm:h-10 sm:w-10">
-                  <MessageCircleHeart className="h-4 w-4 sm:h-5 sm:w-5" />
-                </div>
+          <button
+            type="button"
+            onClick={openPanel}
+            aria-label="Open feedback panel"
+            className="group fixed z-50 cursor-pointer bottom-4 right-4  h-12 w-12  overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] sm:h-14 sm:w-14"
+          >
+            <div className="relative flex h-full w-full items-center justify-center">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500/16 text-red-300 ring-1 ring-inset ring-red-400/30 sm:h-10 sm:w-10">
+                <MessageCircleHeart className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-            </button>
-          </div>
+            </div>
+          </button>
         )}
       </div>
     </>

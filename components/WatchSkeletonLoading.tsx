@@ -1,7 +1,7 @@
 "use client";
 
 const pulse =
-  "animate-pulse rounded-xl border border-white/10 bg-gradient-to-br from-white/10 to-white/[0.03]";
+  "animate-pulse rounded-xl bg-gradient-to-br from-white/10 to-white/[0.03]";
 
 const WatchSkeletonLoading = () => {
   return (

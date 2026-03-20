@@ -312,7 +312,10 @@ export function PlaceholdersAndVanishInput({
   };
 
   const showAutocompletePanel =
-    enableAutocomplete && showSuggestions && value.trim().length >= 2;
+    enableAutocomplete &&
+    showSuggestions &&
+    value.trim().length >= 2 &&
+    (isSuggestionsLoading || suggestions.length > 0);
 
   return (
     <div ref={rootRef} className="relative w-full max-w-xl mx-auto">
@@ -421,21 +424,15 @@ export function PlaceholdersAndVanishInput({
         <div className="absolute left-0 right-0 top-[calc(100%+0.6rem)] z-[120] overflow-hidden rounded-2xl border border-white/10 bg-[#0c0c0e]/fb backdrop-blur-2xl shadow-[0_24px_80px_rgba(0,0,0,0.7)] animate-in fade-in zoom-in-95 duration-200">
           {isSuggestionsLoading ? (
             <div className="p-3 space-y-2">
-              {[...Array(4)].map((_, i) => (
+              {[...Array(5)].map((_, i) => (
                 <div key={i} className="flex items-center gap-3 p-2">
-                  <div className="h-9 w-9 animate-pulse rounded-full bg-white/5" />
+                  <div className="h-10 w-10 animate-pulse rounded-md bg-white/8 ring-1 ring-white/10" />
                   <div className="flex-1 space-y-2">
                     <div className="h-3 w-1/3 animate-pulse rounded bg-white/10" />
                     <div className="h-2 w-1/5 animate-pulse rounded bg-white/5" />
                   </div>
                 </div>
               ))}
-            </div>
-          ) : suggestions.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 text-center">
-              <p className="text-sm font-medium text-white/40">
-                No matches found
-              </p>
             </div>
           ) : (
             <div className="max-h-[440px] overflow-y-auto scrollbar-hide py-2">
@@ -475,17 +472,14 @@ export function PlaceholdersAndVanishInput({
                               width={40}
                               height={40}
                               className={cn(
-                                "h-10 w-10 object-cover ring-1 ring-white/10 transition-all duration-300",
-                                suggestion.category === "person"
-                                  ? "rounded-full"
-                                  : "rounded-md",
+                                "h-10 w-10 rounded-md object-cover ring-1 ring-white/10 transition-all duration-300",
                                 isActive
                                   ? "scale-110 ring-white/30"
                                   : "grayscale-[0.4]",
                               )}
                             />
                           ) : (
-                            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-white/5 text-[10px] font-bold text-white/40 ring-1 ring-white/10">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-white/8 text-[10px] font-bold text-white/40 ring-1 ring-white/10">
                               {suggestion.category?.charAt(0).toUpperCase()}
                             </div>
                           )}
