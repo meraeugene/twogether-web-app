@@ -52,11 +52,19 @@ export function formatPrivateRoomJoinError() {
   return "This private party is only open to the host's friends. Add each other first, then try the code again.";
 }
 
+export function formatActiveRoomConflictError(movieTitle?: string | null) {
+  return movieTitle
+    ? `You are already in "${movieTitle}". Leave that room first before joining or creating another one.`
+    : "You are already in another watch party. Leave that room first before joining or creating another one.";
+}
+
 export async function getExistingActiveRoomForUser(
   supabase: ServerSupabaseClient,
   userId: string,
 ) {
-  const { data, error } = await supabase
+  const recentThresholdIso = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+
+  const { data: ownedRoom, error: ownedRoomError } = await supabase
     .from("watch_party_rooms")
     .select("id")
     .or(`host_user_id.eq.${userId},guest_user_id.eq.${userId}`)
@@ -65,8 +73,31 @@ export async function getExistingActiveRoomForUser(
     .limit(1)
     .maybeSingle();
 
-  if (error) throw new Error(error.message);
-  return data;
+  if (ownedRoomError) throw new Error(ownedRoomError.message);
+  if (ownedRoom) return ownedRoom;
+
+  const { data: recentPresence, error: presenceError } = await supabase
+    .from("watch_party_presence")
+    .select("room_id, last_seen")
+    .eq("user_id", userId)
+    .eq("is_online", true)
+    .gt("last_seen", recentThresholdIso)
+    .order("last_seen", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (presenceError) throw new Error(presenceError.message);
+  if (!recentPresence?.room_id) return null;
+
+  const { data: activeRoom, error: activeRoomError } = await supabase
+    .from("watch_party_rooms")
+    .select("id")
+    .eq("id", recentPresence.room_id)
+    .in("status", ["pending", "active"])
+    .maybeSingle();
+
+  if (activeRoomError) throw new Error(activeRoomError.message);
+  return activeRoom;
 }
 
 export async function getAcceptedFriendIds(

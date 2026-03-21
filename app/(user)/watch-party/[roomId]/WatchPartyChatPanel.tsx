@@ -93,17 +93,14 @@ export default function WatchPartyChatPanel({
   };
 
   return (
-    <aside className="flex min-h-[520px] max-h-[72vh] flex-col overflow-hidden rounded-[24px] border border-white/10 bg-[#0B0B0B]/80 shadow-2xl backdrop-blur-3xl sm:min-h-[620px] sm:max-h-[78vh] sm:rounded-[28px] xl:sticky xl:top-28 xl:h-[calc(100vh-8rem)] xl:max-h-[calc(100vh-8rem)] xl:border-white/12 xl:bg-[#090909]/90">
-      <div className="flex items-center justify-between border-b border-white/[0.03] bg-gradient-to-b from-white/[0.08] to-transparent px-4 py-4 sm:px-6 sm:py-5">
+    <aside className="flex min-h-[520px] max-h-[72vh] flex-col overflow-hidden rounded-[24px]  sm:min-h-[620px] sm:max-h-[78vh] sm:rounded-[28px] xl:sticky xl:top-28 xl:h-[calc(100vh-8rem)] xl:max-h-[calc(100vh-8rem)] bg-black/50 backdrop-blur-3xl">
+      <div className="flex items-center border-b border-white/[0.05] bg-gradient-to-b from-white/[0.1] to-transparent px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-pulse" />
           <p className="text-[10px] font-medium uppercase tracking-widest text-white/90">
             Live Discussion
           </p>
         </div>
-        <span className="rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] text-white/55">
-          {messages.length} msgs
-        </span>
       </div>
 
       <div
@@ -223,13 +220,13 @@ export default function WatchPartyChatPanel({
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 sm:p-5">
+      <div className="bg-gradient-to-t from-white/[0.08] via-white/[0.03] to-transparent p-3 sm:p-5">
         <form
           ref={formRef}
           onSubmit={handleFormSubmit}
-          className="group relative grid grid-cols-[minmax(0,1fr)_44px] items-end gap-2 sm:flex"
+          className="group relative grid grid-cols-[minmax(0,1fr)_52px] items-end gap-2 sm:flex sm:items-end"
         >
-          <div className="relative min-w-0 flex items-end rounded-xl border border-white/10 bg-white/[0.03] pl-2 pr-1 shadow-inner transition-all duration-500 focus-within:border-red-500/40 focus-within:bg-white/[0.06] sm:flex-1 xl:rounded-2xl">
+          <div className="relative min-w-0 flex min-h-[52px] items-end rounded-xl border border-white/10 bg-white/[0.03] pl-2 pr-1 shadow-inner transition-all duration-500 focus-within:border-red-500/40 focus-within:bg-white/[0.06] sm:min-h-[48px] sm:flex-1 xl:rounded-2xl">
             <textarea
               ref={textareaRef}
               value={input}
@@ -241,7 +238,7 @@ export default function WatchPartyChatPanel({
                 }
               }}
               rows={1}
-              className="min-h-[44px] max-h-40 flex-1 resize-none overflow-y-auto overflow-x-hidden bg-transparent px-2.5 py-2.5 text-sm font-light leading-6 text-white outline-none placeholder:text-white/20 [overflow-wrap:anywhere] sm:min-h-[48px] sm:max-h-44 sm:px-3 sm:py-3"
+              className="min-h-[48px] max-h-40 flex-1 resize-none overflow-y-auto overflow-x-hidden bg-transparent px-2.5 py-3 text-sm font-light leading-6 text-white outline-none placeholder:text-white/20 [overflow-wrap:anywhere] sm:min-h-[48px] sm:max-h-44 sm:px-3 sm:py-3"
               placeholder="Say something..."
             />
 
@@ -271,7 +268,7 @@ export default function WatchPartyChatPanel({
 
           <button
             disabled={!input.trim()}
-            className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-red-600 text-white shadow-[0_5px_15px_rgba(220,38,38,0.3)] transition-all hover:scale-105 hover:bg-red-500 active:scale-95 disabled:cursor-not-allowed disabled:opacity-45 sm:h-12 sm:w-12"
+            className="flex h-[52px] w-[52px] shrink-0 self-end cursor-pointer items-center justify-center rounded-xl bg-red-600 text-white shadow-[0_5px_15px_rgba(220,38,38,0.3)] transition-all hover:scale-105 hover:bg-red-500 active:scale-95 disabled:cursor-not-allowed disabled:opacity-45 sm:h-12 sm:w-12"
           >
             <IoSend size={16} />
           </button>

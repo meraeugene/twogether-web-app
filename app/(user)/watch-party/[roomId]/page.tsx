@@ -13,10 +13,24 @@ export default async function WatchPartyRoomPage({
   if (!currentUser) redirect("/");
 
   const roomId = (await params).roomId;
-  const room = await getWatchPartyRoom(roomId, currentUser.id);
+  try {
+    const room = await getWatchPartyRoom(roomId, currentUser.id);
 
-  if (!room) return <ErrorMessage title="Watch room not found." />;
+    if (!room) return <ErrorMessage title="Watch room not found." />;
 
-  return <WatchPartyRoomClient room={room} currentUserId={currentUser.id} />;
+    return <WatchPartyRoomClient room={room} currentUserId={currentUser.id} />;
+  } catch (error) {
+    return (
+      <ErrorMessage
+        title="Unable to join this room"
+        message={
+          error instanceof Error
+            ? error.message
+            : "You can't open this room right now."
+        }
+        actionLabel="Back to Watch Party"
+        href="/watch-party"
+      />
+    );
+  }
 }
-

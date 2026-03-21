@@ -179,7 +179,9 @@ function FilmCard({
   const runtimeLabel =
     item.type === "movie"
       ? item.duration
-        ? `${Math.floor(item.duration / 60)}h ${item.duration % 60}m`
+        ? item.duration >= 60
+          ? `${Math.floor(item.duration / 60)}h ${item.duration % 60}m`
+          : `${item.duration}m`
         : null
       : tvMetaLabel;
 

@@ -20,5 +20,28 @@ export type NotificationItem = {
     display_name: string | null;
     avatar_url: string | null;
   } | null;
+  movie: {
+    room_id: string | null;
+    title: string | null;
+    poster_url: string | null;
+  } | null;
 };
 
+export type InviteFeedItem = {
+  id: string;
+  room_id: string;
+  status: "pending" | "accepted" | "rejected" | "cancelled";
+  created_at: string;
+  responded_at: string | null;
+  room_link: string;
+  movie: {
+    title: string;
+    poster_url: string | null;
+  };
+  counterpart: {
+    id: string;
+    username: string;
+    display_name: string | null;
+    avatar_url: string | null;
+  } | null;
+};

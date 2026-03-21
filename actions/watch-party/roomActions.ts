@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import type { WatchPartyRoom, WatchingNowItem } from "@/types/watchParty";
 import {
   canAccessRoom,
+  formatActiveRoomConflictError,
   formatPrivateRoomJoinError,
   getAcceptedFriendIds,
   getExistingActiveRoomForUser,
@@ -30,20 +31,22 @@ export async function createWatchPartyRoom(input: {
   );
 
   if (existingRoom) {
-    const [{ data: existingRoomData, error: existingRoomError }, { data: hostPresence }] =
-      await Promise.all([
-        supabase
-          .from("watch_party_rooms")
-          .select("id, host_user_id, guest_user_id")
-          .eq("id", existingRoom.id)
-          .maybeSingle(),
-        supabase
-          .from("watch_party_presence")
-          .select("is_online, last_seen")
-          .eq("room_id", existingRoom.id)
-          .eq("user_id", input.hostUserId)
-          .maybeSingle(),
-      ]);
+    const [
+      { data: existingRoomData, error: existingRoomError },
+      { data: hostPresence },
+    ] = await Promise.all([
+      supabase
+        .from("watch_party_rooms")
+        .select("id, host_user_id, guest_user_id, movie_title")
+        .eq("id", existingRoom.id)
+        .maybeSingle(),
+      supabase
+        .from("watch_party_presence")
+        .select("is_online, last_seen")
+        .eq("room_id", existingRoom.id)
+        .eq("user_id", input.hostUserId)
+        .maybeSingle(),
+    ]);
 
     if (existingRoomError) throw new Error(existingRoomError.message);
 
@@ -65,9 +68,7 @@ export async function createWatchPartyRoom(input: {
 
       if (staleDeleteError) throw new Error(staleDeleteError.message);
     } else {
-      throw new Error(
-        "You already have an active watch party. Leave your current room before creating another one.",
-      );
+      throw new Error(formatActiveRoomConflictError(existingRoomData?.movie_title));
     }
   }
 
@@ -107,6 +108,18 @@ export async function getWatchPartyRoom(roomId: string, userId: string) {
 
   if (roomError) throw new Error(roomError.message);
   if (!room) return null;
+
+  const existingRoom = await getExistingActiveRoomForUser(supabase, userId);
+  if (existingRoom && existingRoom.id !== roomId) {
+    const { data: currentRoom, error: currentRoomError } = await supabase
+      .from("watch_party_rooms")
+      .select("movie_title")
+      .eq("id", existingRoom.id)
+      .maybeSingle();
+
+    if (currentRoomError) throw new Error(currentRoomError.message);
+    throw new Error(formatActiveRoomConflictError(currentRoom?.movie_title));
+  }
 
   const hasAccess = await canAccessRoom(supabase, room as WatchPartyRoom, userId);
   if (!hasAccess) return null;
@@ -185,6 +198,18 @@ export async function joinWatchPartyByCode(input: {
 
   if (!room) throw new Error("Room code not found.");
 
+  const existingRoom = await getExistingActiveRoomForUser(supabase, input.userId);
+  if (existingRoom && existingRoom.id !== room.id) {
+    const { data: currentRoom, error: currentRoomError } = await supabase
+      .from("watch_party_rooms")
+      .select("movie_title")
+      .eq("id", existingRoom.id)
+      .maybeSingle();
+
+    if (currentRoomError) throw new Error(currentRoomError.message);
+    throw new Error(formatActiveRoomConflictError(currentRoom?.movie_title));
+  }
+
   const hasAccess = await canAccessRoom(supabase, room as WatchPartyRoom, input.userId);
   if (!hasAccess) throw new Error(formatPrivateRoomJoinError());
 
@@ -225,35 +250,46 @@ export async function joinWatchPartyByCode(input: {
 export async function getWatchingNowRooms(limit = 10, userId?: string) {
   const supabase = await createClient();
   const thresholdIso = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+  const { data: rooms, error: roomError } = await supabase
+    .from("watch_party_rooms")
+    .select(
+      "id, host_user_id, guest_user_id, movie_title, movie_slug, movie_type, movie_tmdb_id, poster_url, status, access_type",
+    )
+    .in("status", ["pending", "active"]);
+
+  if (roomError) throw new Error(roomError.message);
+  if (!rooms?.length) return [] as WatchingNowItem[];
+
+  const roomIds = rooms.map((room) => room.id);
+  const memberUserIds = [
+    ...new Set(
+      rooms.flatMap((room) => [room.host_user_id, room.guest_user_id].filter(Boolean)),
+    ),
+  ] as string[];
 
   const { data: presenceRows, error: presenceError } = await supabase
     .from("watch_party_presence")
     .select("room_id, user_id, is_online, last_seen")
+    .in("room_id", roomIds)
     .eq("is_online", true)
     .gt("last_seen", thresholdIso);
 
   if (presenceError) throw new Error(presenceError.message);
-  if (!presenceRows?.length) return [] as WatchingNowItem[];
 
-  const roomIds = [...new Set(presenceRows.map((row) => row.room_id))];
-  const userIds = [...new Set(presenceRows.map((row) => row.user_id))];
+  const viewerIds = [
+    ...new Set(
+      (presenceRows ?? [])
+        .map((row) => row.user_id)
+        .filter((id) => !memberUserIds.includes(id)),
+    ),
+  ];
 
-  const [{ data: rooms, error: roomError }, { data: users, error: usersError }] =
-    await Promise.all([
-      supabase
-        .from("watch_party_rooms")
-        .select(
-          "id, host_user_id, movie_title, movie_slug, movie_type, movie_tmdb_id, poster_url, status, access_type",
-        )
-        .in("id", roomIds)
-        .in("status", ["pending", "active"]),
-      supabase
-        .from("users")
-        .select("id, username, display_name, avatar_url")
-        .in("id", userIds),
-    ]);
+  const allUserIds = [...new Set([...memberUserIds, ...viewerIds])];
+  const { data: users, error: usersError } = await supabase
+    .from("users")
+    .select("id, username, display_name, avatar_url")
+    .in("id", allUserIds);
 
-  if (roomError) throw new Error(roomError.message);
   if (usersError) throw new Error(usersError.message);
 
   const allowedPrivateHostIds = new Set<string>(
@@ -264,35 +300,54 @@ export async function getWatchingNowRooms(limit = 10, userId?: string) {
   const userMap = new Map((users ?? []).map((user) => [user.id, user]));
   const grouped = new Map<string, WatchingNowItem>();
 
-  for (const row of presenceRows) {
-    const room = roomMap.get(row.room_id);
-    const user = userMap.get(row.user_id);
-    if (!room || !user) continue;
+  for (const room of rooms) {
+    grouped.set(room.id, {
+      room_id: room.id,
+      movie_title: room.movie_title,
+      movie_slug: room.movie_slug,
+      movie_type: room.movie_type,
+      movie_tmdb_id: room.movie_tmdb_id,
+      poster_url: room.poster_url ?? null,
+      access_type: (room.access_type ?? "public") as "public" | "private",
+      is_accessible:
+        (room.access_type ?? "public") === "public" ||
+        (!!userId && allowedPrivateHostIds.has(room.host_user_id)),
+      watching_users: [],
+      watching_count: 0,
+    });
+  }
 
-    if (!grouped.has(row.room_id)) {
-      grouped.set(row.room_id, {
-        room_id: row.room_id,
-        movie_title: room.movie_title,
-        movie_slug: room.movie_slug,
-        movie_type: room.movie_type,
-        movie_tmdb_id: room.movie_tmdb_id,
-        poster_url: room.poster_url ?? null,
-        access_type: (room.access_type ?? "public") as "public" | "private",
-        is_accessible:
-          (room.access_type ?? "public") === "public" ||
-          (!!userId && allowedPrivateHostIds.has(room.host_user_id)),
-        watching_users: [],
-        watching_count: 0,
-      });
-    }
+  for (const [roomId, item] of grouped) {
+    const room = roomMap.get(roomId);
+    if (!room) continue;
 
-    const item = grouped.get(row.room_id)!;
-    item.watching_users.push(user);
+    const memberIds = [
+      room.host_user_id,
+      room.guest_user_id,
+      ...(presenceRows ?? [])
+        .filter((row) => row.room_id === roomId)
+        .map((row) => row.user_id),
+    ].filter(Boolean) as string[];
+
+    const uniqueMemberIds = [...new Set(memberIds)];
+    item.watching_users = uniqueMemberIds
+      .map((id) => userMap.get(id))
+      .filter((user): user is NonNullable<typeof user> => Boolean(user));
     item.watching_count = item.watching_users.length;
   }
 
   return [...grouped.values()]
-    .sort((a, b) => b.watching_count - a.watching_count)
+    .filter((item) => item.watching_count > 0)
+    .sort((a, b) => {
+      if (b.watching_count !== a.watching_count) {
+        return b.watching_count - a.watching_count;
+      }
+
+      const titleCompare = a.movie_title.localeCompare(b.movie_title);
+      if (titleCompare !== 0) return titleCompare;
+
+      return a.room_id.localeCompare(b.room_id);
+    })
     .slice(0, limit);
 }
 

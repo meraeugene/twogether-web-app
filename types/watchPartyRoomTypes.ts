@@ -15,6 +15,7 @@ export type RoomData = {
   movie_title: string;
   movie_type: "movie" | "tv";
   stream_url: string;
+  poster_url?: string | null;
   status: string;
   access_type: "public" | "private";
   host: RoomUser | null;

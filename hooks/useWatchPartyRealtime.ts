@@ -31,8 +31,6 @@ export function useWatchPartyRealtime({
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    let active = true;
-
     const heartbeat = async (isOnline: boolean) => {
       try {
         await updateWatchPartyPresence({
@@ -48,21 +46,11 @@ export function useWatchPartyRealtime({
     void heartbeat(true);
 
     const interval = setInterval(() => {
-      if (active) void heartbeat(true);
+      void heartbeat(true);
     }, 30000);
 
-    const handlePageHide = () => {
-      active = false;
-      void heartbeat(false);
-    };
-
-    window.addEventListener("pagehide", handlePageHide);
-
     return () => {
-      active = false;
       clearInterval(interval);
-      window.removeEventListener("pagehide", handlePageHide);
-      void heartbeat(false);
     };
   }, [roomId, currentUserId]);
 

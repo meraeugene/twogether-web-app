@@ -1,7 +1,12 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { areFriends, getAcceptedFriendIds } from "./access";
+import {
+  areFriends,
+  formatActiveRoomConflictError,
+  getAcceptedFriendIds,
+  getExistingActiveRoomForUser,
+} from "./access";
 
 export async function getInviteableFriends(userId: string, roomId?: string) {
   const supabase = await createClient();
@@ -68,7 +73,7 @@ export async function createWatchPartyInvite(input: {
 
   const { data: room, error: roomError } = await supabase
     .from("watch_party_rooms")
-    .select("id, host_user_id, guest_user_id, movie_title")
+    .select("id, host_user_id, guest_user_id, movie_title, poster_url")
     .eq("id", input.roomId)
     .maybeSingle();
 
@@ -139,6 +144,7 @@ export async function createWatchPartyInvite(input: {
       invite_id: invite.id,
       room_id: room.id,
       movie_title: room.movie_title,
+      poster_url: room.poster_url ?? null,
     },
   });
 
@@ -164,6 +170,20 @@ export async function respondWatchPartyInvite(input: {
   if (inviteError) throw new Error(inviteError.message);
   if (!invite) throw new Error("Invite not found.");
   if (invite.status !== "pending") throw new Error("Invite has already been handled.");
+
+  if (input.action === "accepted") {
+    const existingRoom = await getExistingActiveRoomForUser(supabase, input.userId);
+    if (existingRoom && existingRoom.id !== invite.room_id) {
+      const { data: currentRoom, error: currentRoomError } = await supabase
+        .from("watch_party_rooms")
+        .select("movie_title")
+        .eq("id", existingRoom.id)
+        .maybeSingle();
+
+      if (currentRoomError) throw new Error(currentRoomError.message);
+      throw new Error(formatActiveRoomConflictError(currentRoom?.movie_title));
+    }
+  }
 
   const respondedAt = new Date().toISOString();
 
@@ -212,7 +232,7 @@ export async function respondWatchPartyInvite(input: {
       .maybeSingle(),
     supabase
       .from("watch_party_rooms")
-      .select("movie_title")
+      .select("movie_title, poster_url")
       .eq("id", invite.room_id)
       .maybeSingle(),
   ]);
@@ -235,6 +255,8 @@ export async function respondWatchPartyInvite(input: {
     metadata: {
       invite_id: invite.id,
       room_id: invite.room_id,
+      poster_url: room?.poster_url ?? null,
+      movie_title: room?.movie_title ?? null,
     },
   });
 

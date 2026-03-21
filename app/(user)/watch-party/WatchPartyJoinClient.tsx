@@ -39,16 +39,20 @@ export default function WatchPartyJoinClient({
         });
         router.push(`/watch-party/${result.roomId}`);
       } catch (error) {
-        toast.error(
-          error instanceof Error ? error.message : "Unable to join room.",
-        );
+        const message =
+          error instanceof Error ? error.message : "Unable to join room.";
+        if (message.includes("Leave that room first")) {
+          toast.info(message);
+          return;
+        }
+        toast.error(message);
       }
     });
   };
 
   return (
     <main className="min-h-screen bg-black px-4 pb-16 pt-32 text-white sm:px-6  lg:px-24 xl:px-32 md:pt-36 2xl:px-26">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto pb-16">
         <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
           <div className="w-[80%] h-[50%] bg-red-900/20 blur-[150px] rounded-full" />
         </div>

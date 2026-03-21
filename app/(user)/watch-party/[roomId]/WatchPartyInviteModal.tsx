@@ -44,7 +44,7 @@ export default function WatchPartyInviteModal({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="flex max-h-[88vh] w-full flex-col overflow-hidden rounded-t-[28px] border border-white/10 bg-[#0B0B0C] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)] sm:max-h-[80vh] sm:max-w-md sm:rounded-[28px]"
+            className="flex min-h-[72dvh] max-h-[100dvh] w-full flex-col overflow-hidden rounded-t-[28px] border border-white/10 border-b-0 bg-[#0B0B0C] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)] sm:min-h-0 sm:max-h-[80vh] sm:max-w-md sm:rounded-[28px] sm:border-b"
           >
             <div className="px-4 pb-5 pt-4 sm:px-6 sm:pb-8 sm:pt-6">
               <div className="mb-4 flex items-center justify-between gap-4">
@@ -78,7 +78,7 @@ export default function WatchPartyInviteModal({
               </div>
             </div>
 
-            <div className="mx-3 min-h-0 flex-1 space-y-1 overflow-y-auto px-1.5 sm:mx-4 sm:px-2">
+            <div className="mx-3 min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-contain px-1.5 pb-2 sm:mx-4 sm:px-2">
               {isLoadingFriends ? (
                 <div className="flex flex-col items-center gap-3 py-10">
                   <div className="h-5 w-5 animate-spin rounded-full border-2 border-red-600 border-t-transparent" />
@@ -115,7 +115,7 @@ export default function WatchPartyInviteModal({
                             : "border border-transparent hover:bg-white/[0.04]"
                       }`}
                     >
-                      <div className="relative h-11 w-11 overflow-hidden rounded-full">
+                      <div className="relative h-11 w-11 shrink-0 overflow-visible rounded-full">
                         <Image
                           src={friend.avatar_url || "/default-avatar.png"}
                           alt=""
@@ -123,7 +123,7 @@ export default function WatchPartyInviteModal({
                           height={44}
                           className="h-11 w-11 rounded-full object-cover"
                         />
-                        <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-[#0B0B0C] bg-green-500" />
+                        <div className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[#0B0B0C] bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.75)]" />
                       </div>
 
                       <div className="min-w-0 flex-1 text-left">
@@ -160,8 +160,8 @@ export default function WatchPartyInviteModal({
               )}
             </div>
 
-            <div className="relative mt-2 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-4 sm:p-8">
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 rounded-b-[28px] bg-gradient-to-t from-black to-transparent" />
+            <div className="relative mt-2 flex flex-col gap-3 p-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] sm:flex-row sm:items-center sm:gap-4 sm:p-8">
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black to-transparent sm:rounded-b-[28px]" />
 
               <button
                 onClick={onClose}

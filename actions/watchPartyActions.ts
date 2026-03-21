@@ -11,6 +11,7 @@ import {
   updateWatchPartyPresence as updateWatchPartyPresenceImpl,
 } from "./watch-party/messageActions";
 import {
+  getWatchPartyInviteFeed as getWatchPartyInviteFeedImpl,
   getUnreadNotificationCount as getUnreadNotificationCountImpl,
   getUserNotifications as getUserNotificationsImpl,
   markAllNotificationsRead as markAllNotificationsReadImpl,
@@ -63,6 +64,14 @@ export async function getUserNotifications(userId: string, limit = 25) {
 
 export async function getUnreadNotificationCount(userId: string) {
   return getUnreadNotificationCountImpl(userId);
+}
+
+export async function getWatchPartyInviteFeed(
+  userId: string,
+  direction: "sent" | "received",
+  limit = 25,
+) {
+  return getWatchPartyInviteFeedImpl(userId, direction, limit);
 }
 
 export async function markNotificationRead(notificationId: string, userId: string) {

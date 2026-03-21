@@ -27,6 +27,9 @@ export default function WatchTogetherButton({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [pendingAccessType, setPendingAccessType] = useState<
+    "public" | "private" | null
+  >(null);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
@@ -38,6 +41,8 @@ export default function WatchTogetherButton({
 
   const handleCreateRoom = (accessType: "public" | "private") => {
     startTransition(async () => {
+      setPendingAccessType(accessType);
+
       try {
         const result = await createWatchPartyRoom({
           hostUserId: currentUserId,
@@ -52,11 +57,21 @@ export default function WatchTogetherButton({
         setOpen(false);
         router.push(`/watch-party/${result.roomId}`);
       } catch (error) {
-        toast.error(
+        const message =
           error instanceof Error
             ? error.message
-            : "Unable to start the watch party.",
+            : "Unable to start the watch party.";
+        if (message.includes("Leave that room first")) {
+          toast.info(message);
+          return;
+        }
+        toast.error(
+          message.includes("Server Components render")
+            ? "Unable to start the watch party right now. Please try again."
+            : message,
         );
+      } finally {
+        setPendingAccessType(null);
       }
     });
   };
@@ -114,7 +129,7 @@ export default function WatchTogetherButton({
 
                   <button
                     onClick={() => setOpen(false)}
-                    className="group rounded-2xl border border-white/5 bg-white/[0.03] p-3 text-white/20 transition-all duration-500 hover:border-red-600/50 hover:bg-red-600/20 hover:text-white active:scale-90 sm:p-4"
+                    className="group rounded-2xl border border-white/5 bg-white/[0.03] cursor-pointer p-3 text-white/20 transition-all duration-500 hover:border-red-600/50 hover:bg-red-600/20 hover:text-white active:scale-90 sm:p-4"
                   >
                     <IoClose size={20} className="sm:h-6 sm:w-6" />
                   </button>
@@ -143,7 +158,7 @@ export default function WatchTogetherButton({
                       </div>
 
                       <div className="pt-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-red-500 opacity-100 transition-all duration-500 sm:-translate-x-4 sm:opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100">
-                        {isPending ? (
+                        {isPending && pendingAccessType === "public" ? (
                           <>
                             <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
                             Starting...
@@ -178,7 +193,7 @@ export default function WatchTogetherButton({
                       </div>
 
                       <div className="pt-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white opacity-100 transition-all duration-500 sm:-translate-x-4 sm:opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100">
-                        {isPending ? (
+                        {isPending && pendingAccessType === "private" ? (
                           <>
                             <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
                             Setting up...
@@ -200,9 +215,7 @@ export default function WatchTogetherButton({
                     <span className="text-[9px] font-black uppercase tracking-wide text-red-600/90">
                       Playing Now
                     </span>
-                    <div
-                      className="max-w-[18rem] break-words text-xl italic leading-tight uppercase bg-gradient-to-b from-white to-white/60 bg-clip-text font-black tracking-tighter text-transparent"
-                    >
+                    <div className="max-w-[18rem] break-words text-xl italic leading-tight uppercase bg-gradient-to-b from-white to-white/60 bg-clip-text font-black tracking-tighter text-transparent">
                       {movieTitle}
                     </div>
                   </div>

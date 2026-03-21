@@ -8,4 +8,3 @@ export default async function WatchPartyJoinPage() {
 
   return <WatchPartyJoinClient currentUserId={currentUser.id} />;
 }
-

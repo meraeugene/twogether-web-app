@@ -43,7 +43,7 @@ export default function WatchPartyRoomClient({
         <div className="mb-8 flex flex-col justify-between gap-6 xl:flex-row xl:items-end">
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/70">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/75 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
                 {roomClient.currentRoom.access_type === "private" ? (
                   <>
                     <Lock className="h-3.5 w-3.5" />
@@ -68,7 +68,7 @@ export default function WatchPartyRoomClient({
 
             <div className="mt-4 flex flex-wrap items-center gap-3">
               {roomClient.privateRoomCode ? (
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   <span className="text-xs uppercase tracking-[0.14em] text-white/55">
                     Room Code
                   </span>
@@ -77,7 +77,7 @@ export default function WatchPartyRoomClient({
                   </span>
                   <button
                     onClick={roomClient.copyRoomKey}
-                    className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-white/10 bg-white/[0.05] px-2.5 py-1.5 text-xs text-white/80 transition hover:bg-white/[0.1]"
+                    className="inline-flex h-9 cursor-pointer items-center gap-1 rounded-md border border-white/10 bg-white/[0.05] px-3 text-xs text-white/80 transition hover:bg-white/[0.1]"
                   >
                     <Copy className="h-3.5 w-3.5" />
                     Copy Key
@@ -88,7 +88,7 @@ export default function WatchPartyRoomClient({
               {roomClient.isHost && (
                 <button
                   onClick={roomClient.openInviteModal}
-                  className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-black transition hover:bg-white/90"
+                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-md border border-white/10 bg-white px-3 text-xs font-semibold text-black transition hover:bg-white/90"
                 >
                   Invite Friends
                 </button>
@@ -97,7 +97,7 @@ export default function WatchPartyRoomClient({
               <button
                 onClick={roomClient.handleLeave}
                 disabled={roomClient.isLeaving}
-                className="inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-red-500/30 px-3 text-[11px] font-semibold transition hover:bg-red-500/40 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex h-9 cursor-pointer items-center rounded-md border border-white/10 bg-red-500/30 px-3 text-xs font-semibold transition hover:bg-red-500/40 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <span className="inline-flex items-center gap-1.5 leading-none">
                   {roomClient.isLeaving ? (
@@ -128,25 +128,29 @@ export default function WatchPartyRoomClient({
                   return (
                     <div
                       key={participant.id}
-                      className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-3"
+                      className="flex items-center gap-3 rounded-2xl border border-white/12 bg-white/[0.05] px-3 py-3 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
                     >
-                      <Image
-                        src={participant.avatar_url || "/default-avatar.png"}
-                        alt={participant.username}
-                        width={44}
-                        height={44}
-                        unoptimized
-                        className="h-11 w-11 rounded-full border border-white/15 object-cover"
-                      />
+                      <div className="relative shrink-0 overflow-visible">
+                        <Image
+                          src={participant.avatar_url || "/default-avatar.png"}
+                          alt={participant.username}
+                          width={44}
+                          height={44}
+                          unoptimized
+                          className="h-11 w-11 rounded-full border border-white/15 object-cover"
+                        />
+                        <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[#111] bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.75)]" />
+                      </div>
                       <div className="min-w-0">
                         <p className="truncate text-sm font-semibold text-white">
                           {participantName}
                         </p>
-                        <div className="mt-1 flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-white/45">
+                        <div className="mt-1 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-white/45">
                           <span>@{participant.username}</span>
+                          <span className="text-green-400/90">Online</span>
                           {isHost ? (
-                            <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/30 bg-amber-500/10 px-2 py-1 font-semibold text-amber-200">
-                              <Crown className="h-3 w-3" />
+                            <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/30 bg-amber-500/10 px-2 py-1 text-[9px] font-semibold tracking-[0.2em] text-amber-200 lg:px-2.5">
+                              <Crown className="h-3 w-3 shrink-0" />
                               Host
                             </span>
                           ) : null}
@@ -156,7 +160,7 @@ export default function WatchPartyRoomClient({
                   );
                 })
               ) : (
-                <div className="flex min-h-20 items-center rounded-2xl border border-dashed border-white/10 bg-black/20 px-4 text-sm text-white/45 sm:col-span-2">
+                <div className="flex min-h-20 items-center rounded-2xl border border-dashed border-white/12 bg-white/[0.03] px-4 text-sm text-white/45 backdrop-blur-xl sm:col-span-2">
                   Waiting for someone else to join the room.
                 </div>
               )}
@@ -172,7 +176,7 @@ export default function WatchPartyRoomClient({
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(430px,500px)] xl:items-stretch 2xl:grid-cols-[minmax(0,1fr)_450px]">
           <div className="group relative transition-all duration-700 ease-in-out xl:h-[calc(100vh-8rem)]">
             <div className="absolute -inset-1 bg-gradient-to-r from-red-600/20 to-transparent blur-2xl opacity-100 transition duration-1000" />
-            <div className="relative aspect-video w-full overflow-hidden rounded-[2rem] border border-white/5 bg-black xl:h-full xl:aspect-auto">
+            <div className="relative aspect-video w-full overflow-hidden rounded-[2rem] border border-white/8 bg-white/[0.04] backdrop-blur-xl xl:h-full xl:aspect-auto">
               <iframe
                 src={roomClient.currentRoom.stream_url}
                 className="h-full w-full scale-[1.01]"
