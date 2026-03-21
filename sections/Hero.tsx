@@ -120,16 +120,13 @@ export default function TwogetherHero() {
 
       {/* HERO CONTENT */}
       <div className="relative z-30 text-center px-6 sm:px-8 md:px-10 max-w-5xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+        <div
           className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 md:mb-10 rounded-full border border-red-500/30 bg-red-500/5 backdrop-blur-md"
         >
           <span className="text-[10px] font-bold tracking-[0.2em] text-red-400 uppercase">
             Watch Movies Anytime
           </span>
-        </motion.div>
+        </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[100px] font-medium tracking-tighter text-white mb-6 md:mb-8 leading-[0.9]">
           Watch Shows <br />
