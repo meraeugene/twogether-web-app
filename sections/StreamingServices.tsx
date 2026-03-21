@@ -113,10 +113,12 @@ export default function StreamingServices() {
         {/* HEADER */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 sm:gap-8 mb-10 sm:mb-14 md:mb-20">
           <div className="max-w-2xl">
-            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-medium tracking-tighter text-white leading-[0.95]">
+            <h2 className="text-3xl sm:text-5xl 2xl:text-7xl font-medium tracking-tighter text-white leading-[0.95]">
               Every platform,
               <br />
-              <span className="text-neutral-500">seamlessly integrated.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
+                seamlessly integrated.
+              </span>
             </h2>
           </div>
 

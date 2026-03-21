@@ -13,6 +13,7 @@ import { CurrentUser } from "@/types/user";
 import { signOut } from "@/actions/authActions";
 import type { Variants } from "framer-motion";
 import { createClient } from "@/utils/supabase/client";
+import NotificationBell from "./NotificationBell";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 12 },
@@ -197,11 +198,11 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
     <motion.div
       animate={{ y: hide ? -100 : 0, opacity: hide ? 0 : 1 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className={`fixed top-5 left-1/2 -translate-x-1/2 z-[60] overflow-visible w-[calc(100%-32px)] max-w-[440px] 2xl:w-auto 2xl:max-w-none font-[family-name:var(--font-geist-sans)] ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
+      className={`fixed top-5 left-1/2 -translate-x-1/2 z-[60] overflow-visible w-[calc(100%-32px)] max-w-[440px] xl:w-auto xl:max-w-none font-[family-name:var(--font-geist-sans)] ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
     >
       {/* ── DESKTOP BAR ── */}
       <div
-        className={`hidden  bg-black 2xl:inline-flex items-center space-x-2 px-[8px] py-[6px] rounded-full ${shell}`}
+        className={`hidden  bg-black xl:inline-flex items-center space-x-2 px-[8px] py-[6px] rounded-full ${shell}`}
       >
         <Link
           href="/"
@@ -241,6 +242,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
               label="Profile"
               active={pathname === profileHref}
             />
+            <NotificationBell userId={user.id} />
             <div
               onClick={logout}
               className="group relative flex items-center justify-center w-[40px] h-[40px] rounded-[11px] text-[20px] text-white/40 hover:text-red-400 hover:bg-red-500/[0.12] transition-all duration-150 cursor-pointer"
@@ -263,7 +265,7 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
 
       {/* ── MOBILE TOP BAR ── */}
       <div
-        className={`lg:hidden bg-black flex items-center justify-between px-5 p-3 ${shell} ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
+        className={`xl:hidden bg-black flex items-center justify-between px-5 p-3 ${shell} ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
       >
         <Link
           href="/"
@@ -272,13 +274,16 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
         >
           <span className="text-red-500">Two</span>gether
         </Link>
-        <button
-          onClick={() => setMenuOpen((p) => !p)}
-          aria-label="Toggle menu"
-          className="text-white lg:hidden text-2xl p-1 -mr-1"
-        >
-          {menuOpen ? <HiX /> : <HiOutlineMenuAlt3 />}
-        </button>
+        <div className="flex items-center gap-1">
+          {user?.id && <NotificationBell userId={user.id} />}
+          <button
+            onClick={() => setMenuOpen((p) => !p)}
+            aria-label="Toggle menu"
+            className="text-white xl:hidden text-2xl p-1 -mr-1"
+          >
+            {menuOpen ? <HiX /> : <HiOutlineMenuAlt3 />}
+          </button>
+        </div>
       </div>
 
       {/* ── MOBILE DRAWER ── */}

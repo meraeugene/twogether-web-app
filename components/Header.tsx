@@ -7,8 +7,12 @@ import PresenceManager from "@/components/PresenceManager";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
 import { createClient } from "@/utils/supabase/client";
 
-export default function Header() {
-  const [user, setUser] = useState<CurrentUser | null>(null);
+export default function Header({
+  initialUser,
+}: {
+  initialUser: CurrentUser | null;
+}) {
+  const [user, setUser] = useState<CurrentUser | null>(initialUser);
 
   useEffect(() => {
     const supabase = createClient();

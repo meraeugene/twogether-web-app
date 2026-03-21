@@ -20,6 +20,7 @@ import BackButton from "@/components/BackButton";
 import TMDBReviewForm from "./TMDBReviewForm";
 import TMDBMovieReviews from "./TMDBMovieReviews";
 import { AnimatePresence, motion } from "framer-motion";
+import WatchTogetherButton from "@/components/WatchTogetherButton";
 
 type SWRResponse = {
   recommendation: Recommendation;
@@ -135,6 +136,19 @@ export default function TMDBWatchPage({
 
               {currentUserId && (
                 <div className="flex gap-3 md:flex-row flex-col ">
+                  <WatchTogetherButton
+                    currentUserId={currentUserId}
+                    movieTmdbId={recommendation.tmdb_id}
+                    movieTitle={recommendation.title}
+                    movieType={recommendation.type}
+                    streamUrl={
+                      Array.isArray(recommendation.stream_url)
+                        ? recommendation.stream_url[0]
+                        : recommendation.stream_url
+                    }
+                    posterUrl={recommendation.poster_url}
+                  />
+
                   <ToggleWatchlistButton
                     currentUserId={currentUserId}
                     initialInWatchlist={initialInWatchlist}

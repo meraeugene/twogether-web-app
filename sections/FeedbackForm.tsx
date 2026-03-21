@@ -36,7 +36,7 @@ const FeedbackForm = () => {
   return (
     <section
       id="feedback"
-      className="relative py-20 md:py-24 lg:py-32 bg-[#030303] overflow-hidden px-6 sm:px-8 md:px-12 lg:px-20 border-t border-white/5"
+      className="relative py-20 md:py-28 lg:py-32 bg-[#030303] overflow-hidden border-t border-white/5"
     >
       {/* BACKGROUND */}
       <div className="absolute inset-0 z-0">
@@ -45,7 +45,7 @@ const FeedbackForm = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] md:w-[700px] lg:w-[800px] h-[400px] md:h-[500px] lg:h-[600px] bg-red-600/5 blur-[180px] rounded-full" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto sm:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
         {/* HEADER */}
         <div className="mb-16 md:mb-24 lg:mb-32 max-w-2xl">
           <motion.div

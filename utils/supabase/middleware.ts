@@ -1,6 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+function matchesProtectedPath(pathname: string, basePath: string) {
+  return pathname === basePath || pathname.startsWith(`${basePath}/`);
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -66,8 +70,14 @@ export async function updateSession(request: NextRequest) {
     "/messages",
     "/my-recommendations",
     "/ai-recommend",
+    "/watch-party",
   ];
-  if (!user && error && protectedPages.includes(pathname)) {
+  if (
+    !user &&
+    protectedPages.some((protectedPath) =>
+      matchesProtectedPath(pathname, protectedPath)
+    )
+  ) {
     url.pathname = "/";
     return NextResponse.redirect(url);
   }
@@ -95,6 +105,41 @@ export async function updateSession(request: NextRequest) {
     if (!profile?.onboarding_complete) {
       url.pathname = "/onboarding";
       return NextResponse.redirect(url);
+    }
+  }
+
+  if (user && matchesProtectedPath(pathname, "/watch-party")) {
+    const segments = pathname.split("/").filter(Boolean);
+    const roomId = segments.length >= 2 ? segments[1] : null;
+
+    if (roomId) {
+      const { data: room, error: roomError } = await supabase
+        .from("watch_party_rooms")
+        .select("id, host_user_id, guest_user_id, access_type")
+        .eq("id", roomId)
+        .maybeSingle();
+
+      if (!roomError && room && (room.access_type ?? "public") === "private") {
+        const isDirectParticipant =
+          room.host_user_id === user.id || room.guest_user_id === user.id;
+
+        if (!isDirectParticipant) {
+          const { data: friendship, error: friendshipError } = await supabase
+            .from("friend_requests")
+            .select("id")
+            .or(
+              `and(sender_id.eq.${room.host_user_id},receiver_id.eq.${user.id}),and(sender_id.eq.${user.id},receiver_id.eq.${room.host_user_id})`
+            )
+            .eq("status", "accepted")
+            .maybeSingle();
+
+          if (!friendshipError && !friendship) {
+            url.pathname = "/watch-party";
+            url.searchParams.set("error", "private-room");
+            return NextResponse.redirect(url);
+          }
+        }
+      }
     }
   }
 

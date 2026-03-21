@@ -1,0 +1,195 @@
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import { IoCheckmarkCircle, IoClose, IoSearch } from "react-icons/io5";
+import { LoaderCircle } from "lucide-react";
+import type { RoomUser } from "./watchPartyRoomTypes";
+
+export default function WatchPartyInviteModal({
+  open,
+  inviteQuery,
+  selectedFriendId,
+  friends,
+  isLoadingFriends,
+  isInviting,
+  alreadyInRoomIds,
+  onClose,
+  onQueryChange,
+  onSelectFriend,
+  onInvite,
+}: {
+  open: boolean;
+  inviteQuery: string;
+  selectedFriendId: string | null;
+  friends: RoomUser[];
+  isLoadingFriends: boolean;
+  isInviting: boolean;
+  alreadyInRoomIds: Set<string>;
+  onClose: () => void;
+  onQueryChange: (value: string) => void;
+  onSelectFriend: (friendId: string) => void;
+  onInvite: () => void;
+}) {
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="w-full max-w-md overflow-hidden rounded-[28px] border border-white/10 bg-[#0B0B0C] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)]"
+          >
+            <div className="px-6 pb-8 pt-6">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-xl font-bold tracking-tight text-white">
+                  Invite Friends
+                </h3>
+                <button
+                  onClick={onClose}
+                  className="rounded-full cursor-pointer bg-white/5 p-2 text-white/40 transition-colors hover:bg-white/10 hover:text-white"
+                >
+                  <IoClose size={20} />
+                </button>
+              </div>
+              <p className="text-xs leading-relaxed text-white/40">
+                Choose a friend to join your theater. They&apos;ll receive a
+                notification instantly.
+              </p>
+            </div>
+
+            <div className="mb-4 px-6">
+              <div className="group relative">
+                <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/20 transition-colors group-focus-within:text-red-500">
+                  <IoSearch size={16} />
+                </div>
+                <input
+                  value={inviteQuery}
+                  onChange={(event) => onQueryChange(event.target.value)}
+                  placeholder="Search friends..."
+                  className="w-full rounded-2xl border border-white/5 bg-white/[0.03] py-3 pl-10 pr-4 text-sm text-white outline-none transition-all placeholder:text-white/20 focus:border-red-500/50 focus:bg-white/[0.06]"
+                />
+              </div>
+            </div>
+
+            <div className="mx-4 max-h-[320px] space-y-1 overflow-y-auto px-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {isLoadingFriends ? (
+                <div className="flex flex-col items-center gap-3 py-10">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-red-600 border-t-transparent" />
+                  <p className="text-xs font-medium uppercase tracking-widest text-white/30">
+                    Finding friends...
+                  </p>
+                </div>
+              ) : friends.length === 0 ? (
+                <div className="py-10 text-center">
+                  <p className="text-sm text-white/30">
+                    No friends active right now.
+                  </p>
+                </div>
+              ) : (
+                friends.map((friend) => {
+                  const selected = selectedFriendId === friend.id;
+                  const alreadyInRoom = alreadyInRoomIds.has(friend.id);
+                  const inviteSent = Boolean(friend.pending_invite);
+                  const disabled = alreadyInRoom || inviteSent;
+
+                  return (
+                    <button
+                      key={friend.id}
+                      onClick={() => {
+                        if (disabled) return;
+                        onSelectFriend(friend.id);
+                      }}
+                      disabled={disabled}
+                      className={`group relative flex w-full items-center gap-4 cursor-pointer rounded-2xl p-3 transition-all duration-300 ${
+                        selected
+                          ? "border border-red-500/30 bg-red-600/10 shadow-[0_0_15px_rgba(220,38,38,0.05)]"
+                          : disabled
+                            ? "cursor-not-allowed border border-white/5 bg-white/[0.02] opacity-55"
+                            : "border border-transparent hover:bg-white/[0.04]"
+                      }`}
+                    >
+                      <div className="relative h-11 w-11 overflow-hidden rounded-full">
+                        <Image
+                          src={friend.avatar_url || "/default-avatar.png"}
+                          alt=""
+                          width={44}
+                          height={44}
+                          className="h-11 w-11 rounded-full object-cover"
+                        />
+                        <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-[#0B0B0C] bg-green-500" />
+                      </div>
+
+                      <div className="flex-1 text-left">
+                        <p
+                          className={`text-sm font-bold ${selected ? "text-red-400" : "text-white"}`}
+                        >
+                          {friend.display_name || friend.username}
+                        </p>
+                        <p className="text-[11px] font-medium tracking-wide text-white/30">
+                          {alreadyInRoom
+                            ? "Already in room"
+                            : inviteSent
+                              ? "Invite sent"
+                            : `@${friend.username}`}
+                        </p>
+                      </div>
+
+                      {inviteSent ? (
+                        <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-amber-300">
+                          Sent
+                        </span>
+                      ) : selected ? (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="text-red-500"
+                        >
+                          <IoCheckmarkCircle size={24} />
+                        </motion.div>
+                      ) : null}
+                    </button>
+                  );
+                })
+              )}
+            </div>
+
+            <div className="relative mt-2 flex items-center gap-4 p-8">
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 rounded-b-[28px] bg-gradient-to-t from-black to-transparent" />
+
+              <button
+                onClick={onClose}
+                className="flex h-12 cursor-pointer flex-1 items-center justify-center rounded-xl border border-white/5 bg-[#141416] text-[12px] font-medium tracking-tight text-white/50 shadow-[0_1px_1px_rgba(255,255,255,0.02),0_1px_3px_rgba(0,0,0,0.5)] transition-all active:scale-[0.98] hover:text-white"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={onInvite}
+                disabled={!selectedFriendId || isInviting}
+                className="relative flex h-12 cursor-pointer flex-[2] items-center justify-center overflow-hidden rounded-xl bg-[#800000] text-[13px] font-semibold tracking-wide text-white shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15),0_12px_24px_-10px_rgba(128,0,0,0.5),0_2px_4px_rgba(0,0,0,0.3)] transition-all active:scale-[0.99] disabled:bg-red-800 disabled:opacity-30 hover:bg-[#a00000]"
+              >
+                <span className="relative z-10 flex items-center gap-2.5">
+                  {isInviting ? (
+                    <>
+                      <LoaderCircle className="h-4 w-4 animate-spin" />
+                      Summoning...
+                    </>
+                  ) : (
+                    "Summon to Party"
+                  )}
+                </span>
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}

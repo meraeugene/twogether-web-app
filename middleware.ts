@@ -18,5 +18,7 @@ export const config = {
     "/messages/:path*",
     "/my-recommendations/:path*",
     "/ai-recommend/:path*",
+    "/watch-party",
+    "/watch-party/:path*",
   ],
 };

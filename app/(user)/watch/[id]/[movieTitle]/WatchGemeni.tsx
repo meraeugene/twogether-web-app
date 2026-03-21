@@ -57,10 +57,10 @@ export default function WatchGemeni({
           setIsOpen(true);
         }}
         aria-label="Open feedback panel"
-        className="group fixed z-50 cursor-pointer bottom-4 right-4  h-12 w-12  overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] sm:h-14 sm:w-14"
+        className="group fixed bottom-4 right-4 z-50 h-12 w-12 overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 hover:scale-[1.05] hover:border-red-400/40 hover:shadow-[0_24px_70px_rgba(220,38,38,0.18)] active:scale-[0.98] sm:h-14 sm:w-14"
       >
         <div className="relative flex h-full w-full items-center justify-center">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500/16 text-red-300 ring-1 ring-inset ring-red-400/30 sm:h-10 sm:w-10">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500/16 text-red-300 ring-1 ring-inset ring-red-400/30 transition-all duration-300 group-hover:bg-red-500/24 group-hover:text-red-200 group-hover:ring-red-300/50 sm:h-10 sm:w-10">
             {/* Gemini Icon */}
             <svg
               fill="currentColor"

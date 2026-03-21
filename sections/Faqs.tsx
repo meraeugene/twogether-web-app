@@ -11,13 +11,13 @@ const Faqs = () => {
   return (
     <section
       id="faqs"
-      className="relative py-20 md:py-24 lg:py-32 bg-[#030303] overflow-hidden px-6 sm:px-8 md:px-12 lg:px-20 border-t border-white/5"
+      className="relative py-20 md:py-28 lg:py-32 bg-[#030303] overflow-hidden border-t border-white/5"
     >
       {/* BACKGROUND */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[300px] md:w-[400px] lg:w-[500px] h-[300px] md:h-[400px] lg:h-[500px] bg-red-600/5 blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl sm:px-8 mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 lg:gap-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-12 md:gap-16 lg:gap-44 xl:gap-24">
           {/* LEFT SIDE */}
           <div className="lg:col-span-6 lg:sticky lg:top-28 h-fit">
             <motion.div
@@ -31,7 +31,7 @@ const Faqs = () => {
                 </span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-medium tracking-tighter text-white leading-[0.9] mb-6 md:mb-10">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-medium tracking-tighter text-white leading-[0.9] mb-6 md:mb-10">
                 Frequently Asked <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30">
                   Questions.

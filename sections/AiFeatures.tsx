@@ -14,7 +14,7 @@ const AiFeatures = () => {
   return (
     <section
       id="features"
-      className="relative pt-20 md:pt-24 pb-28 md:pb-40 lg:pb-64 px-6 sm:px-8 md:px-12 lg:px-20 border-t border-white/5 overflow-hidden bg-[#030303]"
+      className="relative py-20 md:py-28 lg:py-32 bg-[#030303] overflow-hidden border-t border-white/5"
     >
       {/* BACKGROUND */}
       <div className="absolute inset-0 z-0">
@@ -23,7 +23,7 @@ const AiFeatures = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] md:w-[500px] lg:w-[600px] h-[400px] md:h-[500px] lg:h-[600px] bg-red-600/5 blur-[120px] rounded-full" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto sm:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
         {/* HEADER */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16 md:mb-20 lg:mb-24">
           <div className="w-full max-w-2xl">

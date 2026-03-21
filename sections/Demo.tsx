@@ -17,14 +17,14 @@ const Demo = () => {
   }, []);
 
   return (
-    <section className="relative border-t border-white/5 bg-[#030303] py-20 md:py-24 lg:py-28 px-6 sm:px-8 md:px-12 lg:px-20 overflow-hidden">
+    <section className="relative py-20 md:py-28 lg:py-32 bg-[#030303] overflow-hidden border-t border-white/5">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#fb2c36_1px,transparent_1px)] [background-size:32px_32px]" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] md:w-[500px] lg:w-[600px] h-[400px] md:h-[500px] lg:h-[600px] bg-red-600/5 blur-[120px] rounded-full" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto sm:px-8 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* LEFT SIDE */}
           <div className="lg:col-span-7 space-y-6">
