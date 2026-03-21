@@ -59,7 +59,7 @@ const FeedbackForm = () => {
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-medium tracking-tighter text-white leading-[0.9] mb-6 md:mb-10">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-medium tracking-tighter text-white leading-[0.9] mb-6 md:mb-10">
               Voice Your <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30">
                 Experience.

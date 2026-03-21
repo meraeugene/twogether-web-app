@@ -4,10 +4,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { IoSend } from "react-icons/io5";
 import { FaSmileWink } from "react-icons/fa";
+import { Crown } from "lucide-react";
 import { useEffect, useRef } from "react";
 import CustomEmojiPicker from "@/app/(user)/messages/CustomEmojiPicker";
 import { customEmojis } from "@/utils/messages/customEmoji";
-import type { RoomMessage, RoomUser } from "./watchPartyRoomTypes";
+import type {
+  RoomMessage,
+  RoomUser,
+} from "../../../../types/watchPartyRoomTypes";
 
 function renderMessageContent(content: string) {
   return content
@@ -35,6 +39,7 @@ export default function WatchPartyChatPanel({
   currentUserId,
   currentUser,
   otherUser,
+  hostUserId,
   typingUserId,
   typingUserName,
   input,
@@ -49,6 +54,7 @@ export default function WatchPartyChatPanel({
   currentUserId: string;
   currentUser: RoomUser | null;
   otherUser: RoomUser | null;
+  hostUserId: string;
   typingUserId: string | null;
   typingUserName: string | null;
   input: string;
@@ -61,6 +67,7 @@ export default function WatchPartyChatPanel({
 }) {
   const formRef = useRef<HTMLFormElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -71,9 +78,23 @@ export default function WatchPartyChatPanel({
     textarea.style.height = `${Math.max(nextHeight, 48)}px`;
   }, [input]);
 
+  const handleFormSubmit = async (event: React.FormEvent) => {
+    await onSubmit(event);
+
+    requestAnimationFrame(() => {
+      const container = messagesContainerRef.current;
+      if (!container) return;
+
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: "smooth",
+      });
+    });
+  };
+
   return (
-    <aside className="flex min-h-[620px] max-h-[78vh] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-[#0B0B0B]/80 shadow-2xl backdrop-blur-3xl xl:sticky xl:top-28 xl:max-h-[calc(100vh-8rem)]">
-      <div className="flex items-center justify-between border-b border-white/[0.03] bg-gradient-to-b from-white/[0.08] to-transparent px-6 py-5">
+    <aside className="flex min-h-[520px] max-h-[72vh] flex-col overflow-hidden rounded-[24px] border border-white/10 bg-[#0B0B0B]/80 shadow-2xl backdrop-blur-3xl sm:min-h-[620px] sm:max-h-[78vh] sm:rounded-[28px] xl:sticky xl:top-28 xl:h-[calc(100vh-8rem)] xl:max-h-[calc(100vh-8rem)] xl:border-white/12 xl:bg-[#090909]/90">
+      <div className="flex items-center justify-between border-b border-white/[0.03] bg-gradient-to-b from-white/[0.08] to-transparent px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-pulse" />
           <p className="text-[10px] font-medium uppercase tracking-widest text-white/90">
@@ -85,9 +106,13 @@ export default function WatchPartyChatPanel({
         </span>
       </div>
 
-      <div className="min-h-0 flex-1 space-y-8 overflow-x-hidden overflow-y-auto px-5 py-6">
+      <div
+        ref={messagesContainerRef}
+        className="min-h-0 flex-1 space-y-5 overflow-x-hidden overflow-y-auto px-3 py-4 sm:space-y-6 sm:px-5 sm:py-6 xl:px-6 xl:py-7"
+      >
         {messages.map((message) => {
           const isMine = message.sender_id === currentUserId;
+          const isHost = message.sender_id === hostUserId;
           const isOnlyEmoji = message.content
             .split(/(:\w+:)/g)
             .every((part) => customEmojis[part] || part.trim() === "");
@@ -114,9 +139,9 @@ export default function WatchPartyChatPanel({
           return (
             <div
               key={message.id}
-              className={`group flex ${isMine ? "justify-end" : "justify-start"}`}
+              className={`group flex w-full ${isMine ? "justify-end" : "justify-start"}`}
             >
-              <div className="max-w-[92%] min-w-0">
+              <div className="w-full max-w-full min-w-0 xl:max-w-[32rem] 2xl:max-w-[34rem]">
                 <div
                   className={`flex items-end gap-3 ${isMine ? "flex-row-reverse" : "flex-row"}`}
                 >
@@ -126,23 +151,39 @@ export default function WatchPartyChatPanel({
                     width={32}
                     height={32}
                     unoptimized
-                    className="h-8 w-8 rounded-full border border-white/20 object-cover shadow-sm"
+                    className="h-8 w-8 shrink-0 rounded-full border border-white/20 object-cover shadow-sm"
                   />
 
                   <div
-                    className={`flex flex-col ${isMine ? "items-end" : "items-start"}`}
+                    className={`min-w-0 flex-1 flex-col ${isMine ? "items-end" : "items-start"}`}
                   >
-                    <span className="mb-1 px-1 text-[11px] font-semibold text-white/70">
-                      {senderName}
-                    </span>
+                    <div
+                      className={`mb-1 flex items-center gap-2 px-1 text-[10px] font-semibold text-white/70 sm:text-[11px] ${
+                        isMine ? "justify-end" : "justify-start"
+                      }`}
+                    >
+                      <span>{senderName}</span>
+                      {isHost ? (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/25 bg-amber-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-amber-200">
+                          <Crown className="h-2.5 w-2.5" />
+                          Host
+                        </span>
+                      ) : null}
+                    </div>
 
-                    <div className="relative min-w-0">
+                    <div
+                      className={`flex min-w-0 ${
+                        isMine
+                          ? "justify-end text-right"
+                          : "justify-start text-left"
+                      }`}
+                    >
                       <div
-                        className={`max-w-full break-words px-4 py-3 text-[13px] leading-7 transition-all duration-300 [overflow-wrap:anywhere] sm:max-w-[22rem] xl:max-w-[20rem] ${
+                        className={`inline-block max-w-[85%] break-words px-3 py-2.5 text-[12px] leading-6 transition-all duration-300 [overflow-wrap:anywhere] sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-[13px] sm:leading-7 xl:max-w-[26rem] 2xl:max-w-[30rem] ${
                           isOnlyEmoji
-                            ? "border-none bg-transparent p-0 shadow-none scale-125"
+                            ? "border-none bg-transparent p-0 shadow-none"
                             : isMine
-                              ? "rounded-[20px] rounded-br-none bg-gradient-to-br from-red-600 to-red-700 text-white shadow-[0_10px_25px_-5px_rgba(220,38,38,0.4)]"
+                              ? "rounded-[22px] rounded-br-md bg-gradient-to-br from-red-600 via-red-600 to-red-700 text-white shadow-[0_16px_36px_-16px_rgba(220,38,38,0.75)]"
                               : "rounded-[20px] rounded-bl-none border border-white/10 bg-white/[0.05] text-white/90 backdrop-blur-md"
                         }`}
                       >
@@ -151,8 +192,10 @@ export default function WatchPartyChatPanel({
                     </div>
 
                     <span
-                      className={`mb-1 px-1 text-[11px] font-semibold text-white/70 mt-1 ${
-                        isMine ? "right-full  " : "left-full "
+                      className={`mt-1 block px-1 text-[10px] font-semibold text-white/60 sm:text-[11px] sm:text-white/70 ${
+                        isMine
+                          ? "ml-auto w-fit text-right"
+                          : "mr-auto w-fit text-left"
                       }`}
                     >
                       {timeLabel}
@@ -180,13 +223,13 @@ export default function WatchPartyChatPanel({
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="bg-gradient-to-t from-black/80 via-black/40 to-transparent p-5">
+      <div className="bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 sm:p-5">
         <form
           ref={formRef}
-          onSubmit={onSubmit}
-          className="group relative flex items-end gap-2"
+          onSubmit={handleFormSubmit}
+          className="group relative grid grid-cols-[minmax(0,1fr)_44px] items-end gap-2 sm:flex"
         >
-          <div className="relative flex flex-1 items-end rounded-xl border border-white/10 bg-white/[0.03] pl-2 pr-1 shadow-inner transition-all duration-500 focus-within:border-red-500/40 focus-within:bg-white/[0.06]">
+          <div className="relative min-w-0 flex items-end rounded-xl border border-white/10 bg-white/[0.03] pl-2 pr-1 shadow-inner transition-all duration-500 focus-within:border-red-500/40 focus-within:bg-white/[0.06] sm:flex-1 xl:rounded-2xl">
             <textarea
               ref={textareaRef}
               value={input}
@@ -198,14 +241,14 @@ export default function WatchPartyChatPanel({
                 }
               }}
               rows={1}
-              className="min-h-[48px] max-h-44 flex-1 resize-none overflow-y-auto overflow-x-hidden bg-transparent px-3 py-3 text-sm font-light leading-6 text-white outline-none placeholder:text-white/20 [overflow-wrap:anywhere]"
+              className="min-h-[44px] max-h-40 flex-1 resize-none overflow-y-auto overflow-x-hidden bg-transparent px-2.5 py-2.5 text-sm font-light leading-6 text-white outline-none placeholder:text-white/20 [overflow-wrap:anywhere] sm:min-h-[48px] sm:max-h-44 sm:px-3 sm:py-3"
               placeholder="Say something..."
             />
 
             <button
               type="button"
               onClick={onToggleEmojiPicker}
-              className="mb-1.5 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl text-white/35 transition-all hover:bg-white/10 hover:text-white/80"
+              className="mb-1 flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-white/35 transition-all hover:bg-white/10 hover:text-white/80 sm:mb-1.5 sm:h-10 sm:w-10"
             >
               <FaSmileWink size={18} />
             </button>
@@ -226,7 +269,10 @@ export default function WatchPartyChatPanel({
             )}
           </AnimatePresence>
 
-          <button className="flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-red-600 text-white shadow-[0_5px_15px_rgba(220,38,38,0.3)] transition-all hover:scale-105 hover:bg-red-500 active:scale-95">
+          <button
+            disabled={!input.trim()}
+            className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-red-600 text-white shadow-[0_5px_15px_rgba(220,38,38,0.3)] transition-all hover:scale-105 hover:bg-red-500 active:scale-95 disabled:cursor-not-allowed disabled:opacity-45 sm:h-12 sm:w-12"
+          >
             <IoSend size={16} />
           </button>
         </form>

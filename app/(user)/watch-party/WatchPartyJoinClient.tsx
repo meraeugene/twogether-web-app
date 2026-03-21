@@ -85,7 +85,7 @@ export default function WatchPartyJoinClient({
                 <button
                   onClick={handleJoin}
                   disabled={isPending}
-                  className="shrink-0 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-[132px]"
+                  className="shrink-0 cursor-pointer rounded-xl bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-[132px]"
                 >
                   <span className="inline-flex items-center gap-2">
                     {isPending ? (

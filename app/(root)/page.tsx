@@ -10,6 +10,7 @@ import StreamingServices from "@/sections/StreamingServices";
 import { buildMetadata } from "@/app/seo";
 import ReviewBotPrompt from "@/components/ReviewBotPrompt";
 import WatchingNow from "@/sections/WatchingNow";
+import { getCurrentUser } from "@/actions/authActions";
 
 export const metadata: Metadata = buildMetadata({
   title: "Watch and Recommend Movies Socially",
@@ -18,11 +19,13 @@ export const metadata: Metadata = buildMetadata({
   path: "/",
 });
 
-export default function Home() {
+export default async function Home() {
+  const currentUser = await getCurrentUser();
+
   return (
     <main className="relative w-full min-h-screen  text-white bg-black">
       <Hero />
-      <WatchingNow limit={4} />
+      <WatchingNow limit={4} currentUserId={currentUser?.id} />
       <StreamingServices />
       <Feedback />
       <Demo />

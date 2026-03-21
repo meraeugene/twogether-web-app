@@ -305,9 +305,6 @@ export async function leaveWatchPartyRoom(input: {
   if (!room) throw new Error("Room not found.");
 
   const nowIso = new Date().toISOString();
-  const otherUserId =
-    room.host_user_id === input.userId ? room.guest_user_id : room.host_user_id;
-
   const { error: presenceError } = await supabase
     .from("watch_party_presence")
     .upsert(
@@ -328,25 +325,34 @@ export async function leaveWatchPartyRoom(input: {
     return { success: true, deleted: false };
   }
 
-  let otherIsOnline = false;
-  if (otherUserId) {
-    const { data: otherPresence, error: otherPresenceError } = await supabase
-      .from("watch_party_presence")
-      .select("is_online, last_seen")
-      .eq("room_id", input.roomId)
-      .eq("user_id", otherUserId)
-      .maybeSingle();
+  const { data: otherPresenceRows, error: otherPresenceError } = await supabase
+    .from("watch_party_presence")
+    .select("user_id, is_online, last_seen")
+    .eq("room_id", input.roomId)
+    .eq("is_online", true)
+    .neq("user_id", input.userId);
 
-    if (otherPresenceError) throw new Error(otherPresenceError.message);
+  if (otherPresenceError) throw new Error(otherPresenceError.message);
 
-    const recentlySeen =
-      otherPresence?.last_seen &&
-      new Date(otherPresence.last_seen).getTime() > Date.now() - 90_000;
+  const onlineCandidateIds = (otherPresenceRows ?? [])
+    .filter((row) => {
+      const recentlySeen =
+        row.last_seen &&
+        new Date(row.last_seen).getTime() > Date.now() - 90_000;
+      return Boolean(recentlySeen);
+    })
+    .map((row) => row.user_id);
 
-    otherIsOnline = Boolean(otherPresence?.is_online && recentlySeen);
-  }
+  const orderedCandidates = [
+    room.guest_user_id,
+    ...onlineCandidateIds.filter((id) => id !== room.guest_user_id),
+  ].filter(Boolean) as string[];
 
-  if (!otherIsOnline) {
+  const uniqueCandidates = [...new Set(orderedCandidates)];
+  const nextHostId = uniqueCandidates[0] ?? null;
+  const nextGuestId = uniqueCandidates[1] ?? null;
+
+  if (!nextHostId) {
     const { error: deleteRoomError } = await supabase
       .from("watch_party_rooms")
       .delete()
@@ -362,9 +368,9 @@ export async function leaveWatchPartyRoom(input: {
     const { error: promoteError } = await supabase
       .from("watch_party_rooms")
       .update({
-        host_user_id: otherUserId,
-        guest_user_id: null,
-        status: "pending",
+        host_user_id: nextHostId,
+        guest_user_id: nextGuestId,
+        status: nextGuestId ? "active" : "pending",
         last_activity_at: nowIso,
       })
       .eq("id", input.roomId);

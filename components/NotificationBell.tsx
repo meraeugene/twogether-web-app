@@ -221,7 +221,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
         className={`group relative flex items-center justify-center w-[40px] h-[40px] rounded-[11px] text-[19px] transition-all duration-150 cursor-pointer ${
           open
             ? "bg-white/[0.12] text-white ring-1 ring-white/20"
-            : "text-white/50 hover:text-white hover:bg-white/[0.08]"
+            : "lg:text-white/50 hover:text-white hover:bg-white/[0.08]"
         }`}
       >
         <IoNotificationsOutline />
@@ -233,7 +233,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
       </button>
 
       {open && (
-        <div className="fixed left-4 right-4 top-20 z-[120] max-h-[min(75vh,32rem)] overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#0a0a0c]/90 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-2xl sm:left-auto sm:w-[min(26rem,calc(100vw-2rem))] md:right-4 md:top-20 xl:absolute xl:right-0 xl:top-[calc(100%+12px)]">
+        <div className="fixed left-4 right-4 top-20 z-[120] max-h-[min(75vh,32rem)] overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#0a0a0c] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-2xl sm:left-auto sm:w-[min(26rem,calc(100vw-2rem))] md:right-4 md:top-20 xl:absolute xl:right-0 xl:top-[calc(100%+12px)]">
           {/* Subtle Grain/Noise Overlay Effect */}
           <div className="absolute inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay"></div>
 

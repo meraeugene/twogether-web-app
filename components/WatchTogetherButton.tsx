@@ -65,7 +65,7 @@ export default function WatchTogetherButton({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 transition text-sm px-4 py-2 rounded-md"
+        className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-medium text-white transition hover:bg-white/[0.1] md:w-fit"
       >
         <LuPartyPopper className="w-4 h-4" />
         Watch Together
@@ -77,20 +77,20 @@ export default function WatchTogetherButton({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md sm:p-6"
+            className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 p-0 backdrop-blur-md sm:items-center sm:p-6"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.92, y: 40, rotateX: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 40, rotateX: 15 }}
               transition={{ type: "spring", damping: 20, stiffness: 150 }}
-              className="relative w-full max-w-2xl overflow-hidden rounded-[28px] border border-white/10 bg-[#060607] shadow-[0_0_100px_rgba(0,0,0,1)] perspective-1000 sm:rounded-[40px]"
+              className="relative flex h-screen w-full flex-col overflow-hidden border-0 bg-[#060607] shadow-[0_0_100px_rgba(0,0,0,1)] perspective-1000 sm:h-auto sm:max-h-[86vh] sm:max-w-2xl sm:rounded-[40px] sm:border sm:border-white/10"
             >
               {/* Cinematic Lighting Overlays */}
               <div className="absolute -top-[10%] -left-[10%] w-[300px] h-[300px] bg-red-600/15 blur-[120px] rounded-full animate-pulse" />
               <div className="absolute -bottom-[5%] -right-[5%] w-[200px] h-[200px] bg-blue-500/5 blur-[100px] rounded-full" />
 
-              <div className="relative z-10 p-5 sm:p-8 md:p-10">
+              <div className="relative z-10 min-h-0 overflow-y-auto p-5 sm:p-8 md:p-10">
                 {/* HEADER SECTION */}
                 <div className="mb-8 flex items-start justify-between sm:mb-12">
                   <div className="space-y-2">
@@ -114,9 +114,9 @@ export default function WatchTogetherButton({
 
                   <button
                     onClick={() => setOpen(false)}
-                    className="group p-4 cursor-pointer rounded-2xl bg-white/[0.03] border border-white/5 text-white/20 hover:text-white hover:bg-red-600/20 hover:border-red-600/50 transition-all duration-500 active:scale-90"
+                    className="group rounded-2xl border border-white/5 bg-white/[0.03] p-3 text-white/20 transition-all duration-500 hover:border-red-600/50 hover:bg-red-600/20 hover:text-white active:scale-90 sm:p-4"
                   >
-                    <IoClose size={24} />
+                    <IoClose size={20} className="sm:h-6 sm:w-6" />
                   </button>
                 </div>
 
@@ -142,7 +142,7 @@ export default function WatchTogetherButton({
                         </p>
                       </div>
 
-                      <div className="pt-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-red-500 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
+                      <div className="pt-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-red-500 opacity-100 transition-all duration-500 sm:-translate-x-4 sm:opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100">
                         {isPending ? (
                           <>
                             <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
@@ -177,7 +177,7 @@ export default function WatchTogetherButton({
                         </p>
                       </div>
 
-                      <div className="pt-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
+                      <div className="pt-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white opacity-100 transition-all duration-500 sm:-translate-x-4 sm:opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100">
                         {isPending ? (
                           <>
                             <LoaderCircle className="h-3.5 w-3.5 animate-spin" />

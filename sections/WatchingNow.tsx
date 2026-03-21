@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Lock } from "lucide-react";
 import { toast } from "sonner";
+import GlowingOutlineButton from "@/components/ui/GlowingOutlineButton";
 
 export default function WatchingNow({
   limit = 4,
@@ -41,16 +42,16 @@ export default function WatchingNow({
             </span>
           </h2>
 
-          <p className="max-w-md border-l border-white/10 pl-5 text-sm font-light text-neutral-400 sm:text-base md:pl-6 md:text-[15px] lg:text-lg">
-            Live rooms open to everyone. Private rooms appear here, but only
-            friends can join. Login, pick a movie, and start your own party to
-            see it here instantly.
+          <p className="max-w-md border-l border-white/10 pl-5 text-sm font-light md:text-base text-neutral-400 sm:text-base md:pl-6 md:text-[15px] lg:text-lg">
+            Public rooms are open to all. Private rooms are visible, but only
+            friends can join. Log in, pick a movie, and start your party
+            instantly.
           </p>
         </div>
 
         <div className="relative z-10 grid grid-cols-1 gap-8 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
           {isLoading ? (
-            Array.from({ length: Math.min(limit, 5) }).map((_, idx) => (
+            Array.from({ length: Math.min(limit, 4) }).map((_, idx) => (
               <div
                 key={idx}
                 className="aspect-[2/3] rounded-3xl bg-neutral-900/50 border border-white/5 animate-pulse"
@@ -61,18 +62,20 @@ export default function WatchingNow({
               <p className="text-xl text-white font-medium">
                 No live rooms yet.
               </p>
-              <p className="text-neutral-400 font-light mt-3 max-w-xl mx-auto leading-7">
+              <p className="text-neutral-400 font-light text-sm md:text-base mt-3 max-w-xl mx-auto leading-relaxed">
                 Login, Pick a movie, press{" "}
                 <span className="text-white">Watch Together</span>, and start
                 the first party. Your room will appear here for others right
                 away.
               </p>
-              <Link
+              <GlowingOutlineButton
                 href="/browse"
-                className="inline-flex mt-6 rounded-full border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm text-white hover:bg-white/[0.08] transition"
+                className="mt-6"
+                contentClassName="gap-2 px-5 py-2.5"
+                textClassName="normal-case"
               >
                 Browse movies
-              </Link>
+              </GlowingOutlineButton>
             </div>
           ) : (
             liveRooms.map((room) => (
@@ -94,17 +97,10 @@ export default function WatchingNow({
                   alt={room.movie_title}
                   fill
                   unoptimized
-                  className={`object-cover transition-transform duration-700 ${
-                    room.is_accessible
-                      ? "group-hover:scale-110 group-hover:rotate-[1.5deg]"
-                      : "opacity-85"
-                  }`}
+                  className={`object-cover transition-transform duration-700  group-hover:scale-110 group-hover:rotate-[1.5deg] opacity-85`}
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
-                {!room.is_accessible && (
-                  <div className="absolute inset-0 bg-black/35 backdrop-blur-[2px]" />
-                )}
 
                 <div className="relative z-10 m-4 p-5 rounded-2xl bg-white/[0.03] backdrop-blur border border-white/10 shadow-2xl transition-all duration-500 group-hover:bg-white/[0.06] group-hover:border-white/15">
                   <div className="flex items-center justify-between gap-3 mb-2">

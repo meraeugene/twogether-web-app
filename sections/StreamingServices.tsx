@@ -216,10 +216,27 @@ export default function StreamingServices() {
 
                     <Link
                       href={`/tmdb/watch/movie/${currentTrailer.id}/${currentTrailer.slug}`}
-                      className="group flex items-center justify-center gap-3 bg-red-700 hover:bg-red-800 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-full transition-all shadow-lg w-full md:w-auto"
+                      className="group relative inline-flex w-full items-center justify-center md:w-auto"
                     >
-                      <Play size={18} fill="white" />
-                      Watch Now
+                      <span className="absolute inset-0 rounded-full bg-red-500/25 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+                      <span className="relative inline-flex w-full overflow-hidden rounded-full p-[1px] transition-all duration-300 md:w-auto">
+                        <span className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0%,transparent_70%,#fb2c36_85%,transparent_100%)]" />
+                        <span className="relative flex w-full items-center justify-center gap-3 rounded-full border border-white/5 bg-black/60 px-5 py-2.5 text-white backdrop-blur-2xl sm:px-6 sm:py-3 md:w-auto">
+                          <Play
+                            size={18}
+                            fill="currentColor"
+                            className="text-red-400"
+                          />
+                          <span className="font-bold text-red-400">
+                            Watch Now
+                          </span>
+                          <ChevronRight
+                            size={18}
+                            className="text-red-400 transition-transform group-hover:translate-x-1"
+                          />
+                          <span className="absolute bottom-0 left-1/2 h-[1px] w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
+                        </span>
+                      </span>
                     </Link>
                   </div>
                 </motion.div>

@@ -38,12 +38,12 @@ export default function WatchPlayer({
       </div>
 
       {/* Server Selector */}
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
         {urls.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentUrlIndex(index)}
-            className={`px-4 cursor-pointer py-2 text-sm flex items-center gap-2 rounded-xl transition font-medium
+            className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition sm:w-auto
               ${
                 currentUrlIndex === index
                   ? "bg-red-600 text-white font-semibold"
@@ -60,7 +60,7 @@ export default function WatchPlayer({
       {type === "tv" && (
         <div className="space-y-6 border-t border-white/10 pt-6">
           {/* Season Selector */}
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap">
             {Object.keys(episodeTitlesPerSeason ?? {}).map((seasonStr) => {
               const season = Number(seasonStr);
               const isActive = selectedSeason === season;
@@ -71,7 +71,7 @@ export default function WatchPlayer({
                     setSelectedSeason(season);
                     setSelectedEpisode(1);
                   }}
-                  className={`px-4 py-2 cursor-pointer text-sm rounded-xl transition font-medium
+                  className={`w-full cursor-pointer rounded-xl px-3 py-2 text-sm font-medium transition sm:w-auto sm:px-4
                     ${
                       isActive
                         ? "bg-red-600 text-white font-semibold"
@@ -93,16 +93,18 @@ export default function WatchPlayer({
                 <button
                   key={ep}
                   onClick={() => setSelectedEpisode(ep)}
-                  className={`px-4 cursor-pointer  py-2 text-xs sm:text-sm rounded-xl flex-wrap flex items-center gap-2 transition
+                  className={`px-4 cursor-pointer py-2 text-xs sm:text-sm rounded-xl flex items-center gap-2 overflow-hidden transition
                     ${
                       isActive
                         ? "bg-red-600 text-white font-semibold"
                         : "bg-white/10 text-white/60 hover:bg-white/20"
                     }`}
                 >
-                  <TbPlayerPlayFilled className="text-base" />
-                  Ep {ep}
-                  <span className=" text-left">- {title}</span>
+                  <TbPlayerPlayFilled className="shrink-0 text-base" />
+                  <span className="shrink-0 whitespace-nowrap">Ep {ep}</span>
+                  <span className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-left [scrollbar-width:thin] md:whitespace-normal ">
+                    - {title}
+                  </span>
                 </button>
               );
             })}

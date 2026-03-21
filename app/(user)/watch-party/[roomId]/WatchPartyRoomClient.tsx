@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { Copy, Globe2, LoaderCircle, Lock } from "lucide-react";
+import { Copy, Crown, Globe2, LoaderCircle, Lock } from "lucide-react";
 import WatchPartyChatPanel from "./WatchPartyChatPanel";
 import WatchPartyInviteModal from "./WatchPartyInviteModal";
-import type { RoomData } from "./watchPartyRoomTypes";
-import { useWatchPartyRoomClient } from "./hooks/useWatchPartyRoomClient";
+import type { RoomData, RoomUser } from "../../../../types/watchPartyRoomTypes";
+import { useWatchPartyRoomClient } from "@/hooks/useWatchPartyRoomClient";
 
 export default function WatchPartyRoomClient({
   room,
@@ -15,6 +15,22 @@ export default function WatchPartyRoomClient({
   currentUserId: string;
 }) {
   const roomClient = useWatchPartyRoomClient({ room, currentUserId });
+  const roomParticipants = [
+    roomClient.currentRoom.host,
+    roomClient.currentRoom.guest,
+    ...(roomClient.currentRoom.viewers ?? []),
+  ].filter((participant): participant is RoomUser => Boolean(participant));
+  const otherParticipants = roomParticipants.filter(
+    (participant, index, array) =>
+      participant.id !== currentUserId &&
+      array.findIndex((candidate) => candidate.id === participant.id) === index,
+  );
+  const participantHeading =
+    otherParticipants.length === 0
+      ? "Just you in the room right now"
+      : otherParticipants.length === 1
+        ? "In a room with 1 other person"
+        : `In a room with ${otherParticipants.length} other people`;
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#050505] px-7 pb-16 pt-28 text-white lg:px-24 xl:px-32 xl:pt-34 2xl:px-26">
@@ -81,12 +97,12 @@ export default function WatchPartyRoomClient({
               <button
                 onClick={roomClient.handleLeave}
                 disabled={roomClient.isLeaving}
-                className="rounded-md cursor-pointer border border-white/10 bg-red-500/30 px-3 py-1.5 text-[11px] font-semibold transition hover:bg-red-500/40 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-red-500/30 px-3 text-[11px] font-semibold transition hover:bg-red-500/40 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <span className="inline-flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1.5 leading-none">
                   {roomClient.isLeaving ? (
                     <>
-                      <LoaderCircle className="animate-spin" />
+                      <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
                       Leaving...
                     </>
                   ) : (
@@ -97,33 +113,52 @@ export default function WatchPartyRoomClient({
             </div>
           </div>
 
-          <div className="w-full xl:max-w-sm">
+          <div className="w-full xl:max-w-md">
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/35">
-              You&apos;re watching with
+              {participantHeading}
             </p>
-            <div className="mt-4 flex items-center gap-3">
-              <div className="flex -space-x-2">
-                {roomClient.visibleViewers.slice(0, 5).map((viewer) => (
-                  <Image
-                    key={viewer.id}
-                    src={viewer.avatar_url || "/default-avatar.png"}
-                    alt={viewer.username}
-                    width={40}
-                    height={40}
-                    unoptimized
-                    className="h-10 w-10 rounded-full border-2 border-[#050505] object-cover"
-                  />
-                ))}
-                {roomClient.visibleViewers.length === 0 && (
-                  <div className="flex h-10 items-center rounded-full border border-dashed border-white/10 bg-black/20 px-4 text-xs text-white/45">
-                    Waiting for people to join
-                  </div>
-                )}
-              </div>
-              {roomClient.visibleViewers.length > 5 && (
-                <span className="text-xs text-white/55">
-                  +{roomClient.visibleViewers.length - 5} more
-                </span>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {otherParticipants.length > 0 ? (
+                otherParticipants.map((participant) => {
+                  const isHost =
+                    participant.id === roomClient.currentRoom.host_user_id;
+                  const participantName =
+                    participant.display_name || participant.username;
+
+                  return (
+                    <div
+                      key={participant.id}
+                      className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-3"
+                    >
+                      <Image
+                        src={participant.avatar_url || "/default-avatar.png"}
+                        alt={participant.username}
+                        width={44}
+                        height={44}
+                        unoptimized
+                        className="h-11 w-11 rounded-full border border-white/15 object-cover"
+                      />
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-white">
+                          {participantName}
+                        </p>
+                        <div className="mt-1 flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-white/45">
+                          <span>@{participant.username}</span>
+                          {isHost ? (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/30 bg-amber-500/10 px-2 py-1 font-semibold text-amber-200">
+                              <Crown className="h-3 w-3" />
+                              Host
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="flex min-h-20 items-center rounded-2xl border border-dashed border-white/10 bg-black/20 px-4 text-sm text-white/45 sm:col-span-2">
+                  Waiting for someone else to join the room.
+                </div>
               )}
             </div>
             <p className="mt-3 text-sm leading-6 text-white/60">
@@ -134,10 +169,10 @@ export default function WatchPartyRoomClient({
           </div>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px] xl:items-start">
-          <div className="group relative transition-all duration-700 ease-in-out">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(430px,500px)] xl:items-stretch 2xl:grid-cols-[minmax(0,1fr)_450px]">
+          <div className="group relative transition-all duration-700 ease-in-out xl:h-[calc(100vh-8rem)]">
             <div className="absolute -inset-1 bg-gradient-to-r from-red-600/20 to-transparent blur-2xl opacity-100 transition duration-1000" />
-            <div className="relative aspect-video w-full overflow-hidden rounded-[2rem] border border-white/5 bg-black">
+            <div className="relative aspect-video w-full overflow-hidden rounded-[2rem] border border-white/5 bg-black xl:h-full xl:aspect-auto">
               <iframe
                 src={roomClient.currentRoom.stream_url}
                 className="h-full w-full scale-[1.01]"
@@ -151,6 +186,7 @@ export default function WatchPartyRoomClient({
             currentUserId={currentUserId}
             currentUser={roomClient.currentUser}
             otherUser={roomClient.otherUser}
+            hostUserId={roomClient.currentRoom.host_user_id}
             typingUserId={roomClient.typingUserId}
             typingUserName={roomClient.typingUserName}
             input={roomClient.input}

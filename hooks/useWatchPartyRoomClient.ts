@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
+import { useCallback, useMemo, useRef, useState, useTransition } from "react";
 import {
   createWatchPartyInvite,
   getInviteableFriends,
@@ -19,7 +12,11 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import useSWR from "swr";
-import type { RoomData, RoomMessage, RoomUser } from "../watchPartyRoomTypes";
+import type {
+  RoomData,
+  RoomMessage,
+  RoomUser,
+} from "@/types/watchPartyRoomTypes";
 import { useWatchPartyRealtime } from "./useWatchPartyRealtime";
 import { useAudioCue } from "@/hooks/useAudioCue";
 
@@ -123,7 +120,9 @@ export function useWatchPartyRoomClient({
     isLoading: isLoadingFriends,
     mutate: mutateFriends,
   } = useSWR<Friend[]>(
-    isInviteOpen ? ["watch-party-friends", currentUserId, currentRoom.id] : null,
+    isInviteOpen
+      ? ["watch-party-friends", currentUserId, currentRoom.id]
+      : null,
     () => getInviteableFriends(currentUserId, currentRoom.id),
   );
 
@@ -189,10 +188,6 @@ export function useWatchPartyRoomClient({
     onHostChanged: handleHostChanged,
     onInviteSent: handleInviteSentToast,
   });
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   const sendTyping = useCallback(() => {
     const now = Date.now();
@@ -407,7 +402,9 @@ export function useWatchPartyRoomClient({
     setShowEmojiPicker,
     showEmojiPicker,
     typingUserId,
-    typingUserName: typingUserId ? (userNameMap.get(typingUserId) ?? null) : null,
+    typingUserName: typingUserId
+      ? (userNameMap.get(typingUserId) ?? null)
+      : null,
     inviteQuery,
     visibleViewers,
   };

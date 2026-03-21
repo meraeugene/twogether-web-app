@@ -62,11 +62,11 @@ export default function ToggleWatchlistButton({
     <button
       onClick={handleToggle}
       disabled={isPending}
-      className={`w-fit flex items-center gap-2 px-4 py-2 rounded-md text-sm transition-all duration-200
+      className={`inline-flex w-full items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-sm font-medium transition-all duration-200 md:w-fit
         ${
           isInList
-            ? "bg-red-600 hover:bg-red-500"
-            : "bg-white text-black hover:bg-white/90"
+            ? "border-red-500/40 bg-red-600 text-white hover:bg-red-500"
+            : "border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.1]"
         }
         ${isPending ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
     >

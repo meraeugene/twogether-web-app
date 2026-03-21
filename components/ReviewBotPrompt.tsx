@@ -5,6 +5,7 @@ import { MessageCircleHeart, Send, X } from "lucide-react";
 import { useEffect, useState, useTransition } from "react";
 import { mutate } from "swr";
 import { toast } from "sonner";
+import GlowingOutlineButton from "@/components/ui/GlowingOutlineButton";
 
 const STORAGE_KEY = "twogether_review_bot_state";
 
@@ -118,7 +119,7 @@ export default function ReviewBotPrompt() {
         type="button"
         aria-label="Close feedback panel"
         onClick={closePanel}
-        className={`fixed inset-0 z-[118] bg-black/55 backdrop-blur-md transition-opacity duration-200 ${
+        className={`fixed inset-0 z-[118] bg-black/70 backdrop-blur-md transition-opacity duration-200 ${
           panelMounted ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
@@ -199,15 +200,19 @@ export default function ReviewBotPrompt() {
                     Keep it short, honest, and personal.
                   </p>
 
-                  <button
+                  <GlowingOutlineButton
                     type="button"
                     onClick={handleSubmit}
                     disabled={isPending}
-                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-medium text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-[112px]"
+                    className="w-full sm:w-auto"
+                    fullWidth
+                    leadingIcon={<Send className="h-4 w-4" />}
+                    trailingIcon={false}
+                    contentClassName="w-full gap-2 px-4 py-3 sm:min-w-[112px]"
+                    textClassName="normal-case"
                   >
-                    <Send className="h-4 w-4" />
                     {isPending ? "Sending" : "Send"}
-                  </button>
+                  </GlowingOutlineButton>
                 </div>
               </div>
             </div>
@@ -219,10 +224,10 @@ export default function ReviewBotPrompt() {
             type="button"
             onClick={openPanel}
             aria-label="Open feedback panel"
-            className="pointer-events-auto group fixed z-50 cursor-pointer bottom-4 right-4  h-12 w-12  overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] sm:h-14 sm:w-14"
+            className="pointer-events-auto group fixed bottom-4 right-4 z-50 h-12 w-12 cursor-pointer overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 hover:scale-[1.05] hover:border-red-400/40 hover:shadow-[0_24px_70px_rgba(220,38,38,0.16)] active:scale-[0.98] sm:h-14 sm:w-14"
           >
             <div className="relative flex h-full w-full items-center justify-center">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500/16 text-red-300 ring-1 ring-inset ring-red-400/30 sm:h-10 sm:w-10">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500/16 text-red-300 ring-1 ring-inset ring-red-400/30 transition-all duration-300 group-hover:bg-red-500/24 group-hover:text-red-200 group-hover:ring-red-300/50 sm:h-10 sm:w-10">
                 <MessageCircleHeart className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
             </div>

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { ChevronRight, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
@@ -9,6 +9,7 @@ import { fetcher } from "@/utils/swr/fetcher";
 import { motion } from "framer-motion";
 import { FLOATING_DATA } from "@/data/floatingData";
 import { createClient } from "@/utils/supabase/client";
+import GlowingOutlineButton from "@/components/ui/GlowingOutlineButton";
 
 export default function TwogetherHero() {
   const router = useRouter();
@@ -145,29 +146,13 @@ export default function TwogetherHero() {
         </p>
 
         {/* BUTTON */}
-        <div
+        <GlowingOutlineButton
           onClick={handleClick}
-          className="group relative inline-flex items-center justify-center cursor-pointer"
+          className="cursor-pointer"
+          contentClassName="gap-2 px-6 py-3 md:gap-3 md:px-10 md:py-4"
         >
-          <div className="absolute inset-0 bg-red-500/25 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-          <button className="relative cursor-pointer p-[1px] inline-flex items-center justify-center rounded-full overflow-hidden transition-all duration-300">
-            <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0%,transparent_70%,#fb2c36_85%,transparent_100%)]" />
-
-            <div className="relative flex items-center gap-2 md:gap-3 px-6 py-3 md:px-10 md:py-4 bg-black/60 rounded-full text-white backdrop-blur-2xl border border-white/5">
-              <span className="text-sm uppercase md:text-base font-bold text-red-400">
-                START TWOGETHER
-              </span>
-
-              <ChevronRight
-                size={18}
-                className="text-red-400 group-hover:translate-x-1 transition-transform"
-              />
-
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
-            </div>
-          </button>
-        </div>
+          Start Twogether
+        </GlowingOutlineButton>
       </div>
 
       {/* Decorative Line */}

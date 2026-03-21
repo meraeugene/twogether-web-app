@@ -79,7 +79,7 @@ export default function WatchInfo({
             {recommendation.title}
           </h1>
 
-          <div className="flex gap-3 md:flex-row flex-col ">
+          <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:flex-wrap">
             <WatchTogetherButton
               currentUserId={currentUserId}
               movieTmdbId={recommendation.tmdb_id}
@@ -116,7 +116,7 @@ export default function WatchInfo({
                   exit={{ opacity: 0, y: -8, scale: 0.96 }}
                   transition={{ duration: 0.2, ease: "easeOut" }}
                   onClick={() => setOpen(true)}
-                  className="cursor-pointer w-fit inline-flex items-center gap-2 bg-white text-black hover:bg-white/90 transition text-sm  px-4 py-2 rounded-md "
+                  className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-medium text-white transition hover:bg-white/[0.1] md:w-fit"
                 >
                   <Sparkles className="w-4 h-4" />
                   Recommend This!

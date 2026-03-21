@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { IoCheckmarkCircle, IoClose, IoSearch } from "react-icons/io5";
 import { LoaderCircle } from "lucide-react";
-import type { RoomUser } from "./watchPartyRoomTypes";
+import type { RoomUser } from "../../../../types/watchPartyRoomTypes";
 
 export default function WatchPartyInviteModal({
   open,
@@ -38,24 +38,24 @@ export default function WatchPartyInviteModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="w-full max-w-md overflow-hidden rounded-[28px] border border-white/10 bg-[#0B0B0C] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)]"
+            className="flex max-h-[88vh] w-full flex-col overflow-hidden rounded-t-[28px] border border-white/10 bg-[#0B0B0C] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)] sm:max-h-[80vh] sm:max-w-md sm:rounded-[28px]"
           >
-            <div className="px-6 pb-8 pt-6">
-              <div className="mb-4 flex items-center justify-between">
+            <div className="px-4 pb-5 pt-4 sm:px-6 sm:pb-8 sm:pt-6">
+              <div className="mb-4 flex items-center justify-between gap-4">
                 <h3 className="text-xl font-bold tracking-tight text-white">
                   Invite Friends
                 </h3>
                 <button
                   onClick={onClose}
-                  className="rounded-full cursor-pointer bg-white/5 p-2 text-white/40 transition-colors hover:bg-white/10 hover:text-white"
+                  className="rounded-full cursor-pointer bg-white/5 p-1.5 text-white/40 transition-colors hover:bg-white/10 hover:text-white sm:p-2"
                 >
-                  <IoClose size={20} />
+                  <IoClose size={18} className="sm:h-5 sm:w-5" />
                 </button>
               </div>
               <p className="text-xs leading-relaxed text-white/40">
@@ -64,7 +64,7 @@ export default function WatchPartyInviteModal({
               </p>
             </div>
 
-            <div className="mb-4 px-6">
+            <div className="mb-4 px-4 sm:px-6">
               <div className="group relative">
                 <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-white/20 transition-colors group-focus-within:text-red-500">
                   <IoSearch size={16} />
@@ -78,7 +78,7 @@ export default function WatchPartyInviteModal({
               </div>
             </div>
 
-            <div className="mx-4 max-h-[320px] space-y-1 overflow-y-auto px-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="mx-3 min-h-0 flex-1 space-y-1 overflow-y-auto px-1.5 sm:mx-4 sm:px-2">
               {isLoadingFriends ? (
                 <div className="flex flex-col items-center gap-3 py-10">
                   <div className="h-5 w-5 animate-spin rounded-full border-2 border-red-600 border-t-transparent" />
@@ -107,7 +107,7 @@ export default function WatchPartyInviteModal({
                         onSelectFriend(friend.id);
                       }}
                       disabled={disabled}
-                      className={`group relative flex w-full items-center gap-4 cursor-pointer rounded-2xl p-3 transition-all duration-300 ${
+                      className={`group cursor-pointer relative flex w-full items-center gap-3 rounded-2xl p-3 transition-all duration-300 sm:gap-4 ${
                         selected
                           ? "border border-red-500/30 bg-red-600/10 shadow-[0_0_15px_rgba(220,38,38,0.05)]"
                           : disabled
@@ -126,18 +126,18 @@ export default function WatchPartyInviteModal({
                         <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-[#0B0B0C] bg-green-500" />
                       </div>
 
-                      <div className="flex-1 text-left">
+                      <div className="min-w-0 flex-1 text-left">
                         <p
-                          className={`text-sm font-bold ${selected ? "text-red-400" : "text-white"}`}
+                          className={`truncate text-sm font-bold ${selected ? "text-red-400" : "text-white"}`}
                         >
                           {friend.display_name || friend.username}
                         </p>
-                        <p className="text-[11px] font-medium tracking-wide text-white/30">
+                        <p className="truncate text-[11px] font-medium tracking-wide text-white/30">
                           {alreadyInRoom
                             ? "Already in room"
                             : inviteSent
                               ? "Invite sent"
-                            : `@${friend.username}`}
+                              : `@${friend.username}`}
                         </p>
                       </div>
 
@@ -160,12 +160,12 @@ export default function WatchPartyInviteModal({
               )}
             </div>
 
-            <div className="relative mt-2 flex items-center gap-4 p-8">
+            <div className="relative mt-2 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-4 sm:p-8">
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 rounded-b-[28px] bg-gradient-to-t from-black to-transparent" />
 
               <button
                 onClick={onClose}
-                className="flex h-12 cursor-pointer flex-1 items-center justify-center rounded-xl border border-white/5 bg-[#141416] text-[12px] font-medium tracking-tight text-white/50 shadow-[0_1px_1px_rgba(255,255,255,0.02),0_1px_3px_rgba(0,0,0,0.5)] transition-all active:scale-[0.98] hover:text-white"
+                className="relative z-10 flex h-12 w-full cursor-pointer items-center justify-center rounded-xl border border-white/5 bg-[#141416] text-[12px] font-medium tracking-tight text-white/50 shadow-[0_1px_1px_rgba(255,255,255,0.02),0_1px_3px_rgba(0,0,0,0.5)] transition-all active:scale-[0.98] hover:text-white sm:flex-1"
               >
                 Cancel
               </button>
@@ -173,7 +173,7 @@ export default function WatchPartyInviteModal({
               <button
                 onClick={onInvite}
                 disabled={!selectedFriendId || isInviting}
-                className="relative flex h-12 cursor-pointer flex-[2] items-center justify-center overflow-hidden rounded-xl bg-[#800000] text-[13px] font-semibold tracking-wide text-white shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15),0_12px_24px_-10px_rgba(128,0,0,0.5),0_2px_4px_rgba(0,0,0,0.3)] transition-all active:scale-[0.99] disabled:bg-red-800 disabled:opacity-30 hover:bg-[#a00000]"
+                className="relative cursor-pointer z-10 flex h-12 w-full items-center justify-center overflow-hidden rounded-xl bg-[#800000] text-[13px] font-semibold tracking-wide text-white shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15),0_12px_24px_-10px_rgba(128,0,0,0.5),0_2px_4px_rgba(0,0,0,0.3)] transition-all active:scale-[0.99] disabled:cursor-not-allowed disabled:bg-red-800 disabled:opacity-30 hover:bg-[#a00000] sm:flex-[2]"
               >
                 <span className="relative z-10 flex items-center gap-2.5">
                   {isInviting ? (
