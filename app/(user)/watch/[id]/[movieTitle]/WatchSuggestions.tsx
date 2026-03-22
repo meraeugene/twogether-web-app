@@ -15,7 +15,7 @@ export default function WatchSuggestions({
       {suggestions.map((rec) => (
         <div
           key={rec.recommendation_id}
-          className="  w-full rounded-sm overflow-hidden shadow-lg"
+          className="w-full rounded-sm overflow-hidden shadow-lg"
         >
           <div className=" group relative">
             <div className="relative aspect-[2/3] w-full">
@@ -90,7 +90,8 @@ export default function WatchSuggestions({
               </div>
             </div>
 
-            {rec.comment && (
+            {rec.comment &&
+              rec.comment.trim().toLowerCase() !== "ai recommended" && (
               <p className="text-sm text-white/80 border-l-4 border-red-500 pl-2 my-3 italic">
                 &quot;{rec.comment}&quot;
               </p>
@@ -98,7 +99,7 @@ export default function WatchSuggestions({
 
             {rec.rating && <VisualHeartRating value={rec.rating} />}
 
-            {rec.recommended_by && (
+            {rec.recommended_by && !rec.generated_by_ai && (
               <div className=" mt-3">
                 <Link
                   prefetch={false}

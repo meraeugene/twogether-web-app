@@ -37,6 +37,9 @@ export default function WatchInfo({
   const [hasRecommended, setHasRecommended] = useState(
     alreadyRecommended ?? false,
   );
+  const shouldShowComment =
+    Boolean(recommendation.comment) &&
+    recommendation.comment.trim().toLowerCase() !== "ai recommended";
 
   const handleSubmit = async (formData: {
     comment: string;
@@ -164,7 +167,7 @@ export default function WatchInfo({
         </div>
       )}
 
-      {recommendation.comment && (
+      {shouldShowComment && (
         <blockquote className="text-white/80 italic border-l-4 border-red-500 pl-4 mt-2 text-sm md:text-base">
           &quot;{recommendation.comment}&quot;
         </blockquote>
@@ -203,9 +206,19 @@ export default function WatchInfo({
             Recommended by
           </p>
 
-          <div className="inline-flex items-center gap-3 py-2 px-3 rounded-md transition-colors bg-white/5 hover:bg-white/10 backdrop-blur border border-white/10 w-fit">
+          <div className="inline-flex items-center gap-3 rounded-md border border-white/10 bg-white/5 px-3 py-2 backdrop-blur transition-colors hover:bg-white/10 w-fit">
+            <div className="w-6 h-6 rounded-full overflow-hidden">
+              <Image
+                src={"/gemini-color.svg"}
+                alt="Gemini Icon"
+                width={24}
+                unoptimized
+                height={24}
+                className="rounded-full object-cover"
+              />
+            </div>
             <strong className="capitalize text-sm md:text-base">
-              {recommender?.username || "Twogether"}
+              Ai Recommended
             </strong>
           </div>
         </div>
@@ -220,4 +233,3 @@ export default function WatchInfo({
     </div>
   );
 }
-

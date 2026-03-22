@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -10,6 +11,7 @@ import {
   siteName,
   siteUrl,
 } from "@/app/seo";
+import { CURRENT_USER_COOKIE, deserializeCurrentUserSnapshot } from "@/utils/currentUserSnapshot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,6 +65,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const initialUser = deserializeCurrentUserSnapshot(
+    cookieStore.get(CURRENT_USER_COOKIE)?.value,
+  );
+
   return (
     <html lang="en">
       <head>
@@ -75,7 +82,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster position="bottom-right" />
-        <Header />
+        <Header initialUser={initialUser} />
         {children}
         <Footer />
       </body>

@@ -1,20 +1,14 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { useAIRecommendations } from "@/stores/useAIRecommendation";
 import ErrorMessage from "@/components/ErrorMessage";
-import WatchSuggestions from "@/app/(user)/watch/[id]/[movieTitle]/WatchSuggestions";
 import WatchInfo from "@/app/(user)/watch/[id]/[movieTitle]/WatchInfo";
 import WatchPlayer from "@/app/(user)/watch/[id]/[movieTitle]/WatchPlayer";
+import WatchGemeni from "@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni";
 import { useEffect, useState } from "react";
 import WatchSkeletonLoading from "@/components/WatchSkeletonLoading";
 import BackButton from "@/components/BackButton";
-
-const WatchGemeni = dynamic(
-  () => import("@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni"),
-  { ssr: false },
-);
 
 export default function AIWatchClient({
   currentUserId,
@@ -33,13 +27,12 @@ export default function AIWatchClient({
   const params = useParams();
   const tmdbId = params?.id as string;
 
-  const recommendations = useAIRecommendations((state) => state.recommendations);
-  const recommendation = recommendations.find(
-    (r) => r.tmdb_id === Number(tmdbId)
+  const recommendations = useAIRecommendations(
+    (state) => state.recommendations,
   );
-  const suggestions = recommendations
-    .filter((item) => item.tmdb_id !== Number(tmdbId))
-    .slice(0, 6);
+  const recommendation = recommendations.find(
+    (r) => r.tmdb_id === Number(tmdbId),
+  );
 
   if (!hasHydrated) return <WatchSkeletonLoading />;
 
@@ -67,8 +60,8 @@ export default function AIWatchClient({
                   ([season, episodes]) => [
                     Number(season),
                     episodes.map((ep) => ep.title),
-                  ]
-                )
+                  ],
+                ),
               )
             : undefined
         }
@@ -84,8 +77,6 @@ export default function AIWatchClient({
           alreadyRecommended={alreadyRecommended}
         />
       </div>
-
-      {suggestions.length > 0 && <WatchSuggestions suggestions={suggestions} />}
 
       <WatchGemeni currentUserId={currentUserId} title={recommendation.title} />
     </main>

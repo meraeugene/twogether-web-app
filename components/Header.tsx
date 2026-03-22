@@ -7,7 +7,6 @@ import { CurrentUser } from "@/types/user";
 import { createClient } from "@/utils/supabase/client";
 import {
   CURRENT_USER_COOKIE,
-  deserializeCurrentUserSnapshot,
   serializeCurrentUserSnapshot,
 } from "@/utils/currentUserSnapshot";
 
@@ -18,19 +17,6 @@ const CookieConsentBanner = dynamic(
   () => import("@/components/CookieConsentBanner"),
   { ssr: false },
 );
-
-function readCurrentUserCookie() {
-  if (typeof document === "undefined") return undefined;
-
-  const cookie = document.cookie
-    .split("; ")
-    .find((entry) => entry.startsWith(`${CURRENT_USER_COOKIE}=`));
-
-  if (!cookie) return undefined;
-
-  const [, value = ""] = cookie.split("=");
-  return deserializeCurrentUserSnapshot(value) ?? undefined;
-}
 
 function writeCurrentUserCookie(user: CurrentUser | null) {
   if (typeof document === "undefined") return;
@@ -45,10 +31,12 @@ function writeCurrentUserCookie(user: CurrentUser | null) {
     "path=/; max-age=604800; samesite=lax";
 }
 
-export default function Header() {
-  const [user, setUser] = useState<CurrentUser | null | undefined>(() =>
-    readCurrentUserCookie(),
-  );
+export default function Header({
+  initialUser,
+}: {
+  initialUser?: CurrentUser | null;
+}) {
+  const [user, setUser] = useState<CurrentUser | null | undefined>(initialUser);
 
   useEffect(() => {
     const supabase = createClient();
