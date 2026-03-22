@@ -132,7 +132,7 @@ export default function WatchPartyInviteModal({
                         >
                           {friend.display_name || friend.username}
                         </p>
-                        <p className="truncate text-[11px] font-medium tracking-wide text-white/30">
+                        <p className="truncate text-[11px] font-medium tracking-wide text-white/60">
                           {alreadyInRoom
                             ? "Already in room"
                             : inviteSent

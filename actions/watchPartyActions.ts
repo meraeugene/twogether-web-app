@@ -89,6 +89,7 @@ export async function getWatchPartyRoom(roomId: string, userId: string) {
 export async function joinWatchPartyByCode(input: {
   userId: string;
   code: string;
+  autoLeaveCurrentRoom?: boolean;
 }) {
   return joinWatchPartyByCodeImpl(input);
 }

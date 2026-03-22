@@ -21,6 +21,15 @@ export default function WatchPartyJoinClient({
     if (searchParams.get("error") === "private-room") {
       toast.error("You are not allowed to enter that private watch party.");
       router.replace("/watch-party");
+      return;
+    }
+
+    if (searchParams.get("error") === "active-room") {
+      const message =
+        searchParams.get("message") ??
+        "You are already in another watch party. Leave that room first before joining another one.";
+      toast.info(message);
+      router.replace("/watch-party");
     }
   }, [router, searchParams]);
 
@@ -41,10 +50,6 @@ export default function WatchPartyJoinClient({
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Unable to join room.";
-        if (message.includes("Leave that room first")) {
-          toast.info(message);
-          return;
-        }
         toast.error(message);
       }
     });
@@ -89,9 +94,9 @@ export default function WatchPartyJoinClient({
                 <button
                   onClick={handleJoin}
                   disabled={isPending}
-                  className="shrink-0 cursor-pointer rounded-xl bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-[132px]"
+                  className="h-12 min-w-[132px] shrink-0 cursor-pointer rounded-xl bg-white px-5 text-sm font-semibold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <span className="inline-flex items-center gap-2">
+                  <span className="inline-flex w-full items-center justify-center gap-2">
                     {isPending ? (
                       <>
                         <LoaderCircle className="h-4 w-4 animate-spin" />

@@ -7,7 +7,7 @@ import {
   getFriendsOfUser,
   getIncomingFriendRequests,
   getSentFriendRequests,
-} from "@/actions/friendActions";
+} from "@/actions/social/friendActions";
 import useSWR from "swr";
 import { AddFriendSearch } from "./AddFriendSearch";
 
@@ -33,7 +33,7 @@ export default function FriendsPage({
     isLoading: isLoadingFriends,
   } = useSWR(
     () => (activeTab === "Friends" ? ["friends", currentUserId] : null),
-    () => fetchFriends(currentUserId)
+    () => fetchFriends(currentUserId),
   );
 
   const {
@@ -46,7 +46,7 @@ export default function FriendsPage({
     {
       refreshInterval: 5000,
       refreshWhenHidden: false,
-    }
+    },
   );
 
   const {
@@ -55,7 +55,7 @@ export default function FriendsPage({
     isLoading: isLoadingSent,
   } = useSWR(
     () => (activeTab === "Sent" ? ["sent", currentUserId] : null),
-    () => fetchSent(currentUserId)
+    () => fetchSent(currentUserId),
   );
 
   const tabButtonClass = (tab: string) =>

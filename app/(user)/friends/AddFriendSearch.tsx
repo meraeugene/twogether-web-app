@@ -3,7 +3,7 @@
 import {
   searchUsersByUsernamePrefix,
   getFriendStats,
-} from "@/actions/friendActions";
+} from "@/actions/social/friendActions";
 import { useState, useTransition, useMemo } from "react";
 import debounce from "lodash.debounce";
 import { UserResultCard } from "./UserResultCard";
@@ -42,7 +42,7 @@ export function AddFriendSearch({ currentUserId }: { currentUserId: string }) {
               filtered.map(async (user) => {
                 const status = await getFriendStats(currentUserId, user.id);
                 return { ...user, status };
-              })
+              }),
             );
 
             setResults(resultsWithStatus);
@@ -53,7 +53,7 @@ export function AddFriendSearch({ currentUserId }: { currentUserId: string }) {
           }
         });
       }, 400),
-    [currentUserId]
+    [currentUserId],
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

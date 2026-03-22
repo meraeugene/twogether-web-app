@@ -93,8 +93,10 @@ export default function WatchPartyChatPanel({
   };
 
   return (
-    <aside className="flex min-h-[520px] max-h-[72vh] flex-col overflow-hidden rounded-[24px]  sm:min-h-[620px] sm:max-h-[78vh] sm:rounded-[28px] xl:sticky xl:top-28 xl:h-[calc(100vh-8rem)] xl:max-h-[calc(100vh-8rem)] bg-black/50 backdrop-blur-3xl">
-      <div className="flex items-center border-b border-white/[0.05] bg-gradient-to-b from-white/[0.1] to-transparent px-4 py-4 sm:px-6 sm:py-5">
+    <aside className="relative flex min-h-[520px] max-h-[72vh] flex-col overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.04] shadow-[0_28px_80px_-42px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-[26px] sm:min-h-[620px] sm:max-h-[78vh] sm:rounded-[28px] xl:sticky xl:top-28 xl:h-[calc(100vh-8rem)] xl:max-h-[calc(100vh-8rem)]">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02)_18%,rgba(0,0,0,0.08)_100%)]" />
+
+      <div className="relative flex items-center border-b border-white/[0.08] bg-gradient-to-b from-white/[0.1] to-transparent px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-pulse" />
           <p className="text-[10px] font-medium uppercase tracking-widest text-white/90">
@@ -105,7 +107,7 @@ export default function WatchPartyChatPanel({
 
       <div
         ref={messagesContainerRef}
-        className="min-h-0 flex-1 space-y-5 overflow-x-hidden overflow-y-auto px-3 py-4 sm:space-y-6 sm:px-5 sm:py-6 xl:px-6 xl:py-7"
+        className="relative min-h-0 flex-1 space-y-5 overflow-x-hidden overflow-y-auto px-3 py-4 sm:space-y-6 sm:px-5 sm:py-6 xl:px-6 xl:py-7"
       >
         {messages.map((message) => {
           const isMine = message.sender_id === currentUserId;
@@ -138,21 +140,23 @@ export default function WatchPartyChatPanel({
               key={message.id}
               className={`group flex w-full ${isMine ? "justify-end" : "justify-start"}`}
             >
-              <div className="w-full max-w-full min-w-0 xl:max-w-[32rem] 2xl:max-w-[34rem]">
+              <div className="flex w-full min-w-0 flex-col">
                 <div
-                  className={`flex items-end gap-3 ${isMine ? "flex-row-reverse" : "flex-row"}`}
+                  className={`flex items-end ${isMine ? "justify-end" : "gap-3"}`}
                 >
-                  <Image
-                    src={senderAvatar}
-                    alt={message.sender?.username || "user"}
-                    width={32}
-                    height={32}
-                    unoptimized
-                    className="h-8 w-8 shrink-0 rounded-full border border-white/20 object-cover shadow-sm"
-                  />
+                  {!isMine ? (
+                    <Image
+                      src={senderAvatar}
+                      alt={message.sender?.username || "user"}
+                      width={32}
+                      height={32}
+                      unoptimized
+                      className="h-8 w-8 shrink-0 rounded-full border border-white/20 object-cover shadow-sm"
+                    />
+                  ) : null}
 
                   <div
-                    className={`min-w-0 flex-1 flex-col ${isMine ? "items-end" : "items-start"}`}
+                    className={`flex min-w-0 max-w-[88%] flex-col sm:max-w-[82%] xl:max-w-[26rem] 2xl:max-w-[30rem] ${isMine ? "items-end" : "items-start"}`}
                   >
                     <div
                       className={`mb-1 flex items-center gap-2 px-1 text-[10px] font-semibold text-white/70 sm:text-[11px] ${
@@ -176,7 +180,7 @@ export default function WatchPartyChatPanel({
                       }`}
                     >
                       <div
-                        className={`inline-block max-w-[85%] break-words px-3 py-2.5 text-[12px] leading-6 transition-all duration-300 [overflow-wrap:anywhere] sm:max-w-[80%] sm:px-4 sm:py-3 sm:text-[13px] sm:leading-7 xl:max-w-[26rem] 2xl:max-w-[30rem] ${
+                        className={`w-fit max-w-full whitespace-pre-wrap break-words px-3 py-2.5 text-[12px] leading-6 transition-all duration-300 [overflow-wrap:anywhere] sm:px-4 sm:py-3 sm:text-[13px] sm:leading-7 ${
                           isOnlyEmoji
                             ? "border-none bg-transparent p-0 shadow-none"
                             : isMine
@@ -220,13 +224,13 @@ export default function WatchPartyChatPanel({
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="bg-gradient-to-t from-white/[0.08] via-white/[0.03] to-transparent p-3 sm:p-5">
+      <div className="relative bg-gradient-to-t from-white/[0.08] via-white/[0.03] to-transparent p-3 sm:p-5">
         <form
           ref={formRef}
           onSubmit={handleFormSubmit}
           className="group relative grid grid-cols-[minmax(0,1fr)_52px] items-end gap-2 sm:flex sm:items-end"
         >
-          <div className="relative min-w-0 flex min-h-[52px] items-end rounded-xl border border-white/10 bg-white/[0.03] pl-2 pr-1 shadow-inner transition-all duration-500 focus-within:border-red-500/40 focus-within:bg-white/[0.06] sm:min-h-[48px] sm:flex-1 xl:rounded-2xl">
+          <div className="relative min-w-0 flex min-h-[52px] items-end rounded-xl border border-white/12 bg-white/[0.04] pl-2 pr-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-all duration-500 focus-within:border-red-500/40 focus-within:bg-white/[0.08] sm:min-h-[48px] sm:flex-1 xl:rounded-2xl">
             <textarea
               ref={textareaRef}
               value={input}

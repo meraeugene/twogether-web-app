@@ -1,6 +1,6 @@
 "use client";
 
-import { getMessageRequests } from "@/actions/messageActions";
+import { getMessageRequests } from "@/actions/social/messageActions";
 import useSWR from "swr";
 import { formatCompactTime } from "@/utils/messages/formatCompactTime";
 import Image from "next/image";
@@ -20,17 +20,17 @@ export default function MessageRequestList({
     avatarUrl: string,
     displayName: string,
     username: string,
-    threadStatus: "active" | "pending" | undefined
+    threadStatus: "active" | "pending" | undefined,
   ) => void;
   activeThreadId: string | null;
 }) {
   const { data: allRequests, isLoading } = useSWR(
     "message-requests",
-    getMessageRequests
+    getMessageRequests,
   );
 
   const filteredRequests = allRequests?.filter(
-    (r) => r.direction === direction
+    (r) => r.direction === direction,
   );
 
   if (isLoading) {
@@ -96,7 +96,7 @@ export default function MessageRequestList({
                 request.other_user_avatar_url,
                 request.other_user_display_name,
                 request.other_user_username,
-                request.status
+                request.status,
               )
             }
             className={`flex cursor-pointer items-center gap-3 p-2 rounded-xl transition w-full ${

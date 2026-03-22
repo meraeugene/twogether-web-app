@@ -20,18 +20,21 @@ import { InfoCard } from "./InfoCard";
 import { Recommendation } from "@/types/recommendation";
 import FilmCard from "@/components/FilmCard";
 import { FollowStats } from "@/types/follows";
-import { toggleFollow } from "@/actions/followActions";
+import { toggleFollow } from "@/actions/social/followActions";
 import {
   cancelFriendRequest,
   getFriendsOfUser,
   getFriendStats,
   sendFriendRequest,
-} from "@/actions/friendActions";
+} from "@/actions/social/friendActions";
 import { FriendRequestStatus, UserPreview } from "@/types/friends";
 import { IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import useSWR from "swr";
 import Link from "next/link";
-import { getOrCreateThread, sendMessage } from "@/actions/messageActions";
+import {
+  getOrCreateThread,
+  sendMessage,
+} from "@/actions/social/messageActions";
 import MessageModal from "@/components/MessageModal";
 import { useRouter } from "next/navigation";
 import { LuUserRoundPen } from "react-icons/lu";
@@ -59,7 +62,7 @@ export default function TabbedProfileView({
 
   // FOLLOWING STATE
   const [isFollowing, setIsFollowing] = useState<boolean>(
-    followStats.isFollowing
+    followStats.isFollowing,
   );
   const [followers, setFollowers] = useState<number>(followStats.followers);
 
@@ -81,7 +84,7 @@ export default function TabbedProfileView({
     {
       refreshInterval: 5000, // re-fetch every 5 seconds
       refreshWhenHidden: false,
-    }
+    },
   );
 
   const {
@@ -94,7 +97,7 @@ export default function TabbedProfileView({
     {
       refreshInterval: 5000, // re-fetch every 5 seconds
       refreshWhenHidden: false,
-    }
+    },
   );
 
   const handleFollowToggle = () => {
@@ -243,8 +246,8 @@ export default function TabbedProfileView({
                        effectiveFriendStatus === "pending"
                          ? "bg-red-600 hover:bg-red-700"
                          : effectiveFriendStatus === "accepted"
-                         ? "bg-green-600 hover:bg-green-700"
-                         : "bg-white/10 hover:bg-white/20"
+                           ? "bg-green-600 hover:bg-green-700"
+                           : "bg-white/10 hover:bg-white/20"
                      }`}
                 >
                   {effectiveFriendStatus === "pending" ? (
@@ -258,8 +261,8 @@ export default function TabbedProfileView({
                   {effectiveFriendStatus === "pending"
                     ? "Cancel Request"
                     : effectiveFriendStatus === "accepted"
-                    ? "Friends"
-                    : "Add Friend"}
+                      ? "Friends"
+                      : "Add Friend"}
                 </button>
 
                 {/* Follow */}

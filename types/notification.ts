@@ -25,6 +25,7 @@ export type NotificationItem = {
     title: string | null;
     poster_url: string | null;
   } | null;
+  invite_status?: "pending" | "accepted" | "rejected" | "cancelled" | null;
 };
 
 export type InviteFeedItem = {

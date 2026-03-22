@@ -12,7 +12,7 @@ import {
   deleteMessageThread,
   markMessagesSeen,
   markMessagesDelivered,
-} from "@/actions/messageActions";
+} from "@/actions/social/messageActions";
 import { MessageItem } from "./MessageItem";
 import CustomEmojiPicker from "./CustomEmojiPicker";
 import { FaSmileWink } from "react-icons/fa";
@@ -160,8 +160,8 @@ export default function MessageThreadView({
             // if it's the first message, or 5+ minutes have passed since the last message that inserted a timestamp
             const shouldInsertTimestamp = Boolean(
               i === 0 ||
-                (prevTime &&
-                  currentTime.getTime() - prevTime.getTime() > 5 * 60 * 1000)
+              (prevTime &&
+                currentTime.getTime() - prevTime.getTime() > 5 * 60 * 1000),
             );
 
             // Determine if this is the first message of a group (based on sender or time gap)

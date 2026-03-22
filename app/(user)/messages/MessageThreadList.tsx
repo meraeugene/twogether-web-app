@@ -1,6 +1,6 @@
 "use client";
 
-import { getUserThreads } from "@/actions/messageActions";
+import { getUserThreads } from "@/actions/social/messageActions";
 import Image from "next/image";
 import useSWR from "swr";
 import { formatCompactTime } from "@/utils/messages/formatCompactTime";
@@ -21,12 +21,12 @@ export default function MessageThreadList({
     avatarUrl: string,
     username: string,
     displayName: string,
-    threadStatus: "active" | "pending"
+    threadStatus: "active" | "pending",
   ) => void;
   activeThreadId: string | null;
 }) {
   const { data: threads, isLoading } = useSWR(["threads", userId], () =>
-    getUserThreads(userId)
+    getUserThreads(userId),
   );
 
   const playSound = useMessageSound();
@@ -109,7 +109,7 @@ export default function MessageThreadList({
                   thread.other_avatar_url || "",
                   thread.other_username || "",
                   thread.other_display_name,
-                  thread.status
+                  thread.status,
                 );
               }
             }}
@@ -149,7 +149,7 @@ export default function MessageThreadList({
                     <span className="text-white/30">·</span>
                     <span>
                       {formatCompactTime(
-                        new Date(thread.last_message_created_at)
+                        new Date(thread.last_message_created_at),
                       )}
                     </span>
                   </>

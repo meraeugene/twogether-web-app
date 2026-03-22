@@ -68,7 +68,9 @@ export async function createWatchPartyRoom(input: {
 
       if (staleDeleteError) throw new Error(staleDeleteError.message);
     } else {
-      throw new Error(formatActiveRoomConflictError(existingRoomData?.movie_title));
+      throw new Error(
+        formatActiveRoomConflictError(existingRoomData?.movie_title),
+      );
     }
   }
 
@@ -121,15 +123,24 @@ export async function getWatchPartyRoom(roomId: string, userId: string) {
     throw new Error(formatActiveRoomConflictError(currentRoom?.movie_title));
   }
 
-  const hasAccess = await canAccessRoom(supabase, room as WatchPartyRoom, userId);
+  const hasAccess = await canAccessRoom(
+    supabase,
+    room as WatchPartyRoom,
+    userId,
+  );
   if (!hasAccess) return null;
 
-  const recentPresenceThreshold = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+  const recentPresenceThreshold = new Date(
+    Date.now() - 2 * 60 * 1000,
+  ).toISOString();
   const [profilesResult, presenceResult] = await Promise.all([
     supabase
       .from("users")
       .select("id, username, display_name, avatar_url")
-      .in("id", [room.host_user_id, room.guest_user_id].filter(Boolean) as string[]),
+      .in(
+        "id",
+        [room.host_user_id, room.guest_user_id].filter(Boolean) as string[],
+      ),
     supabase
       .from("watch_party_presence")
       .select("user_id, is_online, last_seen")
@@ -144,7 +155,9 @@ export async function getWatchPartyRoom(roomId: string, userId: string) {
     ...new Set(presenceRows.map((row) => row.user_id).filter(Boolean)),
   ] as string[];
 
-  let viewers = profiles.filter((profile) => presenceUserIds.includes(profile.id));
+  let viewers = profiles.filter((profile) =>
+    presenceUserIds.includes(profile.id),
+  );
 
   if (presenceUserIds.length > profiles.length) {
     const missingViewerIds = presenceUserIds.filter(
@@ -165,7 +178,7 @@ export async function getWatchPartyRoom(roomId: string, userId: string) {
     ...(room as WatchPartyRoom),
     host: profiles.find((profile) => profile.id === room.host_user_id) ?? null,
     guest: room.guest_user_id
-      ? profiles.find((profile) => profile.id === room.guest_user_id) ?? null
+      ? (profiles.find((profile) => profile.id === room.guest_user_id) ?? null)
       : null,
     viewers,
     viewer_count: viewers.length,
@@ -175,6 +188,7 @@ export async function getWatchPartyRoom(roomId: string, userId: string) {
 export async function joinWatchPartyByCode(input: {
   userId: string;
   code: string;
+  autoLeaveCurrentRoom?: boolean;
 }) {
   const supabase = await createClient();
   const normalized = input.code.trim().toLowerCase();
@@ -198,22 +212,57 @@ export async function joinWatchPartyByCode(input: {
 
   if (!room) throw new Error("Room code not found.");
 
-  const existingRoom = await getExistingActiveRoomForUser(supabase, input.userId);
+  const existingRoom = await getExistingActiveRoomForUser(
+    supabase,
+    input.userId,
+  );
   if (existingRoom && existingRoom.id !== room.id) {
-    const { data: currentRoom, error: currentRoomError } = await supabase
-      .from("watch_party_rooms")
-      .select("movie_title")
-      .eq("id", existingRoom.id)
-      .maybeSingle();
+    if (input.autoLeaveCurrentRoom) {
+      await leaveWatchPartyRoom({
+        roomId: existingRoom.id,
+        userId: input.userId,
+      });
+    } else {
+      const { data: currentRoom, error: currentRoomError } = await supabase
+        .from("watch_party_rooms")
+        .select("movie_title")
+        .eq("id", existingRoom.id)
+        .maybeSingle();
 
-    if (currentRoomError) throw new Error(currentRoomError.message);
-    throw new Error(formatActiveRoomConflictError(currentRoom?.movie_title));
+      if (currentRoomError) throw new Error(currentRoomError.message);
+      throw new Error(formatActiveRoomConflictError(currentRoom?.movie_title));
+    }
   }
 
-  const hasAccess = await canAccessRoom(supabase, room as WatchPartyRoom, input.userId);
+  const hasAccess = await canAccessRoom(
+    supabase,
+    room as WatchPartyRoom,
+    input.userId,
+  );
   if (!hasAccess) throw new Error(formatPrivateRoomJoinError());
 
-  if (room.host_user_id === input.userId || room.guest_user_id === input.userId) {
+  if (
+    room.host_user_id === input.userId ||
+    room.guest_user_id === input.userId
+  ) {
+    const acceptedAt = new Date().toISOString();
+    await supabase
+      .from("watch_party_invites")
+      .update({
+        status: "accepted",
+        responded_at: acceptedAt,
+      })
+      .eq("room_id", room.id)
+      .eq("invitee_id", input.userId)
+      .eq("status", "pending");
+
+    await supabase
+      .from("notifications")
+      .update({ is_read: true })
+      .eq("recipient_user_id", input.userId)
+      .eq("type", "watch_party_invite")
+      .contains("metadata", { room_id: room.id });
+
     return { roomId: room.id };
   }
 
@@ -244,6 +293,23 @@ export async function joinWatchPartyByCode(input: {
     if (roomTouchError) throw new Error(roomTouchError.message);
   }
 
+  await supabase
+    .from("watch_party_invites")
+    .update({
+      status: "accepted",
+      responded_at: nowIso,
+    })
+    .eq("room_id", room.id)
+    .eq("invitee_id", input.userId)
+    .eq("status", "pending");
+
+  await supabase
+    .from("notifications")
+    .update({ is_read: true })
+    .eq("recipient_user_id", input.userId)
+    .eq("type", "watch_party_invite")
+    .contains("metadata", { room_id: room.id });
+
   return { roomId: room.id };
 }
 
@@ -263,7 +329,9 @@ export async function getWatchingNowRooms(limit = 10, userId?: string) {
   const roomIds = rooms.map((room) => room.id);
   const memberUserIds = [
     ...new Set(
-      rooms.flatMap((room) => [room.host_user_id, room.guest_user_id].filter(Boolean)),
+      rooms.flatMap((room) =>
+        [room.host_user_id, room.guest_user_id].filter(Boolean),
+      ),
     ),
   ] as string[];
 
@@ -374,7 +442,10 @@ export async function leaveWatchPartyRoom(input: {
 
   if (presenceError) throw new Error(presenceError.message);
 
-  if (room.host_user_id !== input.userId && room.guest_user_id !== input.userId) {
+  if (
+    room.host_user_id !== input.userId &&
+    room.guest_user_id !== input.userId
+  ) {
     revalidatePath("/");
     revalidatePath("/watch-party");
     return { success: true, deleted: false };
@@ -408,6 +479,13 @@ export async function leaveWatchPartyRoom(input: {
   const nextGuestId = uniqueCandidates[1] ?? null;
 
   if (!nextHostId) {
+    const { error: deleteMessagesError } = await supabase
+      .from("watch_party_messages")
+      .delete()
+      .eq("room_id", input.roomId);
+
+    if (deleteMessagesError) throw new Error(deleteMessagesError.message);
+
     const { error: deleteRoomError } = await supabase
       .from("watch_party_rooms")
       .delete()

@@ -20,6 +20,17 @@ export default async function WatchPartyRoomPage({
 
     return <WatchPartyRoomClient room={room} currentUserId={currentUser.id} />;
   } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes("Leave that room first")
+    ) {
+      const params = new URLSearchParams({
+        error: "active-room",
+        message: error.message,
+      });
+      redirect(`/watch-party?${params.toString()}`);
+    }
+
     return (
       <ErrorMessage
         title="Unable to join this room"

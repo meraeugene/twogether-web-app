@@ -4,7 +4,7 @@ import useSWR from "swr";
 import { getWatchingNowRooms } from "@/actions/watchPartyActions";
 import Image from "next/image";
 import Link from "next/link";
-import { Lock } from "lucide-react";
+import { Globe2, Lock } from "lucide-react";
 import { toast } from "sonner";
 import GlowingOutlineButton from "@/components/ui/GlowingOutlineButton";
 
@@ -89,8 +89,7 @@ export default function WatchingNow({
                     "This private room is locked. Only the host's friends can open it.",
                   );
                 }}
-                className={`group relative aspect-[2/3] flex flex-col justify-end overflow-hidden rounded-[2rem] bg-neutral-900 border border-white/10 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] 
-                }`}
+                className="group relative flex aspect-[2/3] flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02]"
               >
                 <Image
                   src={room.poster_url || "/placeholder.jpg"}
@@ -102,57 +101,61 @@ export default function WatchingNow({
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
 
-                <div className="relative z-10 m-4 p-5 rounded-2xl bg-white/[0.03] backdrop-blur border border-white/10 shadow-2xl transition-all duration-500 group-hover:bg-white/[0.06] group-hover:border-white/15">
-                  <div className="flex items-center justify-between gap-3 mb-2">
+                <div className="relative z-10 m-4 rounded-[1.6rem] border border-white/12 bg-white/[0.08] p-5 backdrop-blur-xl shadow-2xl transition-all duration-500 group-hover:bg-white/[0.12] group-hover:border-white/20">
+                  <div className="flex items-center justify-between gap-3 mb-4">
                     <div className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,1)]" />
-                      <span className="text-[9px] uppercase tracking-widest font-bold text-neutral-400">
+                      <span className="text-[9px] uppercase tracking-widest font-bold text-neutral-300">
                         {room.watching_count} Active
                       </span>
                     </div>
-                    <span className="rounded-full border border-white/10 bg-black/30 px-2.5 py-1 text-[9px] uppercase tracking-[0.18em] text-white/70">
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] ${
+                        room.access_type === "public"
+                          ? "bg-emerald-500 text-white"
+                          : "border border-white/10 bg-black/30 text-white/75"
+                      }`}
+                    >
+                      {room.access_type === "public" ? (
+                        <Globe2 className="h-3 w-3" />
+                      ) : (
+                        <Lock className="h-3 w-3" />
+                      )}
                       {room.access_type === "private" ? "Private" : "Public"}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-medium text-white leading-tight mb-4">
+                  <h3 className="mb-4  text-xl font-black uppercase leading-[1.2] tracking-[0.04em] text-white [text-wrap:balance] italic ">
                     {room.movie_title}
                   </h3>
 
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-3">
                     <div className="flex -space-x-2">
                       {room.watching_users.slice(0, 3).map((user) => (
                         <div
                           key={user.id}
-                          className="h-7 w-7 rounded-full  overflow-hidden"
+                          className="h-8 w-8 overflow-hidden rounded-full border border-white/15 shadow-[0_8px_18px_-12px_rgba(0,0,0,0.95)]"
                         >
                           <Image
                             src={user.avatar_url || "/default-avatar.png"}
                             alt={user.username}
-                            width={28}
-                            height={28}
+                            width={32}
+                            height={32}
                             className="h-full w-full rounded-full object-cover"
                           />
                         </div>
                       ))}
                       {room.watching_count > 3 && (
-                        <div className="h-7 w-7 rounded-full border-2 border-neutral-900 bg-neutral-800 flex items-center justify-center text-[8px] font-bold text-white">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/12 bg-black/55 text-[8px] font-bold text-white">
                           +{room.watching_count - 3}
                         </div>
                       )}
                     </div>
 
-                    <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] text-white/55">
-                      {!room.is_accessible && room.access_type === "private" ? (
-                        <>
-                          <Lock className="h-3 w-3" />
-                          Locked
-                        </>
-                      ) : room.access_type === "private" ? (
-                        "Friends only"
-                      ) : (
-                        "Join room"
-                      )}
+                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
+                      {room.access_type === "private"
+                        ? "Friends only"
+                        : "Join room"}
                     </span>
                   </div>
                 </div>

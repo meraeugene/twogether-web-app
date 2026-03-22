@@ -38,6 +38,13 @@ export async function getUserNotifications(userId: string, limit = 25) {
   if (!data?.length) return [] as NotificationItem[];
 
   const actorIds = [...new Set(data.map((item) => item.actor_user_id).filter(Boolean))] as string[];
+  const inviteIds = [
+    ...new Set(
+      data
+        .map((item) => item.metadata?.["invite_id"])
+        .filter((inviteId): inviteId is string => typeof inviteId === "string"),
+    ),
+  ];
   const roomIds = [
     ...new Set(
       data
@@ -48,6 +55,10 @@ export async function getUserNotifications(userId: string, limit = 25) {
   let actorMap = new Map<
     string,
     { id: string; username: string; display_name: string | null; avatar_url: string | null }
+  >();
+  let inviteMap = new Map<
+    string,
+    { id: string; status: "pending" | "accepted" | "rejected" | "cancelled" }
   >();
   let roomMap = new Map<
     string,
@@ -74,6 +85,16 @@ export async function getUserNotifications(userId: string, limit = 25) {
     roomMap = new Map((rooms ?? []).map((room) => [room.id, room]));
   }
 
+  if (inviteIds.length) {
+    const { data: invites, error: inviteError } = await supabase
+      .from("watch_party_invites")
+      .select("id, status")
+      .in("id", inviteIds);
+
+    if (inviteError) throw new Error(inviteError.message);
+    inviteMap = new Map((invites ?? []).map((invite) => [invite.id, invite]));
+  }
+
   return data.map((item) => ({
     ...item,
     actor: item.actor_user_id ? actorMap.get(item.actor_user_id) ?? null : null,
@@ -88,7 +109,13 @@ export async function getUserNotifications(userId: string, limit = 25) {
           room?.movie_title ??
           (typeof metadataTitle === "string" ? metadataTitle : item.body),
         poster_url: room?.poster_url ?? null,
-      };
+        };
+    })(),
+    invite_status: (() => {
+      const inviteId = item.metadata?.["invite_id"];
+      return typeof inviteId === "string"
+        ? (inviteMap.get(inviteId)?.status ?? null)
+        : null;
     })(),
   })) as NotificationItem[];
 }

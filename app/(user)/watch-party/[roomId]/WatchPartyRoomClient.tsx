@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Copy, Crown, Globe2, LoaderCircle, Lock } from "lucide-react";
+import { Copy, Crown, Globe2, LoaderCircle, Lock, Share2 } from "lucide-react";
 import WatchPartyChatPanel from "./WatchPartyChatPanel";
 import WatchPartyInviteModal from "./WatchPartyInviteModal";
 import type { RoomData, RoomUser } from "../../../../types/watchPartyRoomTypes";
@@ -43,7 +43,13 @@ export default function WatchPartyRoomClient({
         <div className="mb-8 flex flex-col justify-between gap-6 xl:flex-row xl:items-end">
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/75 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+              <span
+                className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] backdrop-blur-xl ${
+                  roomClient.currentRoom.access_type === "public"
+                    ? "bg-emerald-500 text-white shadow-[0_10px_24px_-16px_rgba(34,197,94,0.95)]"
+                    : "border border-white/12 bg-white/[0.06] text-white/75 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                }`}
+              >
                 {roomClient.currentRoom.access_type === "private" ? (
                   <>
                     <Lock className="h-3.5 w-3.5" />
@@ -83,6 +89,25 @@ export default function WatchPartyRoomClient({
                     Copy Key
                   </button>
                 </div>
+              ) : null}
+
+              {roomClient.currentRoom.access_type === "public" ? (
+                <>
+                  <button
+                    onClick={roomClient.shareRoomUrl}
+                    className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-md border border-white/10 bg-white/[0.05] px-3 text-xs font-semibold text-white transition hover:bg-white/[0.1]"
+                  >
+                    <Share2 className="h-3.5 w-3.5" />
+                    Share URL
+                  </button>
+                  <button
+                    onClick={roomClient.copyRoomUrl}
+                    className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-md border border-white/10 bg-white/[0.05] px-3 text-xs font-semibold text-white transition hover:bg-white/[0.1]"
+                  >
+                    <Copy className="h-3.5 w-3.5" />
+                    Copy URL
+                  </button>
+                </>
               ) : null}
 
               {roomClient.isHost && (

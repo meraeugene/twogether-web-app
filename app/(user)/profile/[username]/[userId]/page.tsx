@@ -1,7 +1,7 @@
 import ErrorMessage from "@/components/ErrorMessage";
 import TabbedProfileView from "./TabbedProfileView";
 import { getCurrentUser, getUserByUsername } from "@/actions/authActions";
-import { getFollowStatsWithStatus } from "@/actions/followActions";
+import { getFollowStatsWithStatus } from "@/actions/social/followActions";
 import { getWatchlistByUserId } from "@/actions/watchlistActions";
 import { getUserRecommendationsById } from "@/actions/recommendationActions";
 

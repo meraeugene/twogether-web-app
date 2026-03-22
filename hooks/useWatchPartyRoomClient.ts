@@ -233,22 +233,29 @@ export function useWatchPartyRoomClient({
         sender: currentUser,
       };
 
-      await mutateMessages(
-        async (prev = []) => {
-          await sendWatchPartyMessage({
-            roomId: room.id,
-            senderId: currentUserId,
-            content: trimmed,
-          });
-          channelRef.current?.send({
-            type: "broadcast",
-            event: "new-message",
-            payload: { roomId: room.id },
-          });
-          return [...prev, optimistic];
-        },
-        { revalidate: false },
-      );
+      await mutateMessages((prev = []) => [...prev, optimistic], {
+        revalidate: false,
+      });
+
+      try {
+        await sendWatchPartyMessage({
+          roomId: room.id,
+          senderId: currentUserId,
+          content: trimmed,
+        });
+        channelRef.current?.send({
+          type: "broadcast",
+          event: "new-message",
+          payload: { roomId: room.id },
+        });
+        void mutateMessages();
+      } catch (error) {
+        await mutateMessages();
+        setInput(trimmed);
+        toast.error(
+          error instanceof Error ? error.message : "Failed to send message.",
+        );
+      }
     },
     [channelRef, currentUser, currentUserId, input, mutateMessages, room.id],
   );
@@ -373,10 +380,47 @@ export function useWatchPartyRoomClient({
     toast.success("Room key copied.");
   }, [privateRoomCode]);
 
+  const getRoomUrl = useCallback(() => {
+    if (typeof window === "undefined") return null;
+    return new URL(`/watch-party/${currentRoom.id}`, window.location.origin)
+      .href;
+  }, [currentRoom.id]);
+
+  const copyRoomUrl = useCallback(async () => {
+    const roomUrl = getRoomUrl();
+    if (!roomUrl) return;
+    await navigator.clipboard.writeText(roomUrl);
+    toast.success("Room URL copied.");
+  }, [getRoomUrl]);
+
+  const shareRoomUrl = useCallback(async () => {
+    const roomUrl = getRoomUrl();
+    if (!roomUrl) return;
+
+    const shareData = {
+      title: currentRoom.movie_title,
+      text: `Join my public watch party for ${currentRoom.movie_title}.`,
+      url: roomUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") return;
+      }
+    }
+
+    await navigator.clipboard.writeText(roomUrl);
+    toast.success("Room URL copied.");
+  }, [currentRoom.movie_title, getRoomUrl]);
+
   return {
     alreadyInRoomIds,
     closeInviteModal,
     copyRoomKey,
+    copyRoomUrl,
     currentRoom,
     currentUser,
     filteredFriends,
@@ -397,6 +441,7 @@ export function useWatchPartyRoomClient({
     otherUser,
     privateRoomCode,
     selectedFriendId,
+    shareRoomUrl,
     setInviteQuery,
     setSelectedFriendId,
     setShowEmojiPicker,

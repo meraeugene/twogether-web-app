@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import { sendFriendRequest } from "@/actions/friendActions";
+import { sendFriendRequest } from "@/actions/social/friendActions";
 import { FaUserPlus, FaUser } from "react-icons/fa";
 import { toast } from "sonner";
 import { FriendRequestStatus } from "@/types/friends";

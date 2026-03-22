@@ -33,7 +33,7 @@ function MovieThumb({
   posterUrl?: string | null;
 }) {
   return (
-    <div className="relative min-h-[124px] w-24 shrink-0 self-stretch overflow-hidden rounded-[20px] border border-white/10 bg-white/[0.04] sm:w-28">
+    <div className="relative min-h-[98px] w-20 shrink-0 overflow-hidden rounded-[18px] border border-white/10 bg-white/[0.04] sm:min-h-[124px] sm:w-28 sm:rounded-[20px]">
       {posterUrl ? (
         <Image
           src={posterUrl}
@@ -55,10 +55,12 @@ function NotificationCard({
   notification,
   userId,
   onMutate,
+  onClose,
 }: {
   notification: NotificationItem;
   userId: string;
   onMutate: () => void;
+  onClose: () => void;
 }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -76,6 +78,11 @@ function NotificationCard({
     notification.type === "watch_party_invite"
       ? `${actorName} invited you to watch ${movieTitle} together`
       : notification.title;
+  const canAcceptInvite =
+    notification.type === "watch_party_invite" &&
+    inviteId &&
+    !notification.is_read &&
+    notification.invite_status === "pending";
 
   const markRead = async () => {
     if (notification.is_read) return;
@@ -96,6 +103,7 @@ function NotificationCard({
         await markRead();
         toast.success(`You accepted ${actorName}'s invite.`);
         onMutate();
+        onClose();
         if (result.roomId) router.push(`/watch-party/${result.roomId}`);
       } catch (error) {
         const message =
@@ -119,7 +127,7 @@ function NotificationCard({
           : "border-red-500/20 bg-linear-to-br from-red-600/[0.12] via-white/[0.05] to-transparent"
       }`}
     >
-      <div className="flex items-stretch gap-3">
+      <div className="flex items-start gap-3">
         <MovieThumb
           title={movieTitle}
           posterUrl={notification.movie?.poster_url}
@@ -131,7 +139,7 @@ function NotificationCard({
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/45">
                 Notification
               </p>
-              <p className="mt-1 text-sm font-semibold leading-6 text-white">
+              <p className="mt-1 text-sm font-semibold leading-6 text-white sm:text-[15px]">
                 {displayTitle}
               </p>
             </div>
@@ -141,9 +149,7 @@ function NotificationCard({
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            {notification.type === "watch_party_invite" &&
-            inviteId &&
-            !notification.is_read ? (
+            {canAcceptInvite ? (
               <button
                 onClick={handleAccept}
                 disabled={isPending}
@@ -158,8 +164,12 @@ function NotificationCard({
                   "Accept Invite"
                 )}
               </button>
+            ) : notification.type === "watch_party_invite" &&
+              notification.invite_status === "accepted" ? (
+              <span className="inline-flex h-9 items-center justify-center rounded-md border border-emerald-500/20 bg-emerald-500/10 px-3 text-xs font-semibold text-emerald-300">
+                Joined Room
+              </span>
             ) : null}
-
           </div>
         </div>
       </div>
@@ -176,9 +186,13 @@ export default function NotificationBell({ userId }: { userId: string }) {
     data: notifications,
     mutate: mutateNotifications,
     isLoading,
-  } = useSWR(["notifications", userId], () => getUserNotifications(userId, 25), {
-    refreshInterval: 12000,
-  });
+  } = useSWR(
+    ["notifications", userId],
+    () => getUserNotifications(userId, 25),
+    {
+      refreshInterval: 12000,
+    },
+  );
 
   const { data: unreadCount, mutate: mutateUnread } = useSWR(
     ["notifications-unread", userId],
@@ -193,18 +207,16 @@ export default function NotificationBell({ userId }: { userId: string }) {
 
   useEffect(() => {
     const supabase = createClient();
-    const channel = supabase
-      .channel(`notifications:${userId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "notifications",
-          filter: `recipient_user_id=eq.${userId}`,
-        },
-        () => refreshAll(),
-      );
+    const channel = supabase.channel(`notifications:${userId}`).on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "notifications",
+        filter: `recipient_user_id=eq.${userId}`,
+      },
+      () => refreshAll(),
+    );
 
     channel.subscribe();
 
@@ -255,7 +267,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
       </button>
 
       {open && (
-        <div className="fixed left-4 right-4 top-20 z-[120] overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#09090b]/95 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.75),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-2xl sm:left-auto sm:w-[min(28rem,calc(100vw-2rem))] xl:absolute xl:right-0 xl:top-[calc(100%+12px)]">
+        <div className="fixed left-4 right-4 top-20 z-[120] overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#09090b]  shadow-[0_32px_64px_-16px_rgba(0,0,0,0.75),inset_0_1px_1px_rgba(255,255,255,0.05)] backdrop-blur-2xl md:left-0 xl:left-auto sm:w-[min(28rem,calc(100vw-2rem))] xl:absolute xl:right-0 xl:top-[calc(100%+12px)]">
           <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.12),transparent_45%)]" />
 
           <div className="relative p-4 sm:p-5">
@@ -270,7 +282,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
                     await markAllNotificationsRead(userId);
                     refreshAll();
                   }}
-                  className="text-xs font-semibold text-white/45 transition hover:text-white"
+                  className="text-xs cursor-pointer font-semibold text-white/45 transition hover:text-white"
                 >
                   Mark all as read
                 </button>
@@ -301,6 +313,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
                     notification={notification}
                     userId={userId}
                     onMutate={refreshAll}
+                    onClose={() => setOpen(false)}
                   />
                 ))
               )}

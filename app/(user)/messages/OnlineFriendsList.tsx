@@ -1,6 +1,9 @@
 "use client";
 
-import { getOnlineFriends, getOrCreateThread } from "@/actions/messageActions";
+import {
+  getOnlineFriends,
+  getOrCreateThread,
+} from "@/actions/social/messageActions";
 import Image from "next/image";
 import useSWR from "swr";
 
@@ -15,12 +18,12 @@ export default function OnlineFriendsList({
     avatar: string | null,
     displayName: string,
     username: string,
-    threadStatus: "active" | "pending"
+    threadStatus: "active" | "pending",
   ) => void;
 }) {
   const { data: friends, isLoading } = useSWR(
     "online-friends",
-    getOnlineFriends
+    getOnlineFriends,
   );
 
   if (isLoading) {
@@ -62,7 +65,7 @@ export default function OnlineFriendsList({
               friend.avatar_url,
               friend.display_name || "",
               friend.username || "",
-              "active"
+              "active",
             );
           }}
           key={friend.id}

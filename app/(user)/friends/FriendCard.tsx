@@ -5,7 +5,7 @@ import {
   cancelFriendRequest,
   rejectFriendRequest,
   removeFriend,
-} from "@/actions/friendActions";
+} from "@/actions/social/friendActions";
 import Image from "next/image";
 import { useState, useTransition } from "react";
 import { FaEnvelope, FaUser } from "react-icons/fa";
@@ -13,7 +13,10 @@ import { motion } from "framer-motion";
 import { FaUserXmark } from "react-icons/fa6";
 import Link from "next/link";
 import MessageModal from "@/components/MessageModal";
-import { getOrCreateThread, sendMessage } from "@/actions/messageActions";
+import {
+  getOrCreateThread,
+  sendMessage,
+} from "@/actions/social/messageActions";
 import { useRouter } from "next/navigation";
 import { KeyedMutator } from "swr";
 
@@ -85,7 +88,7 @@ export function FriendCard({
             (currentData ?? []).filter((req) => req.id !== id),
           rollbackOnError: true,
           revalidate: false,
-        }
+        },
       );
     });
   };
@@ -103,7 +106,7 @@ export function FriendCard({
             (currentData ?? []).filter((req) => req.id !== id),
           rollbackOnError: true,
           revalidate: false,
-        }
+        },
       );
     });
   };
@@ -121,7 +124,7 @@ export function FriendCard({
             (currentData ?? []).filter((sent) => sent.id !== id),
           rollbackOnError: true,
           revalidate: false,
-        }
+        },
       );
     });
   };
@@ -139,7 +142,7 @@ export function FriendCard({
             (currentData ?? []).filter((friend) => friend.id !== id),
           rollbackOnError: true,
           revalidate: false,
-        }
+        },
       );
     });
   };
