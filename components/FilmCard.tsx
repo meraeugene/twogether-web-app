@@ -175,7 +175,7 @@ function FilmCard({
   const trailerUrl = item.trailer_key
     ? `https://www.youtube.com/embed/${item.trailer_key}?autoplay=1&mute=0&controls=0&loop=1&playlist=${item.trailer_key}&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&vq=hd1080`
     : null;
-  const tvMetaLabel = `S${item.seasons || 1} · ${item.episodes || 1}EPS`;
+  const tvMetaLabel = `${item.episodes || 1}EPS`;
   const runtimeLabel =
     item.type === "movie"
       ? item.duration
@@ -545,7 +545,7 @@ function FilmCard({
 
                     {item.type === "tv" ? (
                       <span className="text-white/50 font-medium">
-                        S{item.seasons || 1} · {item.episodes || 1}EPS
+                        {item.episodes || 1}EPS
                       </span>
                     ) : (
                       item.duration !== 0 && (

@@ -203,8 +203,7 @@ export default function TMDBWatchPage({
 
             {recommendation.type === "tv" ? (
               <span className="text-white/50 font-medium">
-                S{recommendation.seasons || 1} · {recommendation.episodes || 1}
-                EPS
+                {recommendation.episodes || 1}EPS
               </span>
             ) : (
               recommendation.duration !== 0 && (
@@ -278,3 +277,4 @@ export default function TMDBWatchPage({
     </main>
   );
 }
+

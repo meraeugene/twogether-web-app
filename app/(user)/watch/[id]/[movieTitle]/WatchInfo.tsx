@@ -138,8 +138,7 @@ export default function WatchInfo({
 
         {recommendation.type === "tv" ? (
           <span className="text-white/50 font-medium">
-            S{recommendation.seasons || 1} · {recommendation.episodes || 1}
-            EPS
+            {recommendation.episodes || 1}EPS
           </span>
         ) : (
           <span className="text-white/50 font-medium">
@@ -221,3 +220,4 @@ export default function WatchInfo({
     </div>
   );
 }
+

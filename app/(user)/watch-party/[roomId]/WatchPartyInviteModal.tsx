@@ -38,13 +38,13 @@ export default function WatchPartyInviteModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+          className="fixed inset-0 z-[100] flex items-end justify-center overflow-y-auto bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="flex min-h-[72dvh] max-h-[100dvh] w-full flex-col overflow-hidden rounded-t-[28px] border border-white/10 border-b-0 bg-[#0B0B0C] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)] sm:min-h-0 sm:max-h-[80vh] sm:max-w-md sm:rounded-[28px] sm:border-b"
+            className="flex min-h-[72dvh] max-h-[calc(100dvh-0.75rem)] w-full flex-col overflow-hidden rounded-t-[28px] border border-white/10 border-b-0 bg-[#0B0B0C] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)] sm:min-h-0 sm:max-h-[80vh] sm:max-w-md sm:rounded-[28px] sm:border-b"
           >
             <div className="px-4 pb-5 pt-4 sm:px-6 sm:pb-8 sm:pt-6">
               <div className="mb-4 flex items-center justify-between gap-4">
