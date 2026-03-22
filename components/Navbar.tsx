@@ -308,7 +308,7 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="relative 2xl:hidden border-t border-white/10 p-4 flex flex-col text-white rounded-b-3xl bg-black max-h-[55vh] overflow-y-auto"
+            className="relative 2xl:hidden border-t border-white/10 p-4 flex flex-col text-white rounded-b-3xl bg-black max-h-[65vh] overflow-y-auto"
           >
             <motion.div
               initial="hidden"
