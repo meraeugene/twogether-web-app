@@ -2,7 +2,9 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { CURRENT_USER_COOKIE } from "@/utils/currentUserSnapshot";
 
 export const getCurrentUser = async () => {
   const supabase = await createClient();
@@ -10,7 +12,6 @@ export const getCurrentUser = async () => {
   const { data: authData, error: authError } = await supabase.auth.getUser();
 
   if (authError || !authData.user) {
-    console.log("Error getting user:", authError?.message);
     return null;
   }
 
@@ -23,7 +24,6 @@ export const getCurrentUser = async () => {
     .single();
 
   if (profileError) {
-    console.log("Error fetching profile:", profileError.message);
     return null;
   }
 
@@ -55,12 +55,12 @@ export async function getUserByUsername(username: string) {
 
 export const signOut = async () => {
   const supabase = await createClient();
+  const cookieStore = await cookies();
 
   // Optional: check if user exists before signing out
   const { data: authData } = await supabase.auth.getUser();
 
   if (!authData.user) {
-    console.log("No active session found.");
     redirect("/"); // Still redirect, but gracefully
   }
 
@@ -70,6 +70,12 @@ export const signOut = async () => {
     console.error("Logout failed:", error.message);
     return;
   }
+
+  cookieStore.set(CURRENT_USER_COOKIE, "", {
+    path: "/",
+    sameSite: "lax",
+    maxAge: 0,
+  });
 
   revalidatePath("/", "layout");
 

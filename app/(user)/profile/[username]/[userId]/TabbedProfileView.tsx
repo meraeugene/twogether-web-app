@@ -82,7 +82,8 @@ export default function TabbedProfileView({
     currentUser ? ["friend-status", currentUser.id, user.id] : null,
     currentUser ? () => getFriendStats(currentUser.id, user.id) : null,
     {
-      refreshInterval: 5000, // re-fetch every 5 seconds
+      refreshInterval: 0,
+      revalidateOnFocus: false,
       refreshWhenHidden: false,
     },
   );
@@ -95,7 +96,8 @@ export default function TabbedProfileView({
     ["friends", user.id],
     () => getFriendsOfUser(user.id),
     {
-      refreshInterval: 5000, // re-fetch every 5 seconds
+      refreshInterval: 0,
+      revalidateOnFocus: false,
       refreshWhenHidden: false,
     },
   );
@@ -218,7 +220,7 @@ export default function TabbedProfileView({
             {currentUser?.id === user.id && (
               <div className="flex items-center gap-3">
                 <Link
-                  prefetch
+                  prefetch={false}
                   href={`/profile/${encodeURIComponent(user.username)}`}
                   className={`group mt-5 relative px-4 py-2 rounded-xl flex items-center gap-2 text-base font-medium tracking-wide transition backdrop-blur border border-white/20 shadow-sm hover:bg-white/20
                 `}
@@ -431,7 +433,7 @@ export default function TabbedProfileView({
                           </div>
 
                           <Link
-                            prefetch
+                            prefetch={false}
                             href={`/profile/${friend.username}/${friend.id}`}
                             className="mt-1 cursor-pointer text-sm px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center gap-2"
                           >

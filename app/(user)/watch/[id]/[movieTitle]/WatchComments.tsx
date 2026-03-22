@@ -49,7 +49,7 @@ export default function WatchComments({
     ["comments", recId],
     () => getCommentsForRecommendation(recId, currentUserId),
     {
-      refreshInterval: 1000, // Auto-refresh every 5 seconds
+      refreshInterval: 5000,
       refreshWhenHidden: false,
     },
   );

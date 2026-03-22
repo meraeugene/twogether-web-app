@@ -207,6 +207,18 @@ export default function MessagesClient({
               otherUserDisplayName={selectedUserDisplayName}
               otherUserUsername={selectedUserUsername}
               threadStatus={selectedUserMessageStatus}
+              onThreadDeleted={() => {
+                setSelectedThreadId(null);
+                setSelectedUserId(null);
+                setActiveThreadId(null);
+                setSelectedUserAvatar(null);
+                setSelectedUserDisplayName("");
+                setSelectedUserUsername("");
+                setSelectedUserMessageStatus(undefined);
+              }}
+              onThreadStatusChange={(status) => {
+                setSelectedUserMessageStatus(status);
+              }}
             />
           </>
         )}

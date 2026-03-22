@@ -15,6 +15,47 @@ const CACHE_TTL = 1000 * 60 * 5; // 5 minutes
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+const MAX_RECOMMEND_RESULTS = 8;
+const MAX_TV_SEASONS = 12;
+
+async function getEpisodeTitlesPerSeason(
+  tmdbId: number,
+  totalSeasons: number,
+): Promise<Record<number, EpisodeTitle[]>> {
+  const seasonNumbers = Array.from(
+    { length: Math.min(totalSeasons, MAX_TV_SEASONS) },
+    (_, index) => index + 1,
+  );
+
+  const seasons = await Promise.all(
+    seasonNumbers.map(async (season) => {
+      const seasonRes = await fetch(
+        `${BASE_URL}/tv/${tmdbId}/season/${season}?api_key=${TMDB_API_KEY}`,
+      );
+
+      if (!seasonRes.ok) return null;
+
+      const seasonData: TMDBSeasonResponse = await seasonRes.json();
+      return [
+        season,
+        seasonData.episodes.map(
+          (ep): EpisodeTitle => ({
+            episode_number: ep.episode_number,
+            title: ep.name,
+          }),
+        ),
+      ] as const;
+    }),
+  );
+
+  const validSeasons = seasons.filter(
+    (
+      season,
+    ): season is readonly [number, EpisodeTitle[]] => season !== null,
+  );
+
+  return Object.fromEntries(validSeasons);
+}
 
 export async function GET(req: NextRequest) {
   const query = req.nextUrl.searchParams.get("query");
@@ -45,18 +86,23 @@ export async function GET(req: NextRequest) {
 
   const searchData = await searchRes.json();
 
-  const rawResults: TMDBRawResult[] = (searchData.results || []).sort(
-    (a: TMDBRawResult, b: TMDBRawResult) => {
+  const rawResults: TMDBRawResult[] = (searchData.results || [])
+    .filter(
+      (item: TMDBRawResult) =>
+        (item.media_type === "movie" || item.media_type === "tv") &&
+        !!item.poster_path,
+    )
+    .sort((a: TMDBRawResult, b: TMDBRawResult) => {
       const getYear = (item: TMDBRawResult) =>
         item.media_type === "movie"
           ? parseInt(item.release_date?.slice(0, 4) || "0")
           : parseInt(item.first_air_date?.slice(0, 4) || "0");
       return getYear(b) - getYear(a);
-    },
-  );
+    });
 
   const enrichedResults: TMDBEnrichedResult[] = await Promise.all(
-    rawResults.map(async (item): Promise<TMDBEnrichedResult> => {
+    rawResults.slice(0, MAX_RECOMMEND_RESULTS).map(
+      async (item): Promise<TMDBEnrichedResult> => {
       try {
         const detailsRes = await fetch(
           `${BASE_URL}/${item.media_type}/${item.id}?api_key=${TMDB_API_KEY}&append_to_response=videos`,
@@ -86,24 +132,13 @@ export async function GET(req: NextRequest) {
               video.site === "YouTube",
           );
 
-        const episodeTitlesPerSeason: Record<number, EpisodeTitle[]> = {};
+        let episodeTitlesPerSeason: Record<number, EpisodeTitle[]> | undefined;
 
         if (item.media_type === "tv") {
-          for (let season = 1; season <= details.number_of_seasons; season++) {
-            const seasonRes = await fetch(
-              `${BASE_URL}/tv/${item.id}/season/${season}?api_key=${TMDB_API_KEY}`,
-            );
-
-            if (seasonRes.ok) {
-              const seasonData: TMDBSeasonResponse = await seasonRes.json();
-              episodeTitlesPerSeason[season] = seasonData.episodes.map(
-                (ep): EpisodeTitle => ({
-                  episode_number: ep.episode_number,
-                  title: ep.name,
-                }),
-              );
-            }
-          }
+          episodeTitlesPerSeason = await getEpisodeTitlesPerSeason(
+            item.id,
+            details.number_of_seasons || 0,
+          );
         }
 
         const duration =
@@ -131,8 +166,7 @@ export async function GET(req: NextRequest) {
             item.media_type === "tv" ? details.number_of_seasons : undefined,
           episodes:
             item.media_type === "tv" ? details.number_of_episodes : undefined,
-          episodeTitlesPerSeason:
-            item.media_type === "tv" ? episodeTitlesPerSeason : undefined,
+          episodeTitlesPerSeason,
           trailer_key: trailer?.key || null,
         };
       } catch (err) {

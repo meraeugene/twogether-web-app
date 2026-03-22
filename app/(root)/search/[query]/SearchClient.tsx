@@ -87,7 +87,7 @@ export default function SearchClient({
       <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       <Link
-        prefetch
+        prefetch={false}
         href="/browse"
         className="mb-6 inline-flex items-center justify-center rounded-md bg-white px-4 py-2 text-red-600 transition hover:bg-red-600 hover:text-white"
       >

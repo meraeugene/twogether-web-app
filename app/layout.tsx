@@ -10,7 +10,6 @@ import {
   siteName,
   siteUrl,
 } from "@/app/seo";
-import { getCurrentUser } from "@/actions/authActions";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -64,8 +63,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currentUser = await getCurrentUser();
-
   return (
     <html lang="en">
       <head>
@@ -78,7 +75,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster position="bottom-right" />
-        <Header initialUser={currentUser} />
+        <Header />
         {children}
         <Footer />
       </body>

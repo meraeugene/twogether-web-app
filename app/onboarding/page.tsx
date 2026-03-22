@@ -31,10 +31,10 @@ export default function OnboardingPage() {
     prefers: "both",
   });
   const [relationshipStatusOptions, setRelationshipStatusOptions] = useState(
-    baseRelationshipOptions
+    baseRelationshipOptions,
   );
   const [socialIntentOptions, setSocialIntentOptions] = useState(
-    baseSocialIntentOptions
+    baseSocialIntentOptions,
   );
   const [moodsOptions, setMoodsOptions] = useState(baseMoodOptions);
   const [customMood, setCustomMood] = useState("");
@@ -118,13 +118,13 @@ export default function OnboardingPage() {
     });
 
     if (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Something went wrong.");
       setLoading(false);
       return;
     }
 
-    toast.success("Welcome to Twogether — your movie journey starts now! 🍿✨");
+    toast.success("Welcome to Twogether, your movie journey starts now!");
     router.push("/recos");
   };
 
@@ -161,7 +161,7 @@ export default function OnboardingPage() {
                 e.preventDefault();
                 handleAddCustomRelationship();
               }}
-              className="flex gap-4 items-stretch"
+              className="flex items-stretch gap-4"
             >
               <div className="flex-1">
                 <TextInputCard
@@ -173,7 +173,7 @@ export default function OnboardingPage() {
 
               <button
                 type="submit"
-                className="px-4 w-[20%] uppercase rounded-lg bg-gray-100 text-black hover:bg-gray-300 font-[family-name:var(--font-geist-mono)] italic cursor-pointer"
+                className="w-[20%] cursor-pointer rounded-lg bg-gray-100 px-4 font-[family-name:var(--font-geist-mono)] uppercase italic text-black hover:bg-gray-300"
               >
                 Add
               </button>
@@ -194,7 +194,7 @@ export default function OnboardingPage() {
                 e.preventDefault();
                 handleAddCustomSocialIntent();
               }}
-              className="flex gap-4 items-stretch"
+              className="flex items-stretch gap-4"
             >
               <div className="flex-1">
                 <TextInputCard
@@ -205,7 +205,7 @@ export default function OnboardingPage() {
               </div>
               <button
                 type="submit"
-                className="px-4 w-[20%] uppercase rounded-lg bg-gray-100 text-black hover:bg-gray-300 font-[family-name:var(--font-geist-mono)] italic cursor-pointer"
+                className="w-[20%] cursor-pointer rounded-lg bg-gray-100 px-4 font-[family-name:var(--font-geist-mono)] uppercase italic text-black hover:bg-gray-300"
               >
                 Add
               </button>
@@ -237,7 +237,7 @@ export default function OnboardingPage() {
                 e.preventDefault();
                 handleAddCustomMood();
               }}
-              className="flex gap-4 items-stretch"
+              className="flex items-stretch gap-4"
             >
               <div className="flex-1">
                 <TextInputCard
@@ -248,7 +248,7 @@ export default function OnboardingPage() {
               </div>
               <button
                 type="submit"
-                className="px-4 w-[20%] uppercase rounded-lg bg-gray-100 text-black hover:bg-gray-300 font-[family-name:var(--font-geist-mono)] italic cursor-pointer"
+                className="w-[20%] cursor-pointer rounded-lg bg-gray-100 px-4 font-[family-name:var(--font-geist-mono)] uppercase italic text-black hover:bg-gray-300"
                 disabled={!customMood.trim()}
               >
                 Add
@@ -273,23 +273,22 @@ export default function OnboardingPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center  bg-black text-white  pb-16  pt-28 relative px-7 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black px-7 pb-16 pt-28 text-white lg:px-24 xl:px-32 xl:pt-32 2xl:px-26">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
-      {/* STEPS PROGESS */}
-      <div className="flex flex-wrap justify-center gap-2 mb-8 text-sm">
+      <div className="mb-8 flex flex-wrap justify-center gap-2 text-sm">
         {steps.map((s, i) => (
           <button
             key={s.key}
             type="button"
             onClick={() => i <= step && setStep(i)}
-            className={`uppercase tracking-wide px-3 py-1 rounded  font-[family-name:var(--font-geist-mono)] transition-all duration-200 font-medium
+            className={`rounded px-3 py-1 font-[family-name:var(--font-geist-mono)] font-medium uppercase tracking-wide transition-all duration-200
         ${
           i === step
-            ? "bg-gray-100 text-black hover:bg-gray-200 cursor-pointer"
+            ? "cursor-pointer bg-gray-100 text-black hover:bg-gray-200"
             : i < step
-            ? "bg-gray-400 text-black hover:bg-gray-300 cursor-pointer"
-            : "text-gray-600 cursor-not-allowed"
+              ? "cursor-pointer bg-gray-400 text-black hover:bg-gray-300"
+              : "cursor-not-allowed text-gray-600"
         }
       `}
             disabled={i > step}
@@ -299,17 +298,14 @@ export default function OnboardingPage() {
         ))}
       </div>
 
-      {/* TITLE */}
-      <h1 className="text-2xl lg:text-3xl font-semibold mb-2 text-center font-[family-name:var(--font-geist-sans)]">
+      <h1 className="mb-2 text-center font-[family-name:var(--font-geist-sans)] text-2xl font-semibold lg:text-3xl">
         {steps[step].prompt}
       </h1>
 
-      {/* SUBTITLE */}
-      <p className="text-gray-400 mb-8 text-center font-[family-name:var(--font-geist-sans)]">
+      <p className="mb-8 text-center font-[family-name:var(--font-geist-sans)] text-gray-400">
         Question {step + 1} of {steps.length}
       </p>
 
-      {/* CONTENT */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentKey}
@@ -323,47 +319,44 @@ export default function OnboardingPage() {
         </motion.div>
       </AnimatePresence>
 
-      {/* BUTTONS */}
-      <div className=" w-full max-w-lg  mt-8 font-[family-name:var(--font-geist-mono)]">
+      <div className="mt-8 w-full max-w-lg font-[family-name:var(--font-geist-mono)]">
         {step < steps.length - 1 ? (
           <button
             onClick={() => {
               if (step === 0 && !form.username.trim()) {
-                toast.error(
-                  "Oops! No username? Trying to vanish into thin air? 👻"
-                );
+                toast.error("Oops! No username? Trying to vanish into thin air?");
                 return;
               }
 
               if (step === 1 && !form.relationship_status.trim()) {
-                toast.error(" At least tell us your situationship status 😩");
+                toast.error("At least tell us your situationship status.");
                 return;
               }
 
               if (step === 2 && !form.social_intent.length) {
                 toast.error(
-                  "You forgot your social intent... introvert detected 😅"
+                  "You forgot your social intent. Introvert detected.",
                 );
                 return;
               }
 
               if (step === 3 && !form.favorite_genres.length) {
                 toast.error(
-                  "Pick at least one genre 🎬 No one likes a flavorless film fan."
+                  "Pick at least one genre. No one likes a flavorless film fan.",
                 );
                 return;
               }
 
               if (step === 4 && !form.favorite_moods.length) {
                 toast.error(
-                  "Adding empty mood? That’s *so* emotionally unavailable of you 💅"
+                  "Adding an empty mood? That's emotionally unavailable behavior.",
                 );
                 return;
               }
 
               next();
             }}
-            className="px-5 uppercase w-full py-4 bg-gray-200 text-black hover:bg-gray-300 cursor-pointer rounded-xl"
+            className="w-full cursor-pointer rounded-xl bg-gray-200 px-5 py-4 uppercase text-black hover:bg-gray-300"
           >
             Next
           </button>
@@ -372,7 +365,7 @@ export default function OnboardingPage() {
             type="button"
             onClick={handleFinish}
             disabled={loading}
-            className="px-5 uppercase w-full py-4 bg-gray-200 text-black hover:bg-gray-300 cursor-pointer  rounded-xl"
+            className="w-full cursor-pointer rounded-xl bg-gray-200 px-5 py-4 uppercase text-black hover:bg-gray-300"
           >
             {loading ? (
               <div className="flex items-center justify-center gap-3">

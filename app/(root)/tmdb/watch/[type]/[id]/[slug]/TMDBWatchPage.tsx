@@ -1,7 +1,7 @@
 "use client";
 
 import WatchPlayer from "@/app/(user)/watch/[id]/[movieTitle]/WatchPlayer";
-import WatchGemeni from "@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import WatchSkeletonLoading from "@/components/WatchSkeletonLoading";
 import { Sparkles } from "lucide-react";
@@ -21,6 +21,11 @@ import TMDBReviewForm from "./TMDBReviewForm";
 import TMDBMovieReviews from "./TMDBMovieReviews";
 import { AnimatePresence, motion } from "framer-motion";
 import WatchTogetherButton from "@/components/WatchTogetherButton";
+
+const WatchGemeni = dynamic(
+  () => import("@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni"),
+  { ssr: false },
+);
 
 type SWRResponse = {
   recommendation: Recommendation;
@@ -111,6 +116,7 @@ export default function TMDBWatchPage({
               : [recommendation.stream_url]
           }
           type={recommendation.type}
+          isEpisodeMetadataLoading={isLoading}
           episodeTitlesPerSeason={
             recommendation.episode_titles_per_season
               ? Object.fromEntries(

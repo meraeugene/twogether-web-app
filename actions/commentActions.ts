@@ -15,38 +15,61 @@ export async function getCommentsForRecommendation(
 
   if (error) throw new Error("Failed to fetch comments");
 
-  const enriched = await Promise.all(
-    (comments || []).map(async (comment) => {
-      const [{ count: likes }, { count: dislikes }, { data: userReaction }] =
-        await Promise.all([
-          supabase
-            .from("comment_reactions")
-            .select("*", { count: "exact", head: true })
-            .eq("comment_id", comment.id)
-            .eq("type", "like"),
+  const commentIds = (comments || []).map((comment) => comment.id);
+  if (!commentIds.length) return [];
 
-          supabase
-            .from("comment_reactions")
-            .select("*", { count: "exact", head: true })
-            .eq("comment_id", comment.id)
-            .eq("type", "dislike"),
+  const [{ data: reactions, error: reactionsError }, { data: userReactions, error: userReactionsError }] =
+    await Promise.all([
+      supabase
+        .from("comment_reactions")
+        .select("comment_id, type")
+        .in("comment_id", commentIds),
+      supabase
+        .from("comment_reactions")
+        .select("comment_id, type")
+        .in("comment_id", commentIds)
+        .eq("user_id", currentUserId),
+    ]);
 
-          supabase
-            .from("comment_reactions")
-            .select("type")
-            .eq("comment_id", comment.id)
-            .eq("user_id", currentUserId)
-            .maybeSingle(),
-        ]);
+  if (reactionsError || userReactionsError) {
+    throw new Error("Failed to fetch comment reactions");
+  }
 
-      return {
-        ...comment,
-        likes: likes ?? 0,
-        dislikes: dislikes ?? 0,
-        userReaction: userReaction?.type ?? null,
-      };
-    })
-  );
+  const countsByComment = new Map<
+    string,
+    { likes: number; dislikes: number }
+  >();
+
+  (reactions || []).forEach((reaction) => {
+    const current = countsByComment.get(reaction.comment_id) ?? {
+      likes: 0,
+      dislikes: 0,
+    };
+
+    if (reaction.type === "like") {
+      current.likes += 1;
+    } else if (reaction.type === "dislike") {
+      current.dislikes += 1;
+    }
+
+    countsByComment.set(reaction.comment_id, current);
+  });
+
+  const userReactionByComment = new Map<string, string>();
+  (userReactions || []).forEach((reaction) => {
+    userReactionByComment.set(reaction.comment_id, reaction.type);
+  });
+
+  const enriched = (comments || []).map((comment) => {
+    const counts = countsByComment.get(comment.id);
+
+    return {
+      ...comment,
+      likes: counts?.likes ?? 0,
+      dislikes: counts?.dislikes ?? 0,
+      userReaction: userReactionByComment.get(comment.id) ?? null,
+    };
+  });
 
   return enriched;
 }

@@ -24,6 +24,11 @@ export default function OnlineFriendsList({
   const { data: friends, isLoading } = useSWR(
     "online-friends",
     getOnlineFriends,
+    {
+      refreshInterval: 15000,
+      revalidateOnFocus: true,
+      refreshWhenHidden: false,
+    },
   );
 
   if (isLoading) {
@@ -32,12 +37,12 @@ export default function OnlineFriendsList({
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 p-2 animate-pulse rounded-xl bg-white/5"
+            className="flex items-center gap-3 rounded-xl bg-white/5 p-2 animate-pulse"
           >
-            <div className="w-11 h-11 rounded-full bg-white/10" />
+            <div className="h-11 w-11 rounded-full bg-white/10" />
             <div className="flex-1 space-y-2">
-              <div className="w-1/2 h-3 bg-white/10 rounded" />
-              <div className="w-3/4 h-3 bg-white/10 rounded" />
+              <div className="h-3 w-1/2 rounded bg-white/10" />
+              <div className="h-3 w-3/4 rounded bg-white/10" />
             </div>
           </div>
         ))}
@@ -47,7 +52,7 @@ export default function OnlineFriendsList({
 
   if (!friends || friends.length === 0) {
     return (
-      <p className="text-white/50 text-center border-t border-white/10 p-4">
+      <p className="border-t border-white/10 p-4 text-center text-white/50">
         No online friends.
       </p>
     );
@@ -69,11 +74,10 @@ export default function OnlineFriendsList({
             );
           }}
           key={friend.id}
-          className="flex cursor-pointer items-center gap-3 w-full p-2 rounded-xl hover:bg-white/10 transition-all duration-200 group relative"
+          className="group relative flex w-full cursor-pointer items-center gap-3 rounded-xl p-2 transition-all duration-200 hover:bg-white/10"
         >
-          {/* Avatar + Ping */}
           <div className="relative">
-            <div className="w-11 h-11 rounded-full overflow-hidden">
+            <div className="h-11 w-11 overflow-hidden rounded-full">
               <Image
                 src={friend.avatar_url || "/default-avatar.png"}
                 alt={friend.display_name || friend.username}
@@ -83,19 +87,18 @@ export default function OnlineFriendsList({
                 className="rounded-full object-cover"
               />
             </div>
-            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-black" />
-            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 animate-ping opacity-75" />
+            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-black bg-green-500" />
+            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 opacity-75 animate-ping" />
           </div>
 
-          {/* Name + Username */}
           <div className="flex-1 text-left">
-            <p className="text-white font-medium text-[15px] leading-none">
+            <p className="text-[15px] font-medium leading-none text-white">
               {friend.display_name || friend.username}
             </p>
-            <div className="flex items-center gap-2 mt-1">
-              <p className="text-white/40 text-[13px]">@{friend.username}</p>
-              <p className="text-green-400 text-[12px] font-medium">
-                • Active now
+            <div className="mt-1 flex items-center gap-2">
+              <p className="text-[13px] text-white/40">@{friend.username}</p>
+              <p className="text-[12px] font-medium text-green-400">
+                - Active now
               </p>
             </div>
           </div>

@@ -7,6 +7,47 @@ import {
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+const MAX_SEARCH_RESULTS = 8;
+const MAX_TV_SEASONS = 12;
+
+async function getEpisodeTitlesPerSeason(
+  tmdbId: number,
+  totalSeasons: number,
+): Promise<Record<number, EpisodeTitle[]>> {
+  const seasonNumbers = Array.from(
+    { length: Math.min(totalSeasons, MAX_TV_SEASONS) },
+    (_, index) => index + 1,
+  );
+
+  const seasons = await Promise.all(
+    seasonNumbers.map(async (season) => {
+      const seasonUrl = `${BASE_URL}/tv/${tmdbId}/season/${season}?api_key=${API_KEY}`;
+      const seasonRes = await fetch(seasonUrl, {
+        cache: "force-cache",
+        next: { revalidate: 86400 },
+      });
+
+      if (!seasonRes.ok) return null;
+
+      const seasonData: TMDBSeasonResponse = await seasonRes.json();
+      return [
+        season,
+        seasonData.episodes.map((ep) => ({
+          episode_number: ep.episode_number,
+          title: ep.name,
+        })),
+      ] as const;
+    }),
+  );
+
+  const validSeasons = seasons.filter(
+    (
+      season,
+    ): season is readonly [number, EpisodeTitle[]] => season !== null,
+  );
+
+  return Object.fromEntries(validSeasons);
+}
 
 export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
   const searchUrl = `${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(
@@ -29,7 +70,7 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
   );
 
   const enrichedResults: TMDBEnrichedResult[] = await Promise.all(
-    filtered.map(async (item) => {
+    filtered.slice(0, MAX_SEARCH_RESULTS).map(async (item) => {
       const detailUrl =
         item.media_type === "movie"
           ? `${BASE_URL}/movie/${item.id}?api_key=${API_KEY}&append_to_response=videos`
@@ -66,24 +107,10 @@ export async function searchTMDB(query: string): Promise<TMDBEnrichedResult[]> {
       let episodeTitlesPerSeason: Record<number, EpisodeTitle[]> | undefined;
 
       if (item.media_type === "tv") {
-        episodeTitlesPerSeason = {};
-        const totalSeasons = details.number_of_seasons || 0;
-
-        for (let season = 1; season <= totalSeasons; season++) {
-          const seasonUrl = `${BASE_URL}/tv/${item.id}/season/${season}?api_key=${API_KEY}`;
-          const seasonRes = await fetch(seasonUrl, {
-            cache: "force-cache",
-            next: { revalidate: 86400 },
-          });
-
-          if (seasonRes.ok) {
-            const seasonData: TMDBSeasonResponse = await seasonRes.json();
-            episodeTitlesPerSeason[season] = seasonData.episodes.map((ep) => ({
-              episode_number: ep.episode_number,
-              title: ep.name,
-            }));
-          }
-        }
+        episodeTitlesPerSeason = await getEpisodeTitlesPerSeason(
+          item.id,
+          details.number_of_seasons || 0,
+        );
       }
 
       return {

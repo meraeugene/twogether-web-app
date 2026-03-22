@@ -27,6 +27,11 @@ export default function MessageRequestList({
   const { data: allRequests, isLoading } = useSWR(
     "message-requests",
     getMessageRequests,
+    {
+      refreshInterval: 15000,
+      revalidateOnFocus: true,
+      refreshWhenHidden: false,
+    },
   );
 
   const filteredRequests = allRequests?.filter(
@@ -39,12 +44,12 @@ export default function MessageRequestList({
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 p-2 animate-pulse rounded-xl bg-white/5"
+            className="flex items-center gap-3 rounded-xl bg-white/5 p-2 animate-pulse"
           >
-            <div className="w-11 h-11 rounded-full bg-white/10" />
+            <div className="h-11 w-11 rounded-full bg-white/10" />
             <div className="flex-1 space-y-2">
-              <div className="w-1/2 h-3 bg-white/10 rounded" />
-              <div className="w-3/4 h-3 bg-white/10 rounded" />
+              <div className="h-3 w-1/2 rounded bg-white/10" />
+              <div className="h-3 w-3/4 rounded bg-white/10" />
             </div>
           </div>
         ))}
@@ -52,14 +57,15 @@ export default function MessageRequestList({
     );
   }
 
-  if (!filteredRequests || filteredRequests.length === 0)
+  if (!filteredRequests || filteredRequests.length === 0) {
     return (
-      <p className="text-white/50 text-center border-t border-white/10 p-4">
+      <p className="border-t border-white/10 p-4 text-center text-white/50">
         {direction === "incoming"
           ? "No incoming message requests."
           : "No sent message requests."}
       </p>
     );
+  }
 
   return (
     <div className="space-y-2 border-t border-white/10 p-4">
@@ -99,31 +105,31 @@ export default function MessageRequestList({
                 request.status,
               )
             }
-            className={`flex cursor-pointer items-center gap-3 p-2 rounded-xl transition w-full ${
+            className={`flex w-full cursor-pointer items-center gap-3 rounded-xl p-2 transition ${
               activeThreadId === request.thread_id
                 ? "bg-white/10"
                 : "hover:bg-white/5"
             }`}
           >
-            <div className="w-11 h-11 rounded-full overflow-hidden">
+            <div className="h-11 w-11 overflow-hidden rounded-full">
               <Image
                 src={request.other_user_avatar_url || "/default-avatar.png"}
                 alt="avatar"
                 width={44}
                 unoptimized
                 height={44}
-                className="object-cover w-full h-full"
+                className="h-full w-full object-cover"
               />
             </div>
 
             <div className="flex-1 text-left">
-              <p className="text-white font-medium text-[15px]">
+              <p className="text-[15px] font-medium text-white">
                 {request.other_user_display_name || "Unnamed"}
               </p>
-              <div className="text-white/50 text-[13px] flex items-center gap-1">
+              <div className="flex items-center gap-1 text-[13px] text-white/50">
                 <span className="line-clamp-1">{messagePreview}</span>
 
-                {timeAgo && <span className="text-white/30">· {timeAgo}</span>}
+                {timeAgo && <span className="text-white/30">- {timeAgo}</span>}
               </div>
             </div>
           </button>

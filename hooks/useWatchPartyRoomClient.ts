@@ -50,7 +50,10 @@ export function useWatchPartyRoomClient({
   const { data: liveRoom, mutate: mutateRoom } = useSWR<RoomData | null>(
     ["watch-party-room", room.id, currentUserId],
     () => getWatchPartyRoom(room.id, currentUserId) as Promise<RoomData | null>,
-    { refreshInterval: 2500 },
+    {
+      refreshInterval: 0,
+      revalidateOnFocus: false,
+    },
   );
 
   const currentRoom = liveRoom ?? room;
@@ -112,7 +115,10 @@ export function useWatchPartyRoomClient({
   const { data: messages = [], mutate: mutateMessages } = useSWR<RoomMessage[]>(
     ["watch-party-messages", room.id],
     () => getWatchPartyMessages(room.id, currentUserId),
-    { refreshInterval: 5000 },
+    {
+      refreshInterval: 0,
+      revalidateOnFocus: false,
+    },
   );
 
   const {

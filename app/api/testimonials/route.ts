@@ -17,15 +17,11 @@ export const GET = async () => {
 
     return NextResponse.json(testimonials, { status: 200 });
   } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : "Internal Server Error";
-    const errorDetails =
-      error instanceof Error ? error.stack : JSON.stringify(error);
+    console.error("Failed to fetch testimonials:", error);
 
     return NextResponse.json(
       {
-        message,
-        error: errorDetails,
+        message: "Internal Server Error",
       },
       { status: 500 }
     );

@@ -190,14 +190,18 @@ export default function NotificationBell({ userId }: { userId: string }) {
     ["notifications", userId],
     () => getUserNotifications(userId, 25),
     {
-      refreshInterval: 12000,
+      refreshInterval: 0,
+      revalidateOnFocus: false,
     },
   );
 
   const { data: unreadCount, mutate: mutateUnread } = useSWR(
     ["notifications-unread", userId],
     () => getUnreadNotificationCount(userId),
-    { refreshInterval: 12000 },
+    {
+      refreshInterval: 0,
+      revalidateOnFocus: false,
+    },
   );
 
   const refreshAll = useCallback(() => {

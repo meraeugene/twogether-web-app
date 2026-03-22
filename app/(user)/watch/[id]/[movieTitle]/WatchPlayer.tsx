@@ -1,120 +1,182 @@
 "use client";
 
 import { TbPlayerPlayFilled } from "react-icons/tb";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function WatchPlayer({
   urls,
   type,
   episodeTitlesPerSeason,
+  showServerSelector = true,
+  isEpisodeMetadataLoading = false,
 }: {
   urls: string[];
   type?: string;
   episodeTitlesPerSeason?: Record<number, string[]>;
+  showServerSelector?: boolean;
+  isEpisodeMetadataLoading?: boolean;
 }) {
   const [currentUrlIndex, setCurrentUrlIndex] = useState(0);
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [selectedEpisode, setSelectedEpisode] = useState(1);
+  const safeUrls = urls.filter(Boolean);
+  const hasPlayableUrl = safeUrls.length > 0;
+  const availableSeasons = useMemo(
+    () =>
+      Object.keys(episodeTitlesPerSeason ?? {})
+        .map(Number)
+        .filter((season) => Number.isFinite(season))
+        .sort((a, b) => a - b),
+    [episodeTitlesPerSeason],
+  );
+  const activeUrlIndex = Math.min(currentUrlIndex, Math.max(safeUrls.length - 1, 0));
+  const currentUrl = safeUrls[activeUrlIndex] ?? null;
+
+  useEffect(() => {
+    if (!availableSeasons.length) return;
+
+    if (!availableSeasons.includes(selectedSeason)) {
+      setSelectedSeason(availableSeasons[0]);
+      setSelectedEpisode(1);
+    }
+  }, [availableSeasons, selectedSeason]);
+
+  useEffect(() => {
+    const episodeCount = episodeTitlesPerSeason?.[selectedSeason]?.length ?? 0;
+    if (episodeCount > 0 && selectedEpisode > episodeCount) {
+      setSelectedEpisode(1);
+    }
+  }, [episodeTitlesPerSeason, selectedEpisode, selectedSeason]);
 
   const streamSrc =
-    type === "tv"
-      ? urls[currentUrlIndex].replace(/\/tv\/\d+\/\d+\/\d+/, (match) => {
-          const parts = match.split("/");
-          return `/tv/${parts[2]}/${selectedSeason}/${selectedEpisode}`;
-        })
-      : urls[currentUrlIndex];
+    !currentUrl
+      ? null
+      : type === "tv"
+        ? currentUrl.replace(/\/tv\/\d+\/\d+\/\d+/, (match) => {
+            const parts = match.split("/");
+            return `/tv/${parts[2]}/${selectedSeason}/${selectedEpisode}`;
+          })
+        : currentUrl;
+  const hasEpisodeTitles =
+    availableSeasons.length > 0 &&
+    Boolean(episodeTitlesPerSeason?.[selectedSeason]?.length);
+  const episodeControlsMessage = isEpisodeMetadataLoading
+    ? "Loading season and episode controls..."
+    : "Season and episode controls are unavailable for this title.";
+  const supportMessage = showServerSelector
+    ? "Having issues? Try switching servers or episodes."
+    : "Having issues? Try switching episodes.";
+
+  if (!hasPlayableUrl || !streamSrc) {
+    return (
+      <div className="space-y-6 font-[family-name:var(--font-geist-mono)]">
+        <div className="flex aspect-video items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] px-6 text-center text-sm text-white/60">
+          This stream is unavailable right now. Please try another title later.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 font-[family-name:var(--font-geist-mono)]">
       {/* Video Player */}
-      <div className="aspect-video rounded-2xl overflow-hidden shadow-xl border border-white/10">
+      <div className="aspect-video overflow-hidden rounded-2xl border border-white/10 shadow-xl">
         <iframe
           key={streamSrc}
           src={streamSrc}
-          className="w-full h-full"
+          className="h-full w-full"
           allowFullScreen
           loading="lazy"
         />
       </div>
 
       {/* Server Selector */}
-      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-        {urls.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentUrlIndex(index)}
-            className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition sm:w-auto
+      {showServerSelector && safeUrls.length > 1 ? (
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+          {safeUrls.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentUrlIndex(index)}
+              className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition sm:w-auto
               ${
-                currentUrlIndex === index
+                activeUrlIndex === index
                   ? "bg-red-600 text-white font-semibold"
                   : "bg-white/10 text-white/60 hover:bg-white/20"
               }`}
-          >
-            <TbPlayerPlayFilled className="text-lg" />
-            Server {index + 1}
-          </button>
-        ))}
-      </div>
+            >
+              <TbPlayerPlayFilled className="text-lg" />
+              Server {index + 1}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       {/* TV Controls */}
       {type === "tv" && (
         <div className="space-y-6 border-t border-white/10 pt-6">
-          {/* Season Selector */}
-          <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap">
-            {Object.keys(episodeTitlesPerSeason ?? {}).map((seasonStr) => {
-              const season = Number(seasonStr);
-              const isActive = selectedSeason === season;
-              return (
-                <button
-                  key={season}
-                  onClick={() => {
-                    setSelectedSeason(season);
-                    setSelectedEpisode(1);
-                  }}
-                  className={`w-full cursor-pointer rounded-xl px-3 py-2 text-sm font-medium transition sm:w-auto sm:px-4
-                    ${
-                      isActive
-                        ? "bg-red-600 text-white font-semibold"
-                        : "bg-white/10 text-white/60 hover:bg-white/20"
-                    }`}
-                >
-                  Season {season}
-                </button>
-              );
-            })}
-          </div>
+          {hasEpisodeTitles ? (
+            <>
+              {/* Season Selector */}
+              <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap">
+                {availableSeasons.map((season) => {
+                  const isActive = selectedSeason === season;
+                  return (
+                    <button
+                      key={season}
+                      onClick={() => {
+                        setSelectedSeason(season);
+                        setSelectedEpisode(1);
+                      }}
+                      className={`w-full cursor-pointer rounded-xl px-3 py-2 text-sm font-medium transition sm:w-auto sm:px-4
+                        ${
+                          isActive
+                            ? "bg-red-600 text-white font-semibold"
+                            : "bg-white/10 text-white/60 hover:bg-white/20"
+                        }`}
+                    >
+                      Season {season}
+                    </button>
+                  );
+                })}
+              </div>
 
-          {/* Episode Selector */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
-            {episodeTitlesPerSeason?.[selectedSeason]?.map((title, i) => {
-              const ep = i + 1;
-              const isActive = selectedEpisode === ep;
-              return (
-                <button
-                  key={ep}
-                  onClick={() => setSelectedEpisode(ep)}
-                  className={`px-4 cursor-pointer py-2 text-xs sm:text-sm rounded-xl flex items-center gap-2 overflow-hidden transition
-                    ${
-                      isActive
-                        ? "bg-red-600 text-white font-semibold"
-                        : "bg-white/10 text-white/60 hover:bg-white/20"
-                    }`}
-                >
-                  <TbPlayerPlayFilled className="shrink-0 text-base" />
-                  <span className="shrink-0 whitespace-nowrap">Ep {ep}</span>
-                  <span className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-left [scrollbar-width:thin] md:whitespace-normal ">
-                    - {title}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+              {/* Episode Selector */}
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
+                {episodeTitlesPerSeason?.[selectedSeason]?.map((title, i) => {
+                  const ep = i + 1;
+                  const isActive = selectedEpisode === ep;
+                  return (
+                    <button
+                      key={ep}
+                      onClick={() => setSelectedEpisode(ep)}
+                      className={`flex cursor-pointer items-center gap-2 overflow-hidden rounded-xl px-4 py-2 text-xs transition sm:text-sm
+                        ${
+                          isActive
+                            ? "bg-red-600 text-white font-semibold"
+                            : "bg-white/10 text-white/60 hover:bg-white/20"
+                        }`}
+                    >
+                      <TbPlayerPlayFilled className="shrink-0 text-base" />
+                      <span className="shrink-0 whitespace-nowrap">
+                        Ep {ep}
+                      </span>
+                      <span className="min-w-0 flex-1 text-left md:whitespace-normal">
+                        - {title}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <p className="text-sm text-white/55">{episodeControlsMessage}</p>
+          )}
         </div>
       )}
 
       {/* Info Note */}
-      <p className="text-left text-white/40 text-xs sm:text-sm mt-4">
-        Having issues? Try switching servers or episodes.
+      <p className="mt-4 text-left text-xs text-white/40 sm:text-sm">
+        {supportMessage}
       </p>
     </div>
   );

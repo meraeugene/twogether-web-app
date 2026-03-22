@@ -8,21 +8,20 @@ const ai = new GoogleGenAI({
 
 export async function askGemini(
   prompt: string,
-  title?: string
+  title?: string,
 ): Promise<string> {
-  console.log(title);
   const systemPrompt = title
     ? `
     You are a smart, friendly AI movie assistant. Assume the user is asking about the movie titled: "${title}".
-    
+
     Guidelines:
     - Always be helpful, clear, and direct.
-    - If the user asks about the ending, twists, or spoilers — only include them if clearly requested (e.g. "what is the ending", "tell me the twist", "spoilers please").
+    - If the user asks about the ending, twists, or spoilers, only include them if clearly requested (e.g. "what is the ending", "tell me the twist", "spoilers please").
     - Use bullet points only if the answer includes multiple parts or lists.
     - Do not repeat the movie title unless necessary.
     - Keep your tone casual but informative.
-    - Suggest 1–2 other related things the user can ask about (only if it fits naturally).
-    
+    - Suggest 1-2 other related things the user can ask about (only if it fits naturally).
+
     If the user greets or says "hello", suggest helpful things they can ask about this movie (e.g. plot, cast, characters, themes, trivia).
   `
     : `
@@ -58,14 +57,14 @@ export async function askGemini(
 }
 
 export async function recommendMoviesListWithAI(
-  prompt: string
+  prompt: string,
 ): Promise<{ reason: string; titles: string[] }> {
   const systemPrompt = `
 You are a helpful AI movie and TV show recommender.
 
 When the user describes the kind of content they want, respond with:
 
-1. A short, simple paragraph (2–3 lines) explaining why these 24 titles match the user's request.
+1. A short, simple paragraph (2-3 lines) explaining why these 24 titles match the user's request.
    - Use clear, friendly language.
    - Avoid technical or abstract explanations.
 

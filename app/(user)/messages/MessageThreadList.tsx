@@ -25,8 +25,14 @@ export default function MessageThreadList({
   ) => void;
   activeThreadId: string | null;
 }) {
-  const { data: threads, isLoading } = useSWR(["threads", userId], () =>
-    getUserThreads(userId),
+  const { data: threads, isLoading } = useSWR(
+    ["threads", userId],
+    () => getUserThreads(userId),
+    {
+      refreshInterval: 15000,
+      revalidateOnFocus: true,
+      refreshWhenHidden: false,
+    },
   );
 
   const playSound = useMessageSound();
@@ -58,12 +64,12 @@ export default function MessageThreadList({
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 p-2 animate-pulse rounded-xl bg-white/5"
+            className="flex items-center gap-3 rounded-xl bg-white/5 p-2 animate-pulse"
           >
-            <div className="w-11 h-11 rounded-full bg-white/10" />
+            <div className="h-11 w-11 rounded-full bg-white/10" />
             <div className="flex-1 space-y-2">
-              <div className="w-1/2 h-3 bg-white/10 rounded" />
-              <div className="w-3/4 h-3 bg-white/10 rounded" />
+              <div className="h-3 w-1/2 rounded bg-white/10" />
+              <div className="h-3 w-3/4 rounded bg-white/10" />
             </div>
           </div>
         ))}
@@ -71,12 +77,13 @@ export default function MessageThreadList({
     );
   }
 
-  if (!threads || threads.length === 0)
+  if (!threads || threads.length === 0) {
     return (
-      <p className="text-white/50 text-center  border-t border-white/10  p-4">
+      <p className="border-t border-white/10  p-4 text-center text-white/50">
         No conversations found.
       </p>
     );
+  }
 
   return (
     <div className="space-y-2 border-t border-white/10  p-4 ">
@@ -113,13 +120,13 @@ export default function MessageThreadList({
                 );
               }
             }}
-            className={`flex relative cursor-pointer items-center gap-3 p-2 rounded-xl transition w-full ${
+            className={`relative flex w-full cursor-pointer items-center gap-3 rounded-xl p-2 transition ${
               activeThreadId === thread.thread_id
                 ? "bg-white/10"
                 : "hover:bg-white/5"
             }`}
           >
-            <div className="w-11 h-11 rounded-full overflow-hidden">
+            <div className="h-11 w-11 overflow-hidden rounded-full">
               <Image
                 width={44}
                 unoptimized
@@ -131,14 +138,14 @@ export default function MessageThreadList({
             </div>
 
             <div className="flex-1 text-left">
-              <div className="flex justify-between items-center">
-                <span className="text-white font-medium text-[15px]">
+              <div className="flex items-center justify-between">
+                <span className="text-[15px] font-medium text-white">
                   {thread.other_display_name}
                 </span>
               </div>
 
               <div
-                className={`text-[13px] line-clamp-1 flex items-center gap-1 ${
+                className={`flex items-center gap-1 text-[13px] line-clamp-1 ${
                   isUnread ? "text-white" : "text-white/50"
                 }`}
               >
@@ -146,7 +153,7 @@ export default function MessageThreadList({
 
                 {thread.last_message_created_at && (
                   <>
-                    <span className="text-white/30">·</span>
+                    <span className="text-white/30">-</span>
                     <span>
                       {formatCompactTime(
                         new Date(thread.last_message_created_at),
@@ -158,12 +165,9 @@ export default function MessageThreadList({
             </div>
 
             {isUnread && (
-              <div className="flex items-center justify-center w-6 h-6">
-                {/* Pulsing outer blue ring */}
-                <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping opacity-75" />
-
-                {/* Solid inner blue dot with border, layered above ping */}
-                <div className="w-2.5 h-2.5 -ml-2.5 rounded-full bg-blue-500 border-2 border-black z-10" />
+              <div className="flex h-6 w-6 items-center justify-center">
+                <div className="h-2.5 w-2.5 rounded-full bg-blue-500 animate-ping opacity-75" />
+                <div className="-ml-2.5 h-2.5 w-2.5 rounded-full border-2 border-black bg-blue-500 z-10" />
               </div>
             )}
           </button>

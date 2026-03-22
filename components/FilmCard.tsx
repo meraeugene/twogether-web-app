@@ -200,9 +200,7 @@ function FilmCard({
                 background: "#06030a",
               }}
             >
-              {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-                  FULLSCREEN TRAILER  (flex-1 = fills all remaining height)
-              â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+              {/* Fullscreen trailer area; flex-1 fills the remaining height. */}
               <div className="relative w-full h-full flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
                 {trailerUrl ? (
                   <div className="relative w-full aspect-9/12 md:aspect-video z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
@@ -226,7 +224,7 @@ function FilmCard({
                   />
                 )}
 
-                {/* â”€â”€ Cinema Overlays â”€â”€ */}
+                {/* Cinema overlays */}
                 <div className="absolute inset-0 pointer-events-none z-20">
                   {/* Deep Vertical Vignette */}
                   <div className=" absolute hidden md:block  inset-y-0 left-0 w-32 bg-linear-to-r from-[#06030a] to-transparent" />
@@ -259,7 +257,7 @@ function FilmCard({
                   </div>
                 </div>
 
-                {/* â”€â”€ Desktop Title block â”€â”€ */}
+                {/* Desktop title block */}
                 <motion.div
                   key={`${item.tmdb_id}-${item.type}-desktop`}
                   initial={{ opacity: 0, y: 20 }}

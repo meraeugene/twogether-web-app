@@ -4,6 +4,8 @@ import { hasUserRecommendedFilm } from "@/actions/recommendationActions";
 import { checkIfInWatchlist } from "@/actions/watchlistActions";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
 
@@ -28,11 +30,11 @@ export async function generateMetadata({
     return {
       title,
       description:
-        "Stream now on Twogether — watch and recommend movies with no ads using Brave browser for a smooth experience.",
+        "Stream now on Twogether - watch and recommend movies with no ads using Brave browser for a smooth experience.",
       openGraph: {
         title,
         description:
-          "Stream now on Twogether — watch and recommend movies with no ads using Brave browser for a smooth experience.",
+          "Stream now on Twogether - watch and recommend movies with no ads using Brave browser for a smooth experience.",
         images: [poster],
         siteName: "Twogether",
       },
@@ -40,7 +42,7 @@ export async function generateMetadata({
         card: "summary_large_image",
         title,
         description:
-          "Stream now on Twogether — watch and recommend movies with no ads using Brave browser for a smooth experience.",
+          "Stream now on Twogether - watch and recommend movies with no ads using Brave browser for a smooth experience.",
         images: [poster],
       },
     };

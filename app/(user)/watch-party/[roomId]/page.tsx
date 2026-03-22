@@ -3,6 +3,9 @@ import { getWatchPartyRoom } from "@/actions/watchPartyActions";
 import { redirect } from "next/navigation";
 import ErrorMessage from "@/components/ErrorMessage";
 import WatchPartyRoomClient from "./WatchPartyRoomClient";
+import { getTMDBWatchRecommendation } from "@/utils/tmdb/getTMDBWatchRecommendation";
+
+export const dynamic = "force-dynamic";
 
 export default async function WatchPartyRoomPage({
   params,
@@ -18,7 +21,17 @@ export default async function WatchPartyRoomPage({
 
     if (!room) return <ErrorMessage title="Watch room not found." />;
 
-    return <WatchPartyRoomClient room={room} currentUserId={currentUser.id} />;
+    const initialWatchMetadata = room.movie_tmdb_id
+      ? await getTMDBWatchRecommendation(room.movie_tmdb_id, room.movie_type)
+      : null;
+
+    return (
+      <WatchPartyRoomClient
+        room={room}
+        currentUserId={currentUser.id}
+        initialWatchMetadata={initialWatchMetadata}
+      />
+    );
   } catch (error) {
     if (
       error instanceof Error &&

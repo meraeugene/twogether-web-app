@@ -44,7 +44,8 @@ export default function FriendsPage({
     () => (activeTab === "Requests" ? ["requests", currentUserId] : null),
     () => fetchIncoming(currentUserId),
     {
-      refreshInterval: 5000,
+      refreshInterval: 0,
+      revalidateOnFocus: false,
       refreshWhenHidden: false,
     },
   );

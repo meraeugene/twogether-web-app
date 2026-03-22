@@ -190,7 +190,7 @@ export default function StreamingServices() {
                   className="mt-6 sm:mt-8 flex flex-col md:flex-row md:items-start justify-between gap-6 border-t border-white/5 pt-6"
                 >
                   <div>
-                    <h4 className="text-white text-xl sm:text-2xl font-light tracking-tight">
+                    <h4 className="text-white text-xl sm:text-2xl md:text-3xl font-light tracking-tight">
                       {currentTrailer.title}
                     </h4>
 
@@ -204,7 +204,7 @@ export default function StreamingServices() {
                       </span>
                     </div>
 
-                    <p className="text-neutral-400 text-sm mt-2 max-w-md">
+                    <p className="text-neutral-400 text-sm md:text-base mt-2 max-w-md">
                       {currentTrailer.overview}
                     </p>
                   </div>

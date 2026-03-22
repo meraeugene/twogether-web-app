@@ -12,6 +12,7 @@ export type RoomData = {
   id: string;
   host_user_id: string;
   guest_user_id: string | null;
+  movie_tmdb_id: number;
   movie_title: string;
   movie_type: "movie" | "tv";
   stream_url: string;

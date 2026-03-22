@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/actions/authActions";
+import nextDynamic from "next/dynamic";
 import WatchPlayer from "./WatchPlayer";
 import WatchInfo from "./WatchInfo";
 import WatchComments from "./WatchComments";
@@ -8,8 +9,11 @@ import { redirect } from "next/navigation";
 import { getSuggestions } from "@/actions/suggestionsActions";
 import { getRecommendationById } from "@/actions/recommendationActions";
 import { checkIfInWatchlist } from "@/actions/watchlistActions";
-import WatchGemeni from "./WatchGemeni";
 import BackButton from "@/components/BackButton";
+
+const WatchGemeni = nextDynamic(() => import("./WatchGemeni"));
+
+export const dynamic = "force-dynamic";
 
 export default async function WatchPage({
   params,

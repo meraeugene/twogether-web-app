@@ -30,7 +30,7 @@ const TMDBReviewCard = ({ review }: { review: TMDBMovieReview }) => {
               {review.avatar_url ? (
                 <Link
                   href={`/profile/${review.username}/${review.user_id}`}
-                  prefetch
+                  prefetch={false}
                 >
                   <img
                     src={review.avatar_url}
@@ -46,7 +46,7 @@ const TMDBReviewCard = ({ review }: { review: TMDBMovieReview }) => {
             {/* User info */}
             <div>
               <Link
-                prefetch
+                prefetch={false}
                 href={`/profile/${review.username}/${review.user_id}`}
                 className="text-white font-medium"
               >

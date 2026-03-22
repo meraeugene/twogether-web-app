@@ -17,6 +17,7 @@ import { MessageItem } from "./MessageItem";
 import CustomEmojiPicker from "./CustomEmojiPicker";
 import { FaSmileWink } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function MessageThreadView({
   threadId,
@@ -26,6 +27,8 @@ export default function MessageThreadView({
   otherUserDisplayName,
   otherUserUsername,
   threadStatus,
+  onThreadDeleted,
+  onThreadStatusChange,
 }: {
   threadId: string;
   currentUserId: string;
@@ -34,22 +37,47 @@ export default function MessageThreadView({
   otherUserDisplayName: string;
   otherUserUsername: string | null;
   threadStatus: "active" | "pending" | undefined;
+  onThreadDeleted?: () => void;
+  onThreadStatusChange?: (status: "active" | "pending") => void;
 }) {
+  const router = useRouter();
   const {
     data: messages,
     mutate: mutateMessages,
     isLoading,
   } = useSWR(["thread", threadId], () => getThreadMessages(threadId), {
-    refreshInterval: 2000,
+    refreshInterval: 5000,
+    revalidateOnFocus: false,
+    refreshWhenHidden: false,
   });
 
   useEffect(() => {
     if (!isLoading && messages?.length) {
       const markStatuses = async () => {
         try {
-          await markMessagesDelivered(threadId, otherUserId);
-          await markMessagesSeen(threadId, currentUserId);
-          await mutate(["threads", currentUserId]);
+          const shouldMarkDelivered = messages.some(
+            (message) =>
+              message.receiver_id === otherUserId && message.status === "sent"
+          );
+          const shouldMarkSeen = messages.some(
+            (message) =>
+              message.receiver_id === currentUserId && message.status !== "seen"
+          );
+
+          if (!shouldMarkDelivered && !shouldMarkSeen) return;
+
+          await Promise.all([
+            shouldMarkDelivered
+              ? markMessagesDelivered(threadId, otherUserId)
+              : Promise.resolve(),
+            shouldMarkSeen
+              ? markMessagesSeen(threadId, currentUserId)
+              : Promise.resolve(),
+          ]);
+          await Promise.all([
+            mutateMessages(),
+            mutate(["threads", currentUserId]),
+          ]);
         } catch (err) {
           console.error("Failed to mark messages delivered/seen", err);
         }
@@ -104,8 +132,12 @@ export default function MessageThreadView({
   const handleAccept = async () => {
     try {
       await acceptMessageThread(threadId);
-      mutateMessages();
-      window.location.reload();
+      onThreadStatusChange?.("active");
+      await Promise.all([
+        mutateMessages(),
+        mutate(["threads", currentUserId]),
+      ]);
+      router.refresh();
     } catch (error) {
       console.error("Failed to accept thread", error);
     }
@@ -114,8 +146,9 @@ export default function MessageThreadView({
   const handleDelete = async () => {
     try {
       await deleteMessageThread(threadId);
-      mutateMessages();
-      window.location.reload();
+      await mutate(["threads", currentUserId]);
+      onThreadDeleted?.();
+      router.refresh();
     } catch (err) {
       console.error("Failed to delete thread", err);
     }

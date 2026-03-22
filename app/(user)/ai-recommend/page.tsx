@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TextInputCard } from "@/components/StepCard";
@@ -12,7 +13,34 @@ import { useAIRecommendations } from "@/stores/useAIRecommendation";
 import { toast } from "sonner";
 import { uniqueById } from "@/utils/ai-recommend/uniqueById";
 import { FiRefreshCcw } from "react-icons/fi";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+
+const AI_LOOKUP_CONCURRENCY = 4;
+const DotLottieReact = dynamic(
+  () =>
+    import("@lottiefiles/dotlottie-react").then((mod) => mod.DotLottieReact),
+  { ssr: false },
+);
+
+async function mapWithConcurrency<TInput, TOutput>(
+  items: TInput[],
+  concurrency: number,
+  mapper: (item: TInput) => Promise<TOutput>,
+) {
+  const results: TOutput[] = new Array(items.length);
+  let nextIndex = 0;
+
+  async function worker() {
+    while (nextIndex < items.length) {
+      const currentIndex = nextIndex;
+      nextIndex += 1;
+      results[currentIndex] = await mapper(items[currentIndex]);
+    }
+  }
+
+  const workerCount = Math.min(concurrency, items.length);
+  await Promise.all(Array.from({ length: workerCount }, () => worker()));
+  return results;
+}
 
 export default function AIRecommendForm() {
   const [loading, setLoading] = useState(false);
@@ -47,32 +75,44 @@ export default function AIRecommendForm() {
         return;
       }
 
-      const total = titles.length;
-      const results: TMDBEnrichedResult[] = [];
+      const uniqueTitles = Array.from(
+        new Set(titles.map((title) => title.trim()).filter(Boolean)),
+      );
+      const total = uniqueTitles.length;
+      let completed = 0;
 
       setLoadingMessage("Hunting across galaxies for your match...");
 
-      for (let i = 0; i < total; i++) {
-        const title = titles[i];
+      const settledResults = await mapWithConcurrency(
+        uniqueTitles,
+        AI_LOOKUP_CONCURRENCY,
+        async (title) => {
+          try {
+            const res = await fetch(
+              `/api/recommend?query=${encodeURIComponent(title)}`,
+            );
+            if (!res.ok) {
+              throw new Error(`Lookup failed with status ${res.status}`);
+            }
+            const data: TMDBEnrichedResult[] = await res.json();
+            return data[0] ?? null;
+          } catch (err) {
+            console.error(`Failed to fetch ${title}`, err);
+            return null;
+          } finally {
+            completed += 1;
+            setProgress(Math.round((completed / total) * 100));
+          }
+        },
+      );
 
-        setLoadingMessage(`Summoning "${title}" to the spotlight...`);
-
-        try {
-          const res = await fetch(
-            `/api/recommend?query=${encodeURIComponent(title)}`,
-          );
-          const data: TMDBEnrichedResult[] = await res.json();
-          if (data[0]) results.push(data[0]);
-        } catch (err) {
-          console.error(`Failed to fetch ${title}`, err);
-        }
-
-        setProgress(Math.round(((i + 1) / total) * 100));
-      }
+      const results = settledResults.filter(
+        (item): item is TMDBEnrichedResult => Boolean(item),
+      );
 
       const filtered = uniqueById(results);
 
-      setLoadingMessage("Magic complete. Let’s hit play!");
+      setLoadingMessage("Magic complete. Let's hit play!");
 
       setRecommendations(
         filtered.map((m) => ({

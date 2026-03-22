@@ -20,7 +20,7 @@ export default function WatchGemeni({
   >([
     {
       role: "gemini",
-      content: `Hi! What would you like to know about “${title}”?`,
+      content: `Hi! What would you like to know about "${title}"?`,
     },
   ]);
   const [input, setInput] = useState("");

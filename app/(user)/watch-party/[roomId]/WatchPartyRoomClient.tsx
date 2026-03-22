@@ -6,13 +6,23 @@ import WatchPartyChatPanel from "./WatchPartyChatPanel";
 import WatchPartyInviteModal from "./WatchPartyInviteModal";
 import type { RoomData, RoomUser } from "../../../../types/watchPartyRoomTypes";
 import { useWatchPartyRoomClient } from "@/hooks/useWatchPartyRoomClient";
+import WatchPlayer from "@/app/(user)/watch/[id]/[movieTitle]/WatchPlayer";
+import useSWR from "swr";
+import { fetcher } from "@/utils/swr/fetcher";
+import type { Recommendation } from "@/types/recommendation";
+
+type TMDBWatchResponse = {
+  recommendation: Recommendation;
+};
 
 export default function WatchPartyRoomClient({
   room,
   currentUserId,
+  initialWatchMetadata,
 }: {
   room: RoomData;
   currentUserId: string;
+  initialWatchMetadata: Recommendation | null;
 }) {
   const roomClient = useWatchPartyRoomClient({ room, currentUserId });
   const roomParticipants = [
@@ -31,9 +41,45 @@ export default function WatchPartyRoomClient({
       : otherParticipants.length === 1
         ? "In a room with 1 other person"
         : `In a room with ${otherParticipants.length} other people`;
+  const { data: watchMetadata } = useSWR<TMDBWatchResponse>(
+    roomClient.currentRoom.movie_tmdb_id
+      ? `/api/tmdb/${roomClient.currentRoom.movie_tmdb_id}/?type=${roomClient.currentRoom.movie_type}`
+      : null,
+    fetcher,
+    {
+      fallbackData: initialWatchMetadata
+        ? { recommendation: initialWatchMetadata }
+        : undefined,
+      revalidateOnFocus: false,
+      dedupingInterval: 60_000,
+    },
+  );
+  const watchRecommendation = watchMetadata?.recommendation;
+  const playerUrl =
+    roomClient.currentRoom.stream_url ||
+    (Array.isArray(watchRecommendation?.stream_url)
+      ? watchRecommendation.stream_url[0]
+      : null);
+  const episodeTitlesPerSeason = watchRecommendation?.episode_titles_per_season
+    ? Object.fromEntries(
+        Object.entries(watchRecommendation.episode_titles_per_season).map(
+          ([season, episodes]) => [
+            Number(season),
+            episodes.map((episode) => episode.title),
+          ],
+        ),
+      )
+    : undefined;
+  const hasEpisodeControls = Boolean(
+    episodeTitlesPerSeason && Object.keys(episodeTitlesPerSeason).length > 0,
+  );
+  const isEpisodeMetadataLoading =
+    roomClient.currentRoom.movie_type === "tv" &&
+    !watchMetadata &&
+    !hasEpisodeControls;
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#050505] px-7 pb-16 pt-28 text-white lg:px-24 xl:px-32 xl:pt-34 2xl:px-26">
+    <main className="relative min-h-screen overflow-x-hidden bg-[#050505] px-7 pb-24 pt-28 text-white lg:px-24 xl:px-32 xl:pb-32 xl:pt-34 2xl:px-26">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute left-1/2 top-[-10%] h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-red-900/20 blur-[120px] opacity-50" />
         <div className="absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-red-600/5 blur-[100px]" />
@@ -198,14 +244,18 @@ export default function WatchPartyRoomClient({
           </div>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(430px,500px)] xl:items-stretch 2xl:grid-cols-[minmax(0,1fr)_450px]">
-          <div className="group relative transition-all duration-700 ease-in-out xl:h-[calc(100vh-8rem)]">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(430px,500px)] xl:items-start 2xl:grid-cols-[minmax(0,1fr)_450px]">
+          <div className="group relative transition-all duration-700 ease-in-out">
             <div className="absolute -inset-1 bg-gradient-to-r from-red-600/20 to-transparent blur-2xl opacity-100 transition duration-1000" />
-            <div className="relative aspect-video w-full overflow-hidden rounded-[2rem] border border-white/8 bg-white/[0.04] backdrop-blur-xl xl:h-full xl:aspect-auto">
-              <iframe
-                src={roomClient.currentRoom.stream_url}
-                className="h-full w-full scale-[1.01]"
-                allowFullScreen
+            <div className="relative w-full">
+              <WatchPlayer
+                urls={playerUrl ? [playerUrl] : []}
+                type={roomClient.currentRoom.movie_type}
+                episodeTitlesPerSeason={
+                  hasEpisodeControls ? episodeTitlesPerSeason : undefined
+                }
+                showServerSelector={false}
+                isEpisodeMetadataLoading={isEpisodeMetadataLoading}
               />
             </div>
           </div>

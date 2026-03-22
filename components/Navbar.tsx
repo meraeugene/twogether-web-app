@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import { primaryNavItems, secondaryNavItems } from "./NavItems";
@@ -13,7 +14,10 @@ import { CurrentUser } from "@/types/user";
 import { signOut } from "@/actions/authActions";
 import type { Variants } from "framer-motion";
 import { createClient } from "@/utils/supabase/client";
-import NotificationBell from "./NotificationBell";
+
+const NotificationBell = dynamic(() => import("./NotificationBell"), {
+  ssr: false,
+});
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 12 },
@@ -64,7 +68,7 @@ function NavIcon({
     <Link
       href={href}
       onClick={onClick}
-      prefetch
+      prefetch={false}
       className={`group relative inline-flex items-center gap-2 px-3 h-[40px] rounded-[11px] text-sm font-medium transition-all duration-150 ${
         active
           ? "bg-white/[0.12] text-white ring-1 ring-inset ring-white/[0.14]"
@@ -162,12 +166,17 @@ function MobileLink({
   );
 }
 
-export function Navbar({ user }: { user: CurrentUser | null }) {
+export function Navbar({
+  user,
+}: {
+  user: CurrentUser | null | undefined;
+}) {
   const [isPending, startTransition] = useTransition();
   const [menuOpen, setMenuOpen] = useState(false);
   const [hide, setHide] = useState(false);
   const lastY = useRef(0);
   const pathname = usePathname();
+  const isAuthLoading = typeof user === "undefined";
 
   const logout = () => startTransition(async () => await signOut());
   const close = () => setMenuOpen(false);
@@ -213,17 +222,25 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
 
         <Sep />
 
-        {(user ? primaryNavItems : guestLinks).map((item) => (
-          <NavIcon
-            key={item.href}
-            href={item.href}
-            icon={item.icon}
-            label={item.label}
-            active={pathname === item.href}
-          />
-        ))}
+        {isAuthLoading ? (
+          <>
+            <div className="h-[40px] w-[174px] rounded-[11px] bg-white/[0.06] animate-pulse" />
+            <Sep />
+            <div className="h-[40px] w-[96px] rounded-[11px] bg-white/[0.06] animate-pulse" />
+          </>
+        ) : (
+          (user ? primaryNavItems : guestLinks).map((item) => (
+            <NavIcon
+              key={item.href}
+              href={item.href}
+              icon={item.icon}
+              label={item.label}
+              active={pathname === item.href}
+            />
+          ))
+        )}
 
-        {user ? (
+        {isAuthLoading ? null : user ? (
           <>
             <Sep />
             {secondaryNavItems.map((item) => (
@@ -304,7 +321,12 @@ export function Navbar({ user }: { user: CurrentUser | null }) {
               variants={stagger}
               className="relative z-10 flex flex-col gap-4"
             >
-              {user ? (
+              {isAuthLoading ? (
+                <motion.div
+                  variants={fadeUp}
+                  className="h-14 rounded-lg border border-white/10 bg-white/5 animate-pulse"
+                />
+              ) : user ? (
                 <>
                   <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
                     Discover

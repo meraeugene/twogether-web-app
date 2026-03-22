@@ -1,18 +1,54 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { Navbar } from "./Navbar";
 import { CurrentUser } from "@/types/user";
-import PresenceManager from "@/components/PresenceManager";
-import CookieConsentBanner from "@/components/CookieConsentBanner";
 import { createClient } from "@/utils/supabase/client";
+import {
+  CURRENT_USER_COOKIE,
+  deserializeCurrentUserSnapshot,
+  serializeCurrentUserSnapshot,
+} from "@/utils/currentUserSnapshot";
 
-export default function Header({
-  initialUser,
-}: {
-  initialUser: CurrentUser | null;
-}) {
-  const [user, setUser] = useState<CurrentUser | null>(initialUser);
+const PresenceManager = dynamic(() => import("@/components/PresenceManager"), {
+  ssr: false,
+});
+const CookieConsentBanner = dynamic(
+  () => import("@/components/CookieConsentBanner"),
+  { ssr: false },
+);
+
+function readCurrentUserCookie() {
+  if (typeof document === "undefined") return undefined;
+
+  const cookie = document.cookie
+    .split("; ")
+    .find((entry) => entry.startsWith(`${CURRENT_USER_COOKIE}=`));
+
+  if (!cookie) return undefined;
+
+  const [, value = ""] = cookie.split("=");
+  return deserializeCurrentUserSnapshot(value) ?? undefined;
+}
+
+function writeCurrentUserCookie(user: CurrentUser | null) {
+  if (typeof document === "undefined") return;
+
+  if (!user) {
+    document.cookie = `${CURRENT_USER_COOKIE}=; path=/; max-age=0; samesite=lax`;
+    return;
+  }
+
+  document.cookie =
+    `${CURRENT_USER_COOKIE}=${serializeCurrentUserSnapshot(user)}; ` +
+    "path=/; max-age=604800; samesite=lax";
+}
+
+export default function Header() {
+  const [user, setUser] = useState<CurrentUser | null | undefined>(() =>
+    readCurrentUserCookie(),
+  );
 
   useEffect(() => {
     const supabase = createClient();
@@ -23,6 +59,7 @@ export default function Header({
       } = await supabase.auth.getUser();
 
       if (!authUser) {
+        writeCurrentUserCookie(null);
         setUser(null);
         return;
       }
@@ -33,21 +70,25 @@ export default function Header({
         .eq("id", authUser.id)
         .maybeSingle();
 
-      setUser({
+      const nextUser = {
         id: authUser.id,
         email: authUser.email || null,
         full_name: authUser.user_metadata?.full_name || "",
         avatar_url: authUser.user_metadata?.avatar_url || "",
         username: profile?.username || "",
-      });
+      };
+
+      writeCurrentUserCookie(nextUser);
+      setUser(nextUser);
     };
 
-    loadCurrentUser();
+    void loadCurrentUser();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(() => {
-      loadCurrentUser();
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "TOKEN_REFRESHED") return;
+      void loadCurrentUser();
     });
 
     return () => subscription.unsubscribe();

@@ -68,6 +68,7 @@ export default function WatchPartyChatPanel({
   const formRef = useRef<HTMLFormElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+  const previousMessageCountRef = useRef(messages.length);
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -77,6 +78,30 @@ export default function WatchPartyChatPanel({
     const nextHeight = Math.min(textarea.scrollHeight, 176);
     textarea.style.height = `${Math.max(nextHeight, 48)}px`;
   }, [input]);
+
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const nextMessageCount = messages.length;
+    const hadNewMessage = nextMessageCount > previousMessageCountRef.current;
+    previousMessageCountRef.current = nextMessageCount;
+
+    if (!hadNewMessage) return;
+
+    const distanceFromBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight;
+    const isNearBottom = distanceFromBottom < 120;
+
+    if (!isNearBottom) return;
+
+    requestAnimationFrame(() => {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: "smooth",
+      });
+    });
+  }, [messages]);
 
   const handleFormSubmit = async (event: React.FormEvent) => {
     await onSubmit(event);
@@ -93,7 +118,7 @@ export default function WatchPartyChatPanel({
   };
 
   return (
-    <aside className="relative flex min-h-[520px] max-h-[72vh] flex-col overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.04] shadow-[0_28px_80px_-42px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-[26px] sm:min-h-[620px] sm:max-h-[78vh] sm:rounded-[28px] xl:sticky xl:top-28 xl:h-[calc(100vh-8rem)] xl:max-h-[calc(100vh-8rem)]">
+    <aside className="relative flex min-h-[520px] max-h-[72vh] flex-col overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.04] shadow-[0_28px_80px_-42px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-[26px] sm:min-h-[620px] sm:max-h-[78vh] sm:rounded-[28px] xl:self-start xl:max-h-none">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02)_18%,rgba(0,0,0,0.08)_100%)]" />
 
       <div className="relative flex items-center border-b border-white/[0.08] bg-gradient-to-b from-white/[0.1] to-transparent px-4 py-4 sm:px-6 sm:py-5">
@@ -107,7 +132,7 @@ export default function WatchPartyChatPanel({
 
       <div
         ref={messagesContainerRef}
-        className="relative min-h-0 flex-1 space-y-5 overflow-x-hidden overflow-y-auto px-3 py-4 sm:space-y-6 sm:px-5 sm:py-6 xl:px-6 xl:py-7"
+        className="relative min-h-0 flex-1 space-y-5 overflow-x-hidden overflow-y-auto px-3 py-4 sm:space-y-6 sm:px-5 sm:py-6 xl:overflow-y-visible xl:px-6 xl:py-7"
       >
         {messages.map((message) => {
           const isMine = message.sender_id === currentUserId;

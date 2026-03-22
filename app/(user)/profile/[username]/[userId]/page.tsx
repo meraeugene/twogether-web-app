@@ -5,6 +5,8 @@ import { getFollowStatsWithStatus } from "@/actions/social/followActions";
 import { getWatchlistByUserId } from "@/actions/watchlistActions";
 import { getUserRecommendationsById } from "@/actions/recommendationActions";
 
+export const dynamic = "force-dynamic";
+
 export default async function UserProfile({
   params,
 }: {

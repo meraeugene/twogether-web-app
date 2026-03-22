@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { CURRENT_USER_COOKIE, serializeCurrentUserSnapshot } from "@/utils/currentUserSnapshot";
 
 function matchesProtectedPath(pathname: string, basePath: string) {
   return pathname === basePath || pathname.startsWith(`${basePath}/`);
@@ -52,7 +53,6 @@ export async function updateSession(request: NextRequest) {
 
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
@@ -86,11 +86,35 @@ export async function updateSession(request: NextRequest) {
     ? (
         await supabase
           .from("users")
-          .select("onboarding_complete")
+          .select("onboarding_complete, username")
           .eq("id", user.id)
           .single()
       ).data
     : null;
+
+  if (user && profile?.username) {
+    supabaseResponse.cookies.set(
+      CURRENT_USER_COOKIE,
+      serializeCurrentUserSnapshot({
+        id: user.id,
+        username: profile.username,
+        email: user.email || null,
+        full_name: user.user_metadata?.full_name || "",
+        avatar_url: user.user_metadata?.avatar_url || "",
+      }),
+      {
+        path: "/",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+      },
+    );
+  } else {
+    supabaseResponse.cookies.set(CURRENT_USER_COOKIE, "", {
+      path: "/",
+      sameSite: "lax",
+      maxAge: 0,
+    });
+  }
 
   // 2. Redirect authenticated users trying to access onboarding again
   if (user && pathname === "/onboarding") {
@@ -105,41 +129,6 @@ export async function updateSession(request: NextRequest) {
     if (!profile?.onboarding_complete) {
       url.pathname = "/onboarding";
       return NextResponse.redirect(url);
-    }
-  }
-
-  if (user && matchesProtectedPath(pathname, "/watch-party")) {
-    const segments = pathname.split("/").filter(Boolean);
-    const roomId = segments.length >= 2 ? segments[1] : null;
-
-    if (roomId) {
-      const { data: room, error: roomError } = await supabase
-        .from("watch_party_rooms")
-        .select("id, host_user_id, guest_user_id, access_type")
-        .eq("id", roomId)
-        .maybeSingle();
-
-      if (!roomError && room && (room.access_type ?? "public") === "private") {
-        const isDirectParticipant =
-          room.host_user_id === user.id || room.guest_user_id === user.id;
-
-        if (!isDirectParticipant) {
-          const { data: friendship, error: friendshipError } = await supabase
-            .from("friend_requests")
-            .select("id")
-            .or(
-              `and(sender_id.eq.${room.host_user_id},receiver_id.eq.${user.id}),and(sender_id.eq.${user.id},receiver_id.eq.${room.host_user_id})`
-            )
-            .eq("status", "accepted")
-            .maybeSingle();
-
-          if (!friendshipError && !friendship) {
-            url.pathname = "/watch-party";
-            url.searchParams.set("error", "private-room");
-            return NextResponse.redirect(url);
-          }
-        }
-      }
     }
   }
 

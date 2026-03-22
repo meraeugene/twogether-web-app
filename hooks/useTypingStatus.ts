@@ -37,11 +37,9 @@ export function useTypingStatus(threadId: string, currentUserId: string) {
       }
     });
 
-    channel.subscribe((status, err) => {
+    channel.subscribe((_status, err) => {
       if (err) {
         console.error("Subscription error:", err);
-      } else {
-        console.log("Subscribed with status:", status);
       }
     });
 

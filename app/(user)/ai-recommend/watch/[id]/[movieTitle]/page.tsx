@@ -4,10 +4,12 @@ import { redirect } from "next/navigation";
 import { hasUserRecommendedFilm } from "@/actions/recommendationActions";
 import { checkIfInWatchlist } from "@/actions/watchlistActions";
 
+export const dynamic = "force-dynamic";
+
 export default async function AIWatchPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; movieTitle: string }>;
 }) {
   const tmdbId = (await params).id;
 

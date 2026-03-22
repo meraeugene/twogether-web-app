@@ -122,7 +122,7 @@ export default function TMDBSuggestions({
                 {/* Hover Play Button */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/50 rounded-lg">
                   <Link
-                    prefetch
+                    prefetch={false}
                     href={`/tmdb/watch/${rec.type}/${
                       rec.tmdb_id
                     }/${getSlugFromTitle(rec.title)}`}
@@ -137,7 +137,7 @@ export default function TMDBSuggestions({
               {/* Info */}
               <div className="flex-1 pt-4">
                 <Link
-                  prefetch
+                  prefetch={false}
                   href={`/tmdb/watch/${rec.type}/${
                     rec.tmdb_id
                   }/${getSlugFromTitle(rec.title)}`}
