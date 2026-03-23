@@ -23,11 +23,6 @@ import Link from "next/link";
 import { VisualHeartRating } from "./VisualHeartRating";
 import { toast } from "sonner";
 
-type MyRecosCache = {
-  public: Recommendation[];
-  private: Recommendation[];
-};
-
 function FilmCard({
   item,
   userId,
@@ -97,32 +92,13 @@ function FilmCard({
               ),
             false,
           );
-          mutate<MyRecosCache>(
-            "/api/my-recos",
-            (current) =>
-              current
-                ? {
-                    ...current,
-                    public: current.public.filter(
-                      (reco) =>
-                        reco.recommendation_id !== item.recommendation_id,
-                    ),
-                    private: current.private.filter(
-                      (reco) =>
-                        reco.recommendation_id !== item.recommendation_id,
-                    ),
-                  }
-                : current,
-            false,
-          );
-
           await deleteRecommendation(userId!, item.recommendation_id);
           mutate("/api/recos"); // Refresh recommendations cache
-          mutate("/api/my-recos"); // Refresh my recommendations cache
+          router.refresh();
           toast.success(`Deleted "${item.title}" from recos.`);
         } else if (isRemoveFromWatchlist && watchlistItemId) {
           await removeFromWatchlist(watchlistItemId, userId!);
-          mutate("/api/my-watchlist"); // Refresh watchlist cache
+          router.refresh();
           toast.success(`Removed "${item.title}" from watchlist.`);
         }
         setTimeout(() => setIsVisible(false), 220);
@@ -141,7 +117,7 @@ function FilmCard({
         item.recommendation_id,
         newVisibility,
       );
-      mutate("/api/my-recos"); // Refresh my recommendations cache
+      router.refresh();
       setShowPrivacyModal(false);
     });
   };

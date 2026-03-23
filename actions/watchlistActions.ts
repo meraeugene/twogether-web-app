@@ -1,5 +1,6 @@
 "use server";
 
+import { getCurrentUser } from "@/actions/authActions";
 import { createClient } from "@/utils/supabase/server";
 import { Recommendation } from "@/types/recommendation";
 import { revalidatePath } from "next/cache";
@@ -23,6 +24,22 @@ export async function getWatchlistByUserId(
   }
 
   return data || [];
+}
+
+export async function getMyWatchlist(): Promise<{
+  userId: string;
+  items: Recommendation[];
+} | null> {
+  const user = await getCurrentUser();
+
+  if (!user) return null;
+
+  const items = await getWatchlistByUserId(user.id);
+
+  return {
+    userId: user.id,
+    items,
+  };
 }
 
 // Check if a recommendation is in the watchlist

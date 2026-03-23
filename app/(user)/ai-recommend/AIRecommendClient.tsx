@@ -1,0 +1,327 @@
+"use client";
+
+import dynamic from "next/dynamic";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { TextInputCard } from "@/components/StepCard";
+import { recommendMoviesListWithAI } from "@/actions/geminiActions";
+import { TMDBEnrichedResult } from "@/types/tmdb";
+import FilmCard from "@/components/FilmCard";
+import { adaptAIGeneratedToRecommendation } from "@/utils/adaptAIGeneratedToRecommendation";
+import { formatPromptTitle } from "@/utils/ai-recommend/formatPromptTitle";
+import { useAIRecommendations } from "@/stores/useAIRecommendation";
+import { toast } from "sonner";
+import { uniqueById } from "@/utils/ai-recommend/uniqueById";
+import { FiRefreshCcw } from "react-icons/fi";
+
+const AI_LOOKUP_CONCURRENCY = 4;
+const DotLottieReact = dynamic(
+  () =>
+    import("@lottiefiles/dotlottie-react").then((mod) => mod.DotLottieReact),
+  { ssr: false },
+);
+
+async function mapWithConcurrency<TInput, TOutput>(
+  items: TInput[],
+  concurrency: number,
+  mapper: (item: TInput) => Promise<TOutput>,
+) {
+  const results: TOutput[] = new Array(items.length);
+  let nextIndex = 0;
+
+  async function worker() {
+    while (nextIndex < items.length) {
+      const currentIndex = nextIndex;
+      nextIndex += 1;
+      results[currentIndex] = await mapper(items[currentIndex]);
+    }
+  }
+
+  const workerCount = Math.min(concurrency, items.length);
+  await Promise.all(Array.from({ length: workerCount }, () => worker()));
+  return results;
+}
+
+export default function AIRecommendClient() {
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [loadingMessage, setLoadingMessage] = useState("");
+
+  const {
+    recommendations,
+    prompt,
+    reason,
+    setRecommendations,
+    setPrompt,
+    setReason,
+    clearAll,
+  } = useAIRecommendations();
+
+  const handleSubmit = async () => {
+    if (!prompt.trim()) {
+      toast.error("Please enter a prompt to get recommendations.");
+      return;
+    }
+
+    setLoading(true);
+    setProgress(5);
+    setLoadingMessage("Summoning hidden gems from the movie multiverse...");
+
+    try {
+      const { titles, reason } = await recommendMoviesListWithAI(prompt);
+
+      if (!titles.length) {
+        toast.error("AI couldn't find any matching movies for your prompt.");
+        return;
+      }
+
+      const uniqueTitles = Array.from(
+        new Set(titles.map((title) => title.trim()).filter(Boolean)),
+      );
+      const total = uniqueTitles.length;
+      let completed = 0;
+
+      setLoadingMessage("Hunting across galaxies for your match...");
+
+      const settledResults = await mapWithConcurrency(
+        uniqueTitles,
+        AI_LOOKUP_CONCURRENCY,
+        async (title) => {
+          try {
+            const res = await fetch(
+              `/api/recommend?query=${encodeURIComponent(title)}&lite=1&limit=1`,
+            );
+            if (!res.ok) {
+              throw new Error(`Lookup failed with status ${res.status}`);
+            }
+            const data: TMDBEnrichedResult[] = await res.json();
+            return data[0] ?? null;
+          } catch (err) {
+            console.error(`Failed to fetch ${title}`, err);
+            return null;
+          } finally {
+            completed += 1;
+            setProgress(Math.round((completed / total) * 100));
+          }
+        },
+      );
+
+      const results = settledResults.filter(
+        (item): item is TMDBEnrichedResult => Boolean(item),
+      );
+
+      const filtered = uniqueById(results);
+
+      setLoadingMessage("Magic complete. Let's hit play!");
+
+      setRecommendations(
+        filtered.map((m) => ({
+          ...adaptAIGeneratedToRecommendation(m),
+          generated_by_ai: true,
+        })),
+      );
+
+      setReason(reason);
+      setLoadingMessage("Ready! Enjoy your curated list.");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetForm = () => {
+    clearAll();
+    sessionStorage.removeItem("ai-recommendations");
+  };
+
+  const displayPrompt = formatPromptTitle(prompt);
+
+  return (
+    <div className="min-h-screen  flex flex-col px-7 md:px-15 items-center justify-center   lg:px-24 xl:px-32 relative 2xl:px-26  bg-black text-white font-[family-name:var(--font-geist-sans)]">
+      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+
+      <AnimatePresence mode="wait">
+        {!loading && recommendations.length === 0 && (
+          <motion.div
+            key="input"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.4 }}
+            className="w-full max-w-xl text-center"
+          >
+            <DotLottieReact
+              className="w-44 h-44 mx-auto"
+              src="/ai.lottie"
+              loop
+              autoplay
+            />
+
+            <h1
+              className="text-3xl font-bold mb-6 text-transparent bg-clip-text  bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600
+
+"
+            >
+              AI Recommend
+            </h1>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+            >
+              <TextInputCard
+                value={prompt}
+                onChange={(v) => {
+                  setPrompt(v);
+                }}
+                placeholder="e.g. Witty romantic films"
+              />
+
+              <div className="bg-white/10 mt-6 backdrop-blur-xl border border-white/10 rounded-xl p-2 flex justify-center items-center">
+                <button
+                  type="submit"
+                  disabled={loading && !prompt.trim()}
+                  className="w-full py-3 rounded-xl 
+  bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 
+  text-white 
+  hover:brightness-110 transition font-semibold text-lg 
+  shadow-md flex items-center justify-center gap-2 
+  backdrop-blur-sm 
+  disabled:opacity-60 disabled:cursor-not-allowed 
+  cursor-pointer"
+                >
+                  <div className="flex items-center gap-2 drop-shadow-[0_1px_4px_rgba(255,255,255,0.3)]">
+                    <svg
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      height="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12" />
+                    </svg>
+                    <span>Magic Recommendations</span>
+                  </div>
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        )}
+
+        {(loading || recommendations.length > 0) && (
+          <motion.div
+            key="results"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.4 }}
+            className="w-full"
+          >
+            {!loading && (
+              <div className="flex mt-28 w-fit mx-auto xl:mt-32  justify-center  bg-white/10  backdrop-blur-xl border border-white/10 rounded-xl p-2">
+                <button
+                  onClick={resetForm}
+                  className="w-full py-3 px-6 rounded-xl 
+  bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 
+  text-white 
+  hover:brightness-110 transition font-semibold text-lg 
+  shadow-md flex items-center justify-center gap-2 
+  backdrop-blur-sm 
+  disabled:opacity-60 disabled:cursor-not-allowed 
+  cursor-pointer
+                  "
+                >
+                  <FiRefreshCcw className="text-base" />
+                  Recommend Me Again
+                </button>
+              </div>
+            )}
+
+            {!loading && (
+              <header className="mt-6  mb-10 text-center">
+                <h2 className="text-3xl md:text-4xl  font-semibold">
+                  <span
+                    className=" mb-6 text-transparent bg-clip-text
+          bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600"
+                  >
+                    {displayPrompt}{" "}
+                  </span>{" "}
+                  AI Picks for You
+                </h2>
+                {reason && (
+                  <p className="mt-4 text-sm md:text-base  text-white/70 max-w-2xl mx-auto">
+                    {reason}
+                  </p>
+                )}
+              </header>
+            )}
+
+            <section aria-label="AI Recommendations">
+              <div className=" mt-6">
+                {loading ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    className="fixed inset-0 z-[100] bg-black/10 backdrop-blur-xs flex flex-col items-center justify-center px-6 overflow-hidden"
+                  >
+                    <div className="w-7 h-7 rounded-full animate-spin mb-4 bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 p-[4px]">
+                      <div className="bg-black w-full h-full rounded-full" />
+                    </div>
+
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      className="flex flex-col items-center justify-center  gap-3 text-center z-10"
+                    >
+                      <motion.p
+                        key={loadingMessage}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.4 }}
+                        className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-400 text-base md:text-lg text-center px-4 break-words max-w-xl mx-auto"
+                      >
+                        {loadingMessage}
+                      </motion.p>
+
+                      <p className="text-white/60 text-xs md:text-sm max-w-xs mx-auto animate-pulse">
+                        Please stay on this page while we generate your movie
+                        and show recommendations.
+                      </p>
+                    </motion.div>
+
+                    <div className="w-full max-w-sm z-10 mt-4">
+                      <div className="h-4 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div
+                          className="h-full bg-gradient-to-r from-purple-900 via-indigo-500 to-pink-500"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${progress}%` }}
+                          transition={{ duration: 0.3, ease: "easeOut" }}
+                        />
+                      </div>
+                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-400 font-bold text-sm mt-2 text-center">
+                        {progress}%
+                      </p>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 pb-16">
+                    {recommendations.map((item) => (
+                      <FilmCard key={item.recommendation_id} item={item} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
