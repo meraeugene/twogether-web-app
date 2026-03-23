@@ -21,10 +21,6 @@ export default function CollectionPage({ genre }: { genre: string }) {
     persistSize: true,
   });
 
-  if (error) {
-    return <ErrorMessage />;
-  }
-
   const collections = data ? data.flat() : [];
 
   const uniqueCollections = Array.from(
@@ -51,6 +47,10 @@ export default function CollectionPage({ genre }: { genre: string }) {
   }, [isValidating, setSize]);
 
   const isInitialLoading = !data && isValidating;
+
+  if (error) {
+    return <ErrorMessage />;
+  }
 
   return (
     <section className="space-y-10">
