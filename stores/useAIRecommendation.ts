@@ -4,10 +4,16 @@ import CryptoJS from "crypto-js";
 import { Recommendation } from "@/types/recommendation";
 
 const SECRET_KEY = process.env.NEXT_PUBLIC_AI_RECOMMEND_SECRET!;
+const noopStorage = {
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {},
+};
 
 // Wrap sessionStorage with encryption
 const encryptedStorage = {
   getItem: (name: string) => {
+    if (typeof window === "undefined") return null;
     const encrypted = sessionStorage.getItem(name);
     if (!encrypted) return null;
     try {
@@ -20,10 +26,14 @@ const encryptedStorage = {
     }
   },
   setItem: (name: string, value: string) => {
+    if (typeof window === "undefined") return;
     const encrypted = CryptoJS.AES.encrypt(value, SECRET_KEY).toString();
     sessionStorage.setItem(name, encrypted);
   },
-  removeItem: (name: string) => sessionStorage.removeItem(name),
+  removeItem: (name: string) => {
+    if (typeof window === "undefined") return;
+    sessionStorage.removeItem(name);
+  },
 };
 
 type State = {
@@ -49,7 +59,9 @@ export const useAIRecommendations = create<State>()(
     }),
     {
       name: "ai-recommendations",
-      storage: createJSONStorage(() => encryptedStorage),
+      storage: createJSONStorage(() =>
+        typeof window === "undefined" ? noopStorage : encryptedStorage,
+      ),
     }
   )
 );

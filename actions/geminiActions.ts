@@ -5,6 +5,11 @@ import { GoogleGenAI } from "@google/genai";
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
+const aiRecommendationCache = new Map<
+  string,
+  { data: { reason: string; titles: string[] }; timestamp: number }
+>();
+const AI_RECOMMENDATION_CACHE_TTL = 1000 * 60 * 10;
 
 export async function askGemini(
   prompt: string,
@@ -59,16 +64,23 @@ export async function askGemini(
 export async function recommendMoviesListWithAI(
   prompt: string,
 ): Promise<{ reason: string; titles: string[] }> {
+  const cacheKey = prompt.trim().toLowerCase();
+  const cached = aiRecommendationCache.get(cacheKey);
+
+  if (cached && Date.now() - cached.timestamp < AI_RECOMMENDATION_CACHE_TTL) {
+    return cached.data;
+  }
+
   const systemPrompt = `
 You are a helpful AI movie and TV show recommender.
 
 When the user describes the kind of content they want, respond with:
 
-1. A short, simple paragraph (2-3 lines) explaining why these 24 titles match the user's request.
+1. A short, simple paragraph (2-3 lines) explaining why these 12 titles match the user's request.
    - Use clear, friendly language.
    - Avoid technical or abstract explanations.
 
-2. Then list exactly 24 titles, sorted from the most relevant to the least relevant based on the user's prompt.
+2. Then list exactly 12 titles, sorted from the most relevant to the least relevant based on the user's prompt.
    - Include both movies and TV shows if appropriate.
    - Only list the title names (no years, no types, no numbering, no extra info).
    - One title per line.
@@ -107,7 +119,13 @@ Titles:
         .map((line) => line.trim())
         .filter(Boolean) ?? [];
 
-    return { reason, titles };
+    const data = { reason, titles };
+    aiRecommendationCache.set(cacheKey, {
+      data,
+      timestamp: Date.now(),
+    });
+
+    return data;
   } catch (error) {
     console.error("Gemini AI error:", error);
     return { reason: "", titles: [] };

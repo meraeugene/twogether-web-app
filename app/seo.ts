@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const FALLBACK_SITE_URL = "https://twogether-live.vercel.app";
+const FALLBACK_SITE_URL = "https://twogether.watch/";
 
 const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
 

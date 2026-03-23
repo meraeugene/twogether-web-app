@@ -230,10 +230,7 @@ export default function StreamingServices() {
                           <span className="font-bold text-red-400">
                             Watch Now
                           </span>
-                          <ChevronRight
-                            size={18}
-                            className="text-red-400 transition-transform group-hover:translate-x-1"
-                          />
+
                           <span className="absolute bottom-0 left-1/2 h-[1px] w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
                         </span>
                       </span>

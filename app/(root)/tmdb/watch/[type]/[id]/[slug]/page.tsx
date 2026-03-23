@@ -3,6 +3,8 @@ import TMDBWatchPage from "./TMDBWatchPage";
 import { hasUserRecommendedFilm } from "@/actions/recommendationActions";
 import { checkIfInWatchlist } from "@/actions/watchlistActions";
 import { Metadata } from "next";
+import { getTMDBWatchRecommendation } from "@/utils/tmdb/getTMDBWatchRecommendation";
+import ErrorMessage from "@/components/ErrorMessage";
 
 export const dynamic = "force-dynamic";
 
@@ -55,9 +57,21 @@ export async function generateMetadata({
   }
 }
 
-const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const tmdbId = (await params).id;
+const Page = async ({
+  params,
+}: {
+  params: Promise<{ type: string; id: string }>;
+}) => {
+  const { id: tmdbId, type } = await params;
   const currentUser = await getCurrentUser();
+  const recommendation = await getTMDBWatchRecommendation(
+    tmdbId,
+    type as "movie" | "tv",
+  );
+
+  if (!recommendation) {
+    return <ErrorMessage />;
+  }
 
   let hasRecommended = false;
   let inWatchlist = false;
@@ -76,6 +90,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <TMDBWatchPage
+      initialRecommendation={recommendation}
       currentUserId={currentUser?.id}
       alreadyRecommended={hasRecommended}
       initialInWatchlist={inWatchlist}

@@ -3,7 +3,6 @@
 import WatchPlayer from "@/app/(user)/watch/[id]/[movieTitle]/WatchPlayer";
 import dynamic from "next/dynamic";
 import { useState } from "react";
-import WatchSkeletonLoading from "@/components/WatchSkeletonLoading";
 import { Sparkles } from "lucide-react";
 import ToggleWatchlistButton from "@/app/(user)/watch/[id]/[movieTitle]/ToggleWatchlistButton";
 import { omit } from "@/utils/ai-recommend/omit";
@@ -11,10 +10,6 @@ import RecommendModal from "@/components/RecommendModal";
 import { createRecommendation } from "@/actions/recommendationActions";
 import { toast } from "sonner";
 import TMDBSuggestions from "./TMDBSuggestions";
-import { fetcher } from "@/utils/swr/fetcher";
-import { useParams } from "next/navigation";
-import useSWR from "swr";
-import ErrorMessage from "@/components/ErrorMessage";
 import { Recommendation } from "@/types/recommendation";
 import BackButton from "@/components/BackButton";
 import TMDBReviewForm from "./TMDBReviewForm";
@@ -26,38 +21,25 @@ const WatchGemeni = dynamic(
   () => import("@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni"),
   { ssr: false },
 );
-
-type SWRResponse = {
-  recommendation: Recommendation;
-};
-
 export default function TMDBWatchPage({
+  initialRecommendation,
   currentUserId,
   alreadyRecommended,
   initialInWatchlist,
   initialWatchlistId,
   isTMDBRecommendation,
 }: {
+  initialRecommendation: Recommendation;
   currentUserId?: string;
   alreadyRecommended: boolean;
   initialInWatchlist: boolean;
   initialWatchlistId: string | null;
   isTMDBRecommendation?: boolean;
 }) {
-  const params = useParams<{ type: string; id: string }>();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasRecommended, setHasRecommended] = useState(alreadyRecommended);
-
-  const { data, error, isLoading } = useSWR<SWRResponse>(
-    `/api/tmdb/${params.id}/?type=${params.type}`,
-    fetcher,
-  );
-
-  if (isLoading) return <WatchSkeletonLoading />;
-  if (error) return <ErrorMessage />;
-
-  const recommendation = data?.recommendation;
+  const recommendation = initialRecommendation;
 
   const handleSubmit = async (formData: {
     comment: string;
@@ -116,7 +98,6 @@ export default function TMDBWatchPage({
               : [recommendation.stream_url]
           }
           type={recommendation.type}
-          isEpisodeMetadataLoading={isLoading}
           episodeTitlesPerSeason={
             recommendation.episode_titles_per_season
               ? Object.fromEntries(
@@ -232,7 +213,7 @@ export default function TMDBWatchPage({
         </div>
       )}
 
-      <TMDBMovieReviews tmdbId={Number(params.id)} />
+      <TMDBMovieReviews tmdbId={recommendation.tmdb_id} />
 
       {!currentUserId && (
         <div className="w-full xl:max-w-1/2 mt-16">
@@ -246,14 +227,14 @@ export default function TMDBWatchPage({
         </div>
       )}
 
-      {currentUserId && recommendation?.tmdb_id && (
+      {currentUserId && recommendation.tmdb_id && (
         <TMDBReviewForm
           currentUserId={currentUserId}
           tmdbId={recommendation.tmdb_id}
         />
       )}
 
-      {recommendation?.tmdb_id && (
+      {recommendation.tmdb_id && (
         <TMDBSuggestions
           tmdbId={recommendation.tmdb_id}
           type={recommendation.type}
@@ -261,7 +242,7 @@ export default function TMDBWatchPage({
       )}
 
       <WatchGemeni
-        title={recommendation?.title ?? ""}
+        title={recommendation.title}
         currentUserId={currentUserId}
       />
 

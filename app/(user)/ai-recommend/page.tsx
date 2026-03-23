@@ -89,7 +89,7 @@ export default function AIRecommendForm() {
         async (title) => {
           try {
             const res = await fetch(
-              `/api/recommend?query=${encodeURIComponent(title)}`,
+              `/api/recommend?query=${encodeURIComponent(title)}&lite=1&limit=1`,
             );
             if (!res.ok) {
               throw new Error(`Lookup failed with status ${res.status}`);

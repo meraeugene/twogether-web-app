@@ -18,10 +18,11 @@ export default function CollectionPage({ genre }: { genre: string }) {
     BingeCollection[]
   >(getKey, fetcher, {
     revalidateFirstPage: false,
+    persistSize: true,
   });
 
   if (error) {
-    <ErrorMessage />;
+    return <ErrorMessage />;
   }
 
   const collections = data ? data.flat() : [];

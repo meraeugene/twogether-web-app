@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Recommendation } from "@/types/recommendation";
 import FilmCard from "@/components/FilmCard";
+import {
+  buttonVariants,
+  containerVariants,
+  itemVariants,
+} from "@/utils/suggestionsAnimation";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -22,47 +27,75 @@ export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
 
   const paginated = items.slice(
     page * ITEMS_PER_PAGE,
-    (page + 1) * ITEMS_PER_PAGE
+    (page + 1) * ITEMS_PER_PAGE,
   );
 
   return (
     <section className="mb-16">
-      {/* Header Row with arrows */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl md:text-3xl font-semibold">Latest Reco</h2>
-        <div className="flex gap-2">
-          <button
+        <h2 className="text-2xl md:text-3xl font-semibold">Latest Reco</h2>{" "}
+        <div className="flex gap-3">
+          <motion.button
             onClick={handlePrev}
             disabled={page === 0}
-            className="bg-white/10 cursor-pointer hover:bg-white/20 disabled:opacity-30 text-white p-2 rounded-full transition"
+            className="p-2 md:p-3 rounded-full cursor-pointer bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 transition-colors"
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
           >
-            <HiChevronLeft size={24} />
-          </button>
-          <button
+            <ChevronLeft className="w-5 h-5" />
+          </motion.button>
+          <motion.button
             onClick={handleNext}
             disabled={page === maxPage}
-            className="bg-white/10 cursor-pointer hover:bg-white/20 disabled:opacity-30 text-white p-2 rounded-full transition"
+            className="p-2 md:p-3 rounded-full cursor-pointer bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 transition-colors"
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
           >
-            <HiChevronRight size={24} />
-          </button>
+            <ChevronRight className="w-5 h-5" />
+          </motion.button>
         </div>
       </div>
 
-      {/* Grid with transition */}
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={page}
-          initial={{ x: 100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -100, opacity: 0 }}
-          transition={{ duration: 0.4 }}
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
         >
           {paginated.map((item) => (
-            <FilmCard key={item.recommendation_id} item={item} />
+            <motion.div
+              key={`${item.recommendation_id}-${page}`}
+              variants={itemVariants}
+              layout
+            >
+              <FilmCard item={item} />
+            </motion.div>
           ))}
         </motion.div>
       </AnimatePresence>
+
+      {maxPage > 0 && (
+        <div className="flex justify-center mt-8 gap-2">
+          {Array.from({ length: maxPage + 1 }, (_, index) => (
+            <motion.button
+              key={index}
+              onClick={() => setPage(index)}
+              className={`w-2 h-2 cursor-pointer rounded-full transition-all duration-300 ${
+                page === index
+                  ? "bg-red-500 w-6"
+                  : "bg-gray-600 hover:bg-gray-500"
+              }`}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

@@ -8,7 +8,7 @@ import { Recommendation } from "@/types/recommendation";
 import { CurrentUser } from "@/types/user";
 import Link from "next/link";
 import { Section } from "./Section";
-import FilmGridSkeleton from "@/components/FilmGridSkeleton";
+import { FilmCardSkeleton } from "@/components/FilmGridSkeleton";
 
 type MyRecosResponse = {
   user: CurrentUser;
@@ -31,14 +31,24 @@ export default function MyRecommendationsPage() {
     return (
       <main className="min-h-screen relative bg-black px-7 pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)] lg:px-24 xl:px-32 2xl:px-26 xl:pt-32">
         <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
-        <div className="space-y-12">
-          <FilmGridSkeleton
-            titleWidth="w-56"
-            count={6}
-            showDescription
-          />
-          <FilmGridSkeleton titleWidth="w-32" count={6} />
-          <FilmGridSkeleton titleWidth="w-32" count={6} />
+        <h1 className="relative z-10 text-2xl font-bold mb-2">
+          Your Recommendations
+        </h1>
+        <p className="relative z-10 text-gray-600 mb-8 font-[family-name:var(--font-geist-mono)]">
+          Here are the movies and shows you&apos;ve recommended.
+        </p>
+
+        <div className="relative z-10 space-y-12">
+          <Section title="Public">
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <FilmCardSkeleton key={`public-skeleton-${idx}`} />
+            ))}
+          </Section>
+          <Section title="Private">
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <FilmCardSkeleton key={`private-skeleton-${idx}`} />
+            ))}
+          </Section>
         </div>
       </main>
     );
@@ -56,7 +66,11 @@ export default function MyRecommendationsPage() {
         </h1>
         <p className="text-gray-400 mb-6 font-[family-name:var(--font-geist-mono)]">
           You haven&apos;t recommended anything yet. Start{" "}
-          <Link prefetch={false} href="/browse" className="text-white underline">
+          <Link
+            prefetch={false}
+            href="/browse"
+            className="text-white underline"
+          >
             browsing
           </Link>{" "}
           to find something worth sharing!

@@ -1,8 +1,10 @@
-export default function RowSkeleton() {
+export default function RowSkeleton({ title }: { title: string }) {
   return (
-    <section className="mb-16">
+    <section className="mb-16 relative z-10">
       <div className="flex justify-between items-center mb-6 mt-4">
-        <div className="h-8 w-44 rounded bg-white/10 animate-pulse" />
+        <h2 className="text-2xl md:text-3xl font-semibold text-white">
+          {title}
+        </h2>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">

@@ -17,6 +17,10 @@ const TMDB_API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
 const MAX_RECOMMEND_RESULTS = 8;
 const MAX_TV_SEASONS = 12;
+const TMDB_FETCH_OPTIONS = {
+  cache: "force-cache" as const,
+  next: { revalidate: 86400 },
+};
 
 async function getEpisodeTitlesPerSeason(
   tmdbId: number,
@@ -59,11 +63,18 @@ async function getEpisodeTitlesPerSeason(
 
 export async function GET(req: NextRequest) {
   const query = req.nextUrl.searchParams.get("query");
+  const lite = req.nextUrl.searchParams.get("lite") === "1";
+  const requestedLimit = Number(req.nextUrl.searchParams.get("limit") ?? "");
+  const resultLimit =
+    Number.isFinite(requestedLimit) && requestedLimit > 0
+      ? Math.min(requestedLimit, MAX_RECOMMEND_RESULTS)
+      : MAX_RECOMMEND_RESULTS;
+
   if (!query) {
     return NextResponse.json({ error: "Missing query" }, { status: 400 });
   }
 
-  const cacheKey = query.toLowerCase().trim();
+  const cacheKey = `${query.toLowerCase().trim()}::${lite ? "lite" : "full"}::${resultLimit}`;
   const now = Date.now();
   const cached = cache.get(cacheKey);
 
@@ -79,7 +90,7 @@ export async function GET(req: NextRequest) {
     query,
   )}&api_key=${TMDB_API_KEY}&include_adult=false&language=en-US&region=US`;
 
-  const searchRes = await fetch(searchUrl);
+  const searchRes = await fetch(searchUrl, TMDB_FETCH_OPTIONS);
   if (!searchRes.ok) {
     return NextResponse.json({ error: "TMDB search failed" }, { status: 502 });
   }
@@ -101,11 +112,12 @@ export async function GET(req: NextRequest) {
     });
 
   const enrichedResults: TMDBEnrichedResult[] = await Promise.all(
-    rawResults.slice(0, MAX_RECOMMEND_RESULTS).map(
+    rawResults.slice(0, resultLimit).map(
       async (item): Promise<TMDBEnrichedResult> => {
       try {
         const detailsRes = await fetch(
           `${BASE_URL}/${item.media_type}/${item.id}?api_key=${TMDB_API_KEY}&append_to_response=videos`,
+          TMDB_FETCH_OPTIONS,
         );
         if (!detailsRes.ok) throw new Error("Details fetch failed");
 
@@ -134,7 +146,7 @@ export async function GET(req: NextRequest) {
 
         let episodeTitlesPerSeason: Record<number, EpisodeTitle[]> | undefined;
 
-        if (item.media_type === "tv") {
+        if (!lite && item.media_type === "tv") {
           episodeTitlesPerSeason = await getEpisodeTitlesPerSeason(
             item.id,
             details.number_of_seasons || 0,

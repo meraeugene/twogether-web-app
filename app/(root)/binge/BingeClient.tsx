@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { BINGE_GENRES } from "@/constants/genre";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import CollectionPage from "./CollectionPage";
 import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
 import { bingePlaceholders } from "@/constants/placeholders";
@@ -28,10 +28,6 @@ export default function BingeClient() {
       router.push(`/search/collections/${encodeURIComponent(trimmed)}`);
     }
   };
-
-  const latestList = useMemo(() => {
-    return <CollectionPage genre={selectedGenre} />;
-  }, [selectedGenre]);
 
   return (
     <main className="min-h-screen relative bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white font-(family-name:--font-geist-sans)">
@@ -61,7 +57,7 @@ export default function BingeClient() {
             ))}
           </select>
         </div>
-        {latestList}
+        <CollectionPage genre={selectedGenre} />
       </section>
     </main>
   );
