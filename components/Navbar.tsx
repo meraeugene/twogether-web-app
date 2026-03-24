@@ -21,7 +21,6 @@ import type { Variants } from "framer-motion";
 import { createClient } from "@/utils/supabase/client";
 import { ChevronDown, Compass, LayoutGrid } from "lucide-react";
 import { FaUserFriends } from "react-icons/fa";
-import { MdStars } from "react-icons/md";
 
 const NotificationBell = dynamic(() => import("./NotificationBell"), {
   ssr: false,
@@ -258,11 +257,15 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
   const moreRef = useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
   const isAuthLoading = typeof user === "undefined";
-  const recosActive = recoNavItems.some((item) => pathname.startsWith(item.href));
+  const recosActive = recoNavItems.some((item) =>
+    pathname.startsWith(item.href),
+  );
   const socialsActive = socialNavItems.some((item) =>
     pathname.startsWith(item.href),
   );
-  const moreActive = moreNavItems.some((item) => pathname.startsWith(item.href));
+  const moreActive = moreNavItems.some((item) =>
+    pathname.startsWith(item.href),
+  );
 
   const logout = () => startTransition(async () => await signOut());
   const close = () => setMenuOpen(false);
