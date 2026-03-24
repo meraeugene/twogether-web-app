@@ -5,7 +5,12 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
-import { primaryNavItems, secondaryNavItems } from "./NavItems";
+import {
+  moreNavItems,
+  primaryNavItems,
+  recoNavItems,
+  socialNavItems,
+} from "./NavItems";
 import { RiLogoutCircleLine, RiMovieAiLine } from "react-icons/ri";
 import { BiMoviePlay } from "react-icons/bi";
 import { AiOutlineFieldTime } from "react-icons/ai";
@@ -14,6 +19,9 @@ import { CurrentUser } from "@/types/user";
 import { signOut } from "@/actions/authActions";
 import type { Variants } from "framer-motion";
 import { createClient } from "@/utils/supabase/client";
+import { ChevronDown, LayoutGrid } from "lucide-react";
+import { FaUserFriends } from "react-icons/fa";
+import { MdStars } from "react-icons/md";
 
 const NotificationBell = dynamic(() => import("./NotificationBell"), {
   ssr: false,
@@ -78,6 +86,77 @@ function NavIcon({
       <span className="text-[18px]">{icon}</span>
       <span className="leading-none whitespace-nowrap">{label}</span>
     </Link>
+  );
+}
+
+function DesktopDropdown({
+  label,
+  active,
+  items,
+  pathname,
+  open,
+  onToggle,
+  onClose,
+  icon,
+}: {
+  label: string;
+  active: boolean;
+  items: { href: string; icon: React.ReactNode; label: string }[];
+  pathname: string;
+  open: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={onToggle}
+        className={`inline-flex h-[40px] items-center gap-2 rounded-[11px] px-3 text-sm font-medium transition-all duration-150 ${
+          active
+            ? "bg-white/[0.12] text-white ring-1 ring-inset ring-white/[0.14]"
+            : "text-white/55 hover:bg-white/[0.08] hover:text-white/90"
+        } cursor-pointer`}
+      >
+        <span className="text-[18px]">{icon}</span>
+        <span className="leading-none whitespace-nowrap">{label}</span>
+        <ChevronDown
+          className={`h-4 w-4 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      <div
+        className={`absolute left-0 top-[calc(100%+12px)] z-[80] min-w-[200px] rounded-[18px] border border-white/[0.1] bg-[#111113]/96 p-2 shadow-[0_18px_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl transition-all duration-200 ease-out ${
+          open
+            ? "pointer-events-auto translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-2 opacity-0"
+        }`}
+      >
+        {items.map((item) => {
+          const isActive = pathname.startsWith(item.href);
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              prefetch={false}
+              onClick={onClose}
+              className={`flex items-center gap-3 rounded-[12px] px-3 py-2.5 text-sm transition-colors ${
+                isActive
+                  ? "bg-white/[0.1] text-white"
+                  : "text-white/70 hover:bg-white/[0.06] hover:text-white"
+              }`}
+            >
+              <span className="text-[18px]">{item.icon}</span>
+              <span className="whitespace-nowrap">{item.label}</span>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
@@ -169,10 +248,21 @@ function MobileLink({
 export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
   const [isPending, startTransition] = useTransition();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [recosOpen, setRecosOpen] = useState(false);
+  const [socialsOpen, setSocialsOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const [hide, setHide] = useState(false);
   const lastY = useRef(0);
+  const recosRef = useRef<HTMLDivElement | null>(null);
+  const socialsRef = useRef<HTMLDivElement | null>(null);
+  const moreRef = useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
   const isAuthLoading = typeof user === "undefined";
+  const recosActive = recoNavItems.some((item) => pathname.startsWith(item.href));
+  const socialsActive = socialNavItems.some((item) =>
+    pathname.startsWith(item.href),
+  );
+  const moreActive = moreNavItems.some((item) => pathname.startsWith(item.href));
 
   const logout = () => startTransition(async () => await signOut());
   const close = () => setMenuOpen(false);
@@ -198,6 +288,35 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
     window.addEventListener("scroll", fn);
     return () => window.removeEventListener("scroll", fn);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        recosRef.current &&
+        !recosRef.current.contains(event.target as Node)
+      ) {
+        setRecosOpen(false);
+      }
+      if (
+        socialsRef.current &&
+        !socialsRef.current.contains(event.target as Node)
+      ) {
+        setSocialsOpen(false);
+      }
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
+        setMoreOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    setRecosOpen(false);
+    setSocialsOpen(false);
+    setMoreOpen(false);
+  }, [pathname]);
 
   return (
     <motion.div
@@ -239,15 +358,54 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
         {isAuthLoading ? null : user ? (
           <>
             <Sep />
-            {secondaryNavItems.map((item) => (
-              <NavIcon
-                key={item.href}
-                href={item.href}
-                icon={item.icon}
-                label={item.label}
-                active={pathname.startsWith(item.href)}
+            <div ref={recosRef}>
+              <DesktopDropdown
+                label="Recos"
+                items={recoNavItems}
+                active={recosActive}
+                pathname={pathname}
+                open={recosOpen}
+                onToggle={() => {
+                  setSocialsOpen(false);
+                  setMoreOpen(false);
+                  setRecosOpen((prev) => !prev);
+                }}
+                onClose={() => setRecosOpen(false)}
+                icon={<MdStars className="text-lg" />}
               />
-            ))}
+            </div>
+            <div ref={socialsRef}>
+              <DesktopDropdown
+                label="Socials"
+                items={socialNavItems}
+                active={socialsActive}
+                pathname={pathname}
+                open={socialsOpen}
+                onToggle={() => {
+                  setRecosOpen(false);
+                  setMoreOpen(false);
+                  setSocialsOpen((prev) => !prev);
+                }}
+                onClose={() => setSocialsOpen(false)}
+                icon={<FaUserFriends className="text-lg" />}
+              />
+            </div>
+            <div ref={moreRef}>
+              <DesktopDropdown
+                label="More"
+                items={moreNavItems}
+                active={moreActive}
+                pathname={pathname}
+                open={moreOpen}
+                onToggle={() => {
+                  setRecosOpen(false);
+                  setSocialsOpen(false);
+                  setMoreOpen((prev) => !prev);
+                }}
+                onClose={() => setMoreOpen(false)}
+                icon={<LayoutGrid className="h-[18px] w-[18px]" />}
+              />
+            </div>
             <Sep />
             <NavIcon
               href={profileHref}
@@ -339,7 +497,15 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
                   <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
                     My Space
                   </h3>
-                  {secondaryNavItems.map((item) => (
+                  {recoNavItems.map((item) => (
+                    <MobileLink
+                      key={item.href}
+                      {...item}
+                      active={pathname.startsWith(item.href)}
+                      onClick={close}
+                    />
+                  ))}
+                  {socialNavItems.map((item) => (
                     <MobileLink
                       key={item.href}
                       {...item}

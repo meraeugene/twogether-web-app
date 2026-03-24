@@ -19,14 +19,35 @@ export const primaryNavItems = [
     icon: <BiMoviePlay className="text-lg" />,
   },
   {
+    label: "Watchlist",
+    href: "/watchlist",
+    icon: <MdMovieFilter className="text-lg" />,
+  },
+];
+
+export const moreNavItems = [
+  {
+    label: "Party",
+    href: "/watch-party",
+    icon: <LuPartyPopper className="text-lg" />,
+  },
+  {
     label: "Chrono",
     href: "/chrono",
     icon: <AiOutlineFieldTime className="text-lg" />,
   },
+];
+
+export const recoNavItems = [
   {
     label: "Recos",
     href: "/recos",
     icon: <MdStars className="text-lg" />,
+  },
+  {
+    label: "My Recos",
+    href: "/my-recommendations",
+    icon: <RiFilmAiLine className="text-lg" />,
   },
   {
     label: "AI Reco",
@@ -37,24 +58,9 @@ export const primaryNavItems = [
       </svg>
     ),
   },
-  {
-    label: "Party",
-    href: "/watch-party",
-    icon: <LuPartyPopper className="text-lg" />,
-  },
 ];
 
-export const secondaryNavItems = [
-  {
-    label: "My Recos",
-    href: "/my-recommendations",
-    icon: <RiFilmAiLine className="text-lg" />,
-  },
-  {
-    label: "Watchlist",
-    href: "/watchlist",
-    icon: <MdMovieFilter className="text-lg" />,
-  },
+export const socialNavItems = [
   {
     label: "Friends",
     href: "/friends",
