@@ -19,7 +19,7 @@ import { CurrentUser } from "@/types/user";
 import { signOut } from "@/actions/authActions";
 import type { Variants } from "framer-motion";
 import { createClient } from "@/utils/supabase/client";
-import { ChevronDown, LayoutGrid } from "lucide-react";
+import { ChevronDown, Compass, LayoutGrid } from "lucide-react";
 import { FaUserFriends } from "react-icons/fa";
 import { MdStars } from "react-icons/md";
 
@@ -360,7 +360,7 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
             <Sep />
             <div ref={recosRef}>
               <DesktopDropdown
-                label="Recos"
+                label="Explore"
                 items={recoNavItems}
                 active={recosActive}
                 pathname={pathname}
@@ -371,7 +371,7 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
                   setRecosOpen((prev) => !prev);
                 }}
                 onClose={() => setRecosOpen(false)}
-                icon={<MdStars className="text-lg" />}
+                icon={<Compass className="h-[18px] w-[18px]" />}
               />
             </div>
             <div ref={socialsRef}>

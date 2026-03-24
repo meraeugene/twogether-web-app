@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { preload } from "react-dom";
 import { TextInputCard } from "@/components/StepCard";
 import { recommendMoviesListWithAI } from "@/actions/geminiActions";
 import { TMDBEnrichedResult } from "@/types/tmdb";
@@ -15,6 +16,11 @@ import { uniqueById } from "@/utils/ai-recommend/uniqueById";
 import { FiRefreshCcw } from "react-icons/fi";
 
 const AI_LOOKUP_CONCURRENCY = 4;
+preload("/ai.lottie", {
+  as: "fetch",
+  crossOrigin: "anonymous",
+});
+
 const DotLottieReact = dynamic(
   () =>
     import("@lottiefiles/dotlottie-react").then((mod) => mod.DotLottieReact),
