@@ -1,61 +1,15 @@
-"use client";
-
-import useSWR from "swr";
-import { fetcher } from "@/utils/swr/fetcher";
+import { getCurrentUserRecommendations } from "@/actions/recommendationActions";
 import FilmCard from "@/components/FilmCard";
 import ErrorMessage from "@/components/ErrorMessage";
-import { Recommendation } from "@/types/recommendation";
-import { CurrentUser } from "@/types/user";
 import Link from "next/link";
 import { Section } from "./Section";
-import { FilmCardSkeleton } from "@/components/FilmGridSkeleton";
 
-type MyRecosResponse = {
-  user: CurrentUser;
-  public: Recommendation[];
-  private: Recommendation[];
-};
+export default async function MyRecommendationsPage() {
+  const data = await getCurrentUserRecommendations();
 
-export default function MyRecommendationsPage() {
-  const { data, error, isLoading } = useSWR<MyRecosResponse>(
-    "/api/my-recos",
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      dedupingInterval: 60000,
-      keepPreviousData: true,
-    },
-  );
+  if (!data) return <ErrorMessage />;
 
-  if (isLoading)
-    return (
-      <main className="min-h-screen relative bg-black px-7 pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)] lg:px-24 xl:px-32 2xl:px-26 xl:pt-32">
-        <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
-        <h1 className="relative z-10 text-2xl font-bold mb-2">
-          Your Recommendations
-        </h1>
-        <p className="relative z-10 text-gray-600 mb-8 font-[family-name:var(--font-geist-mono)]">
-          Here are the movies and shows you&apos;ve recommended.
-        </p>
-
-        <div className="relative z-10 space-y-12">
-          <Section title="Public">
-            {Array.from({ length: 6 }).map((_, idx) => (
-              <FilmCardSkeleton key={`public-skeleton-${idx}`} />
-            ))}
-          </Section>
-          <Section title="Private">
-            {Array.from({ length: 6 }).map((_, idx) => (
-              <FilmCardSkeleton key={`private-skeleton-${idx}`} />
-            ))}
-          </Section>
-        </div>
-      </main>
-    );
-
-  if (error || !data?.user) return <ErrorMessage />;
-
-  const { user, public: publicRecs, private: privateRecs } = data;
+  const { userId, public: publicRecs, private: privateRecs } = data;
   const hasNoRecs = publicRecs.length === 0 && privateRecs.length === 0;
 
   if (hasNoRecs) {
@@ -94,7 +48,7 @@ export default function MyRecommendationsPage() {
             <FilmCard
               key={item.recommendation_id}
               item={item}
-              userId={user.id}
+              userId={userId}
               isDeleteRecommendation
             />
           ))}
@@ -107,7 +61,7 @@ export default function MyRecommendationsPage() {
             <FilmCard
               key={item.recommendation_id}
               item={item}
-              userId={user.id}
+              userId={userId}
               isDeleteRecommendation
             />
           ))}

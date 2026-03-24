@@ -1,9 +1,8 @@
-import AIRecommendClient from "./AIRecommendClient";
+"use client";
 
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { preload } from "react-dom";
 import { TextInputCard } from "@/components/StepCard";
 import { recommendMoviesListWithAI } from "@/actions/geminiActions";
 import { TMDBEnrichedResult } from "@/types/tmdb";
@@ -16,11 +15,6 @@ import { uniqueById } from "@/utils/ai-recommend/uniqueById";
 import { FiRefreshCcw } from "react-icons/fi";
 
 const AI_LOOKUP_CONCURRENCY = 4;
-preload("/ai.lottie", {
-  as: "fetch",
-  crossOrigin: "anonymous",
-});
-
 const DotLottieReact = dynamic(
   () =>
     import("@lottiefiles/dotlottie-react").then((mod) => mod.DotLottieReact),
@@ -48,7 +42,7 @@ async function mapWithConcurrency<TInput, TOutput>(
   return results;
 }
 
-export default function AIRecommendForm() {
+export default function AIRecommendClient() {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState("");
@@ -200,7 +194,6 @@ export default function AIRecommendForm() {
   cursor-pointer"
                 >
                   <div className="flex items-center gap-2 drop-shadow-[0_1px_4px_rgba(255,255,255,0.3)]">
-                    {/* Gemini Icon */}
                     <svg
                       fill="currentColor"
                       viewBox="0 0 24 24"
@@ -227,7 +220,6 @@ export default function AIRecommendForm() {
             transition={{ duration: 0.4 }}
             className="w-full"
           >
-            {/* Reset Button */}
             {!loading && (
               <div className="flex mt-28 w-fit mx-auto xl:mt-32  justify-center  bg-white/10  backdrop-blur-xl border border-white/10 rounded-xl p-2">
                 <button
@@ -248,7 +240,6 @@ export default function AIRecommendForm() {
               </div>
             )}
 
-            {/* Heading Section */}
             {!loading && (
               <header className="mt-6  mb-10 text-center">
                 <h2 className="text-3xl md:text-4xl  font-semibold">
@@ -268,7 +259,6 @@ export default function AIRecommendForm() {
               </header>
             )}
 
-            {/* Grid Section */}
             <section aria-label="AI Recommendations">
               <div className=" mt-6">
                 {loading ? (
@@ -279,12 +269,10 @@ export default function AIRecommendForm() {
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                     className="fixed inset-0 z-[100] bg-black/10 backdrop-blur-xs flex flex-col items-center justify-center px-6 overflow-hidden"
                   >
-                    {/* Optional Spinner */}
                     <div className="w-7 h-7 rounded-full animate-spin mb-4 bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 p-[4px]">
                       <div className="bg-black w-full h-full rounded-full" />
                     </div>
 
-                    {/* Foreground Loader Message */}
                     <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -308,7 +296,6 @@ export default function AIRecommendForm() {
                       </p>
                     </motion.div>
 
-                    {/* Progress Bar */}
                     <div className="w-full max-w-sm z-10 mt-4">
                       <div className="h-4 bg-white/10 rounded-full overflow-hidden">
                         <motion.div

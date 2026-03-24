@@ -117,6 +117,23 @@ export async function getMyRecommendations(userId: string): Promise<{
   };
 }
 
+export async function getCurrentUserRecommendations(): Promise<{
+  userId: string;
+  public: Recommendation[];
+  private: Recommendation[];
+} | null> {
+  const user = await getCurrentUser();
+
+  if (!user) return null;
+
+  const recommendations = await getMyRecommendations(user.id);
+
+  return {
+    userId: user.id,
+    ...recommendations,
+  };
+}
+
 export async function getUserRecommendationsById(
   userId: string
 ): Promise<Recommendation[] | null> {
