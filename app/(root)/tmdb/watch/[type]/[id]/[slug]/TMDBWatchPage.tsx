@@ -71,7 +71,6 @@ export default function TMDBWatchPage({
     });
 
     setLoading(false);
-    document.body.classList.remove("overflow-hidden");
 
     if (!submitError) {
       toast.success("Recommendation submitted successfully.");
@@ -159,10 +158,7 @@ export default function TMDBWatchPage({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.96 }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        onClick={() => {
-                          document.body.classList.add("overflow-hidden");
-                          setOpen(true);
-                        }}
+                        onClick={() => setOpen(true)}
                         className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-medium text-white transition hover:bg-white/[0.1] md:w-fit"
                       >
                         <Sparkles className="w-4 h-4" />
@@ -248,10 +244,7 @@ export default function TMDBWatchPage({
 
       <RecommendModal
         open={open}
-        onClose={() => {
-          document.body.classList.remove("overflow-hidden");
-          setOpen(false);
-        }}
+        onClose={() => setOpen(false)}
         onSubmit={handleSubmit}
         loading={loading}
       />

@@ -140,6 +140,10 @@ function FilmCard({
       router.push(`/watch/${item.tmdb_id}/${slug}`);
       return;
     }
+
+    if (item.tmdb_id && item.type) {
+      router.push(`/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`);
+    }
   };
 
   const stagger = (i: number) => ({

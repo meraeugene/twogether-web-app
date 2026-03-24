@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaLock, FaGlobe } from "react-icons/fa";
 import { toast } from "sonner";
@@ -25,6 +25,17 @@ export default function RecommendModal({
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const [visibility, setVisibility] = useState<"public" | "private">("public");
+
+  useEffect(() => {
+    if (!open) return;
+
+    const { body } = document;
+    body.classList.add("overflow-hidden");
+
+    return () => {
+      body.classList.remove("overflow-hidden");
+    };
+  }, [open]);
 
   const handleSubmit = () => {
     if (!comment.trim()) {

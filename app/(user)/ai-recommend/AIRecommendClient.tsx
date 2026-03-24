@@ -16,6 +16,7 @@ import { uniqueById } from "@/utils/ai-recommend/uniqueById";
 import { FiRefreshCcw } from "react-icons/fi";
 
 const AI_LOOKUP_CONCURRENCY = 4;
+const AI_RECOMMENDATION_TARGET = 12;
 preload("/ai.lottie", {
   as: "fetch",
   crossOrigin: "anonymous",
@@ -116,7 +117,7 @@ export default function AIRecommendClient() {
         (item): item is TMDBEnrichedResult => Boolean(item),
       );
 
-      const filtered = uniqueById(results);
+      const filtered = uniqueById(results).slice(0, AI_RECOMMENDATION_TARGET);
 
       setLoadingMessage("Magic complete. Let's hit play!");
 

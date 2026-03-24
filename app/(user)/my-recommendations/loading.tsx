@@ -10,7 +10,7 @@ export default function Loading() {
         <div className="mt-3 h-4 w-80 max-w-full rounded bg-white/10 animate-pulse" />
 
         <div className="mt-8 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          {Array.from({ length: 6 }).map((_, idx) => (
+          {Array.from({ length: 12 }).map((_, idx) => (
             <FilmCardSkeleton key={`recommendation-skeleton-${idx}`} />
           ))}
         </div>
