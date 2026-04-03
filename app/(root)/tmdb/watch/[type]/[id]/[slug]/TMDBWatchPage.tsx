@@ -16,6 +16,7 @@ import TMDBReviewForm from "./TMDBReviewForm";
 import TMDBMovieReviews from "./TMDBMovieReviews";
 import { AnimatePresence, motion } from "framer-motion";
 import WatchTogetherButton from "@/components/WatchTogetherButton";
+import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 
 const WatchGemeni = dynamic(
   () => import("@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni"),
@@ -109,6 +110,15 @@ export default function TMDBWatchPage({
                 )
               : undefined
           }
+          resumeTracking={{
+            tmdbId: recommendation.tmdb_id,
+            title: recommendation.title,
+            href: `/tmdb/watch/${recommendation.type}/${recommendation.tmdb_id}/${getSlugFromTitle(recommendation.title)}`,
+            posterUrl: recommendation.poster_url,
+            synopsis: recommendation.synopsis,
+            type: recommendation.type,
+            year: recommendation.year,
+          }}
         />
       )}
 

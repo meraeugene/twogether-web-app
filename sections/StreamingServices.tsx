@@ -42,6 +42,7 @@ export default function StreamingServices() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [repeat, setRepeat] = useState(false);
+  const [blockedTrailerKeys, setBlockedTrailerKeys] = useState<string[]>([]);
 
   const playerRef = useRef<YouTubePlayer | null>(null);
   const playerOptions = useMemo(
@@ -50,22 +51,43 @@ export default function StreamingServices() {
       height: "100%",
       playerVars: {
         autoplay: 1,
-        controls: 1,
+        controls: 0,
         modestbranding: 1,
         rel: 0,
         mute: isMuted ? 1 : 0,
         playsinline: 1,
         fs: 1,
+        iv_load_policy: 3,
+        disablekb: 1,
+        cc_load_policy: 0,
       },
     }),
     [isMuted],
   );
 
   const currentTrailer = trailers?.[currentIndex];
+  const isCurrentTrailerBlocked = currentTrailer
+    ? blockedTrailerKeys.includes(currentTrailer.trailerKey)
+    : false;
 
   useEffect(() => {
     setIsPlaying(true);
   }, [currentIndex]);
+
+  useEffect(() => {
+    if (!powerOn || !trailers?.length || !isCurrentTrailerBlocked) return;
+
+    const playableTrailers = trailers.filter(
+      (trailer) => !blockedTrailerKeys.includes(trailer.trailerKey),
+    );
+
+    if (playableTrailers.length === 0) {
+      setIsPlaying(false);
+      return;
+    }
+
+    setCurrentIndex((prev) => (prev + 1) % trailers.length);
+  }, [blockedTrailerKeys, isCurrentTrailerBlocked, powerOn, trailers]);
 
   const nextTrailer = () => {
     if (!trailers) return;
@@ -151,12 +173,12 @@ export default function StreamingServices() {
                   </AnimatePresence>
 
                   {/* YouTube Player */}
-                  {powerOn && currentTrailer && (
+                  {powerOn && currentTrailer && !isCurrentTrailerBlocked && (
                     <YouTube
                       key={currentTrailer.trailerKey}
                       videoId={currentTrailer.trailerKey}
                       className="w-full h-full"
-                      iframeClassName="w-full h-full"
+                      iframeClassName="w-full h-full pointer-events-none"
                       opts={playerOptions}
                       onReady={(event) => {
                         playerRef.current = event.target;
@@ -170,6 +192,14 @@ export default function StreamingServices() {
                         } else {
                           nextTrailer();
                         }
+                      }}
+                      onError={() => {
+                        setBlockedTrailerKeys((prev) =>
+                          prev.includes(currentTrailer.trailerKey)
+                            ? prev
+                            : [...prev, currentTrailer.trailerKey],
+                        );
+                        setIsPlaying(false);
                       }}
                     />
                   )}

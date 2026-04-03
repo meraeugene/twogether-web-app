@@ -10,6 +10,7 @@ import { getSuggestions } from "@/actions/suggestionsActions";
 import { getRecommendationById } from "@/actions/recommendationActions";
 import { checkIfInWatchlist } from "@/actions/watchlistActions";
 import BackButton from "@/components/BackButton";
+import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 
 const WatchGemeni = nextDynamic(() => import("./WatchGemeni"));
 
@@ -31,6 +32,10 @@ export default async function WatchPage({
   if (!recommendation) {
     return <ErrorMessage />;
   }
+
+  const watchHref = `/watch/${recommendation.tmdb_id}/${getSlugFromTitle(
+    recommendation.title,
+  )}`;
 
   const suggestions = await getSuggestions(Number(id), recommendation.genres);
 
@@ -67,6 +72,15 @@ export default async function WatchPage({
                   )
                 : undefined
             }
+            resumeTracking={{
+              tmdbId: recommendation.tmdb_id,
+              title: recommendation.title,
+              href: watchHref,
+              posterUrl: recommendation.poster_url,
+              synopsis: recommendation.synopsis,
+              type: recommendation.type,
+              year: recommendation.year,
+            }}
           />{" "}
           <WatchInfo
             recommendation={recommendation}
