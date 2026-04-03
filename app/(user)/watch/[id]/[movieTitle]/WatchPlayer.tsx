@@ -2,6 +2,18 @@
 
 import { TbPlayerPlayFilled } from "react-icons/tb";
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { saveRecentWatch } from "@/utils/recentWatch";
+
+type ResumeTracking = {
+  tmdbId: number;
+  title: string;
+  href: string;
+  posterUrl?: string;
+  synopsis?: string;
+  type: "movie" | "tv";
+  year?: string;
+};
 
 export default function WatchPlayer({
   urls,
@@ -9,16 +21,35 @@ export default function WatchPlayer({
   episodeTitlesPerSeason,
   showServerSelector = true,
   isEpisodeMetadataLoading = false,
+  resumeTracking,
 }: {
   urls: string[];
   type?: string;
   episodeTitlesPerSeason?: Record<number, string[]>;
   showServerSelector?: boolean;
   isEpisodeMetadataLoading?: boolean;
+  resumeTracking?: ResumeTracking;
 }) {
-  const [currentUrlIndex, setCurrentUrlIndex] = useState(0);
-  const [selectedSeason, setSelectedSeason] = useState(1);
-  const [selectedEpisode, setSelectedEpisode] = useState(1);
+  const searchParams = useSearchParams();
+  const requestedServerIndex = Number(searchParams.get("server") ?? "0");
+  const requestedSeason = Number(searchParams.get("season") ?? "1");
+  const requestedEpisode = Number(searchParams.get("episode") ?? "1");
+
+  const [currentUrlIndex, setCurrentUrlIndex] = useState(
+    Number.isFinite(requestedServerIndex) && requestedServerIndex >= 0
+      ? requestedServerIndex
+      : 0,
+  );
+  const [selectedSeason, setSelectedSeason] = useState(
+    Number.isFinite(requestedSeason) && requestedSeason > 0
+      ? requestedSeason
+      : 1,
+  );
+  const [selectedEpisode, setSelectedEpisode] = useState(
+    Number.isFinite(requestedEpisode) && requestedEpisode > 0
+      ? requestedEpisode
+      : 1,
+  );
   const safeUrls = urls.filter(Boolean);
   const hasPlayableUrl = safeUrls.length > 0;
   const availableSeasons = useMemo(
@@ -47,6 +78,44 @@ export default function WatchPlayer({
       setSelectedEpisode(1);
     }
   }, [episodeTitlesPerSeason, selectedEpisode, selectedSeason]);
+
+  useEffect(() => {
+    if (!resumeTracking || !hasPlayableUrl) return;
+
+    const params = new URLSearchParams();
+    if (activeUrlIndex > 0) {
+      params.set("server", String(activeUrlIndex));
+    }
+
+    if (resumeTracking.type === "tv") {
+      params.set("season", String(selectedSeason));
+      params.set("episode", String(selectedEpisode));
+    }
+
+    const href = params.toString()
+      ? `${resumeTracking.href}?${params.toString()}`
+      : resumeTracking.href;
+
+    saveRecentWatch({
+      tmdbId: resumeTracking.tmdbId,
+      title: resumeTracking.title,
+      href,
+      posterUrl: resumeTracking.posterUrl,
+      synopsis: resumeTracking.synopsis,
+      type: resumeTracking.type,
+      year: resumeTracking.year,
+      season: resumeTracking.type === "tv" ? selectedSeason : undefined,
+      episode: resumeTracking.type === "tv" ? selectedEpisode : undefined,
+      serverIndex: activeUrlIndex,
+      updatedAt: new Date().toISOString(),
+    });
+  }, [
+    activeUrlIndex,
+    hasPlayableUrl,
+    resumeTracking,
+    selectedEpisode,
+    selectedSeason,
+  ]);
 
   const streamSrc =
     !currentUrl
