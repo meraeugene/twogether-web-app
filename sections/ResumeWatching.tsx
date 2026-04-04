@@ -83,7 +83,7 @@ export default function ResumeWatching() {
                   </span>
                 </div>
 
-                <h3 className="max-w-3xl text-4xl font-medium tracking-tight text-white sm:text-5xl lg:text-6xl">
+                <h3 className="max-w-3xl text-3xl font-medium tracking-tight text-white sm:text-5xl lg:text-6xl">
                   {recentWatch.title}
                 </h3>
 
