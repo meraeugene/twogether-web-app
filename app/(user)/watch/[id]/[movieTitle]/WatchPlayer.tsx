@@ -22,7 +22,6 @@ export default function WatchPlayer({
   showServerSelector = true,
   isEpisodeMetadataLoading = false,
   resumeTracking,
-  prioritizeMobileSize = false,
 }: {
   urls: string[];
   type?: string;
@@ -30,7 +29,6 @@ export default function WatchPlayer({
   showServerSelector?: boolean;
   isEpisodeMetadataLoading?: boolean;
   resumeTracking?: ResumeTracking;
-  prioritizeMobileSize?: boolean;
 }) {
   const searchParams = useSearchParams();
   const requestedServerIndex = Number(searchParams.get("server") ?? "0");
@@ -137,9 +135,6 @@ export default function WatchPlayer({
   const supportMessage = showServerSelector
     ? "Having issues? Try switching servers or episodes."
     : "Having issues? Try switching episodes.";
-  const playerShellClassName = prioritizeMobileSize
-    ? "aspect-[5/4] min-h-[18rem] rounded-2xl bg-white/[0.03] p-2 sm:aspect-video sm:min-h-0 sm:bg-transparent sm:p-0"
-    : "aspect-video rounded-2xl";
 
   if (!hasPlayableUrl || !streamSrc) {
     return (
@@ -154,9 +149,7 @@ export default function WatchPlayer({
   return (
     <div className="space-y-8 font-[family-name:var(--font-geist-mono)]">
       {/* Video Player */}
-      <div
-        className={`${playerShellClassName} overflow-hidden border border-white/10 shadow-xl`}
-      >
+      <div className="h-[16rem] w-full overflow-hidden rounded-2xl border border-white/10 shadow-xl sm:aspect-video sm:h-auto">
         <iframe
           key={streamSrc}
           src={streamSrc}

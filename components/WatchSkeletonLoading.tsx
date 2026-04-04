@@ -11,7 +11,7 @@ const WatchSkeletonLoading = () => {
       <div className="relative space-y-8">
         <div className="h-9 w-14 animate-pulse rounded-md bg-white/10" />
 
-        <section className={`${pulse} aspect-video w-full`} />
+        <section className={`${pulse} h-[16rem] w-full sm:aspect-video sm:h-auto`} />
 
         <section className="space-y-5">
           <div className="flex flex-wrap gap-3">
