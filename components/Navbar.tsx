@@ -496,6 +496,14 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
                       onClick={close}
                     />
                   ))}
+                  {moreNavItems.map((item) => (
+                    <MobileLink
+                      key={item.href}
+                      {...item}
+                      active={pathname.startsWith(item.href)}
+                      onClick={close}
+                    />
+                  ))}
 
                   <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
                     My Space
@@ -508,6 +516,10 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
                       onClick={close}
                     />
                   ))}
+
+                  <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
+                    Socials
+                  </h3>
                   {socialNavItems.map((item) => (
                     <MobileLink
                       key={item.href}
