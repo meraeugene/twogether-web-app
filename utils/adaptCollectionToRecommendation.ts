@@ -16,6 +16,7 @@ export function adaptCollectionMoviesToRecommendations(
       type: "movie",
       stream_url: [
         // `https://vidlink.pro/movie/${movie.tmdb_id}?title=true&poster=true&autoplay=false`,
+        `https://vidsrc-embed.ru/embed/movie/${movie.tmdb_id}`,
         `https://vidsrc.cc/v2/embed/movie/${movie.tmdb_id}?autoPlay=false&poster=true`,
         `https://vidsrc.to/embed/movie/${movie.tmdb_id}`,
       ],

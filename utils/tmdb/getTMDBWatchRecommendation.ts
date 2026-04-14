@@ -29,9 +29,7 @@ async function getEpisodeTitlesPerSeason(
   );
 
   const validSeasons = seasonEntries.filter(
-    (
-      season,
-    ): season is readonly [number, EpisodeTitle[]] => season !== null,
+    (season): season is readonly [number, EpisodeTitle[]] => season !== null,
   );
 
   return Object.fromEntries(validSeasons);
@@ -56,9 +54,7 @@ export async function getTMDBWatchRecommendation(
         type: string;
         official?: boolean;
       }) =>
-        video.site === "YouTube" &&
-        video.type === "Trailer" &&
-        video.official,
+        video.site === "YouTube" && video.type === "Trailer" && video.official,
     ) ||
     details.videos?.results?.find(
       (video: { key: string; site: string; type: string }) =>
@@ -92,17 +88,18 @@ export async function getTMDBWatchRecommendation(
       ? `https://image.tmdb.org/t/p/w500${details.poster_path}`
       : undefined,
     year:
-      details.release_date?.slice(0, 4) ||
-      details.first_air_date?.slice(0, 4),
+      details.release_date?.slice(0, 4) || details.first_air_date?.slice(0, 4),
     synopsis: details.overview ?? "",
     trailer_key: trailer?.key ?? null,
     stream_url:
       type === "tv"
         ? [
+            `https://vidsrc-embed.ru/embed/tv/${details.id}/1/1`,
             `https://vidsrc.cc/v2/embed/tv/${details.id}/1/1?autoPlay=false&poster=true`,
             `https://vidsrc.to/embed/tv/${details.id}/1/1`,
           ]
         : [
+            `https://vidsrc-embed.ru/embed/movie/${details.id}`,
             `https://vidsrc.cc/v2/embed/movie/${details.id}?autoPlay=false&poster=true`,
             `https://vidsrc.to/embed/movie/${details.id}`,
           ],

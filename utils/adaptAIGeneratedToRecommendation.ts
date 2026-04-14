@@ -17,11 +17,13 @@ export function adaptAIGeneratedToRecommendation(
       tmdb.media_type === "tv"
         ? [
             // `https://vidlink.pro/tv/${tmdb.id}/1/1?title=true&poster=true&autoplay=false`,
+            `https://vidsrc-embed.ru/embed/tv/${tmdb.id}/1/1`,
             `https://vidsrc.cc/v2/embed/tv/${tmdb.id}/1/1?autoPlay=false&poster=true`,
             `https://vidsrc.to/embed/tv/${tmdb.id}/1/1`,
           ]
         : [
             // `https://vidlink.pro/movie/${tmdb.id}?title=true&poster=true&autoplay=false`,
+            `https://vidsrc-embed.ru/embed/movie/${tmdb.id}`,
             `https://vidsrc.cc/v2/embed/movie/${tmdb.id}?autoPlay=false&poster=true`,
             `https://vidsrc.to/embed/movie/${tmdb.id}`,
           ],
