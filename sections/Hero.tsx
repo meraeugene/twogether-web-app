@@ -138,7 +138,7 @@ export default function TwogetherHero() {
         <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 max-w-xl md:max-w-2xl mx-auto mb-10 md:mb-14 font-light leading-relaxed">
           Skip the endless scrolling. Join users worldwide and
           <br className="hidden md:block" />
-          watch{" "}
+          {""} watch {""}
           <span className="text-red-400 font-medium">10,000+ titles.</span>
         </p>
 
