@@ -85,7 +85,7 @@ export default function TMDBWatchPage({
   };
 
   return (
-    <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 relative lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 text-white ">
+    <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-4 pt-28 pb-16 relative lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 text-white ">
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
 
       <BackButton />
@@ -247,10 +247,7 @@ export default function TMDBWatchPage({
         />
       )}
 
-      <WatchGemeni
-        title={recommendation.title}
-        currentUserId={currentUserId}
-      />
+      <WatchGemeni title={recommendation.title} currentUserId={currentUserId} />
 
       <RecommendModal
         open={open}
@@ -261,4 +258,3 @@ export default function TMDBWatchPage({
     </main>
   );
 }
-

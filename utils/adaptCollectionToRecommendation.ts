@@ -15,9 +15,9 @@ export function adaptCollectionMoviesToRecommendations(
       poster_url: movie.poster_url ?? undefined,
       type: "movie",
       stream_url: [
-        // `https://vidlink.pro/movie/${movie.tmdb_id}?title=true&poster=true&autoplay=false`,
+        `https://player.videasy.net/movie/${movie.tmdb_id}/1/1`,
+        `https://www.vidking.net/embed/movie/${movie.tmdb_id}`,
         `https://vidsrc-embed.ru/embed/movie/${movie.tmdb_id}`,
-        `https://vidsrc.cc/v2/embed/movie/${movie.tmdb_id}?autoPlay=false&poster=true`,
         `https://vidsrc.to/embed/movie/${movie.tmdb_id}`,
       ],
       genres: movie.genres,

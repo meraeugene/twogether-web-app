@@ -41,11 +41,11 @@ export default async function WatchPage({
 
   const { inWatchlist, id: watchListId } = await checkIfInWatchlist(
     recommendation.tmdb_id,
-    currentUser.id
+    currentUser.id,
   );
 
   return (
-    <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 relative lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 text-white">
+    <main className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-4 pt-28 pb-16 relative lg:px-24 xl:px-32 2xl:px-26 xl:pt-34 text-white">
       {/* Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
 
@@ -64,11 +64,11 @@ export default async function WatchPage({
               recommendation.episode_titles_per_season
                 ? Object.fromEntries(
                     Object.entries(
-                      recommendation.episode_titles_per_season
+                      recommendation.episode_titles_per_season,
                     ).map(([season, episodes]) => [
                       Number(season),
                       episodes.map((ep) => ep.title),
-                    ])
+                    ]),
                   )
                 : undefined
             }
