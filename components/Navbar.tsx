@@ -21,6 +21,7 @@ import type { Variants } from "framer-motion";
 import { createClient } from "@/utils/supabase/client";
 import { ChevronDown, Compass, LayoutGrid } from "lucide-react";
 import { FaUserFriends } from "react-icons/fa";
+import AccountSettingsMenu from "@/components/AccountSettingsMenu";
 
 const NotificationBell = dynamic(() => import("./NotificationBell"), {
   ssr: false,
@@ -416,6 +417,7 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
               label="Profile"
               active={pathname === profileHref}
             />
+            <AccountSettingsMenu compact />
             <NotificationBell userId={user.id} />
             <div
               onClick={logout}
@@ -539,6 +541,10 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
                     active={pathname === profileHref}
                     onClick={close}
                   />
+
+                  <motion.div variants={fadeUp}>
+                    <AccountSettingsMenu mobile onClick={close} />
+                  </motion.div>
 
                   <motion.div variants={fadeUp}>
                     <button

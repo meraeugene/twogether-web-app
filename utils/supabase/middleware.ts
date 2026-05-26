@@ -71,6 +71,7 @@ export async function updateSession(request: NextRequest) {
     "/my-recommendations",
     "/ai-recommend",
     "/watch-party",
+    "/settings",
   ];
   if (
     !user &&

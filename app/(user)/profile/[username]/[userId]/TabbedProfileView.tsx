@@ -218,7 +218,7 @@ export default function TabbedProfileView({
             )}
 
             {currentUser?.id === user.id && (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center gap-3">
                 <Link
                   prefetch={false}
                   href={`/profile/${encodeURIComponent(user.username)}`}
