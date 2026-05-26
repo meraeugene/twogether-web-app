@@ -271,6 +271,7 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
   const logout = () => startTransition(async () => await signOut());
   const close = () => setMenuOpen(false);
   const profileHref = user ? `/profile/${user.username}/${user.id}` : "#";
+  const hideOnboarding = pathname.startsWith("/onboarding");
 
   const handleLogin = async () => {
     const supabase = createClient();
@@ -321,6 +322,10 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
     setSocialsOpen(false);
     setMoreOpen(false);
   }, [pathname]);
+
+  if (hideOnboarding) {
+    return null;
+  }
 
   return (
     <motion.div

@@ -11,7 +11,10 @@ import {
   siteName,
   siteUrl,
 } from "@/app/seo";
-import { CURRENT_USER_COOKIE, deserializeCurrentUserSnapshot } from "@/utils/currentUserSnapshot";
+import {
+  CURRENT_USER_COOKIE,
+  deserializeCurrentUserSnapshot,
+} from "@/utils/currentUserSnapshot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -81,7 +84,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Toaster position="bottom-right" />
+        <Toaster position="top-center" />
         <Header initialUser={initialUser} />
         {children}
         <Footer />
