@@ -94,15 +94,15 @@ export async function getTMDBWatchRecommendation(
     stream_url:
       type === "tv"
         ? [
-            `https://player.videasy.net/tv/${details.id}/1/1`,
-            `https://www.vidking.net/embed/tv/${details.id}/1/1`,
             `https://vidsrc-embed.ru/embed/tv/${details.id}/1/1`,
+            `https://www.vidking.net/embed/tv/${details.id}/1/1`,
+            `https://player.videasy.net/tv/${details.id}/1/1`,
             `https://vidsrc.to/embed/tv/${details.id}/1/1`,
           ]
         : [
-            `https://player.videasy.net/movie/${details.id}/1/1`,
-            `https://www.vidking.net/embed/movie/${details.id}`,
             `https://vidsrc-embed.ru/embed/movie/${details.id}`,
+            `https://www.vidking.net/embed/movie/${details.id}`,
+            `https://player.videasy.net/movie/${details.id}/1/1`,
             `https://vidsrc.to/embed/movie/${details.id}`,
           ],
     genres:
