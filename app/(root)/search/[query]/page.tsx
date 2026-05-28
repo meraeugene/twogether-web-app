@@ -35,7 +35,11 @@ export default async function SearchPage({
 
   const adaptedResults = results.map((item) => adaptTMDBToRecommendation(item));
   const normalize = (value: string) =>
-    value.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ").trim();
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
   const normalizedQuery = normalize(decodedQuery);
 
   const hasExactMovieOrTvMatch = adaptedResults.some(
