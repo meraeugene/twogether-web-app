@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/app/seo";
 import BingeClient from "./BingeClient";
@@ -11,9 +10,5 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function BingePage() {
-  return (
-    <Suspense fallback={null}>
-      <BingeClient />
-    </Suspense>
-  );
+  return <BingeClient />;
 }
