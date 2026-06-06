@@ -56,7 +56,7 @@ export default function BrowseMoviesClient() {
           </h1>
 
           <select
-            className=" border border-white/10 px-4 py-2 rounded-md bg-black text-white text-sm focus:outline-none focus:ring-2 hover:border-red-500 cursor-pointer focus:ring-red-500 transition duration-200"
+            className="rounded-md border border-red-900 bg-black px-4 py-2 text-sm text-white transition duration-200 cursor-pointer hover:border-red-500 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
             value={selectedGenre}
             onChange={(e) => handleGenreChange(e.target.value)}
           >

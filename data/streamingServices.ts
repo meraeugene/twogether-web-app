@@ -37,6 +37,6 @@ export const streamingServices = [
   {
     name: "Peacock",
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/d/d3/NBCUniversal_Peacock_Logo.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/f/fb/NBCUniversal_Peacock_Logo_%282020%E2%80%932026%29.svg",
   },
 ];
