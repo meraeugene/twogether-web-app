@@ -16,15 +16,15 @@ export function adaptAIGeneratedToRecommendation(
     stream_url:
       tmdb.media_type === "tv"
         ? [
+          `https://player.videasy.net/tv/${tmdb.id}/1/1`,
             `https://vidsrc-embed.ru/embed/tv/${tmdb.id}/1/1`,
             `https://www.vidking.net/embed/tv/${tmdb.id}/1/1`,
-            `https://player.videasy.net/tv/${tmdb.id}/1/1`,
             `https://vidsrc.to/embed/tv/${tmdb.id}/1/1`,
           ]
         : [
+          `https://player.videasy.net/movie/${tmdb.id}/1/1`,
             `https://vidsrc-embed.ru/embed/movie/${tmdb.id}`,
             `https://www.vidking.net/embed/movie/${tmdb.id}`,
-            `https://player.videasy.net/movie/${tmdb.id}/1/1`,
             `https://vidsrc.to/embed/movie/${tmdb.id}`,
           ],
 

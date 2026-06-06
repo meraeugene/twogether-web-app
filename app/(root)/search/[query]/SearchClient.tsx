@@ -48,8 +48,10 @@ export default function SearchClient({
         poster_url: movie.poster_url ?? undefined,
         type: "movie",
         stream_url: [
-          `https://vidsrc.cc/v2/embed/movie/${movie.id}?autoPlay=false&poster=true`,
-          `https://vidsrc.to/embed/movie/${movie.id}`,
+            `https://player.videasy.net/movie/${movie.id}/1/1`,
+            `https://vidsrc-embed.ru/embed/movie/${movie.id}`,
+            `https://www.vidking.net/embed/movie/${movie.id}`,
+            `https://vidsrc.to/embed/movie/${movie.id}`,
         ],
         genres: movie.genres || [],
         year: movie.year,

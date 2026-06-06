@@ -45,15 +45,15 @@ export default function RecommendStepMovieSearch({
     const stream_url =
       type === "tv"
         ? [
+          `https://player.videasy.net/tv/${item.id}/1/1`,
             `https://vidsrc-embed.ru/embed/tv/${item.id}/1/1`,
             `https://www.vidking.net/embed/tv/${item.id}/1/1`,
-            `https://player.videasy.net/tv/${item.id}/1/1`,
             `https://vidsrc.to/embed/tv/${item.id}/1/1`,
           ]
         : [
+          `https://player.videasy.net/movie/${item.id}/1/1`,
             `https://vidsrc-embed.ru/embed/movie/${item.id}`,
             `https://www.vidking.net/embed/movie/${item.id}`,
-            `https://player.videasy.net/movie/${item.id}/1/1`,
             `https://vidsrc.to/embed/movie/${item.id}`,
           ];
 
