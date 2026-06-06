@@ -83,6 +83,12 @@ export default function WatchingNow({
                 key={room.room_id}
                 href={`/watch-party/${room.room_id}`}
                 onClick={(event) => {
+                  if (!currentUserId) {
+                    event.preventDefault();
+                    toast.error("Please log in first before joining a room.");
+                    return;
+                  }
+
                   if (room.is_accessible) return;
                   event.preventDefault();
                   toast.error(
