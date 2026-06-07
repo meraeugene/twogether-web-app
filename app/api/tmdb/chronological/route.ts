@@ -1,6 +1,9 @@
 import { franchiseMap } from "@/data/franchiseMap";
 import { NextResponse } from "next/server";
 
+// Chronology is local curated data, so browsers/CDNs can keep it longer.
+const CHRONOLOGICAL_CACHE_SECONDS = 604800; // 7 days
+
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -22,7 +25,14 @@ export async function GET(req: Request) {
       );
     }
 
-    return NextResponse.json({ name: data.name, movies: data.movies });
+    return NextResponse.json(
+      { name: data.name, movies: data.movies },
+      {
+        headers: {
+          "Cache-Control": `public, max-age=${CHRONOLOGICAL_CACHE_SECONDS}, stale-while-revalidate=86400`,
+        },
+      },
+    );
   } catch (error) {
     console.error("[CHRONOLOGY_API_ERROR]", error);
     return NextResponse.json(

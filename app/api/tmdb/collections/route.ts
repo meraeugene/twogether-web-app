@@ -9,6 +9,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+// Genre collection discovery should update daily, while collection internals are stable.
+const COLLECTION_DISCOVERY_CACHE_SECONDS = 86400; // 24 hours
+const COLLECTION_DETAILS_CACHE_SECONDS = 604800; // 7 days
 
 const GENRE_NAME_TO_ID: Record<string, number> = {
   Action: 28,
@@ -46,7 +49,10 @@ export async function GET(req: NextRequest) {
   }
 
   const discoverUrl = `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&include_adult=false&certification_country=US&certification.lte=PG-13&api_key=${API_KEY}&page=${page}`;
-  const res = await fetch(discoverUrl);
+  const res = await fetch(discoverUrl, {
+    cache: "force-cache",
+    next: { revalidate: COLLECTION_DISCOVERY_CACHE_SECONDS },
+  });
   const json: { results: TMDBMovie[] } = await res.json();
 
   const collectionsMap: Record<number, EnrichedCollection> = {};
@@ -55,6 +61,10 @@ export async function GET(req: NextRequest) {
     (json.results || []).map(async (movie) => {
       const detailsRes = await fetch(
         `${BASE_URL}/movie/${movie.id}?api_key=${API_KEY}`,
+        {
+          cache: "force-cache",
+          next: { revalidate: COLLECTION_DETAILS_CACHE_SECONDS },
+        },
       );
       const details: TMDBMovieDetails = await detailsRes.json();
       const collection = details.belongs_to_collection;
@@ -63,6 +73,10 @@ export async function GET(req: NextRequest) {
 
       const colRes = await fetch(
         `${BASE_URL}/collection/${collection.id}?api_key=${API_KEY}`,
+        {
+          cache: "force-cache",
+          next: { revalidate: COLLECTION_DETAILS_CACHE_SECONDS },
+        },
       );
       const colData: TMDBCollection = await colRes.json();
 
@@ -71,6 +85,10 @@ export async function GET(req: NextRequest) {
       for (const part of colData.parts || []) {
         const partDetailsRes = await fetch(
           `${BASE_URL}/movie/${part.id}?api_key=${API_KEY}&append_to_response=videos`,
+          {
+            cache: "force-cache",
+            next: { revalidate: COLLECTION_DETAILS_CACHE_SECONDS },
+          },
         );
         const partDetails: TMDBMovieDetails = await partDetailsRes.json();
 
@@ -128,7 +146,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(Object.values(collectionsMap), {
     headers: {
-      "Cache-Control": "public, max-age=86400, stale-while-revalidate=60",
+      "Cache-Control": `public, max-age=${COLLECTION_DISCOVERY_CACHE_SECONDS}, stale-while-revalidate=300`,
     },
   });
 }

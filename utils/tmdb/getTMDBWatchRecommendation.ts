@@ -4,6 +4,8 @@ import { getStreamUrls } from "@/utils/getStreamUrls";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+// TMDB details and season metadata rarely need sub-daily refreshes.
+const TMDB_DETAILS_CACHE_SECONDS = 86400; // 24 hours
 
 async function getEpisodeTitlesPerSeason(
   tmdbId: number,
@@ -13,7 +15,7 @@ async function getEpisodeTitlesPerSeason(
     seasons.map(async (season) => {
       const seasonRes = await fetch(
         `${BASE_URL}/tv/${tmdbId}/season/${season}?api_key=${API_KEY}`,
-        { next: { revalidate: 86400 } },
+        { next: { revalidate: TMDB_DETAILS_CACHE_SECONDS } },
       );
 
       if (!seasonRes.ok) return null;
@@ -41,7 +43,9 @@ export async function getTMDBWatchRecommendation(
   type: "movie" | "tv",
 ): Promise<Recommendation | null> {
   const apiUrl = `${BASE_URL}/${type}/${tmdbId}?api_key=${API_KEY}&append_to_response=credits,videos`;
-  const res = await fetch(apiUrl, { next: { revalidate: 86400 } });
+  const res = await fetch(apiUrl, {
+    next: { revalidate: TMDB_DETAILS_CACHE_SECONDS },
+  });
 
   if (!res.ok) return null;
 

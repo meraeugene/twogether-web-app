@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+// Anime discovery results are useful with twice-daily freshness.
+const ANIME_LIST_CACHE_SECONDS = 43200; // 12 hours
+// Episode counts, genres, and trailers do not need the same refresh cadence.
+const ANIME_DETAILS_CACHE_SECONDS = 86400; // 24 hours
 
 export async function GET(req: NextRequest) {
   const page = Number(req.nextUrl.searchParams.get("page") || "1");
@@ -12,7 +16,7 @@ export async function GET(req: NextRequest) {
 
   const res = await fetch(url, {
     cache: "force-cache",
-    next: { revalidate: 86400 },
+    next: { revalidate: ANIME_LIST_CACHE_SECONDS },
   });
 
   const tmdbData = await res.json();
@@ -25,7 +29,7 @@ export async function GET(req: NextRequest) {
           `${BASE_URL}/tv/${item.id}?api_key=${API_KEY}&append_to_response=videos`,
           {
             cache: "force-cache",
-            next: { revalidate: 86400 },
+            next: { revalidate: ANIME_DETAILS_CACHE_SECONDS },
           },
         );
 
@@ -92,7 +96,7 @@ export async function GET(req: NextRequest) {
   const response = NextResponse.json(enriched);
   response.headers.set(
     "Cache-Control",
-    "public, max-age=86400, stale-while-revalidate=60",
+    `public, max-age=${ANIME_LIST_CACHE_SECONDS}, stale-while-revalidate=300`,
   );
   return response;
 }

@@ -3,13 +3,17 @@ import { TMDBRawResult, TMDBEnrichedResult } from "@/types/tmdb";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+// Browse landing content should feel current without hammering TMDB.
+const TRENDING_CACHE_SECONDS = 21600; // 6 hours
+// Details, genres, and trailers change less often than ranking lists.
+const DETAILS_CACHE_SECONDS = 86400; // 24 hours
 
 export async function GET() {
   try {
     // --- Movies ---
     const moviesRes = await fetch(
       `${BASE_URL}/trending/movie/week?language=en-US&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: 86400 } },
+      { cache: "force-cache", next: { revalidate: TRENDING_CACHE_SECONDS } },
     );
     const moviesData = await moviesRes.json();
     const movies: TMDBRawResult[] = (moviesData.results || []).slice(0, 18);
@@ -17,7 +21,7 @@ export async function GET() {
     // --- Anime (TV with Animation genre 16) ---
     const animeRes = await fetch(
       `${BASE_URL}/discover/tv?with_genres=16&sort_by=popularity.desc&language=en-US&page=1&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: 86400 } },
+      { cache: "force-cache", next: { revalidate: TRENDING_CACHE_SECONDS } },
     );
     const animeData = await animeRes.json();
     const anime: TMDBRawResult[] = (animeData.results || []).slice(0, 18);
@@ -25,7 +29,7 @@ export async function GET() {
     // --- TV Shows (non-anime) ---
     const tvRes = await fetch(
       `${BASE_URL}/tv/popular?language=en-US&page=1&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: 86400 } },
+      { cache: "force-cache", next: { revalidate: TRENDING_CACHE_SECONDS } },
     );
     const tvData = await tvRes.json();
     const tv: TMDBRawResult[] = (tvData.results || []).slice(0, 18);
@@ -33,7 +37,7 @@ export async function GET() {
     // --- K-Dramas (TV, Korean language + Drama genre) ---
     const kdramaRes = await fetch(
       `${BASE_URL}/discover/tv?with_original_language=ko&with_genres=18&sort_by=popularity.desc&page=1&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: 86400 } },
+      { cache: "force-cache", next: { revalidate: TRENDING_CACHE_SECONDS } },
     );
     const kdramaData = await kdramaRes.json();
     const kdramas: TMDBRawResult[] = (kdramaData.results || []).slice(0, 18);
@@ -46,7 +50,7 @@ export async function GET() {
       try {
         const detailsRes = await fetch(
           `${BASE_URL}/${type}/${item.id}?api_key=${API_KEY}&append_to_response=videos`,
-          { cache: "force-cache", next: { revalidate: 86400 } },
+          { cache: "force-cache", next: { revalidate: DETAILS_CACHE_SECONDS } },
         );
 
         if (!detailsRes.ok) throw new Error("Details fetch failed");
@@ -129,7 +133,7 @@ export async function GET() {
 
     response.headers.set(
       "Cache-Control",
-      "public, max-age=86400, stale-while-revalidate=60",
+      `public, max-age=${TRENDING_CACHE_SECONDS}, stale-while-revalidate=300`,
     );
     return response;
   } catch (error) {

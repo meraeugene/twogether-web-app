@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+// Artist search rarely needs instant freshness; hourly cache cuts repeated lookups.
+const ARTIST_SEARCH_CACHE_SECONDS = 3600; // 1 hour
 
 type TMDBArtistResult = {
   id: number;
@@ -24,7 +26,8 @@ export async function GET(request: NextRequest) {
     )}&include_adult=false&language=en-US&page=1`;
 
     const response = await fetch(url, {
-      cache: "no-store",
+      cache: "force-cache",
+      next: { revalidate: ARTIST_SEARCH_CACHE_SECONDS },
     });
 
     if (!response.ok) {
@@ -45,7 +48,15 @@ export async function GET(request: NextRequest) {
         known_for_department: artist.known_for_department || "",
       }));
 
-    return NextResponse.json({ results }, { status: 200 });
+    return NextResponse.json(
+      { results },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": `public, max-age=${ARTIST_SEARCH_CACHE_SECONDS}, stale-while-revalidate=300`,
+        },
+      },
+    );
   } catch {
     return NextResponse.json({ results: [] }, { status: 200 });
   }

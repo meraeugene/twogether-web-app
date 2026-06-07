@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
+// Trailer modules should track now-playing changes without refreshing every request.
+const TOP_TRAILERS_CACHE_SECONDS = 21600; // 6 hours
 
 type TMDBMovie = {
   id: number;
@@ -22,7 +24,7 @@ export async function GET() {
     const moviesRes = await fetch(
       `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`,
       {
-        next: { revalidate: 86400 },
+        next: { revalidate: TOP_TRAILERS_CACHE_SECONDS },
       },
     );
 
@@ -38,7 +40,7 @@ export async function GET() {
         const res = await fetch(
           `${BASE_URL}/movie/${movie.id}/videos?api_key=${API_KEY}`,
           {
-            next: { revalidate: 86400 },
+            next: { revalidate: TOP_TRAILERS_CACHE_SECONDS },
           },
         );
 
@@ -76,7 +78,7 @@ export async function GET() {
     );
     response.headers.set(
       "Cache-Control",
-      "public, max-age=86400, stale-while-revalidate=300",
+      `public, max-age=${TOP_TRAILERS_CACHE_SECONDS}, stale-while-revalidate=300`,
     );
 
     return response;

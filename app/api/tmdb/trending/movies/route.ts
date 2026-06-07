@@ -5,6 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+// Movie browse lists move faster than metadata, so refresh rankings a few times daily.
+const MOVIE_LIST_CACHE_SECONDS = 21600; // 6 hours
+// Movie details and trailers are comparatively stable.
+const MOVIE_DETAILS_CACHE_SECONDS = 86400; // 24 hours
 
 function isGenre(value: string): value is Genre {
   return value in TMDB_GENRE_MAP;
@@ -29,9 +33,8 @@ export async function GET(req: NextRequest) {
   }
 
   const res = await fetch(url, {
-    // cache for 24 hours, consider `force-cache` if you want it 100% static
     cache: "force-cache",
-    next: { revalidate: 86400 }, // revalidate every 24 hours
+    next: { revalidate: MOVIE_LIST_CACHE_SECONDS },
   });
 
   const tmdbData = await res.json();
@@ -44,7 +47,7 @@ export async function GET(req: NextRequest) {
           `${BASE_URL}/movie/${item.id}?api_key=${API_KEY}&append_to_response=videos`,
           {
             cache: "force-cache",
-            next: { revalidate: 86400 },
+            next: { revalidate: MOVIE_DETAILS_CACHE_SECONDS },
           },
         );
 
@@ -110,7 +113,7 @@ export async function GET(req: NextRequest) {
   // Edge cache control for downstream CDNs
   response.headers.set(
     "Cache-Control",
-    "public, max-age=86400, stale-while-revalidate=60",
+    `public, max-age=${MOVIE_LIST_CACHE_SECONDS}, stale-while-revalidate=300`,
   );
 
   return response;

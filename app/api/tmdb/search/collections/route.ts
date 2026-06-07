@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+// Collection search is less volatile than typeahead, so hourly caching is safe.
+const COLLECTION_SEARCH_CACHE_SECONDS = 3600; // 1 hour
 
 type CollectionResult = {
   id: number;
@@ -21,7 +23,10 @@ export async function GET(request: NextRequest) {
       query,
     )}&language=en-US&page=1`;
 
-    const response = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, {
+      cache: "force-cache",
+      next: { revalidate: COLLECTION_SEARCH_CACHE_SECONDS },
+    });
     if (!response.ok) {
       return NextResponse.json({ results: [] }, { status: 200 });
     }
@@ -38,7 +43,15 @@ export async function GET(request: NextRequest) {
         : null,
     }));
 
-    return NextResponse.json({ results }, { status: 200 });
+    return NextResponse.json(
+      { results },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": `public, max-age=${COLLECTION_SEARCH_CACHE_SECONDS}, stale-while-revalidate=300`,
+        },
+      },
+    );
   } catch {
     return NextResponse.json({ results: [] }, { status: 200 });
   }

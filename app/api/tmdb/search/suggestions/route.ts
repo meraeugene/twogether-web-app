@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+// Typeahead should be fresh, but a short cache protects TMDB during repeated queries.
+const SEARCH_SUGGESTIONS_CACHE_SECONDS = 600; // 10 minutes
 
 function formatDepartment(department?: string) {
   switch ((department || "").toLowerCase()) {
@@ -49,7 +51,10 @@ export async function GET(request: NextRequest) {
       query,
     )}&include_adult=false&language=en-US&page=1`;
 
-    const response = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, {
+      cache: "force-cache",
+      next: { revalidate: SEARCH_SUGGESTIONS_CACHE_SECONDS },
+    });
     if (!response.ok) {
       return NextResponse.json({ results: [] }, { status: 200 });
     }
@@ -88,7 +93,15 @@ export async function GET(request: NextRequest) {
         };
       });
 
-    return NextResponse.json({ results }, { status: 200 });
+    return NextResponse.json(
+      { results },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": `public, max-age=${SEARCH_SUGGESTIONS_CACHE_SECONDS}, stale-while-revalidate=60`,
+        },
+      },
+    );
   } catch {
     return NextResponse.json({ results: [] }, { status: 200 });
   }

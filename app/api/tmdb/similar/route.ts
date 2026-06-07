@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+// Recommendations change slowly, so a daily cache saves many repeated TMDB calls.
+const SIMILAR_CACHE_SECONDS = 86400; // 24 hours
 
 export async function GET(req: NextRequest) {
   const tmdbId = req.nextUrl.searchParams.get("id");
@@ -15,7 +17,7 @@ export async function GET(req: NextRequest) {
   // Fetch recommendations
   const recRes = await fetch(
     `${BASE_URL}/${type}/${tmdbId}/recommendations?api_key=${API_KEY}&page=1`,
-    { cache: "no-store" }
+    { cache: "force-cache", next: { revalidate: SIMILAR_CACHE_SECONDS } },
   );
   const recData = await recRes.json();
 
@@ -39,7 +41,7 @@ export async function GET(req: NextRequest) {
           `${BASE_URL}/${item.type || type}/${
             item.id
           }?api_key=${API_KEY}&append_to_response=credits,videos`,
-          { cache: "no-store" }
+          { cache: "force-cache", next: { revalidate: SIMILAR_CACHE_SECONDS } },
         );
         const details = await detailsRes.json();
 
@@ -73,8 +75,13 @@ export async function GET(req: NextRequest) {
     })
   );
 
-  return NextResponse.json({
+  const response = NextResponse.json({
     results: detailedResults.filter(Boolean),
     total_pages: 1,
   });
+  response.headers.set(
+    "Cache-Control",
+    `public, max-age=${SIMILAR_CACHE_SECONDS}, stale-while-revalidate=300`,
+  );
+  return response;
 }

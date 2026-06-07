@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
+// Popular cover art is browse decoration; daily freshness keeps it stable and cheap.
+const POPULAR_CACHE_SECONDS = 86400; // 24 hours
 
 interface TMDBResult {
   id: number;
@@ -20,8 +22,8 @@ export async function GET() {
         `${url}?api_key=${API_KEY}&language=en-US&page=1`,
         {
           cache: "force-cache",
-          next: { revalidate: 86400 },
-        }
+          next: { revalidate: POPULAR_CACHE_SECONDS },
+        },
       );
 
       if (!res.ok) throw new Error("TMDB fetch failed");
@@ -45,7 +47,7 @@ export async function GET() {
     const response = NextResponse.json(images);
     response.headers.set(
       "Cache-Control",
-      "public, max-age=86400, stale-while-revalidate=60"
+      `public, max-age=${POPULAR_CACHE_SECONDS}, stale-while-revalidate=300`,
     );
 
     return response;
