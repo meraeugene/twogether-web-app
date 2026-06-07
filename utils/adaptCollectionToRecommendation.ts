@@ -1,5 +1,6 @@
 import { EnrichedCollection } from "@/types/binge";
 import { Recommendation } from "@/types/recommendation";
+import { getStreamUrls } from "@/utils/getStreamUrls";
 
 export function adaptCollectionMoviesToRecommendations(
   collection: EnrichedCollection,
@@ -14,12 +15,7 @@ export function adaptCollectionMoviesToRecommendations(
       title: movie.title,
       poster_url: movie.poster_url ?? undefined,
       type: "movie",
-      stream_url: [
-        `https://vidsrc-embed.ru/embed/movie/${movie.tmdb_id}`,
-        `https://player.videasy.net/movie/${movie.tmdb_id}/1/1`,
-        `https://www.vidking.net/embed/movie/${movie.tmdb_id}`,
-        `https://vidsrc.to/embed/movie/${movie.tmdb_id}`,
-      ],
+      stream_url: getStreamUrls(movie.tmdb_id, "movie"),
       genres: movie.genres,
       year: movie.year ?? "",
       duration: movie.duration ?? undefined,

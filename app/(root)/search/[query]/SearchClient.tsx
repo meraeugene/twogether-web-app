@@ -5,6 +5,7 @@ import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanis
 import { browsePlaceholders } from "@/constants/placeholders";
 import { ArtistMovie, ArtistProfile } from "@/types/artistSearch";
 import { Recommendation } from "@/types/recommendation";
+import { getStreamUrls } from "@/utils/getStreamUrls";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -47,12 +48,7 @@ export default function SearchClient({
         title: movie.title,
         poster_url: movie.poster_url ?? undefined,
         type: "movie",
-        stream_url: [
-          `https://vidsrc-embed.ru/embed/movie/${movie.id}`,
-            `https://player.videasy.net/movie/${movie.id}/1/1`,
-            `https://www.vidking.net/embed/movie/${movie.id}`,
-            `https://vidsrc.to/embed/movie/${movie.id}`,
-        ],
+        stream_url: getStreamUrls(movie.id, "movie"),
         genres: movie.genres || [],
         year: movie.year,
         duration: movie.duration ?? undefined,

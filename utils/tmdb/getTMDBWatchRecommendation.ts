@@ -1,5 +1,6 @@
 import type { Recommendation } from "@/types/recommendation";
 import type { EpisodeTitle, TMDBSeasonResponse } from "@/types/tmdb";
+import { getStreamUrls } from "@/utils/getStreamUrls";
 
 const API_KEY = process.env.TMDB_API_KEY!;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -91,20 +92,7 @@ export async function getTMDBWatchRecommendation(
       details.release_date?.slice(0, 4) || details.first_air_date?.slice(0, 4),
     synopsis: details.overview ?? "",
     trailer_key: trailer?.key ?? null,
-    stream_url:
-      type === "tv"
-        ? [
-          `https://vidsrc-embed.ru/embed/tv/${details.id}/1/1`,
-          `https://player.videasy.net/tv/${details.id}/1/1`,
-            `https://www.vidking.net/embed/tv/${details.id}/1/1`,
-            `https://vidsrc.to/embed/tv/${details.id}/1/1`,
-          ]
-        : [
-          `https://vidsrc-embed.ru/embed/movie/${details.id}`,
-          `https://player.videasy.net/movie/${details.id}/1/1`,
-            `https://www.vidking.net/embed/movie/${details.id}`,
-            `https://vidsrc.to/embed/movie/${details.id}`,
-          ],
+    stream_url: getStreamUrls(details.id, type),
     genres:
       details.genres?.map((g: { id: number; name: string }) => g.name) || [],
     duration: details.runtime ?? details.episode_run_time?.[0] ?? undefined,

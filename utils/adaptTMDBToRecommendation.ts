@@ -1,5 +1,6 @@
 import { Recommendation } from "@/types/recommendation";
 import { TMDBEnrichedResult } from "@/types/tmdb";
+import { getStreamUrls } from "@/utils/getStreamUrls";
 
 export function adaptTMDBToRecommendation(
   tmdb: TMDBEnrichedResult,
@@ -13,20 +14,7 @@ export function adaptTMDBToRecommendation(
     title: tmdb.title || tmdb.name || "Untitled",
     poster_url: tmdb.poster_url ?? undefined,
     type: tmdb.type === "tv" ? "tv" : "movie",
-    stream_url:
-      tmdb.type === "tv"
-        ? [
-          `https://vidsrc-embed.ru/embed/tv/${tmdb.id}/1/1`,
-          `https://player.videasy.net/tv/${tmdb.id}/1/1`,
-            `https://www.vidking.net/embed/tv/${tmdb.id}/1/1`,
-            `https://vidsrc.to/embed/tv/${tmdb.id}/1/1`,
-          ]
-        : [
-          `https://vidsrc-embed.ru/embed/movie/${tmdb.id}`,
-          `https://player.videasy.net/movie/${tmdb.id}/1/1`,
-            `https://www.vidking.net/embed/movie/${tmdb.id}`,
-            `https://vidsrc.to/embed/movie/${tmdb.id}`,
-          ],
+    stream_url: getStreamUrls(tmdb.id, tmdb.type === "tv" ? "tv" : "movie"),
     genres: tmdb.genres,
     year: tmdb.year,
     duration: tmdb.duration ?? undefined,

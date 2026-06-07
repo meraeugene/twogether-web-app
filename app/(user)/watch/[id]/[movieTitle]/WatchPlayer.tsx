@@ -153,7 +153,7 @@ export default function WatchPlayer({
         <iframe
           key={streamSrc}
           src={streamSrc}
-          className="h-full w-full"
+          className="h-full w-full overflow-hidden"
           allowFullScreen
           loading="lazy"
         />
