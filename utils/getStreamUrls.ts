@@ -3,6 +3,7 @@ type StreamType = "movie" | "tv";
 export function getStreamUrls(tmdbId: string | number, type: StreamType) {
   if (type === "tv") {
     return [
+      `cinesrc.st/embed/tv/${tmdbId}/1/1`,
       `https://vidlink.pro/tv/${tmdbId}/1/1`,
       `https://111movies.net/tv/${tmdbId}/1/1`,
       `https://player.videasy.net/tv/${tmdbId}/1/1`,
@@ -19,6 +20,7 @@ export function getStreamUrls(tmdbId: string | number, type: StreamType) {
   }
 
   return [
+    `cinesrc.st/embed/movie/${tmdbId}`,
     `https://vidlink.pro/movie/${tmdbId}`,
     `https://111movies.net/movie/${tmdbId}`,
     `https://player.videasy.net/movie/${tmdbId}`,
