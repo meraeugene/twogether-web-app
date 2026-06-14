@@ -19,8 +19,7 @@ const WatchSkeletonLoading = () => {
           <div className="flex flex-wrap gap-3">
             <div className={`${pulse} h-10 w-40`} />
             <div className={`${pulse} h-10 w-40`} />
-            <div className={`${pulse} h-10 w-40`} />
-<div className={`${pulse} h-10 w-40`} />
+            
           </div>
 
           <div className="h-11 w-[85%] max-w-3xl animate-pulse rounded-lg bg-white/10" />
