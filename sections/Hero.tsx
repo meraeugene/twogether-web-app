@@ -38,8 +38,6 @@ export default function TwogetherHero() {
     <div className="relative min-h-screen w-full bg-[#030303] flex flex-col items-center justify-center overflow-hidden font-sans selection:bg-red-500/30">
       {/* BACKGROUND */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute hidden md:block inset-0 opacity-[0.12] pointer-events-none bg-[radial-gradient(#fb2c36_0.8px,transparent_0.8px)] bg-size-[32px_32px]" />
-
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-75 md:w-175 md:h-100 xl:w-250 xl:h-150 bg-red-900/10 blur-[160px] rounded-full" />
       </div>
 
@@ -120,9 +118,7 @@ export default function TwogetherHero() {
 
       {/* HERO CONTENT */}
       <div className="relative z-30 text-center px-6 sm:px-8 md:px-10 max-w-5xl">
-        <div
-          className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 md:mb-10 rounded-full border border-red-500/30 bg-red-500/5 backdrop-blur-md"
-        >
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 md:mb-10 rounded-full border border-red-500/30 bg-red-500/5 backdrop-blur-md">
           <span className="text-[10px] font-bold tracking-[0.2em] text-red-400 uppercase">
             Watch Movies Anytime
           </span>
@@ -151,9 +147,6 @@ export default function TwogetherHero() {
           Start Twogether
         </GlowingOutlineButton>
       </div>
-
-      {/* Decorative Line */}
-      <div className="absolute hidden md:block bottom-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-t from-red-500/50 to-transparent z-30" />
     </div>
   );
 }
