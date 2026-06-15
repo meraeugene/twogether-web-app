@@ -35,7 +35,7 @@ export default function TMDBSuggestions({
 
   const { data, isLoading } = useSWR<SWRResponse>(
     tmdbId ? `/api/tmdb/similar?id=${tmdbId}&type=${type}&page=1` : null,
-    fetcher
+    fetcher,
   );
 
   const suggestions = data?.results || [];
@@ -47,7 +47,7 @@ export default function TMDBSuggestions({
   // current 6-item slide
   const currentItems = suggestions.slice(
     slide * ITEMS_PER_SLIDE,
-    slide * ITEMS_PER_SLIDE + ITEMS_PER_SLIDE
+    slide * ITEMS_PER_SLIDE + ITEMS_PER_SLIDE,
   );
 
   const handleNext = () => {
@@ -93,7 +93,7 @@ export default function TMDBSuggestions({
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={slide}
-          className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-7"
+          className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6 gap-7"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -190,4 +190,3 @@ export default function TMDBSuggestions({
     </section>
   );
 }
-

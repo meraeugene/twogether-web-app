@@ -68,7 +68,7 @@ export default function TrendingTMDBMovieList({ genre }: { genre: string }) {
     <section className="space-y-8">
       {/* Initial loading skeletons */}
       {!data && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-6 gap-8">
           {Array.from({ length: 18 }).map((_, i) => (
             <div key={i}>
               <div className="aspect-2/3 w-full rounded-md bg-white/10 animate-pulse" />
@@ -79,7 +79,7 @@ export default function TrendingTMDBMovieList({ genre }: { genre: string }) {
 
       {/* Real content when loaded */}
       {data && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-6 gap-8">
           {visibleItems.map((item) => {
             const adapted = adaptTMDBToRecommendation(item);
             return <FilmCard key={adapted.id} item={adapted} />;
@@ -92,7 +92,7 @@ export default function TrendingTMDBMovieList({ genre }: { genre: string }) {
       {/* Show spinner only when loading more, not initial load */}
       {isValidating && data && (
         <div className="flex justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent border-white/50" />
+          <div className="animate-spin rounded-full h-8 w-8 border-3 border-t-transparent border-red-500/50" />
         </div>
       )}
     </section>

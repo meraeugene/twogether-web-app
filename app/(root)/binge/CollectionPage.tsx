@@ -59,7 +59,7 @@ export default function CollectionPage({ genre }: { genre: string }) {
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={`skeleton-section-${i}`}>
               <div className="h-8 w-72 bg-white/10 rounded mb-6 animate-pulse" />
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-6 gap-8">
                 {Array.from({ length: 6 }).map((_, j) => (
                   <div
                     key={`skeleton-card-${i}-${j}`}
@@ -76,7 +76,7 @@ export default function CollectionPage({ genre }: { genre: string }) {
             <h2 className=" text-2xl md:text-3xl font-semibold mb-6">
               {collection.collection_name}
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-6 gap-8">
               {collection.movies.map((movie) => {
                 const adapted = adaptTMDBToRecommendation(movie);
                 return (
@@ -93,7 +93,7 @@ export default function CollectionPage({ genre }: { genre: string }) {
 
       <div ref={loaderRef} className="h-10 flex justify-center items-center">
         {isValidating && !isInitialLoading && (
-          <div className="w-6 h-6 border-2 border-t-transparent border-white/60 rounded-full animate-spin" />
+          <div className="w-7 h-7 border-3 border-t-transparent border-red-500/50 rounded-full animate-spin" />
         )}
       </div>
     </section>

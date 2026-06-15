@@ -40,7 +40,7 @@ export function BrowseCategory({
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6 gap-6">
           {Array.from({ length: 12 }).map((_, i) => (
             <div
               key={i}
@@ -51,7 +51,7 @@ export function BrowseCategory({
       ) : error ? (
         <p className="text-red-400">Failed to load {title.toLowerCase()}.</p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6 gap-6">
           {adaptedItems.map((item) => (
             <FilmCard key={item.id} item={item} />
           ))}

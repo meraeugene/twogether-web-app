@@ -118,7 +118,7 @@ export default function TwogetherHero() {
 
       {/* HERO CONTENT */}
       <div className="relative z-30 text-center px-6 sm:px-8 md:px-10 max-w-5xl">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 md:mb-10 rounded-full border border-red-500/30 bg-red-500/5 backdrop-blur-md">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 md:mb-10 lg:mb-5 2xl:mb-10 rounded-full border border-red-500/30 bg-red-500/5 backdrop-blur-md">
           <span className="text-[10px] font-bold tracking-[0.2em] text-red-400 uppercase">
             Watch Movies Anytime
           </span>
@@ -131,7 +131,7 @@ export default function TwogetherHero() {
           </span>
         </h1>
 
-        <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 max-w-xl md:max-w-2xl mx-auto mb-10 md:mb-14 font-light leading-relaxed">
+        <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 max-w-xl md:max-w-2xl mx-auto mb-10 font-light leading-relaxed">
           Skip the endless scrolling. Join users worldwide and
           <br className="hidden md:block" />
           {""} watch {""}
