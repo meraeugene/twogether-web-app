@@ -17,10 +17,10 @@ const WatchSkeletonLoading = () => {
 
         <section className="space-y-5">
           <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-            <div className={`${pulse} h-10 w-40`} />
-            <div className={`${pulse} h-10 w-40`} />
-            <div className={`${pulse} h-10 w-40`} />
-            <div className={`${pulse} h-10 w-40`} />
+            <div className={`${pulse} h-10 w-full`} />
+            <div className={`${pulse} h-10 w-full`} />
+            <div className={`${pulse} h-10 w-full`} />
+            <div className={`${pulse} h-10 w-full`} />
           </div>
 
           <div className="h-11 w-[85%] max-w-3xl animate-pulse rounded-lg bg-white/10" />
