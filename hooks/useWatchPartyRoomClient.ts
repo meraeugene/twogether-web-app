@@ -19,6 +19,7 @@ import type {
 } from "@/types/watchPartyRoomTypes";
 import { useWatchPartyRealtime } from "./useWatchPartyRealtime";
 import { useAudioCue } from "@/hooks/useAudioCue";
+import { createBrowserId } from "@/utils/browserId";
 
 type Friend = RoomUser;
 
@@ -231,7 +232,7 @@ export function useWatchPartyRoomClient({
 
       setInput("");
       const optimistic: RoomMessage = {
-        id: crypto.randomUUID(),
+        id: createBrowserId(),
         room_id: room.id,
         sender_id: currentUserId,
         content: trimmed,

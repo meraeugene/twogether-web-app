@@ -32,17 +32,10 @@ const withPWA = nextPWA({
         },
       },
     },
-    {
-      urlPattern: /\/_next\/static\/.+\.(?:js|css)$/i,
-      handler: "StaleWhileRevalidate",
-      options: {
-        cacheName: "next-static-assets",
-        expiration: {
-          maxEntries: 64,
-          maxAgeSeconds: 60 * 60 * 24,
-        },
-      },
-    },
+    // Next.js build assets already have content-hashed URLs and are precached
+    // by next-pwa. A second stale-while-revalidate cache can keep an old app
+    // shell alive after a deployment, which is especially troublesome in iOS
+    // standalone/Safari storage. Let the precache own these files exclusively.
     {
       urlPattern: /\/_next\/image\?url=.+$/i,
       handler: "StaleWhileRevalidate",

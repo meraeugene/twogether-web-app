@@ -18,6 +18,7 @@ import CustomEmojiPicker from "./CustomEmojiPicker";
 import { FaSmileWink } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { createBrowserId } from "@/utils/browserId";
 
 export default function MessageThreadView({
   threadId,
@@ -105,7 +106,7 @@ export default function MessageThreadView({
     setInput("");
 
     const newMessage = {
-      id: crypto.randomUUID(),
+      id: createBrowserId(),
       thread_id: threadId,
       sender_id: currentUserId,
       receiver_id: otherUserId,

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
+import { createBrowserId } from "@/utils/browserId";
 
 const LEADER_LEASE_MS = 90_000;
 const HEARTBEAT_MS = 60_000;
@@ -9,16 +10,16 @@ const HEARTBEAT_MS = 60_000;
 export default function PresenceManager({ userId }: { userId: string }) {
   useEffect(() => {
     const supabase = createClient();
-    const tabId = crypto.randomUUID();
+    const tabId = createBrowserId();
     const leaderKey = `presence-leader:${userId}`;
     let isActive = true;
     let isLeader = false;
 
     const readLeader = () => {
-      const raw = window.localStorage.getItem(leaderKey);
-      if (!raw) return null;
-
       try {
+        const raw = window.localStorage.getItem(leaderKey);
+        if (!raw) return null;
+
         const parsed = JSON.parse(raw) as { id: string; expiresAt: number };
         if (!parsed.id || !parsed.expiresAt) return null;
         return parsed;
@@ -28,13 +29,17 @@ export default function PresenceManager({ userId }: { userId: string }) {
     };
 
     const writeLeader = () => {
-      window.localStorage.setItem(
-        leaderKey,
-        JSON.stringify({
-          id: tabId,
-          expiresAt: Date.now() + LEADER_LEASE_MS,
-        }),
-      );
+      try {
+        window.localStorage.setItem(
+          leaderKey,
+          JSON.stringify({
+            id: tabId,
+            expiresAt: Date.now() + LEADER_LEASE_MS,
+          }),
+        );
+      } catch {
+        // Safari can deny storage in private or restricted browsing contexts.
+      }
       isLeader = true;
     };
 
@@ -54,7 +59,11 @@ export default function PresenceManager({ userId }: { userId: string }) {
     const releaseLeadership = () => {
       const leader = readLeader();
       if (leader?.id === tabId) {
-        window.localStorage.removeItem(leaderKey);
+        try {
+          window.localStorage.removeItem(leaderKey);
+        } catch {
+          // Ignore storage restrictions during page teardown.
+        }
       }
       isLeader = false;
     };
