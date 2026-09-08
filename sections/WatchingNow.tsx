@@ -1,12 +1,15 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { getWatchingNowRooms } from "@/actions/watchPartyActions";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Globe2, Lock } from "lucide-react";
 import { toast } from "sonner";
 import GlowingOutlineButton from "@/components/ui/GlowingOutlineButton";
+import { createClient } from "@/utils/supabase/client";
 
 export default function WatchingNow({
   limit = 4,
@@ -15,9 +18,39 @@ export default function WatchingNow({
   limit?: number;
   currentUserId?: string;
 }) {
+  const router = useRouter();
+  const supabase = useMemo(() => createClient(), []);
+  const [authenticatedUserId, setAuthenticatedUserId] = useState<
+    string | undefined
+  >(currentUserId);
+
+  useEffect(() => {
+    if (currentUserId) {
+      setAuthenticatedUserId(currentUserId);
+      return;
+    }
+
+    let active = true;
+
+    void supabase.auth.getUser().then(({ data }) => {
+      if (active) setAuthenticatedUserId(data.user?.id);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthenticatedUserId(session?.user.id);
+    });
+
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
+  }, [currentUserId, supabase]);
+
   const { data, isLoading } = useSWR(
-    ["watching-now", limit, currentUserId],
-    () => getWatchingNowRooms(limit, currentUserId),
+    ["watching-now", limit, authenticatedUserId],
+    () => getWatchingNowRooms(limit, authenticatedUserId),
     {
       refreshInterval: 15000,
     },
@@ -82,9 +115,20 @@ export default function WatchingNow({
               <Link
                 key={room.room_id}
                 href={`/watch-party/${room.room_id}`}
-                onClick={(event) => {
-                  if (!currentUserId) {
+                onClick={async (event) => {
+                  if (!authenticatedUserId) {
                     event.preventDefault();
+
+                    const {
+                      data: { user },
+                    } = await supabase.auth.getUser();
+
+                    if (user) {
+                      setAuthenticatedUserId(user.id);
+                      router.push(`/watch-party/${room.room_id}`);
+                      return;
+                    }
+
                     toast.error("Please log in first before joining a room.");
                     return;
                   }
