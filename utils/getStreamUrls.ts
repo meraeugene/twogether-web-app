@@ -5,8 +5,8 @@ export function getStreamUrls(tmdbId: string | number, type: StreamType) {
     return [
       `https://zxcstream.xyz/player/tv/${tmdbId}/1/1`,
       `https://streamimdb.ru/embed/tv/${tmdbId}/1/1`,
-      `https://player.videasy.net/tv/${tmdbId}/1/1`,
       `https://111movies.net/tv/${tmdbId}/1/1`,
+      `https://player.videasy.net/tv/${tmdbId}/1/1`,
 
       // `https://vidlink.pro/tv/${tmdbId}/1/1`,
       // `https://cinesrc.st/embed/tv/${tmdbId}/1/1`,
@@ -25,8 +25,8 @@ export function getStreamUrls(tmdbId: string | number, type: StreamType) {
   return [
     `https://zxcstream.xyz/player/movie/${tmdbId}`,
     `https://streamimdb.ru/embed/movie/${tmdbId}`,
-    `https://player.videasy.net/movie/${tmdbId}`,
     `https://111movies.net/movie/${tmdbId}`,
+    `https://player.videasy.net/movie/${tmdbId}`,
 
     // `https://vidlink.pro/movie/${tmdbId}`,
     // `https://cinesrc.st/embed/movie/${tmdbId}`,
