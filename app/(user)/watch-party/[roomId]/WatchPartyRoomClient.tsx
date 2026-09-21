@@ -55,11 +55,16 @@ export default function WatchPartyRoomClient({
     },
   );
   const watchRecommendation = watchMetadata?.recommendation;
-  const playerUrl =
-    roomClient.currentRoom.stream_url ||
-    (Array.isArray(watchRecommendation?.stream_url)
-      ? watchRecommendation.stream_url[0]
-      : null);
+  const playerUrls = Array.from(
+    new Set(
+      [
+        roomClient.currentRoom.stream_url,
+        ...(Array.isArray(watchRecommendation?.stream_url)
+          ? watchRecommendation.stream_url
+          : []),
+      ].filter((url): url is string => Boolean(url)),
+    ),
+  );
   const episodeTitlesPerSeason = watchRecommendation?.episode_titles_per_season
     ? Object.fromEntries(
         Object.entries(watchRecommendation.episode_titles_per_season).map(
@@ -249,12 +254,12 @@ export default function WatchPartyRoomClient({
             <div className="absolute -inset-1 bg-gradient-to-r from-red-600/20 to-transparent blur-2xl opacity-100 transition duration-1000" />
             <div className="relative w-full">
               <WatchPlayer
-                urls={playerUrl ? [playerUrl] : []}
+                urls={playerUrls}
                 type={roomClient.currentRoom.movie_type}
                 episodeTitlesPerSeason={
                   hasEpisodeControls ? episodeTitlesPerSeason : undefined
                 }
-                showServerSelector={false}
+                showServerSelector
                 isEpisodeMetadataLoading={isEpisodeMetadataLoading}
               />
             </div>

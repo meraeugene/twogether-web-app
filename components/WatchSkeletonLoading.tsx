@@ -1,5 +1,3 @@
-"use client";
-
 const pulse =
   "animate-pulse rounded-xl bg-gradient-to-br from-white/10 to-white/[0.03]";
 
