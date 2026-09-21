@@ -1,9 +1,11 @@
-"use client";
+import Skeleton from "@/components/ui/Skeleton";
 
 export function FilmCardSkeleton() {
   return (
-    <div className="relative w-full font-(family-name:--font-geist-sans)">
-      <div className="relative aspect-2/3 w-full overflow-hidden rounded-md bg-white/10 animate-pulse shadow-md" />
+    <div className="relative w-full space-y-3 font-(family-name:--font-geist-sans)">
+      <Skeleton className="aspect-2/3 w-full rounded-md shadow-md" />
+      <Skeleton className="h-4 w-4/5" />
+      <Skeleton className="h-3 w-2/5" />
     </div>
   );
 }
@@ -22,12 +24,10 @@ export default function FilmGridSkeleton({
   return (
     <section className="relative z-10">
       {showHeader && (
-        <div
-          className={`h-8 ${titleWidth} rounded bg-white/10 animate-pulse`}
-        />
+        <Skeleton className={`h-8 ${titleWidth}`} />
       )}
       {showHeader && showDescription && (
-        <div className="mt-3 h-4 w-80 max-w-full rounded bg-white/10 animate-pulse" />
+        <Skeleton className="mt-3 h-4 w-80 max-w-full" />
       )}
 
       <div

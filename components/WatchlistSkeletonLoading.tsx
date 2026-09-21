@@ -1,7 +1,7 @@
 import { FilmCardSkeleton } from "@/components/FilmGridSkeleton";
+import Skeleton from "@/components/ui/Skeleton";
 
-const pulse =
-  "animate-pulse rounded-xl bg-gradient-to-br from-white/10 to-white/[0.03]";
+const pulse = "rounded-xl";
 
 export default function WatchlistSkeletonLoading() {
   return (
@@ -10,8 +10,8 @@ export default function WatchlistSkeletonLoading() {
 
       <div className="relative space-y-6">
         <section className="space-y-3">
-          <div className={`${pulse} h-10 w-56`} />
-          <div className={`${pulse} h-4 w-full max-w-lg rounded-md`} />
+          <Skeleton className={`${pulse} h-10 w-56`} />
+          <Skeleton className={`${pulse} h-4 w-full max-w-lg rounded-md`} />
         </section>
 
         <section className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">

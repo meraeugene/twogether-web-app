@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { usePathname } from "next/navigation";
 import { Navbar } from "./Navbar";
 import { CurrentUser } from "@/types/user";
 import { createClient } from "@/utils/supabase/client";
@@ -38,7 +37,6 @@ export default function Header({
   initialUser?: CurrentUser | null;
 }) {
   const [user, setUser] = useState<CurrentUser | null | undefined>(initialUser);
-  const pathname = usePathname();
 
   useEffect(() => {
     const supabase = createClient();
@@ -88,7 +86,7 @@ export default function Header({
       cancelled = true;
       subscription.unsubscribe();
     };
-  }, [pathname]);
+  }, []);
 
   return (
     <>

@@ -5,6 +5,7 @@ import { useEffect, useRef, useMemo } from "react";
 import FilmCard from "@/components/FilmCard";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
+import { FilmCardSkeleton } from "@/components/FilmGridSkeleton";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -21,7 +22,10 @@ export default function TrendingTMDBMovieList({ genre }: { genre: string }) {
 
   const { data, size, setSize, isValidating } = useSWRInfinite<
     TMDBEnrichedResult[]
-  >(getKey, fetcher);
+  >(getKey, fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 60000,
+  });
 
   // Flatten and deduplicate by tmdb_id
   const uniqueItems = useMemo(() => {
@@ -70,9 +74,7 @@ export default function TrendingTMDBMovieList({ genre }: { genre: string }) {
       {!data && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-6 gap-8">
           {Array.from({ length: 18 }).map((_, i) => (
-            <div key={i}>
-              <div className="aspect-2/3 w-full rounded-md bg-white/10 animate-pulse" />
-            </div>
+            <FilmCardSkeleton key={i} />
           ))}
         </div>
       )}

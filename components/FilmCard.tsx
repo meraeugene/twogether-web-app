@@ -74,8 +74,35 @@ function FilmCard({
     };
   }, [cinemaOpen]);
 
+  const getWatchHref = () => {
+    const slug = getSlugFromTitle(item.title);
+    const recommenderId = item.recommended_by?.id;
+
+    if (item.generated_by_ai && recommenderId === "ai-generated") {
+      return `/ai-recommend/watch/${item.tmdb_id}/${slug}`;
+    }
+
+    if (item.is_tmdb_recommendation && recommenderId === "tmdb") {
+      return `/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`;
+    }
+
+    if (item.recommendation_id) {
+      return `/watch/${item.tmdb_id}/${slug}`;
+    }
+
+    if (item.tmdb_id && item.type) {
+      return `/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`;
+    }
+
+    return null;
+  };
+
   const openCinema = () => {
     setCinemaOpen(true);
+    // Opening the modal is a strong intent signal. Warm only this detail page
+    // while the viewer reads, instead of prefetching every card in the grid.
+    const href = getWatchHref();
+    if (href) router.prefetch(href);
   };
 
   const confirmDelete = () => {
@@ -123,27 +150,8 @@ function FilmCard({
   };
 
   const handleClick = () => {
-    const slug = getSlugFromTitle(item.title);
-    const recommenderId = item.recommended_by?.id;
-
-    if (item.generated_by_ai && recommenderId === "ai-generated") {
-      router.push(`/ai-recommend/watch/${item.tmdb_id}/${slug}`);
-      return;
-    }
-
-    if (item.is_tmdb_recommendation && recommenderId === "tmdb") {
-      router.push(`/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`);
-      return;
-    }
-
-    if (item.recommendation_id) {
-      router.push(`/watch/${item.tmdb_id}/${slug}`);
-      return;
-    }
-
-    if (item.tmdb_id && item.type) {
-      router.push(`/tmdb/watch/${item.type}/${item.tmdb_id}/${slug}`);
-    }
+    const href = getWatchHref();
+    if (href) router.push(href);
   };
 
   const stagger = (i: number) => ({

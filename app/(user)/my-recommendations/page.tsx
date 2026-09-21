@@ -21,7 +21,6 @@ export default async function MyRecommendationsPage() {
         <p className="text-gray-400 mb-6 font-[family-name:var(--font-geist-mono)]">
           You haven&apos;t recommended anything yet. Start{" "}
           <Link
-            prefetch={false}
             href="/browse"
             className="text-white underline"
           >

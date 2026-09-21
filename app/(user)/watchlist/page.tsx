@@ -26,7 +26,6 @@ export default async function WatchlistPage() {
         <p className="mb-6 font-[family-name:var(--font-geist-mono)] text-gray-600">
           You haven&apos;t added any Movies/Shows to your Watchlist yet. Start{" "}
           <Link
-            prefetch={false}
             href="/browse"
             className="text-white hover:underline"
           >

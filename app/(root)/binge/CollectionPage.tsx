@@ -7,6 +7,8 @@ import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import { BingeCollection } from "@/types/binge";
 import ErrorMessage from "@/components/ErrorMessage";
 import { fetcher } from "@/utils/swr/fetcher";
+import { FilmCardSkeleton } from "@/components/FilmGridSkeleton";
+import Skeleton from "@/components/ui/Skeleton";
 
 export default function CollectionPage({ genre }: { genre: string }) {
   const loaderRef = useRef<HTMLDivElement | null>(null);
@@ -18,6 +20,8 @@ export default function CollectionPage({ genre }: { genre: string }) {
     BingeCollection[]
   >(getKey, fetcher, {
     revalidateFirstPage: false,
+    revalidateOnFocus: false,
+    dedupingInterval: 60000,
     persistSize: true,
   });
 
@@ -58,13 +62,10 @@ export default function CollectionPage({ genre }: { genre: string }) {
         <>
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={`skeleton-section-${i}`}>
-              <div className="h-8 w-72 bg-white/10 rounded mb-6 animate-pulse" />
+              <Skeleton className="mb-6 h-8 w-72" />
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-6 gap-8">
                 {Array.from({ length: 6 }).map((_, j) => (
-                  <div
-                    key={`skeleton-card-${i}-${j}`}
-                    className="aspect-2/3 w-full rounded-md bg-white/10 animate-pulse"
-                  />
+                  <FilmCardSkeleton key={`skeleton-card-${i}-${j}`} />
                 ))}
               </div>
             </div>

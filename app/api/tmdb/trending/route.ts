@@ -10,36 +10,44 @@ const DETAILS_CACHE_SECONDS = 86400; // 24 hours
 
 export async function GET() {
   try {
-    // --- Movies ---
-    const moviesRes = await fetch(
-      `${BASE_URL}/trending/movie/week?language=en-US&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: TRENDING_CACHE_SECONDS } },
-    );
-    const moviesData = await moviesRes.json();
+    // These feeds are independent. Starting them together removes three
+    // network round trips from a cold browse-page request.
+    const requestOptions = {
+      cache: "force-cache" as const,
+      next: { revalidate: TRENDING_CACHE_SECONDS },
+    };
+    const [moviesRes, animeRes, tvRes, kdramaRes] = await Promise.all([
+      fetch(
+        `${BASE_URL}/trending/movie/week?language=en-US&api_key=${API_KEY}`,
+        requestOptions,
+      ),
+      fetch(
+        `${BASE_URL}/discover/tv?with_genres=16&sort_by=popularity.desc&language=en-US&page=1&api_key=${API_KEY}`,
+        requestOptions,
+      ),
+      fetch(
+        `${BASE_URL}/tv/popular?language=en-US&page=1&api_key=${API_KEY}`,
+        requestOptions,
+      ),
+      fetch(
+        `${BASE_URL}/discover/tv?with_original_language=ko&with_genres=18&sort_by=popularity.desc&page=1&api_key=${API_KEY}`,
+        requestOptions,
+      ),
+    ]);
+
+    if (![moviesRes, animeRes, tvRes, kdramaRes].every((res) => res.ok)) {
+      throw new Error("One or more TMDB trending feeds failed");
+    }
+
+    const [moviesData, animeData, tvData, kdramaData] = await Promise.all([
+      moviesRes.json(),
+      animeRes.json(),
+      tvRes.json(),
+      kdramaRes.json(),
+    ]);
     const movies: TMDBRawResult[] = (moviesData.results || []).slice(0, 18);
-
-    // --- Anime (TV with Animation genre 16) ---
-    const animeRes = await fetch(
-      `${BASE_URL}/discover/tv?with_genres=16&sort_by=popularity.desc&language=en-US&page=1&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: TRENDING_CACHE_SECONDS } },
-    );
-    const animeData = await animeRes.json();
     const anime: TMDBRawResult[] = (animeData.results || []).slice(0, 18);
-
-    // --- TV Shows (non-anime) ---
-    const tvRes = await fetch(
-      `${BASE_URL}/tv/popular?language=en-US&page=1&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: TRENDING_CACHE_SECONDS } },
-    );
-    const tvData = await tvRes.json();
     const tv: TMDBRawResult[] = (tvData.results || []).slice(0, 18);
-
-    // --- K-Dramas (TV, Korean language + Drama genre) ---
-    const kdramaRes = await fetch(
-      `${BASE_URL}/discover/tv?with_original_language=ko&with_genres=18&sort_by=popularity.desc&page=1&api_key=${API_KEY}`,
-      { cache: "force-cache", next: { revalidate: TRENDING_CACHE_SECONDS } },
-    );
-    const kdramaData = await kdramaRes.json();
     const kdramas: TMDBRawResult[] = (kdramaData.results || []).slice(0, 18);
 
     // --- Enrichment helper ---

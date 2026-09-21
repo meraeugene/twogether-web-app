@@ -76,7 +76,6 @@ function NavIcon({
     <Link
       href={href}
       onClick={onClick}
-      prefetch={false}
       className={`group relative inline-flex items-center gap-2 px-3 h-[40px] rounded-[11px] text-sm font-medium transition-all duration-150 ${
         active
           ? "bg-white/[0.12] text-white ring-1 ring-inset ring-white/[0.14]"
@@ -142,7 +141,6 @@ function DesktopDropdown({
             <Link
               key={item.href}
               href={item.href}
-              prefetch={false}
               onClick={onClose}
               className={`flex items-center gap-3 rounded-[12px] px-3 py-2.5 text-sm transition-colors ${
                 isActive
