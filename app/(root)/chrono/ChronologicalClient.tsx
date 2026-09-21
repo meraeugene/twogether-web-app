@@ -12,7 +12,6 @@ import { FaPlay } from "react-icons/fa";
 import { Pause, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ErrorMessage from "@/components/ErrorMessage";
-import PageLoadingSkeleton from "@/components/PageLoadingSkeleton";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -95,7 +94,11 @@ export default function ChronologicalClient() {
   }, [data, isAutoMoving]);
 
   if (isLoading) {
-    return <PageLoadingSkeleton />;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black">
+        <div className="h-8 w-8 animate-spin rounded-full border-3 border-white/30 border-t-white" />
+      </div>
+    );
   }
 
   if (error || !data) return <ErrorMessage />;
