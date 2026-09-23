@@ -108,18 +108,20 @@ export default function BingeClient() {
             alt=""
             fill
             priority
+            unoptimized
             sizes="100vw"
             onLoad={() => setHeroLoading(false)}
             onError={() => setHeroLoading(false)}
             className={`-z-30 object-cover object-center transition-opacity duration-700 lg:object-[70%_center] ${
-              heroLoading ? "opacity-60" : "opacity-100"
+              heroLoading ? "opacity-80" : "opacity-100"
             }`}
           />
         ) : (
           <div className="absolute inset-0 -z-30 animate-pulse bg-zinc-900" />
         )}
-        <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,#050505_0%,rgba(5,5,5,.98)_28%,rgba(5,5,5,.72)_55%,rgba(5,5,5,.2)_82%)]" />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,#050505_0%,transparent_36%,rgba(5,5,5,.2)_100%)]" />
+        <div className="absolute inset-0 -z-20 bg-black/45 lg:hidden" />
+        <div className="absolute inset-0 -z-20 hidden bg-[linear-gradient(90deg,#050505_0%,rgba(5,5,5,.98)_28%,rgba(5,5,5,.72)_55%,rgba(5,5,5,.2)_82%)] lg:block" />
+        <div className="absolute inset-0 -z-10 hidden bg-[linear-gradient(0deg,#050505_0%,transparent_36%,rgba(5,5,5,.2)_100%)] lg:block" />
 
         <div className="mx-auto flex min-h-[500px] max-w-[1500px] items-center">
           <div className="w-full max-w-[790px]">
@@ -196,7 +198,7 @@ export default function BingeClient() {
         className="scroll-mt-24 px-5 pb-20 sm:px-8 lg:px-14 xl:px-20 2xl:px-24"
       >
         <div className="mx-auto max-w-[1500px]">
-          <div className="mb-6 flex items-end justify-between gap-4">
+          <div className="mb-6 flex items-end justify-between gap-4 pt-8 sm:pt-10">
             <div>
               <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-red-400">
                 {activeSearchQuery

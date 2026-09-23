@@ -286,7 +286,7 @@ export default function CollectionPage({
         new Set(
           uniqueCollections
             .flatMap((collection) => collection.movies)
-            .map((movie) => movie.backdrop_url || movie.poster_url)
+            .map((movie) => movie.backdrop_url)
             .filter((image): image is string => Boolean(image)),
         ),
       ).slice(0, 12),

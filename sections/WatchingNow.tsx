@@ -82,16 +82,16 @@ export default function WatchingNow({
           </p>
         </div>
 
-        <div className="relative z-10 grid grid-cols-1 gap-8 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="relative z-10 -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3 xl:grid-cols-4 [&::-webkit-scrollbar]:hidden">
           {isLoading ? (
             Array.from({ length: Math.min(limit, 4) }).map((_, idx) => (
               <div
                 key={idx}
-                className="aspect-[2/3] rounded-3xl bg-neutral-900/50 border border-white/5 animate-pulse"
+                className="aspect-[2/3] w-[76vw] max-w-[280px] shrink-0 snap-start rounded-3xl border border-white/5 bg-neutral-900/50 animate-pulse sm:w-auto sm:max-w-none"
               />
             ))
           ) : liveRooms.length === 0 ? (
-            <div className="col-span-full py-16 px-6 border border-dashed border-white/10 rounded-[2.5rem] text-center bg-white/[0.02]">
+            <div className="col-span-full w-full shrink-0 rounded-[2.5rem] border border-dashed border-white/10 bg-white/[0.02] px-6 py-16 text-center">
               <p className="text-xl text-white font-medium">
                 No live rooms yet.
               </p>
@@ -139,7 +139,7 @@ export default function WatchingNow({
                     "This private room is locked. Only the host's friends can open it.",
                   );
                 }}
-                className="group relative flex aspect-[2/3] flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02]"
+                className="group relative flex aspect-[2/3] w-[76vw] max-w-[280px] shrink-0 snap-start flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] sm:w-auto sm:max-w-none"
               >
                 <Image
                   src={room.poster_url || "/placeholder.jpg"}
