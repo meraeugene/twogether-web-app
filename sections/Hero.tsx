@@ -45,7 +45,7 @@ export default function TwogetherHero() {
         {FLOATING_DATA.map((el, idx) => (
           <div
             key={idx}
-            style={{ top: el.top, left: el.left, rotate: el.rotate }}
+            style={{ top: el.top, left: el.left, rotate: `${el.rotate}deg` }}
             className={`absolute ${
               el.type === "poster" ? "block" : "hidden xl:block"
             }`}
@@ -76,9 +76,10 @@ export default function TwogetherHero() {
             {/* USER */}
             {el.type === "user" && (
               <div className="flex items-center gap-3 p-2 pr-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
-                <img
-                  src={el.content}
-                  loading="lazy"
+                <Image
+                  src={el.content || "/default-avatar.png"}
+                  width={36}
+                  height={36}
                   className="w-9 h-9 rounded-full border border-red-500/40 object-cover"
                   alt=""
                 />
