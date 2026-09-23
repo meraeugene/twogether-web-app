@@ -1,20 +1,257 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, Clock3, Film, Play } from "lucide-react";
 import useSWRInfinite from "swr/infinite";
-import FilmCard from "@/components/FilmCard";
-import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import { BingeCollection } from "@/types/binge";
-import ErrorMessage from "@/components/ErrorMessage";
+import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { fetcher } from "@/utils/swr/fetcher";
-import { FilmCardSkeleton } from "@/components/FilmGridSkeleton";
-import Skeleton from "@/components/ui/Skeleton";
+import ErrorMessage from "@/components/ErrorMessage";
 
-export default function CollectionPage({ genre }: { genre: string }) {
+function formatRuntime(minutes: number) {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return `${hours}h ${remainingMinutes.toString().padStart(2, "0")}m`;
+}
+
+function CollectionSkeleton() {
+  return (
+    <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-4 sm:p-5">
+      <div className="skeleton-shimmer grid min-h-[280px] gap-6 lg:grid-cols-[34%_1fr]">
+        <div className="rounded-2xl bg-white/[0.07]" />
+        <div className="flex flex-col justify-center gap-5 py-3">
+          <div className="h-8 w-2/5 rounded bg-white/[0.08]" />
+          <div className="h-4 w-1/4 rounded bg-white/[0.06]" />
+          <div className="flex gap-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className="aspect-[2/3] w-20 rounded-xl bg-white/[0.07] sm:w-24"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CollectionRow({
+  collection,
+  priority,
+}: {
+  collection: BingeCollection;
+  priority: boolean;
+}) {
+  const movieRailRef = useRef<HTMLDivElement | null>(null);
+  const [canScrollPrevious, setCanScrollPrevious] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(
+    collection.movies.length > 4,
+  );
+  const firstMovie = collection.movies[0];
+  const backdrop = collection.movies.find((movie) => movie.backdrop_url)
+    ?.backdrop_url;
+  const totalRuntime = collection.movies.reduce(
+    (total, movie) => total + (movie.duration || 0),
+    0,
+  );
+  const watchHref = firstMovie
+    ? `/tmdb/watch/${firstMovie.type}/${firstMovie.tmdb_id}/${getSlugFromTitle(firstMovie.title)}`
+    : "/binge";
+
+  const updateRailControls = () => {
+    const rail = movieRailRef.current;
+    if (!rail) return;
+    setCanScrollPrevious(rail.scrollLeft > 4);
+    setCanScrollNext(rail.scrollLeft + rail.clientWidth < rail.scrollWidth - 4);
+  };
+
+  const scrollMovies = (direction: -1 | 1) => {
+    const rail = movieRailRef.current;
+    if (!rail) return;
+    rail.scrollBy({
+      left: direction * Math.max(rail.clientWidth * 0.8, 300),
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(updateRailControls);
+    window.addEventListener("resize", updateRailControls);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", updateRailControls);
+    };
+  }, [collection.movies.length]);
+
+  return (
+    <article className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0c] shadow-[0_28px_90px_rgba(0,0,0,.24)] transition duration-300 hover:border-white/20">
+      {backdrop && (
+        <Image
+          src={backdrop}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 34vw, 100vw"
+          className="pointer-events-none -z-10 object-cover opacity-[0.09] blur-2xl transition duration-500 group-hover:opacity-[0.14]"
+        />
+      )}
+
+      <div className="grid lg:min-h-[310px] lg:grid-cols-[35%_1fr]">
+        <div className="relative min-h-[230px] overflow-hidden lg:min-h-full">
+          {backdrop ? (
+            <Image
+              src={backdrop}
+              alt={`${collection.collection_name} artwork`}
+              fill
+              priority={priority}
+              sizes="(min-width: 1024px) 35vw, 100vw"
+              className="object-cover transition duration-700 group-hover:scale-[1.025]"
+            />
+          ) : firstMovie?.poster_url ? (
+            <Image
+              src={firstMovie.poster_url}
+              alt={`${collection.collection_name} artwork`}
+              fill
+              priority={priority}
+              sizes="(min-width: 1024px) 35vw, 100vw"
+              className="object-cover object-top transition duration-700 group-hover:scale-[1.025]"
+            />
+          ) : null}
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_58%,#0b0b0c_100%)] max-lg:bg-[linear-gradient(0deg,#0b0b0c_0%,transparent_55%)]" />
+          <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8">
+            <p className="max-w-[360px] text-xs font-semibold uppercase tracking-[0.2em] text-white/65">
+              {collection.movies.length} films. One complete story.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex min-w-0 flex-col justify-between gap-7 p-5 sm:p-7 lg:p-8">
+          <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+            <div>
+              <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                {collection.collection_name}
+              </h3>
+              <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-white/50">
+                <span className="inline-flex items-center gap-1.5">
+                  <Film className="h-4 w-4" />
+                  {collection.movies.length} films
+                </span>
+                {totalRuntime > 0 && (
+                  <span className="inline-flex items-center gap-1.5">
+                    <Clock3 className="h-4 w-4" />
+                    {formatRuntime(totalRuntime)}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <Link
+              href={watchHref}
+              className="inline-flex h-12 w-fit shrink-0 items-center justify-center gap-2 rounded-xl bg-red-500 px-5 text-sm font-semibold text-white shadow-lg shadow-red-950/40 transition hover:bg-red-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400"
+            >
+              <Play className="h-4 w-4 fill-current" />
+              Start from the beginning
+            </Link>
+          </div>
+
+          <div className="min-w-0">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45">
+                  Viewing order
+                </p>
+                <p className="mt-1 text-xs text-white/35 sm:hidden">
+                  Swipe to see every movie
+                </p>
+              </div>
+              <div className="hidden items-center gap-2 sm:flex">
+                <button
+                  type="button"
+                  onClick={() => scrollMovies(-1)}
+                  disabled={!canScrollPrevious}
+                  aria-label={`Previous movies in ${collection.collection_name}`}
+                  className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white transition hover:border-white/35 hover:bg-white/[0.1] disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollMovies(1)}
+                  disabled={!canScrollNext}
+                  aria-label={`Next movies in ${collection.collection_name}`}
+                  className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white transition hover:border-white/35 hover:bg-white/[0.1] disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            <div
+              ref={movieRailRef}
+              onScroll={updateRailControls}
+              className="-mx-2 mt-2 flex min-w-0 snap-x snap-mandatory items-start gap-2 overflow-x-auto px-2 py-3 [scrollbar-width:none] sm:snap-proximity [&::-webkit-scrollbar]:hidden"
+            >
+            {collection.movies.map((movie, index) => (
+              <Link
+                key={`${movie.tmdb_id}-${movie.id}`}
+                href={`/tmdb/watch/${movie.type}/${movie.tmdb_id}/${getSlugFromTitle(movie.title)}`}
+                className="group/movie w-[112px] shrink-0 snap-start rounded-2xl border border-transparent p-2 transition duration-200 hover:border-white/15 hover:bg-white/[0.075] focus-visible:border-white/30 focus-visible:bg-white/[0.075] focus-visible:outline-none sm:w-[124px]"
+                title={movie.title}
+              >
+                <div className="relative aspect-[2/3] overflow-hidden rounded-xl border border-white/10 bg-white/[0.05] transition duration-200 group-hover/movie:border-white/40 group-hover/movie:shadow-[0_12px_35px_rgba(0,0,0,.45)]">
+                  {movie.poster_url && (
+                    <Image
+                      src={movie.poster_url}
+                      alt={movie.title}
+                      fill
+                      sizes="124px"
+                      className="object-cover"
+                    />
+                  )}
+                  <span className="absolute left-2 top-2 flex h-6 min-w-6 items-center justify-center rounded-full bg-black/80 px-1.5 text-[11px] font-bold backdrop-blur-md">
+                    {index + 1}
+                  </span>
+                </div>
+                <p className="mt-2 break-words text-xs font-medium leading-4 text-white/65 transition group-hover/movie:text-white">
+                  {movie.title}
+                </p>
+              </Link>
+            ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export default function CollectionPage({
+  genre,
+  searchQuery = "",
+  onHeroBackdropsChange,
+}: {
+  genre: string;
+  searchQuery?: string;
+  onHeroBackdropsChange?: (backdrops: string[]) => void;
+}) {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  const getKey = (pageIndex: number) =>
-    `/api/tmdb/collections?genre=${genre}&page=${pageIndex + 1}`;
+  const getKey = (
+    pageIndex: number,
+    previousPageData: BingeCollection[] | null,
+  ) => {
+    if (previousPageData && previousPageData.length === 0) return null;
+
+    const params = new URLSearchParams({ page: String(pageIndex + 1) });
+    if (searchQuery.trim()) {
+      params.set("query", searchQuery.trim());
+    } else {
+      params.set("genre", genre);
+    }
+    return `/api/tmdb/collections?${params.toString()}`;
+  };
 
   const { data, setSize, isValidating, error } = useSWRInfinite<
     BingeCollection[]
@@ -22,81 +259,90 @@ export default function CollectionPage({ genre }: { genre: string }) {
     revalidateFirstPage: false,
     revalidateOnFocus: false,
     dedupingInterval: 60000,
-    persistSize: true,
+    persistSize: false,
   });
 
-  const collections = data ? data.flat() : [];
-
-  const uniqueCollections = Array.from(
-    new Map(collections.map((c) => [c.collection_id, c])).values(),
+  const collections = useMemo(() => (data ? data.flat() : []), [data]);
+  const hasReachedEnd = Boolean(data && data[data.length - 1]?.length === 0);
+  const uniqueCollections = useMemo(
+    () =>
+      Array.from(
+        new Map(
+          collections.map((collection) => [
+            collection.collection_id,
+            collection,
+          ]),
+        ).values(),
+      ),
+    [collections],
+  );
+  const heroBackdrops = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          uniqueCollections
+            .flatMap((collection) => collection.movies)
+            .map((movie) => movie.backdrop_url || movie.poster_url)
+            .filter((image): image is string => Boolean(image)),
+        ),
+      ).slice(0, 12),
+    [uniqueCollections],
   );
 
   useEffect(() => {
+    onHeroBackdropsChange?.(heroBackdrops);
+  }, [heroBackdrops, onHeroBackdropsChange]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (first.isIntersecting && !isValidating) {
-          setSize((prev) => prev + 1);
+      ([entry]) => {
+        if (entry.isIntersecting && !isValidating && !hasReachedEnd) {
+          setSize((previousSize) => previousSize + 1);
         }
       },
-      { threshold: 1 },
+      { rootMargin: "500px 0px", threshold: 0 },
     );
 
     const current = loaderRef.current;
     if (current) observer.observe(current);
-
     return () => {
       if (current) observer.unobserve(current);
     };
-  }, [isValidating, setSize]);
+  }, [hasReachedEnd, isValidating, setSize]);
 
-  const isInitialLoading = !data && isValidating;
-
-  if (error) {
-    return <ErrorMessage />;
-  }
+  if (error) return <ErrorMessage />;
 
   return (
-    <section className="space-y-10">
-      {isInitialLoading ? (
-        <>
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={`skeleton-section-${i}`}>
-              <Skeleton className="mb-6 h-8 w-72" />
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-6 gap-8">
-                {Array.from({ length: 6 }).map((_, j) => (
-                  <FilmCardSkeleton key={`skeleton-card-${i}-${j}`} />
-                ))}
-              </div>
-            </div>
+    <div className="space-y-5">
+      {!data && isValidating
+        ? Array.from({ length: 3 }).map((_, index) => (
+            <CollectionSkeleton key={index} />
+          ))
+        : uniqueCollections.map((collection, index) => (
+            <CollectionRow
+              key={collection.collection_id}
+              collection={collection}
+              priority={index === 0}
+            />
           ))}
-        </>
-      ) : (
-        uniqueCollections.map((collection) => (
-          <div key={collection.collection_id}>
-            <h2 className=" text-2xl md:text-3xl font-semibold mb-6">
-              {collection.collection_name}
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-6 gap-8">
-              {collection.movies.map((movie) => {
-                const adapted = adaptTMDBToRecommendation(movie);
-                return (
-                  <FilmCard
-                    key={`movie-${movie.type}-${movie.tmdb_id}-${movie.id}`}
-                    item={adapted}
-                  />
-                );
-              })}
-            </div>
-          </div>
-        ))
+
+      {data && !isValidating && uniqueCollections.length === 0 && (
+        <div className="rounded-3xl border border-white/10 bg-white/[0.025] px-6 py-16 text-center">
+          <h3 className="text-xl font-semibold text-white">
+            No matching collections found
+          </h3>
+          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-white/50">
+            Try another franchise name, check the spelling, or clear the search
+            to return to {genre} sagas.
+          </p>
+        </div>
       )}
 
-      <div ref={loaderRef} className="h-10 flex justify-center items-center">
-        {isValidating && !isInitialLoading && (
-          <div className="w-7 h-7 border-3 border-t-transparent border-red-500/50 rounded-full animate-spin" />
+      <div ref={loaderRef} className="flex h-20 items-center justify-center">
+        {isValidating && data && (
+          <div className="h-7 w-7 animate-spin rounded-full border-2 border-white/15 border-t-red-500" />
         )}
       </div>
-    </section>
+    </div>
   );
 }

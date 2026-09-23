@@ -2,6 +2,7 @@ export type TMDBMovie = {
   id: number;
   title: string;
   poster_path: string | null;
+  backdrop_path?: string | null;
   release_date: string;
 };
 
@@ -12,6 +13,7 @@ export type TMDBGenre = {
 
 export type TMDBMovieDetails = {
   id: number;
+  backdrop_path?: string | null;
   genres: TMDBGenre[];
   runtime: number;
   release_date?: string;
@@ -41,6 +43,7 @@ export type EnrichedMovie = {
   tmdb_id: number;
   title: string;
   poster_url: string | null;
+  backdrop_url?: string | null;
   year: string | undefined;
   type: "movie";
   genres: string[];
@@ -64,6 +67,7 @@ export type BingeCollection = {
     tmdb_id: number;
     title: string;
     poster_url: string | null;
+    backdrop_url?: string | null;
     year?: string;
     type: "movie" | "tv";
     genres: string[];
