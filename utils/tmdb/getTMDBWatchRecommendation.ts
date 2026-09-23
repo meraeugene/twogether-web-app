@@ -50,6 +50,26 @@ export async function getTMDBWatchRecommendation(
   if (!res.ok) return null;
 
   const details = await res.json();
+  const director = details.credits?.crew?.find(
+    (member: { job?: string; name?: string }) => member.job === "Director",
+  )?.name;
+  const cast = (details.credits?.cast || [])
+    .slice(0, 14)
+    .map(
+      (member: {
+        id: number;
+        name: string;
+        character?: string;
+        profile_path?: string | null;
+      }) => ({
+        id: member.id,
+        name: member.name,
+        character: member.character || undefined,
+        profile_url: member.profile_path
+          ? `https://image.tmdb.org/t/p/w342${member.profile_path}`
+          : undefined,
+      }),
+    );
 
   const trailer =
     details.videos?.results?.find(
@@ -92,6 +112,9 @@ export async function getTMDBWatchRecommendation(
     poster_url: details.poster_path
       ? `https://image.tmdb.org/t/p/w500${details.poster_path}`
       : undefined,
+    backdrop_url: details.backdrop_path
+      ? `https://image.tmdb.org/t/p/original${details.backdrop_path}`
+      : undefined,
     year:
       details.release_date?.slice(0, 4) || details.first_air_date?.slice(0, 4),
     synopsis: details.overview ?? "",
@@ -102,6 +125,21 @@ export async function getTMDBWatchRecommendation(
     duration: details.runtime ?? details.episode_run_time?.[0] ?? undefined,
     seasons: type === "tv" ? details.number_of_seasons : undefined,
     episodes: type === "tv" ? details.number_of_episodes : undefined,
+    tagline: details.tagline || undefined,
+    tmdb_rating: details.vote_average || undefined,
+    vote_count: details.vote_count || undefined,
+    status: details.status || undefined,
+    original_language: details.original_language || undefined,
+    director,
+    creators:
+      type === "tv"
+        ? details.created_by?.map((creator: { name: string }) => creator.name) || []
+        : undefined,
+    production_countries:
+      details.production_countries?.map(
+        (country: { name: string }) => country.name,
+      ) || [],
+    cast,
     episode_titles_per_season: episodeTitlesPerSeason,
     visibility: "public",
     comment: "",

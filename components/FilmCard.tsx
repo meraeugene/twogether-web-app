@@ -29,12 +29,18 @@ function FilmCard({
   isDeleteRecommendation,
   isRemoveFromWatchlist,
   watchlistItemId,
+  compact = false,
+  orderNumber,
+  priority = false,
 }: {
   item: Recommendation;
   isDeleteRecommendation?: boolean;
   isRemoveFromWatchlist?: boolean;
   userId?: string;
   watchlistItemId?: string;
+  compact?: boolean;
+  orderNumber?: number;
+  priority?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const [isVisible, setIsVisible] = useState(true);
@@ -44,6 +50,9 @@ function FilmCard({
   const [isUpdatingPrivacy, startPrivacyTransition] = useTransition();
 
   const [cinemaOpen, setCinemaOpen] = useState(false);
+  const [previewTrailerKey, setPreviewTrailerKey] = useState(
+    item.trailer_key ?? null,
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -97,12 +106,27 @@ function FilmCard({
     return null;
   };
 
-  const openCinema = () => {
+  const openCinema = async () => {
     setCinemaOpen(true);
     // Opening the modal is a strong intent signal. Warm only this detail page
     // while the viewer reads, instead of prefetching every card in the grid.
     const href = getWatchHref();
     if (href) router.prefetch(href);
+
+    if (!previewTrailerKey && item.tmdb_id && item.type) {
+      try {
+        const response = await fetch(
+          `/api/tmdb/${item.tmdb_id}?type=${item.type}`,
+        );
+        if (!response.ok) return;
+        const payload = (await response.json()) as {
+          recommendation?: { trailer_key?: string | null };
+        };
+        setPreviewTrailerKey(payload.recommendation?.trailer_key ?? null);
+      } catch {
+        // The modal already has a poster fallback when no trailer is available.
+      }
+    }
   };
 
   const confirmDelete = () => {
@@ -160,8 +184,8 @@ function FilmCard({
     transition: { delay: 0.07 * i, duration: 0.28 },
   });
 
-  const trailerUrl = item.trailer_key
-    ? `https://www.youtube.com/embed/${item.trailer_key}?autoplay=1&mute=0&controls=0&loop=1&playlist=${item.trailer_key}&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&vq=hd1080`
+  const trailerUrl = previewTrailerKey
+    ? `https://www.youtube.com/embed/${previewTrailerKey}?autoplay=1&mute=0&controls=0&loop=1&playlist=${previewTrailerKey}&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&vq=hd1080`
     : null;
   const tvMetaLabel = `${item.episodes || 1}EPS`;
   const runtimeLabel =
@@ -469,6 +493,44 @@ function FilmCard({
       : null;
 
   if (!isVisible) return null;
+
+  if (compact) {
+    return (
+      <>
+        <button
+          type="button"
+          onClick={openCinema}
+          className="group/movie w-full cursor-pointer rounded-2xl border border-transparent p-2 text-left transition duration-200 hover:border-white/15 hover:bg-white/[0.075] focus-visible:border-white/30 focus-visible:bg-white/[0.075] focus-visible:outline-none"
+          title={item.title}
+        >
+          <div className="relative aspect-[2/3] overflow-hidden rounded-xl border border-white/10 bg-white/[0.05] transition duration-200 group-hover/movie:border-white/40 group-hover/movie:shadow-[0_12px_35px_rgba(0,0,0,.45)]">
+            {item.poster_url && (
+              <Image
+                src={item.poster_url}
+                alt={item.title}
+                fill
+                priority={priority}
+                sizes="124px"
+                className="object-cover transition duration-300 group-hover/movie:scale-[1.04] group-hover/movie:opacity-65"
+              />
+            )}
+            {orderNumber !== undefined && (
+              <span className="absolute left-2 top-2 flex h-6 min-w-6 items-center justify-center rounded-full bg-black/80 px-1.5 text-[11px] font-bold text-white backdrop-blur-md">
+                {orderNumber}
+              </span>
+            )}
+            <span className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 scale-90 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-xl shadow-black/60 transition group-hover/movie:scale-100 group-hover/movie:opacity-100">
+              <Play size={15} fill="currentColor" className="ml-0.5" />
+            </span>
+          </div>
+          <p className="mt-2 break-words text-xs font-medium leading-4 text-white/65 transition group-hover/movie:text-white">
+            {item.title}
+          </p>
+        </button>
+        {cinemaOverlay}
+      </>
+    );
+  }
 
   return (
     <>

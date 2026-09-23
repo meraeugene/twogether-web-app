@@ -2,8 +2,9 @@
 
 import WatchPlayer from "@/app/(user)/watch/[id]/[movieTitle]/WatchPlayer";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useState } from "react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Star } from "lucide-react";
 import ToggleWatchlistButton from "@/app/(user)/watch/[id]/[movieTitle]/ToggleWatchlistButton";
 import { omit } from "@/utils/ai-recommend/omit";
 import RecommendModal from "@/components/RecommendModal";
@@ -62,6 +63,16 @@ export default function TMDBWatchPage({
       "is_tmdb_recommendation",
       "generated_by_ai",
       "recommendation_created_at",
+      "backdrop_url",
+      "tagline",
+      "tmdb_rating",
+      "vote_count",
+      "status",
+      "original_language",
+      "director",
+      "creators",
+      "production_countries",
+      "cast",
     ]);
 
     const { error: submitError } = await createRecommendation({
@@ -217,6 +228,168 @@ export default function TMDBWatchPage({
             </div>
           )}
         </div>
+      )}
+
+      {recommendation && (
+        <section className="relative mt-12 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-5 text-white shadow-[0_28px_90px_rgba(0,0,0,.3)] sm:p-7 lg:p-9">
+          {recommendation.backdrop_url && (
+            <Image
+              src={recommendation.backdrop_url}
+              alt=""
+              fill
+              sizes="100vw"
+              className="pointer-events-none -z-10 object-cover opacity-[0.07] blur-2xl"
+            />
+          )}
+
+          <div className="grid gap-7 lg:grid-cols-[210px_1fr] lg:gap-10">
+            {recommendation.poster_url && (
+              <div className="relative mx-auto aspect-[2/3] w-full max-w-[210px] overflow-hidden rounded-2xl border border-white/15 bg-white/[0.05] shadow-2xl shadow-black/45 lg:mx-0">
+                <Image
+                  src={recommendation.poster_url}
+                  alt={`${recommendation.title} poster`}
+                  fill
+                  sizes="210px"
+                  className="object-cover"
+                />
+              </div>
+            )}
+
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-400">
+                More details
+              </p>
+              <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+                About {recommendation.title}
+              </h2>
+              {recommendation.tagline && (
+                <p className="mt-3 text-base italic text-white/55 sm:text-lg">
+                  “{recommendation.tagline}”
+                </p>
+              )}
+
+              <dl className="mt-6 grid grid-cols-2 gap-x-5 gap-y-5 sm:grid-cols-3 xl:grid-cols-4">
+                {recommendation.tmdb_rating ? (
+                  <div>
+                    <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
+                      TMDB rating
+                    </dt>
+                    <dd className="mt-1.5 flex items-center gap-1.5 text-sm font-semibold text-white/80">
+                      <Star className="h-4 w-4 fill-red-500 text-red-500" />
+                      {recommendation.tmdb_rating.toFixed(1)} / 10
+                    </dd>
+                  </div>
+                ) : null}
+                {recommendation.director && (
+                  <div>
+                    <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
+                      Director
+                    </dt>
+                    <dd className="mt-1.5 text-sm font-medium text-white/80">
+                      {recommendation.director}
+                    </dd>
+                  </div>
+                )}
+                {recommendation.creators && recommendation.creators.length > 0 && (
+                  <div>
+                    <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
+                      Created by
+                    </dt>
+                    <dd className="mt-1.5 text-sm font-medium text-white/80">
+                      {recommendation.creators.join(", ")}
+                    </dd>
+                  </div>
+                )}
+                {recommendation.status && (
+                  <div>
+                    <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
+                      Status
+                    </dt>
+                    <dd className="mt-1.5 text-sm font-medium text-white/80">
+                      {recommendation.status}
+                    </dd>
+                  </div>
+                )}
+                {recommendation.original_language && (
+                  <div>
+                    <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
+                      Original language
+                    </dt>
+                    <dd className="mt-1.5 text-sm font-medium uppercase text-white/80">
+                      {recommendation.original_language}
+                    </dd>
+                  </div>
+                )}
+                {recommendation.production_countries &&
+                  recommendation.production_countries.length > 0 && (
+                    <div className="col-span-2">
+                      <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
+                        Production
+                      </dt>
+                      <dd className="mt-1.5 text-sm font-medium text-white/80">
+                        {recommendation.production_countries.join(", ")}
+                      </dd>
+                    </div>
+                  )}
+              </dl>
+            </div>
+          </div>
+
+          {recommendation.cast && recommendation.cast.length > 0 && (
+            <div className="mt-10 border-t border-white/10 pt-7">
+              <div className="mb-5 flex items-end justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-400">
+                    Featured cast
+                  </p>
+                  <h2 className="mt-1 text-2xl font-bold tracking-tight">
+                    Actors and characters
+                  </h2>
+                </div>
+                <p className="hidden text-xs text-white/35 sm:block">
+                  Swipe to explore
+                </p>
+              </div>
+
+              <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:none] sm:gap-4 [&::-webkit-scrollbar]:hidden">
+                {recommendation.cast.map((member) => (
+                  <article
+                    key={member.id}
+                    className="w-[128px] shrink-0 snap-start sm:w-[148px]"
+                  >
+                    <div className="relative aspect-[2/3] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06]">
+                      {member.profile_url ? (
+                        <Image
+                          src={member.profile_url}
+                          alt={member.name}
+                          fill
+                          sizes="148px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center bg-white/[0.04] px-3 text-center text-2xl font-bold text-white/25">
+                          {member.name
+                            .split(" ")
+                            .map((part) => part[0])
+                            .slice(0, 2)
+                            .join("")}
+                        </div>
+                      )}
+                    </div>
+                    <h3 className="mt-3 text-sm font-semibold leading-5 text-white/85">
+                      {member.name}
+                    </h3>
+                    {member.character && (
+                      <p className="mt-1 line-clamp-2 text-xs leading-4 text-white/40">
+                        {member.character}
+                      </p>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
       )}
 
       <TMDBMovieReviews tmdbId={recommendation.tmdb_id} />

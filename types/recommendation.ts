@@ -17,6 +17,13 @@ export type PartialRecommendation = {
   >;
 };
 
+export type CastMember = {
+  id: number;
+  name: string;
+  character?: string;
+  profile_url?: string;
+};
+
 export type Recommendation = {
   id: string;
   tmdb_id: number;
@@ -48,4 +55,14 @@ export type Recommendation = {
     { episode_number: number; title: string }[]
   >;
   rating?: number;
+  backdrop_url?: string;
+  tagline?: string;
+  tmdb_rating?: number;
+  vote_count?: number;
+  status?: string;
+  original_language?: string;
+  director?: string;
+  creators?: string[];
+  production_countries?: string[];
+  cast?: CastMember[];
 };

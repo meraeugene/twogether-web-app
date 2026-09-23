@@ -9,6 +9,8 @@ import { BingeCollection } from "@/types/binge";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { fetcher } from "@/utils/swr/fetcher";
 import ErrorMessage from "@/components/ErrorMessage";
+import FilmCard from "@/components/FilmCard";
+import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 
 function formatRuntime(minutes: number) {
   const hours = Math.floor(minutes / 60);
@@ -193,32 +195,34 @@ function CollectionRow({
               onScroll={updateRailControls}
               className="-mx-2 mt-2 flex min-w-0 snap-x snap-mandatory items-start gap-2 overflow-x-auto px-2 py-3 [scrollbar-width:none] sm:snap-proximity [&::-webkit-scrollbar]:hidden"
             >
-            {collection.movies.map((movie, index) => (
-              <Link
-                key={`${movie.tmdb_id}-${movie.id}`}
-                href={`/tmdb/watch/${movie.type}/${movie.tmdb_id}/${getSlugFromTitle(movie.title)}`}
-                className="group/movie w-[112px] shrink-0 snap-start rounded-2xl border border-transparent p-2 transition duration-200 hover:border-white/15 hover:bg-white/[0.075] focus-visible:border-white/30 focus-visible:bg-white/[0.075] focus-visible:outline-none sm:w-[124px]"
-                title={movie.title}
-              >
-                <div className="relative aspect-[2/3] overflow-hidden rounded-xl border border-white/10 bg-white/[0.05] transition duration-200 group-hover/movie:border-white/40 group-hover/movie:shadow-[0_12px_35px_rgba(0,0,0,.45)]">
-                  {movie.poster_url && (
-                    <Image
-                      src={movie.poster_url}
-                      alt={movie.title}
-                      fill
-                      sizes="124px"
-                      className="object-cover"
+              {collection.movies.map((movie, index) => {
+                const previewItem = adaptTMDBToRecommendation({
+                  id: movie.tmdb_id,
+                  tmdb_id: movie.tmdb_id,
+                  type: movie.type,
+                  title: movie.title,
+                  poster_url: movie.poster_url,
+                  genres: movie.genres,
+                  year: movie.year,
+                  duration: movie.duration ?? null,
+                  synopsis: movie.synopsis,
+                  trailer_key: null,
+                });
+
+                return (
+                  <div
+                    key={`${movie.tmdb_id}-${movie.id}`}
+                    className="w-[112px] shrink-0 snap-start sm:w-[124px]"
+                  >
+                    <FilmCard
+                      item={previewItem}
+                      compact
+                      orderNumber={index + 1}
+                      priority={priority && index < 4}
                     />
-                  )}
-                  <span className="absolute left-2 top-2 flex h-6 min-w-6 items-center justify-center rounded-full bg-black/80 px-1.5 text-[11px] font-bold backdrop-blur-md">
-                    {index + 1}
-                  </span>
-                </div>
-                <p className="mt-2 break-words text-xs font-medium leading-4 text-white/65 transition group-hover/movie:text-white">
-                  {movie.title}
-                </p>
-              </Link>
-            ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
