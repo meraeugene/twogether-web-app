@@ -23,23 +23,29 @@ export default function WatchingNow({
   const [authenticatedUserId, setAuthenticatedUserId] = useState<
     string | undefined
   >(currentUserId);
+  const [authReady, setAuthReady] = useState(Boolean(currentUserId));
 
   useEffect(() => {
     if (currentUserId) {
       setAuthenticatedUserId(currentUserId);
+      setAuthReady(true);
       return;
     }
 
     let active = true;
 
     void supabase.auth.getUser().then(({ data }) => {
-      if (active) setAuthenticatedUserId(data.user?.id);
+      if (active) {
+        setAuthenticatedUserId(data.user?.id);
+        setAuthReady(true);
+      }
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setAuthenticatedUserId(session?.user.id);
+      setAuthReady(true);
     });
 
     return () => {
@@ -49,10 +55,14 @@ export default function WatchingNow({
   }, [currentUserId, supabase]);
 
   const { data, isLoading } = useSWR(
-    ["watching-now", limit, authenticatedUserId],
+    authReady ? ["watching-now", limit, authenticatedUserId] : null,
     () => getWatchingNowRooms(limit, authenticatedUserId),
     {
       refreshInterval: 15000,
+      dedupingInterval: 10000,
+      revalidateOnFocus: false,
+      refreshWhenHidden: false,
+      refreshWhenOffline: false,
     },
   );
 
@@ -83,7 +93,7 @@ export default function WatchingNow({
         </div>
 
         <div className="relative z-10 -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3 xl:grid-cols-4 [&::-webkit-scrollbar]:hidden">
-          {isLoading ? (
+          {!authReady || isLoading ? (
             Array.from({ length: Math.min(limit, 4) }).map((_, idx) => (
               <div
                 key={idx}
@@ -145,7 +155,7 @@ export default function WatchingNow({
                   src={room.poster_url || "/placeholder.jpg"}
                   alt={room.movie_title}
                   fill
-                  unoptimized
+                  sizes="(min-width: 1280px) 280px, (min-width: 640px) 50vw, 76vw"
                   className={`object-cover transition-transform duration-700  group-hover:scale-110 group-hover:rotate-[1.5deg] opacity-85`}
                 />
 

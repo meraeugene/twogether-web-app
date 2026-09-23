@@ -31,11 +31,17 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function StreamingServices() {
   const featuredServices = streamingServices;
-  const { data: trailers } = useSWR<Trailer[]>("/api/top-trailers", fetcher, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    dedupingInterval: 86400000,
-  });
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [isNearViewport, setIsNearViewport] = useState(false);
+  const { data: trailers } = useSWR<Trailer[]>(
+    isNearViewport ? "/api/top-trailers" : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 86400000,
+    },
+  );
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [powerOn, setPowerOn] = useState(true);
@@ -45,6 +51,23 @@ export default function StreamingServices() {
   const [blockedTrailerKeys, setBlockedTrailerKeys] = useState<string[]>([]);
 
   const playerRef = useRef<YouTubePlayer | null>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || isNearViewport) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setIsNearViewport(true);
+        observer.disconnect();
+      },
+      { rootMargin: "600px 0px" },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [isNearViewport]);
   const playerOptions = useMemo(
     () => ({
       width: "100%",
@@ -118,7 +141,10 @@ export default function StreamingServices() {
   };
 
   return (
-    <section className="relative py-14 sm:py-20 md:py-28 lg:py-32 bg-[#020202] overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative py-14 sm:py-20 md:py-28 lg:py-32 bg-[#020202] overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_900px]"
+    >
       {/* Ambilight */}
       <div className="absolute inset-0 z-0 flex items-center justify-center">
         <motion.div

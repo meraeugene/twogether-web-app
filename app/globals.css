@@ -111,8 +111,29 @@ body {
   }
 }
 
+/* Homepage decoration stays on the compositor instead of running dozens of
+   continuous JavaScript animation timelines. */
+@keyframes home-hero-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -25px, 0);
+  }
+}
+
+.home-hero-float {
+  animation: home-hero-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton-shimmer::after {
+    animation: none;
+  }
+
+  .home-hero-float {
     animation: none;
   }
 }

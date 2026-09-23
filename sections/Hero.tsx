@@ -1,12 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
+import Image from "next/image";
 import { Star } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { fetcher } from "@/utils/swr/fetcher";
-import { motion } from "framer-motion";
 import { FLOATING_DATA } from "@/data/floatingData";
 import { createClient } from "@/utils/supabase/client";
 import GlowingOutlineButton from "@/components/ui/GlowingOutlineButton";
@@ -14,7 +13,7 @@ import GlowingOutlineButton from "@/components/ui/GlowingOutlineButton";
 export default function TwogetherHero() {
   const router = useRouter();
 
-  const { data: movieCovers } = useSWR<string[]>("/api/tmdb/popular", fetcher, {
+  const { data: movieCovers } = useSWR<string[]>("/api/tmdb/popular?v=2", fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     dedupingInterval: 86400000,
@@ -44,34 +43,30 @@ export default function TwogetherHero() {
       {/* FLOATING UI */}
       <div className="absolute inset-0 pointer-events-none z-10">
         {FLOATING_DATA.map((el, idx) => (
-          <motion.div
+          <div
             key={idx}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{
-              opacity: el.type === "poster" ? 0.2 : 0.25,
-              scale: 1,
-              y: [0, -25, 0],
-            }}
-            transition={{
-              opacity: { duration: 1 },
-              y: {
-                duration: 5 + (idx % 3),
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: el.delay,
-              },
-            }}
             style={{ top: el.top, left: el.left, rotate: el.rotate }}
             className={`absolute ${
               el.type === "poster" ? "block" : "hidden xl:block"
             }`}
           >
+            <div
+              className={`home-hero-float ${
+                el.type === "poster" ? "opacity-20" : "opacity-25"
+              }`}
+              style={{
+                animationDelay: `${el.delay}s`,
+                animationDuration: `${5 + (idx % 3)}s`,
+              }}
+            >
             {/* POSTER */}
             {el.type === "poster" && movieCovers?.[idx] && (
-              <div className="w-15 h-22.5 sm:w-[75px] sm:h-[110px] md:w-[110px] md:h-[160px] xl:w-[140px] xl:h-[200px] rounded-xl md:rounded-2xl border border-white/10 overflow-hidden shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] bg-neutral-900">
-                <img
+              <div className="relative w-15 h-22.5 sm:w-[75px] sm:h-[110px] md:w-[110px] md:h-[160px] xl:w-[140px] xl:h-[200px] rounded-xl md:rounded-2xl border border-white/10 overflow-hidden shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] bg-neutral-900">
+                <Image
                   src={movieCovers[idx]}
                   alt=""
+                  fill
+                  sizes="(min-width: 1280px) 140px, (min-width: 768px) 110px, (min-width: 640px) 75px, 60px"
                   className="w-full h-full object-cover  "
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
@@ -83,6 +78,7 @@ export default function TwogetherHero() {
               <div className="flex items-center gap-3 p-2 pr-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
                 <img
                   src={el.content}
+                  loading="lazy"
                   className="w-9 h-9 rounded-full border border-red-500/40 object-cover"
                   alt=""
                 />
@@ -112,7 +108,8 @@ export default function TwogetherHero() {
                 </span>
               </div>
             )}
-          </motion.div>
+            </div>
+          </div>
         ))}
       </div>
 

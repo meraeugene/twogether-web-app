@@ -32,7 +32,7 @@ export async function GET() {
 
       return (data.results || [])
         .filter((item) => item.poster_path)
-        .map((item) => `https://image.tmdb.org/t/p/w500${item.poster_path}`);
+        .map((item) => `https://image.tmdb.org/t/p/w185${item.poster_path}`);
     };
 
     // Fetch popular movies and TV shows
@@ -41,8 +41,9 @@ export async function GET() {
       fetchImages(`${BASE_URL}/tv/popular`),
     ]);
 
-    // Combine and limit to 30 unique images
-    const images = Array.from(new Set([...movies, ...shows])).slice(0, 30);
+    // The hero has twelve poster slots. Returning correctly sized thumbnails
+    // avoids downloading full card artwork that is immediately scaled down.
+    const images = Array.from(new Set([...movies, ...shows])).slice(0, 12);
 
     const response = NextResponse.json(images);
     response.headers.set(
