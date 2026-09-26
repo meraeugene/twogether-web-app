@@ -34,9 +34,12 @@ export const metadata: Metadata = {
   },
   applicationName: siteName,
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: [
+      { url: "/twogether-favicon-v2.ico", sizes: "any" },
+      { url: "/twogether-favicon-v2.png", type: "image/png", sizes: "32x32" },
+    ],
+    shortcut: "/twogether-favicon-v2.ico",
+    apple: "/icons/twogether-192-v2.png",
   },
   description: defaultDescription,
   keywords: [
@@ -77,8 +80,6 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo.png" type="image/png" sizes="1024x1024" />
-        <link rel="apple-touch-icon" href="/logo.png" />
         <meta name="theme-color" content="#010101" />
       </head>
       <body

@@ -13,15 +13,15 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/icons/twogether-192-v2.png",
       "type": "image/png",
-      "sizes": "1024x1024",
+      "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "/logo.png",
+      "src": "/icons/twogether-512-v2.png",
       "type": "image/png",
-      "sizes": "1024x1024",
+      "sizes": "512x512",
       "purpose": "maskable"
     }
   ],
