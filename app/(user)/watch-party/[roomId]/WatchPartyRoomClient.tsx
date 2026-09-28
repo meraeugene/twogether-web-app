@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Copy, Crown, Globe2, LoaderCircle, Lock, Share2 } from "lucide-react";
 import WatchPartyChatPanel from "./WatchPartyChatPanel";
 import WatchPartyInviteModal from "./WatchPartyInviteModal";
@@ -10,6 +9,7 @@ import WatchPlayer from "@/app/(user)/watch/[id]/[movieTitle]/WatchPlayer";
 import useSWR from "swr";
 import { fetcher } from "@/utils/swr/fetcher";
 import type { Recommendation } from "@/types/recommendation";
+import UserAvatar from "@/components/UserAvatar";
 
 type TMDBWatchResponse = {
   recommendation: Recommendation;
@@ -207,13 +207,11 @@ export default function WatchPartyRoomClient({
                       className="flex items-center gap-3 rounded-2xl border border-white/12 bg-white/[0.05] px-3 py-3 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
                     >
                       <div className="relative shrink-0 overflow-visible">
-                        <Image
-                          src={participant.avatar_url || "/default-avatar.png"}
-                          alt={participant.username}
-                          width={44}
-                          height={44}
-                          unoptimized
-                          className="h-11 w-11 rounded-full border border-white/15 object-cover"
+                        <UserAvatar
+                          src={participant.avatar_url}
+                          name={participantName}
+                          sizes="44px"
+                          className="h-11 w-11 border border-white/15"
                         />
                         <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[#111] bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.75)]" />
                       </div>

@@ -1,10 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
 import { IoCheckmarkCircle, IoClose, IoSearch } from "react-icons/io5";
 import { LoaderCircle } from "lucide-react";
 import type { RoomUser } from "../../../../types/watchPartyRoomTypes";
+import UserAvatar from "@/components/UserAvatar";
 
 export default function WatchPartyInviteModal({
   open,
@@ -116,12 +116,11 @@ export default function WatchPartyInviteModal({
                       }`}
                     >
                       <div className="relative h-11 w-11 shrink-0 overflow-visible rounded-full">
-                        <Image
-                          src={friend.avatar_url || "/default-avatar.png"}
-                          alt=""
-                          width={44}
-                          height={44}
-                          className="h-11 w-11 rounded-full object-cover"
+                        <UserAvatar
+                          src={friend.avatar_url}
+                          name={friend.display_name || friend.username}
+                          sizes="44px"
+                          className="h-11 w-11"
                         />
                         <div className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[#0B0B0C] bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.75)]" />
                       </div>

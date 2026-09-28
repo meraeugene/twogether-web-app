@@ -19,7 +19,15 @@ export const GET = async () => {
       );
     }
 
-    return NextResponse.json({ user, ...data }, { status: 200 });
+    return NextResponse.json(
+      { user, ...data },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "private, max-age=30, stale-while-revalidate=60",
+        },
+      },
+    );
   } catch (error: unknown) {
     console.error("Failed to fetch recommendations:", error);
 

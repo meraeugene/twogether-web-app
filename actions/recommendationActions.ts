@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { Recommendation } from "@/types/recommendation";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { getCurrentUser } from "./authActions";
 
 interface RecommendationFormData {
@@ -41,6 +41,13 @@ export const createRecommendation = async (form: RecommendationFormData) => {
     ...form,
   });
 
+  if (!error) {
+    revalidateTag("recommendations:public");
+    revalidateTag(`recommendations:${user.id}`);
+    revalidatePath("/recos");
+    revalidatePath("/my-recommendations");
+  }
+
   return { error };
 };
 
@@ -49,19 +56,25 @@ export const getRecommendations = async (): Promise<
 > => {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from("recommendations_flattened")
-    .select("*")
-    .eq("visibility", "public")
-    .order("created_at", { ascending: false })
-    .limit(18);
+  return unstable_cache(
+    async () => {
+      const { data, error } = await supabase
+        .from("recommendations_flattened")
+        .select("*")
+        .eq("visibility", "public")
+        .order("created_at", { ascending: false })
+        .limit(18);
 
-  if (error) {
-    console.error("Error fetching recommendations:", error);
-    return [];
-  }
+      if (error) {
+        console.error("Error fetching recommendations:", error);
+        return [];
+      }
 
-  return data;
+      return data as Recommendation[];
+    },
+    ["public-recommendations"],
+    { revalidate: 60, tags: ["recommendations:public"] },
+  )();
 };
 
 export async function getRecommendationById(
@@ -88,33 +101,29 @@ export async function getMyRecommendations(userId: string): Promise<{
 }> {
   const supabase = await createClient();
 
-  const [publicResult, privateResult] = await Promise.all([
-    supabase
-      .from("recommendations_flattened")
-      .select("*")
-      .eq("recommended_by->>id", userId)
-      .eq("visibility", "public")
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("recommendations_flattened")
-      .select("*")
-      .eq("recommended_by->>id", userId)
-      .eq("visibility", "private")
-      .order("created_at", { ascending: false }),
-  ]);
+  return unstable_cache(
+    async () => {
+      const { data, error } = await supabase
+        .from("recommendations_flattened")
+        .select("*")
+        .eq("recommended_by->>id", userId)
+        .in("visibility", ["public", "private"])
+        .order("created_at", { ascending: false });
 
-  if (publicResult.error || privateResult.error) {
-    console.error(
-      "Error fetching recommendation:",
-      publicResult.error || privateResult.error,
-    );
-    return { public: [], private: [] };
-  }
+      if (error) {
+        console.error("Error fetching recommendation:", error);
+        return { public: [], private: [] };
+      }
 
-  return {
-    public: publicResult.data || [],
-    private: privateResult.data || [],
-  };
+      const recommendations = (data || []) as Recommendation[];
+      return {
+        public: recommendations.filter((item) => item.visibility === "public"),
+        private: recommendations.filter((item) => item.visibility === "private"),
+      };
+    },
+    ["my-recommendations", userId],
+    { revalidate: 60, tags: [`recommendations:${userId}`] },
+  )();
 }
 
 export async function getCurrentUserRecommendations(): Promise<{
@@ -170,7 +179,10 @@ export async function deleteRecommendation(
     throw new Error("Failed to delete recommendation");
   }
 
+  revalidateTag("recommendations:public");
+  revalidateTag(`recommendations:${userId}`);
   revalidatePath("/my-recommendations");
+  revalidatePath("/recos");
   return { success: true };
 }
 
@@ -192,7 +204,10 @@ export async function toggleRecommendationVisibility(
     throw new Error("Failed to toggle visibility");
   }
 
+  revalidateTag("recommendations:public");
+  revalidateTag(`recommendations:${userId}`);
   revalidatePath("/my-recommendations");
+  revalidatePath("/recos");
   return { success: true };
 }
 

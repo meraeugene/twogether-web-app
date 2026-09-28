@@ -3,7 +3,7 @@
 import { getCurrentUser } from "@/actions/authActions";
 import { createClient } from "@/utils/supabase/server";
 import { Recommendation } from "@/types/recommendation";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { WatchlistMetadata } from "@/types/watchlist";
 
 // Fetch watchlist by user ID
@@ -12,18 +12,24 @@ export async function getWatchlistByUserId(
 ): Promise<Recommendation[]> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from("watchlist_flattened")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+  return unstable_cache(
+    async () => {
+      const { data, error } = await supabase
+        .from("watchlist_flattened")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Error fetching watchlist:", error);
-    return [];
-  }
+      if (error) {
+        console.error("Error fetching watchlist:", error);
+        return [];
+      }
 
-  return data || [];
+      return (data || []) as Recommendation[];
+    },
+    ["watchlist", userId],
+    { revalidate: 60, tags: [`watchlist:${userId}`] },
+  )();
 }
 
 export async function getMyWatchlist(): Promise<{
@@ -80,6 +86,7 @@ export async function addToWatchlist(
 
   if (error) throw new Error(error.message);
 
+  revalidateTag(`watchlist:${currentUserId}`);
   revalidatePath("/watchlist");
 
   return data.id;
@@ -96,6 +103,7 @@ export async function removeFromWatchlist(id: string, userId: string) {
 
   if (error) throw new Error(error.message);
 
+  revalidateTag(`watchlist:${userId}`);
   revalidatePath("/watchlist");
 
   return true;
@@ -134,6 +142,7 @@ export async function addToWatchlistWithMetadata(
 
   if (error) throw new Error(error.message);
 
+  revalidateTag(`watchlist:${currentUserId}`);
   revalidatePath("/watchlist");
 
   return data.id;

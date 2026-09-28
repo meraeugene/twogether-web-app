@@ -18,6 +18,7 @@ import TMDBMovieReviews from "./TMDBMovieReviews";
 import { AnimatePresence, motion } from "framer-motion";
 import WatchTogetherButton from "@/components/WatchTogetherButton";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
+import Link from "next/link";
 
 const WatchGemeni = dynamic(
   () => import("@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni"),
@@ -353,18 +354,21 @@ export default function TMDBWatchPage({
 
               <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:none] sm:gap-4 [&::-webkit-scrollbar]:hidden">
                 {recommendation.cast.map((member) => (
-                  <article
+                  <Link
                     key={member.id}
-                    className="w-[128px] shrink-0 snap-start sm:w-[148px]"
+                    href={`/search/${encodeURIComponent(member.name)}`}
+                    prefetch={false}
+                    aria-label={`View movies featuring ${member.name}`}
+                    className="group/cast w-[128px] shrink-0 snap-start rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-400 sm:w-[148px]"
                   >
-                    <div className="relative aspect-[2/3] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06]">
+                    <div className="relative aspect-[2/3] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] transition duration-300 group-hover/cast:-translate-y-1 group-hover/cast:border-white/30 group-hover/cast:shadow-[0_16px_40px_rgba(0,0,0,.4)]">
                       {member.profile_url ? (
                         <Image
                           src={member.profile_url}
                           alt={member.name}
                           fill
                           sizes="148px"
-                          className="object-cover"
+                          className="object-cover transition duration-500 group-hover/cast:scale-[1.04]"
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center bg-white/[0.04] px-3 text-center text-2xl font-bold text-white/25">
@@ -376,7 +380,7 @@ export default function TMDBWatchPage({
                         </div>
                       )}
                     </div>
-                    <h3 className="mt-3 text-sm font-semibold leading-5 text-white/85">
+                    <h3 className="mt-3 text-sm font-semibold leading-5 text-white/85 transition group-hover/cast:text-white">
                       {member.name}
                     </h3>
                     {member.character && (
@@ -384,7 +388,7 @@ export default function TMDBWatchPage({
                         {member.character}
                       </p>
                     )}
-                  </article>
+                  </Link>
                 ))}
               </div>
             </div>

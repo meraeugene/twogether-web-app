@@ -17,7 +17,12 @@ export const GET = async () => {
       );
     }
 
-    return NextResponse.json(recommendations, { status: 200 });
+    return NextResponse.json(recommendations, {
+      status: 200,
+      headers: {
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+      },
+    });
   } catch (error: unknown) {
     console.error("Failed to fetch public recommendations:", error);
 

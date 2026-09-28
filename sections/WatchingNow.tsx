@@ -10,6 +10,7 @@ import { Globe2, Lock } from "lucide-react";
 import { toast } from "sonner";
 import GlowingOutlineButton from "@/components/ui/GlowingOutlineButton";
 import { createClient } from "@/utils/supabase/client";
+import UserAvatar from "@/components/UserAvatar";
 
 export default function WatchingNow({
   limit = 4,
@@ -192,18 +193,13 @@ export default function WatchingNow({
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex -space-x-2">
                       {room.watching_users.slice(0, 3).map((user) => (
-                        <div
+                        <UserAvatar
                           key={user.id}
-                          className="h-8 w-8 overflow-hidden rounded-full border border-white/15 shadow-[0_8px_18px_-12px_rgba(0,0,0,0.95)]"
-                        >
-                          <Image
-                            src={user.avatar_url || "/default-avatar.png"}
-                            alt={user.username}
-                            width={32}
-                            height={32}
-                            className="h-full w-full rounded-full object-cover"
-                          />
-                        </div>
+                          src={user.avatar_url}
+                          name={user.display_name || user.username}
+                          sizes="32px"
+                          className="h-8 w-8 border border-white/15 shadow-[0_8px_18px_-12px_rgba(0,0,0,0.95)]"
+                        />
                       ))}
                       {room.watching_count > 3 && (
                         <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/12 bg-black/55 text-[8px] font-bold text-white">

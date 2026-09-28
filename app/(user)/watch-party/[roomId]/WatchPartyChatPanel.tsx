@@ -12,6 +12,7 @@ import type {
   RoomMessage,
   RoomUser,
 } from "../../../../types/watchPartyRoomTypes";
+import UserAvatar from "@/components/UserAvatar";
 
 function renderMessageContent(content: string) {
   return content
@@ -142,8 +143,7 @@ export default function WatchPartyChatPanel({
             .every((part) => customEmojis[part] || part.trim() === "");
           const senderAvatar =
             message.sender?.avatar_url ||
-            (isMine ? currentUser?.avatar_url : otherUser?.avatar_url) ||
-            "/default-avatar.png";
+            (isMine ? currentUser?.avatar_url : otherUser?.avatar_url);
           const senderName =
             message.sender?.display_name ||
             message.sender?.username ||
@@ -170,13 +170,11 @@ export default function WatchPartyChatPanel({
                   className={`flex items-end ${isMine ? "justify-end" : "gap-3"}`}
                 >
                   {!isMine ? (
-                    <Image
+                    <UserAvatar
                       src={senderAvatar}
-                      alt={message.sender?.username || "user"}
-                      width={32}
-                      height={32}
-                      unoptimized
-                      className="h-8 w-8 shrink-0 rounded-full border border-white/20 object-cover shadow-sm"
+                      name={senderName}
+                      sizes="32px"
+                      className="h-8 w-8 border border-white/20 shadow-sm"
                     />
                   ) : null}
 
