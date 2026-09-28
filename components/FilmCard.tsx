@@ -510,7 +510,7 @@ function FilmCard({
                 alt={item.title}
                 fill
                 priority={priority}
-                sizes="124px"
+                sizes="(min-width: 1280px) 12vw, (min-width: 640px) 124px, 112px"
                 className="object-cover transition duration-300 group-hover/movie:scale-[1.04] group-hover/movie:opacity-65"
               />
             )}
@@ -523,7 +523,7 @@ function FilmCard({
               <Play size={15} fill="currentColor" className="ml-0.5" />
             </span>
           </div>
-          <p className="mt-2 break-words text-xs font-medium leading-4 text-white/65 transition group-hover/movie:text-white">
+          <p className="mt-2 break-words text-sm font-medium leading-5 text-white/70 transition group-hover/movie:text-white">
             {item.title}
           </p>
         </button>

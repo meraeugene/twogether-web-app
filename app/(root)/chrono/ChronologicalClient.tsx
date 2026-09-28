@@ -60,37 +60,88 @@ export default function ChronologicalClient() {
 
     let frameId = 0;
     let lastTimestamp = 0;
+    let currentLeft = viewport.scrollLeft;
+    let maxScrollLeft = viewport.scrollWidth - viewport.clientWidth;
+    let isVisible = false;
     const speed = 80;
 
+    const updateBounds = () => {
+      maxScrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+      currentLeft = Math.min(viewport.scrollLeft, maxScrollLeft);
+    };
+
     const tick = (timestamp: number) => {
+      frameId = 0;
+
+      if (!isVisible || document.hidden) {
+        lastTimestamp = timestamp;
+        return;
+      }
+
       if (!lastTimestamp) {
         lastTimestamp = timestamp;
       }
 
-      const deltaSeconds = (timestamp - lastTimestamp) / 1000;
+      const deltaSeconds = Math.min((timestamp - lastTimestamp) / 1000, 0.05);
       lastTimestamp = timestamp;
-
-      const maxScrollLeft = viewport.scrollWidth - viewport.clientWidth;
 
       if (maxScrollLeft <= 0) {
         frameId = requestAnimationFrame(tick);
         return;
       }
 
-      const nextLeft = viewport.scrollLeft + speed * deltaSeconds;
+      currentLeft += speed * deltaSeconds;
 
-      if (nextLeft >= maxScrollLeft) {
+      if (currentLeft >= maxScrollLeft) {
+        currentLeft = 0;
         viewport.scrollLeft = 0;
       } else {
-        viewport.scrollLeft = nextLeft;
+        viewport.scrollLeft = currentLeft;
       }
 
       frameId = requestAnimationFrame(tick);
     };
 
-    frameId = requestAnimationFrame(tick);
+    const startAnimation = () => {
+      if (!frameId && isVisible && !document.hidden) {
+        lastTimestamp = 0;
+        frameId = requestAnimationFrame(tick);
+      }
+    };
 
-    return () => cancelAnimationFrame(frameId);
+    const stopAnimation = () => {
+      cancelAnimationFrame(frameId);
+      frameId = 0;
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) stopAnimation();
+      else startAnimation();
+    };
+
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) startAnimation();
+        else stopAnimation();
+      },
+      { threshold: 0.01 },
+    );
+    const resizeObserver = new ResizeObserver(updateBounds);
+
+    intersectionObserver.observe(viewport);
+    resizeObserver.observe(viewport);
+    if (viewport.firstElementChild) {
+      resizeObserver.observe(viewport.firstElementChild);
+    }
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      stopAnimation();
+      intersectionObserver.disconnect();
+      resizeObserver.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [data, isAutoMoving]);
 
   if (isLoading) {
@@ -185,7 +236,7 @@ export default function ChronologicalClient() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-sm md:p-8">
+        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_80px_rgba(0,0,0,0.35)] md:p-8">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(239,68,68,0.12),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(248,113,113,0.08),transparent_24%)]" />
 
           <div className="relative z-10 mb-6 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -220,9 +271,9 @@ export default function ChronologicalClient() {
 
           <div
             ref={routeViewportRef}
-            className="chrono-scroll relative z-10 overflow-x-auto overflow-y-hidden pb-4"
+            className="chrono-scroll relative z-10 overflow-x-auto overflow-y-hidden pb-4 [contain:layout_paint] [will-change:scroll-position]"
           >
-            <div className="relative min-w-max px-2 py-4 md:px-4 md:py-8">
+            <div className="relative min-w-max px-2 py-4 md:px-4 md:pb-36 md:pt-8">
               <div className="pointer-events-none absolute left-0 right-0 top-[8.2rem] h-px bg-gradient-to-r from-red-400/0 via-red-400/35 to-red-400/0" />
               <div className="pointer-events-none absolute left-6 top-[8.2rem] h-3 w-3 -translate-y-1/2 rounded-full border border-red-300/50 bg-[#050505] shadow-[0_0_18px_rgba(248,113,113,0.35)]" />
               <div className="pointer-events-none absolute right-6 top-[8.2rem] h-3 w-3 -translate-y-1/2 rounded-full border border-red-300/50 bg-[#050505] shadow-[0_0_18px_rgba(248,113,113,0.35)]" />
@@ -239,7 +290,7 @@ export default function ChronologicalClient() {
                       className="relative flex items-start md:items-stretch"
                     >
                       <div
-                        className={`w-[230px] shrink-0 md:w-[280px] ${
+                        className={`w-[230px] shrink-0 [contain:layout_paint_style] [content-visibility:auto] [contain-intrinsic-size:280px_680px] md:w-[280px] ${
                           isEven ? "md:translate-y-0" : "md:translate-y-28"
                         }`}
                       >
@@ -266,13 +317,14 @@ export default function ChronologicalClient() {
                                     : `https://image.tmdb.org/t/p/w500${movie.poster_url}`
                                 }
                                 alt={movie.title}
-                                unoptimized
                                 width={500}
                                 height={750}
+                                sizes="(min-width: 768px) 248px, 198px"
+                                quality={72}
                                 className="aspect-[2/3] w-full object-cover transition duration-500 group-hover:scale-105 group-hover:brightness-50"
                               />
 
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 via-45% to-transparent" />
 
                               <div className="absolute inset-0 hidden items-center justify-center opacity-0 transition duration-300 group-hover:flex group-hover:opacity-100">
                                 <button

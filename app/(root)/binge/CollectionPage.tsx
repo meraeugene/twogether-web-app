@@ -23,15 +23,18 @@ function CollectionSkeleton() {
     <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-4 sm:p-5">
       <div className="skeleton-shimmer grid min-h-[280px] gap-6 lg:grid-cols-[34%_1fr]">
         <div className="rounded-2xl bg-white/[0.07]" />
-        <div className="flex flex-col justify-center gap-5 py-3">
+        <div className="flex min-w-0 flex-col justify-center gap-5 py-3">
           <div className="h-8 w-2/5 rounded bg-white/[0.08]" />
           <div className="h-4 w-1/4 rounded bg-white/[0.06]" />
-          <div className="flex gap-4">
-            {Array.from({ length: 4 }).map((_, index) => (
+          <div className="flex min-w-0 gap-2 overflow-hidden">
+            {Array.from({ length: 5 }).map((_, index) => (
               <div
                 key={index}
-                className="aspect-[2/3] w-20 rounded-xl bg-white/[0.07] sm:w-24"
-              />
+                className="w-[112px] shrink-0 sm:w-[124px] xl:w-[calc((100%-2rem)/5)]"
+              >
+                <div className="aspect-[2/3] rounded-xl bg-white/[0.07]" />
+                <div className="mt-2 h-4 w-4/5 rounded bg-white/[0.06]" />
+              </div>
             ))}
           </div>
         </div>
@@ -129,7 +132,7 @@ function CollectionRow({
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-col justify-between gap-7 p-5 sm:p-7 lg:p-8">
+        <div className="flex min-w-0 flex-col justify-between gap-7 p-5 sm:p-7 sm:pb-5 lg:p-8 lg:pb-5">
           <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
             <div>
               <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">
@@ -193,7 +196,7 @@ function CollectionRow({
             <div
               ref={movieRailRef}
               onScroll={updateRailControls}
-              className="-mx-2 mt-2 flex min-w-0 snap-x snap-mandatory items-start gap-2 overflow-x-auto px-2 py-3 [scrollbar-width:none] sm:snap-proximity [&::-webkit-scrollbar]:hidden"
+              className="-mx-2 mt-2 flex min-w-0 snap-x snap-mandatory items-start gap-2 overflow-x-auto px-2 pb-1 pt-3 [scrollbar-width:none] sm:snap-proximity [&::-webkit-scrollbar]:hidden"
             >
               {collection.movies.map((movie, index) => {
                 const previewItem = adaptTMDBToRecommendation({
@@ -212,7 +215,7 @@ function CollectionRow({
                 return (
                   <div
                     key={`${movie.tmdb_id}-${movie.id}`}
-                    className="w-[112px] shrink-0 snap-start sm:w-[124px]"
+                    className="w-[112px] shrink-0 snap-start sm:w-[124px] xl:w-[calc((100%-2rem)/5)]"
                   >
                     <FilmCard
                       item={previewItem}
