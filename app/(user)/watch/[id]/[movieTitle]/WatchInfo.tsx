@@ -12,7 +12,6 @@ import { omit } from "@/utils/ai-recommend/omit";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import RecommendModal from "@/components/RecommendModal";
-import WatchTogetherButton from "@/components/WatchTogetherButton";
 
 export default function WatchInfo({
   recommendation,
@@ -83,19 +82,6 @@ export default function WatchInfo({
           </h1>
 
           <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:flex-wrap">
-            <WatchTogetherButton
-              currentUserId={currentUserId}
-              movieTmdbId={recommendation.tmdb_id}
-              movieTitle={recommendation.title}
-              movieType={recommendation.type}
-              streamUrl={
-                Array.isArray(recommendation.stream_url)
-                  ? recommendation.stream_url[0]
-                  : recommendation.stream_url
-              }
-              posterUrl={recommendation.poster_url}
-            />
-
             <ToggleWatchlistButton
               currentUserId={currentUserId}
               initialInWatchlist={initialInWatchlist}

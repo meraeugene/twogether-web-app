@@ -3,7 +3,7 @@
 import { MdMovieFilter, MdStars } from "react-icons/md";
 import { RiFilmAiLine, RiMovieAiLine } from "react-icons/ri";
 import { FaUserFriends } from "react-icons/fa";
-import { LuMessageSquareHeart, LuPartyPopper } from "react-icons/lu";
+import { LuMessageSquareHeart } from "react-icons/lu";
 import { BiMoviePlay } from "react-icons/bi";
 import { AiOutlineFieldTime } from "react-icons/ai";
 
@@ -26,11 +26,6 @@ export const primaryNavItems = [
 ];
 
 export const moreNavItems = [
-  {
-    label: "Party",
-    href: "/watch-party",
-    icon: <LuPartyPopper className="text-lg" />,
-  },
   {
     label: "Chrono",
     href: "/chrono",

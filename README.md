@@ -1,6 +1,6 @@
 # Twogether
 
-Twogether is a social movie and TV app built with Next.js. It helps people discover what to watch, share recommendations, keep a watchlist, and jump into live watch parties with friends.
+Twogether is a social movie and TV app built with Next.js. It helps people discover what to watch, share recommendations, keep a watchlist, and connect with friends.
 
 ## Features
 
@@ -10,9 +10,7 @@ Twogether is a social movie and TV app built with Next.js. It helps people disco
 - Create and manage public or private recommendations.
 - Save titles to a personal watchlist.
 - Get AI-powered movie recommendations from a natural-language prompt.
-- Join live public watch parties or private rooms with invite links/codes.
-- Chat, sync presence, and view active watchers inside watch party rooms.
-- Manage friends, profiles, notifications, messages, and account settings.
+- Manage friends, profiles, messages, and account settings.
 - SEO-ready metadata, sitemap, robots config, and PWA manifest support.
 
 ## Tech Stack
@@ -99,7 +97,7 @@ Runs TypeScript validation without emitting files.
 
 ```text
 app/             App Router pages, layouts, route handlers, loading states
-actions/         Server actions for auth, recommendations, watch parties, friends
+actions/         Server actions for auth, recommendations, watchlists, friends
 components/      Shared UI components
 sections/        Homepage and large page sections
 utils/           Supabase, TMDB, AI, SEO, and adapter helpers
@@ -111,7 +109,7 @@ public/          Static images, icons, and manifest assets
 
 ## Main Routes
 
-- `/` - landing page with live watch parties and feature sections
+- `/` - landing page with recent watching and feature sections
 - `/browse` - browse hub
 - `/browse/movies` - trending movies
 - `/browse/tv` - trending TV shows
@@ -122,8 +120,6 @@ public/          Static images, icons, and manifest assets
 - `/search/collections/[query]` - collection search results
 - `/tmdb/watch/[type]/[id]/[slug]` - TMDB watch detail page
 - `/watch/[id]/[movieTitle]` - recommendation watch page
-- `/watch-party` - watch party lobby
-- `/watch-party/[roomId]` - watch party room
 - `/recos` - public recommendations
 - `/recommend` - create a recommendation
 - `/my-recommendations` - current user's recommendations
@@ -151,3 +147,7 @@ npm run build
 ```
 
 After deployment, update `NEXT_PUBLIC_SITE_URL` to the production domain so metadata, sitemap URLs, and canonical links resolve correctly.
+
+## Database cleanup
+
+The watch-party feature has been removed. Apply the SQL in `supabase/migrations/20261011000000_remove_watch_party.sql` through the Supabase SQL Editor to remove its four empty tables and associated table policies/indexes. This migration preserves unrelated notifications.

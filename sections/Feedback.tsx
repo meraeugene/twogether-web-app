@@ -102,7 +102,7 @@ const Feedback = () => {
 
           <div className="flex flex-col lg:items-end gap-6">
             <p className="text-neutral-400 font-light text-sm sm:text-base md:text-lg max-w-sm lg:text-right">
-              Hear from the community that’s changing how we watch together.
+              Hear from the community that’s sharing what they love to watch.
             </p>
 
             <div className="flex gap-2">

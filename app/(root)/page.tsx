@@ -10,7 +10,6 @@ import StreamingServices from "@/sections/StreamingServices";
 import { buildMetadata } from "@/app/seo";
 import ReviewBotPrompt from "@/components/ReviewBotPrompt";
 import ResumeWatching from "@/sections/ResumeWatching";
-import WatchingNow from "@/sections/WatchingNow";
 
 export const metadata: Metadata = buildMetadata({
   title: "Watch and Recommend Movies Socially",
@@ -24,7 +23,6 @@ export default function Home() {
     <main className="relative w-full min-h-screen  text-white bg-black">
       <Hero />
       <ResumeWatching />
-      <WatchingNow limit={4} />
       <StreamingServices />
       <Feedback />
       <Demo />

@@ -70,7 +70,6 @@ export async function updateSession(request: NextRequest) {
     "/messages",
     "/my-recommendations",
     "/ai-recommend",
-    "/watch-party",
     "/settings",
   ];
   if (

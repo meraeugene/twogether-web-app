@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -22,10 +21,6 @@ import { createClient } from "@/utils/supabase/client";
 import { ChevronDown, Compass, LayoutGrid } from "lucide-react";
 import { FaUserFriends } from "react-icons/fa";
 import AccountSettingsMenu from "@/components/AccountSettingsMenu";
-
-const NotificationBell = dynamic(() => import("./NotificationBell"), {
-  ssr: false,
-});
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 12 },
@@ -421,7 +416,6 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
               active={pathname === profileHref}
             />
             <AccountSettingsMenu compact />
-            <NotificationBell userId={user.id} />
             <div
               onClick={logout}
               className="group relative flex items-center justify-center w-[40px] h-[40px] rounded-[11px] text-[20px] text-white/40 hover:text-red-400 hover:bg-red-500/[0.12] transition-all duration-150 cursor-pointer"
@@ -454,7 +448,6 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
           <span className="text-red-500">Two</span>gether
         </Link>
         <div className="flex items-center gap-1">
-          {user?.id && <NotificationBell userId={user.id} />}
           <button
             onClick={() => setMenuOpen((p) => !p)}
             aria-label="Toggle menu"

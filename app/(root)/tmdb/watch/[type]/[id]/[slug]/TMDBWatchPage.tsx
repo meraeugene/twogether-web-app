@@ -16,7 +16,6 @@ import BackButton from "@/components/BackButton";
 import TMDBReviewForm from "./TMDBReviewForm";
 import TMDBMovieReviews from "./TMDBMovieReviews";
 import { AnimatePresence, motion } from "framer-motion";
-import WatchTogetherButton from "@/components/WatchTogetherButton";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import Link from "next/link";
 
@@ -144,19 +143,6 @@ export default function TMDBWatchPage({
 
               {currentUserId && (
                 <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row md:flex-wrap">
-                  <WatchTogetherButton
-                    currentUserId={currentUserId}
-                    movieTmdbId={recommendation.tmdb_id}
-                    movieTitle={recommendation.title}
-                    movieType={recommendation.type}
-                    streamUrl={
-                      Array.isArray(recommendation.stream_url)
-                        ? recommendation.stream_url[0]
-                        : recommendation.stream_url
-                    }
-                    posterUrl={recommendation.poster_url}
-                  />
-
                   <ToggleWatchlistButton
                     currentUserId={currentUserId}
                     initialInWatchlist={initialInWatchlist}
