@@ -29,7 +29,7 @@ export default function SearchClient({
   const [searchQuery, setSearchQuery] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  const hasArtistResults = Boolean(artist && artistMovies.length > 0);
+  const hasArtistResults = Boolean(artist);
 
   const biography = useMemo(() => {
     if (!artist?.biography) return "No biography available yet.";
@@ -172,6 +172,7 @@ export default function SearchClient({
               </span>
             </div>
 
+            {adaptedArtistMovies.length === 0 && <p className="mt-5 text-sm text-white/55">Movie credits are not available for this artist yet.</p>}
             <div className="mt-5 grid grid-cols-2 gap-4 sm:gap-6 lg:gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">
               {adaptedArtistMovies.map((item) => (
                 <div key={item.id} className="space-y-2">

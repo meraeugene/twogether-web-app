@@ -64,6 +64,8 @@ type ArtistFilmographySearchResponse = {
 
 export async function searchArtistFilmographyTMDB(
   query: string,
+  selectedArtistId?: number,
+  includeMovieDetails = selectedArtistId === undefined,
 ): Promise<ArtistFilmographySearchResponse> {
   const trimmed = query.trim();
   if (!trimmed) {
@@ -71,7 +73,7 @@ export async function searchArtistFilmographyTMDB(
   }
 
   const normalize = (value: string) =>
-    value.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ").trim();
+    value.normalize("NFKD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/[^\p{L}\p{N}\s]/gu, "").replace(/\s+/g, " ").trim();
   const normalizedQuery = normalize(trimmed);
   const queryTokens = normalizedQuery.split(" ").filter(Boolean);
 
@@ -79,16 +81,17 @@ export async function searchArtistFilmographyTMDB(
     trimmed,
   )}&include_adult=false&language=en-US&page=1`;
 
-  const searchRes = await fetch(personSearchUrl, {
+  // A selected autocomplete artist already has a TMDB ID; skip the name lookup.
+  const searchRes = selectedArtistId ? null : await fetch(personSearchUrl, {
     cache: "force-cache",
     next: { revalidate: 86400 },
   });
 
-  if (!searchRes.ok) {
+  if (searchRes && !searchRes.ok) {
     return { artist: null, movies: [] };
   }
 
-  const searchData = (await searchRes.json()) as {
+  const searchData = (searchRes ? await searchRes.json() : { results: [] }) as {
     results?: PersonSearchResult[];
   };
 
@@ -116,13 +119,13 @@ export async function searchArtistFilmographyTMDB(
     })
     .map(({ person }) => person);
 
-  const artistCandidate = people[0];
+  const artistCandidate = selectedArtistId ? { id: selectedArtistId, name: trimmed } : people[0];
 
   if (!artistCandidate) {
     return { artist: null, movies: [] };
   }
 
-  if (getNameScore(artistCandidate.name) < 50) {
+  if (!selectedArtistId && getNameScore(artistCandidate.name) < 50) {
     return { artist: null, movies: [] };
   }
 
@@ -192,6 +195,10 @@ export async function searchArtistFilmographyTMDB(
       return yearB - yearA;
     })
     .slice(0, 24);
+
+  // The credits already contain posters and synopses. Card previews fetch their
+  // own trailer on demand instead of making the profile wait for 24 detail calls.
+  if (!includeMovieDetails) return { artist, movies: rankedMovies };
 
   const movies = await Promise.all(
     rankedMovies.map(async (movie) => {

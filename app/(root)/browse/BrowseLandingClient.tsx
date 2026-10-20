@@ -1,82 +1,63 @@
 "use client";
 
-import useSWR from "swr";
-
-import { TMDBEnrichedResult } from "@/types/tmdb";
-import { fetcher } from "@/utils/swr/fetcher";
-import { BrowseCategory } from "./BrowseCategory";
-import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { browsePlaceholders } from "@/constants/placeholders";
+import useSWR from "swr";
+import type { TMDBBrowseCategoryResponse, TMDBBrowseFeaturedResponse } from "@/types/tmdb";
+import { fetcher } from "@/utils/swr/fetcher";
+import { BROWSE_CATEGORY_SHELVES, browseCategoryHref } from "@/constants/browseShelves";
+import BrowseHero from "./BrowseHero";
+import BrowseMovieShelf from "./BrowseMovieShelf";
+import styles from "./browse.module.css";
+
+const categories = [
+  { id: "featured", label: "For You", href: "/browse/movies" },
+  { id: "movies", label: "Movies", href: "/browse/movies" },
+  { id: "tv", label: "TV Shows", href: "/browse/tv" },
+  { id: "anime", label: "Anime", href: "/browse/anime" },
+  { id: "kdramas", label: "K-Dramas", href: "/browse/kdrama" },
+] as const;
+type Category = typeof categories[number]["id"];
 
 export default function BrowseLandingClient() {
-  const { data, error, isLoading } = useSWR<{
-    movies: TMDBEnrichedResult[];
-    anime: TMDBEnrichedResult[];
-    tv: TMDBEnrichedResult[];
-    kdramas: TMDBEnrichedResult[];
-  }>("/api/tmdb/trending", fetcher, {
-    revalidateOnFocus: false,
-    dedupingInterval: 60000,
+  const [category, setCategory] = useState<Category>("featured");
+  const featured = useSWR<TMDBBrowseFeaturedResponse>(
+    "/api/tmdb/featured?v=2", fetcher, { revalidateOnFocus: false, dedupingInterval: 60000 },
+  );
+  const trending = useSWR<TMDBBrowseCategoryResponse>(category === "featured" ? null : `/api/tmdb/browse-shelves?category=${category}`, fetcher, {
+    revalidateOnFocus: false, dedupingInterval: 60000,
   });
-
-  const movies = data?.movies ?? [];
-  const anime = data?.anime ?? [];
-  const tv = data?.tv ?? [];
-  const kdrama = data?.kdramas ?? [];
-
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSubmit = (e?: React.FormEvent, submittedValue?: string) => {
-    e?.preventDefault();
-    const trimmed = (submittedValue ?? searchQuery).trim();
-    if (trimmed) {
-      router.push(`/search/${encodeURIComponent(trimmed)}`);
-    }
-  };
+  const activeCategory = categories.find((item) => item.id === category)!;
+  const items = category === "featured" ? featured.data?.items : trending.data?.items;
+  const isLoading = category === "featured" ? featured.isLoading : trending.isLoading;
+  const error = category === "featured" ? featured.error : trending.error;
+  const genreCategory = category === "featured" ? "movies" : category;
+  const shelves = category === "featured" ? featured.data?.shelves : trending.data?.shelves;
+  const retry = () => void (category === "featured" ? featured.mutate() : trending.mutate());
 
   return (
-    <main className="min-h-screen relative bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-16 2xl:px-26 text-white">
-      <div className="absolute inset-0 bg-linear-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
-
-      <div className="max-w-2xl mx-auto w-full mb-8">
-        <PlaceholdersAndVanishInput
-          placeholders={browsePlaceholders}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onSubmit={handleSubmit}
-        />
+    <main className={styles.page}>
+      <h1 className="sr-only">Browse movies and shows</h1>
+      <section className={styles.hero} aria-label="Find your next watch">
+        <BrowseHero movies={featured.data?.heroes} />
+      </section>
+      <div className={styles.content}>
+        <nav className={styles.categories} aria-label="Browse categories">
+          {categories.map((item) => (
+            <button key={item.id} type="button" aria-pressed={category === item.id}
+              aria-controls="browse-movies" onClick={() => setCategory(item.id)}>{item.label}</button>
+          ))}
+        </nav>
+        <BrowseMovieShelf id="browse-movies" title={category === "featured" ? "Worth a watch" : `Trending ${activeCategory.label}`}
+          href={activeCategory.href} items={items} isLoading={isLoading} error={Boolean(error)} priority
+          onRetry={retry} />
+        {BROWSE_CATEGORY_SHELVES[genreCategory].map((config) => {
+          const shelf = shelves?.find((item) => item.id === config.id);
+          return <BrowseMovieShelf key={`${category}-${config.id}`} id={`genre-${config.id}`} title={config.title}
+            href={`${browseCategoryHref(genreCategory)}?genre=${encodeURIComponent(config.genre)}`} items={shelf?.items}
+            isLoading={isLoading} error={Boolean(error) || shelf?.unavailable}
+            onRetry={retry} />;
+        })}
       </div>
-
-      <BrowseCategory
-        title="Movies"
-        href="/browse/movies"
-        items={movies}
-        error={error}
-        isLoading={isLoading}
-      />
-      <BrowseCategory
-        title="K-Dramas"
-        href="/browse/kdrama"
-        items={kdrama}
-        error={error}
-        isLoading={isLoading}
-      />
-      <BrowseCategory
-        title="Anime"
-        href="/browse/anime"
-        items={anime}
-        error={error}
-        isLoading={isLoading}
-      />
-      <BrowseCategory
-        title="TV/Shows"
-        href="/browse/tv"
-        items={tv}
-        error={error}
-        isLoading={isLoading}
-      />
     </main>
   );
 }

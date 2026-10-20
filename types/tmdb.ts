@@ -41,3 +41,28 @@ export type TMDBEnrichedResult = TMDBRawResult & {
 export type TMDBResponse = {
   data: TMDBEnrichedResult[];
 };
+
+export type TMDBFeaturedResult = TMDBEnrichedResult & {
+  backdrop_url: string | null;
+  logo_url: string | null;
+};
+
+export type TMDBBrowseShelf = {
+  id: string;
+  title: string;
+  genre: string;
+  items: TMDBEnrichedResult[];
+  unavailable?: boolean;
+};
+
+export type TMDBBrowseFeaturedResponse = {
+  hero: TMDBFeaturedResult | null;
+  heroes: TMDBFeaturedResult[];
+  items: TMDBEnrichedResult[];
+  shelves: TMDBBrowseShelf[];
+};
+
+export type TMDBBrowseCategoryResponse = {
+  items: TMDBEnrichedResult[];
+  shelves: TMDBBrowseShelf[];
+};

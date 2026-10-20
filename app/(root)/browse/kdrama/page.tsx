@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/app/seo";
 import BrowseKDramaClient from "./BrowseKDramaClient";
+import { BROWSE_CATEGORY_SHELVES } from "@/constants/browseShelves";
 
 export const metadata: Metadata = buildMetadata({
   title: "Browse Trending K-Dramas",
@@ -9,6 +10,8 @@ export const metadata: Metadata = buildMetadata({
   path: "/browse/kdrama",
 });
 
-export default function BrowseKDramaPage() {
-  return <BrowseKDramaClient />;
+export default async function BrowseKDramaPage({ searchParams }: { searchParams: Promise<{ genre?: string | string[] }> }) {
+  const params = await searchParams;
+  const genre = BROWSE_CATEGORY_SHELVES.kdramas.find((item) => item.genre === params.genre)?.genre;
+  return <BrowseKDramaClient genre={genre} />;
 }

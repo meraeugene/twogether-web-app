@@ -7,7 +7,7 @@ import { browsePlaceholders } from "@/constants/placeholders";
 import BackButton from "@/components/BackButton";
 import TrendingKDramaList from "./TrendingKDramaList";
 
-export default function BrowseKDramaClient() {
+export default function BrowseKDramaClient({ genre }: { genre?: string }) {
   const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,8 +21,8 @@ export default function BrowseKDramaClient() {
   };
 
   const trendingList = useMemo(() => {
-    return <TrendingKDramaList />;
-  }, []);
+    return <TrendingKDramaList genre={genre} />;
+  }, [genre]);
 
   return (
     <main className="min-h-screen relative bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-16 2xl:px-26 text-white font-[family-name:var(--font-geist-sans)]">
@@ -39,7 +39,7 @@ export default function BrowseKDramaClient() {
         </div>
 
         <h1 className="font-semibold text-center lg:text-left text-2xl md:text-3xl mb-10 mt-6 ">
-          Trending K-Dramas
+          {genre ? `${genre} K-Dramas` : "Trending K-Dramas"}
         </h1>
 
         {trendingList}

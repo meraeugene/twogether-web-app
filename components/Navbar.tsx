@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,6 +22,10 @@ import { createClient } from "@/utils/supabase/client";
 import { ChevronDown, Compass, LayoutGrid } from "lucide-react";
 import { FaUserFriends } from "react-icons/fa";
 import AccountSettingsMenu from "@/components/AccountSettingsMenu";
+import { FiSearch } from "react-icons/fi";
+
+const SearchOverlay = dynamic(() => import("@/components/SearchOverlay"), { ssr: false });
+const preloadSearch = () => { void import("@/components/SearchOverlay"); };
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 12 },
@@ -245,6 +250,10 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
   const [socialsOpen, setSocialsOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [hide, setHide] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [isMac, setIsMac] = useState(false);
+  const searchShortcut = isMac ? "⌘ K" : "Ctrl K";
+  const closeSearch = useCallback(() => setSearchOpen(false), []);
   const lastY = useRef(0);
   const recosRef = useRef<HTMLDivElement | null>(null);
   const socialsRef = useRef<HTMLDivElement | null>(null);
@@ -265,6 +274,26 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
   const close = () => setMenuOpen(false);
   const profileHref = user ? `/profile/${user.username}/${user.id}` : "#";
   const hideOnboarding = pathname.startsWith("/onboarding");
+
+  useEffect(() => {
+    setIsMac(/Mac|iPhone|iPad|iPod/.test(navigator.userAgent));
+    if (hideOnboarding) return;
+    const openSearchWithKeyboard = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || event.isComposing || event.repeat || event.altKey || event.shiftKey
+        || !(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "k") return;
+      event.preventDefault();
+      if (document.querySelector('dialog[open], [aria-modal="true"]')) return;
+      setMenuOpen(false);
+      setRecosOpen(false);
+      setSocialsOpen(false);
+      setMoreOpen(false);
+      setHide(false);
+      preloadSearch();
+      setSearchOpen(true);
+    };
+    window.addEventListener("keydown", openSearchWithKeyboard);
+    return () => window.removeEventListener("keydown", openSearchWithKeyboard);
+  }, [hideOnboarding]);
 
   const handleLogin = async () => {
     const supabase = createClient();
@@ -314,6 +343,7 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
     setRecosOpen(false);
     setSocialsOpen(false);
     setMoreOpen(false);
+    setSearchOpen(false);
   }, [pathname]);
 
   if (hideOnboarding) {
@@ -356,6 +386,16 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
             />
           ))
         )}
+
+        <button type="button" aria-label="Open search" aria-haspopup="dialog" aria-expanded={searchOpen}
+          aria-keyshortcuts="Control+K Meta+K"
+          onPointerEnter={preloadSearch} onFocus={preloadSearch}
+          onClick={() => setSearchOpen(true)}
+          className="group relative flex h-[40px] shrink-0 cursor-pointer items-center justify-center gap-2 rounded-[11px] px-3 text-white/55 transition-colors hover:bg-white/[0.08] hover:text-white focus-visible:outline-2 focus-visible:outline-white/70">
+          <FiSearch className="h-[19px] w-[19px]" aria-hidden="true" />
+          <kbd aria-hidden="true" className="rounded-md border border-white/15 bg-white/5 px-1.5 py-0.5 font-sans text-[10px] font-medium leading-4 whitespace-nowrap text-white/50">{searchShortcut}</kbd>
+          <Tip label={`Search (${searchShortcut})`} />
+        </button>
 
         {isAuthLoading ? null : user ? (
           <>
@@ -448,6 +488,14 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
           <span className="text-red-500">Two</span>gether
         </Link>
         <div className="flex items-center gap-1">
+          <button type="button" aria-label="Open search" aria-haspopup="dialog" aria-expanded={searchOpen}
+            aria-keyshortcuts="Control+K Meta+K"
+            onPointerEnter={preloadSearch} onFocus={preloadSearch}
+            onClick={() => { close(); setSearchOpen(true); }}
+            className="flex h-9 min-w-9 cursor-pointer items-center justify-center gap-2 rounded-full px-2 text-white/75 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-white/70">
+            <FiSearch className="h-5 w-5" aria-hidden="true" />
+            <kbd aria-hidden="true" className="hidden rounded-md border border-white/15 bg-white/5 px-1.5 py-0.5 font-sans text-[10px] font-medium leading-4 whitespace-nowrap text-white/50 sm:inline-block">{searchShortcut}</kbd>
+          </button>
           <button
             onClick={() => setMenuOpen((p) => !p)}
             aria-label="Toggle menu"
@@ -590,6 +638,7 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
           </motion.div>
         )}
       </AnimatePresence>
+      {searchOpen && <SearchOverlay onClose={closeSearch} />}
     </motion.div>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/app/seo";
 import BrowseAnimeClient from "./BrowseAnimeClient";
+import { BROWSE_CATEGORY_SHELVES } from "@/constants/browseShelves";
 
 export const metadata: Metadata = buildMetadata({
   title: "Browse Trending Anime",
@@ -9,6 +10,8 @@ export const metadata: Metadata = buildMetadata({
   path: "/browse/anime",
 });
 
-export default function BrowseAnimePage() {
-  return <BrowseAnimeClient />;
+export default async function BrowseAnimePage({ searchParams }: { searchParams: Promise<{ genre?: string | string[] }> }) {
+  const params = await searchParams;
+  const genre = BROWSE_CATEGORY_SHELVES.anime.find((item) => item.genre === params.genre)?.genre;
+  return <BrowseAnimeClient genre={genre} />;
 }

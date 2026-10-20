@@ -7,7 +7,7 @@ import { browsePlaceholders } from "@/constants/placeholders";
 import TrendingTMDBTVShowsList from "./TrendingTMDBTVShowsList";
 import BackButton from "@/components/BackButton";
 
-export default function BrowseTVShowsClient() {
+export default function BrowseTVShowsClient({ genre }: { genre?: string }) {
   const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,8 +21,8 @@ export default function BrowseTVShowsClient() {
   };
 
   const trendingList = useMemo(() => {
-    return <TrendingTMDBTVShowsList />;
-  }, []);
+    return <TrendingTMDBTVShowsList genre={genre} />;
+  }, [genre]);
 
   return (
     <main className="min-h-screen relative bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-16 2xl:px-26 text-white font-[family-name:var(--font-geist-sans)]">
@@ -40,7 +40,7 @@ export default function BrowseTVShowsClient() {
         </div>
 
         <h1 className="font-semibold text-center lg:text-left text-2xl md:text-3xl mb-10 mt-6 ">
-          Trending TV Shows
+          {genre ? `${genre} TV Shows` : "Trending TV Shows"}
         </h1>
 
         {trendingList}

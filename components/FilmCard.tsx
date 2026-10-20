@@ -1,7 +1,8 @@
 ﻿"use client";
 
-import React, { useState, useTransition, useEffect } from "react";
-import Image from "next/image";
+/* eslint-disable @next/next/no-img-element -- Card images intentionally bypass Vercel image optimization. */
+
+import React, { useState, useTransition, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
@@ -22,6 +23,7 @@ import { FaLock } from "react-icons/fa";
 import Link from "next/link";
 import { VisualHeartRating } from "./VisualHeartRating";
 import { toast } from "sonner";
+import { TRAILER_PREVIEW_OPEN_EVENT } from "@/constants/trailerPreview";
 
 function FilmCard({
   item,
@@ -32,6 +34,7 @@ function FilmCard({
   compact = false,
   orderNumber,
   priority = false,
+  renderTrigger,
 }: {
   item: Recommendation;
   isDeleteRecommendation?: boolean;
@@ -41,6 +44,7 @@ function FilmCard({
   compact?: boolean;
   orderNumber?: number;
   priority?: boolean;
+  renderTrigger?: (openPreview: () => void) => React.ReactNode;
 }) {
   const [isPending, startTransition] = useTransition();
   const [isVisible, setIsVisible] = useState(true);
@@ -53,33 +57,39 @@ function FilmCard({
   const [previewTrailerKey, setPreviewTrailerKey] = useState(
     item.trailer_key ?? null,
   );
+  const [previewDetails, setPreviewDetails] = useState<Recommendation | null>(null);
+  const previewItem = previewDetails ?? item;
+  const closePreviewButton = useRef<HTMLButtonElement>(null);
   const router = useRouter();
 
   useEffect(() => {
     if (!cinemaOpen) return;
 
+    const trigger = document.activeElement;
+    closePreviewButton.current?.focus();
+    window.dispatchEvent(new Event(TRAILER_PREVIEW_OPEN_EVENT));
     const fn = (e: KeyboardEvent) => {
       if (e.key === "Escape") setCinemaOpen(false);
     };
     window.addEventListener("keydown", fn);
-    return () => window.removeEventListener("keydown", fn);
+    return () => {
+      window.removeEventListener("keydown", fn);
+      if (trigger instanceof HTMLElement && trigger.isConnected) trigger.focus();
+    };
   }, [cinemaOpen]);
 
   useEffect(() => {
-    if (cinemaOpen) {
-      const scrollBarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
-
-      document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = `${scrollBarWidth}px`;
-    } else {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
-    }
+    if (!cinemaOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    const previousPadding = document.body.style.paddingRight;
+    const scrollBarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = "hidden";
+    document.body.style.paddingRight = `${scrollBarWidth}px`;
 
     return () => {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
+      document.body.style.overflow = previousOverflow;
+      document.body.style.paddingRight = previousPadding;
     };
   }, [cinemaOpen]);
 
@@ -120,8 +130,9 @@ function FilmCard({
         );
         if (!response.ok) return;
         const payload = (await response.json()) as {
-          recommendation?: { trailer_key?: string | null };
+          recommendation?: Recommendation;
         };
+        if (payload.recommendation) setPreviewDetails(payload.recommendation);
         setPreviewTrailerKey(payload.recommendation?.trailer_key ?? null);
       } catch {
         // The modal already has a poster fallback when no trailer is available.
@@ -187,13 +198,13 @@ function FilmCard({
   const trailerUrl = previewTrailerKey
     ? `https://www.youtube.com/embed/${previewTrailerKey}?autoplay=1&mute=0&controls=0&loop=1&playlist=${previewTrailerKey}&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&vq=hd1080`
     : null;
-  const tvMetaLabel = `${item.episodes || 1}EPS`;
+  const tvMetaLabel = previewItem.episodes ? `${previewItem.episodes}EPS` : "TV Series";
   const runtimeLabel =
-    item.type === "movie"
-      ? item.duration
-        ? item.duration >= 60
-          ? `${Math.floor(item.duration / 60)}h ${item.duration % 60}m`
-          : `${item.duration}m`
+    previewItem.type === "movie"
+      ? previewItem.duration
+        ? previewItem.duration >= 60
+          ? `${Math.floor(previewItem.duration / 60)}h ${previewItem.duration % 60}m`
+          : `${previewItem.duration}m`
         : null
       : tvMetaLabel;
 
@@ -208,6 +219,10 @@ function FilmCard({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="fixed inset-0 z-9999 flex flex-col overflow-hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${item.title} trailer overview`}
+              data-trailer-preview="true"
               style={{
                 background: "#06030a",
               }}
@@ -223,16 +238,16 @@ function FilmCard({
                         src={`${trailerUrl}&controls=0&modestbranding=1&rel=0`}
                         className="w-full h-[120%] -translate-y-[8%] pointer-events-none scale-[1.1]"
                         allow="autoplay; encrypted-media; fullscreen"
-                        title=""
+                        title={`${item.title} trailer`}
                       />
                     </div>
                   </div>
                 ) : (
-                  <Image
-                    src={item.poster_url || ""}
+                  <img
+                    src={item.poster_url || undefined}
                     alt={item.title}
-                    fill
-                    className="object-cover brightness-50"
+                    decoding="async"
+                    className="absolute inset-0 h-full w-full object-cover brightness-50"
                   />
                 )}
 
@@ -302,6 +317,9 @@ function FilmCard({
                 {/* Close Button (Modern Minimalist) */}
 
                 <button
+                  ref={closePreviewButton}
+                  type="button"
+                  aria-label="Close trailer overview"
                   onClick={() => setCinemaOpen(false)}
                   className="absolute cursor-pointer top-4 right-4 md:top-6 md:right-8 z-50 flex items-center gap-3 group"
                 >
@@ -350,7 +368,7 @@ function FilmCard({
                         <div className="flex items-center gap-2">
                           <Calendar size={10} className="text-white/60" />
                           <span className="text-[10px] sm:text-[14px] font-mono text-white/60">
-                            {item.year}
+                            {previewItem.year}
                           </span>
                         </div>
                       </div>
@@ -366,7 +384,7 @@ function FilmCard({
                       <div className=" h-px w-3 bg-red-600/30" />
 
                       <div className="flex flex-wrap justify-center gap-3">
-                        {item.genres.slice(0, 1).map((g) => (
+                        {previewItem.genres.slice(0, 1).map((g) => (
                           <span
                             key={g}
                             className="text-[8px] sm:text-[11px] font-black text-red-600 uppercase tracking-[0.3em]
@@ -388,7 +406,7 @@ function FilmCard({
                       <div className=" h-[1px] w-6 bg-red-600/30" />
 
                       <div className="flex flex-wrap justify-center gap-3">
-                        {item.genres.slice(0, 3).map((g) => (
+                        {previewItem.genres.slice(0, 3).map((g) => (
                           <span
                             key={g}
                             className="text-[8px] sm:text-[11px] font-black text-red-600 uppercase tracking-[0.3em]
@@ -432,7 +450,7 @@ function FilmCard({
                       className="text-[12px] sm:text-[15px] leading-relaxed text-center
             text-white/60 max-w-sm md:max-w-lg mx-auto  line-clamp-2"
                     >
-                      {item.synopsis}
+                      {previewItem.synopsis}
                     </motion.p>
                   </div>
 
@@ -494,6 +512,10 @@ function FilmCard({
 
   if (!isVisible) return null;
 
+  if (renderTrigger) {
+    return <>{renderTrigger(() => { void openCinema(); })}{cinemaOverlay}</>;
+  }
+
   if (compact) {
     return (
       <>
@@ -505,13 +527,13 @@ function FilmCard({
         >
           <div className="relative aspect-[2/3] overflow-hidden rounded-xl border border-white/10 bg-white/[0.05] transition duration-200 group-hover/movie:border-white/40 group-hover/movie:shadow-[0_12px_35px_rgba(0,0,0,.45)]">
             {item.poster_url && (
-              <Image
+              <img
                 src={item.poster_url}
                 alt={item.title}
-                fill
-                priority={priority}
-                sizes="(min-width: 1280px) 12vw, (min-width: 640px) 124px, 112px"
-                className="object-cover transition duration-300 group-hover/movie:scale-[1.04] group-hover/movie:opacity-65"
+                loading={priority ? "eager" : "lazy"}
+                fetchPriority={priority ? "high" : "auto"}
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover/movie:scale-[1.04] group-hover/movie:opacity-65"
               />
             )}
             {orderNumber !== undefined && (
@@ -549,12 +571,13 @@ function FilmCard({
           {isVisible && (
             <motion.div className="w-full">
               <div className="relative aspect-2/3 w-full overflow-hidden rounded-md bg-[#141414] shadow-md cursor-pointer">
-                <Image
+                <img
                   src={item.poster_url || "/placeholder.jpg"}
                   alt={item.title}
-                  fill
-                  className="object-cover transition-all duration-300 group-hover:opacity-50 group-hover:scale-105"
-                  sizes="(max-width: 768px) 50vw, 20vw"
+                  loading={priority ? "eager" : "lazy"}
+                  fetchPriority={priority ? "high" : "auto"}
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover transition-all duration-300 group-hover:opacity-50 group-hover:scale-105"
                 />
 
                 <div
@@ -598,7 +621,7 @@ function FilmCard({
                         {item.episodes || 1}EPS
                       </span>
                     ) : (
-                      item.duration !== 0 && (
+                      typeof item.duration === "number" && item.duration > 0 && (
                         <span className="text-white/50 font-medium">
                           {item.duration}m
                         </span>
@@ -742,12 +765,13 @@ function FilmCard({
             >
               {item.recommended_by.avatar_url && (
                 <div className="w-6 h-6 rounded-full overflow-hidden">
-                  <Image
+                  <img
                     src={item.recommended_by.avatar_url}
                     alt={item.recommended_by.username}
                     width={24}
-                    unoptimized
                     height={24}
+                    loading="lazy"
+                    decoding="async"
                     className="rounded-full object-cover"
                   />
                 </div>

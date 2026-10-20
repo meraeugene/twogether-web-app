@@ -3,19 +3,24 @@
 import useSWRInfinite from "swr/infinite";
 import { useEffect, useRef, useMemo } from "react";
 import FilmCard from "@/components/FilmCard";
-import { TMDBEnrichedResult } from "@/types/tmdb";
+import { TMDBEnrichedResult, TMDBBrowseCategoryResponse } from "@/types/tmdb";
+import { fetcher as fetchJSON } from "@/utils/swr/fetcher";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (url: string) => {
+  const data = await fetchJSON<TMDBEnrichedResult[] | TMDBBrowseCategoryResponse>(url);
+  return Array.isArray(data) ? data : data.items;
+};
 
 const INITIAL_COUNT = 12;
 const LOAD_MORE_COUNT = 8;
 
-export default function TrendingTMDBTVShowsList() {
+export default function TrendingTMDBTVShowsList({ genre }: { genre?: string }) {
   const loaderRef = useRef<HTMLDivElement>(null);
 
-  const getKey = (pageIndex: number) =>
-    `/api/tmdb/trending/tv?page=${pageIndex + 1}`;
+  const getKey = (pageIndex: number, previous?: TMDBEnrichedResult[]) => previous?.length === 0 ? null : genre
+    ? `/api/tmdb/browse-shelves?category=tv&genre=${encodeURIComponent(genre)}&page=${pageIndex + 1}`
+    : `/api/tmdb/trending/tv?page=${pageIndex + 1}`;
 
   const { data, size, setSize, isValidating } = useSWRInfinite<
     TMDBEnrichedResult[]

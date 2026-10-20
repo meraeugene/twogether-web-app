@@ -22,15 +22,21 @@ export async function generateMetadata({
 
 export default async function SearchPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ query: string }>;
+  searchParams: Promise<{ artist?: string; kind?: string }>;
 }) {
   const { query } = await params;
+  const filters = await searchParams;
+  const selectedArtistId = filters.artist && /^\d+$/.test(filters.artist) && Number.isSafeInteger(Number(filters.artist)) && Number(filters.artist) > 0
+    ? Number(filters.artist) : undefined;
+  const artistOnly = Boolean(selectedArtistId) || filters.kind === "artists";
   const decodedQuery = decodeURIComponent(query);
 
   const [results, artistSearch] = await Promise.all([
-    searchTMDB(decodedQuery),
-    searchArtistFilmographyTMDB(decodedQuery),
+    artistOnly ? Promise.resolve([]) : searchTMDB(decodedQuery),
+    filters.kind === "titles" && !selectedArtistId ? Promise.resolve({ artist: null, movies: [] }) : searchArtistFilmographyTMDB(decodedQuery, selectedArtistId, !artistOnly),
   ]);
 
   const adaptedResults = results.map((item) => adaptTMDBToRecommendation(item));
@@ -58,9 +64,7 @@ export default async function SearchPage({
 
   const shouldShowArtist =
     Boolean(artistSearch.artist) &&
-    artistSearch.movies.length > 0 &&
-    isStrongArtistMatch &&
-    !hasExactMovieOrTvMatch;
+    (artistOnly || (artistSearch.movies.length > 0 && isStrongArtistMatch && !hasExactMovieOrTvMatch));
 
   return (
     <main className="min-h-screen bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white relative font-(family-name:--font-geist-sans)">
