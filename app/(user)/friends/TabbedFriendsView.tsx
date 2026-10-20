@@ -67,7 +67,7 @@ export default function FriendsPage({
     }`;
 
   return (
-    <div className="page-gutter min-h-screen font-[family-name:var(--font-geist-sans)] bg-black text-white px-7  pt-28 pb-16 xl:pt-32 relative">
+    <div className="page-gutter page-listing min-h-screen font-[family-name:var(--font-geist-sans)] bg-black text-white px-7  pt-28 pb-16 relative">
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
 
       {/* Hero Banner */}
@@ -85,7 +85,7 @@ export default function FriendsPage({
       </motion.div>
 
       {/* Tabs */}
-      <div className="flex justify-center border-b border-white/10 sticky top-0 z-20 bg-black/90">
+      <div className="mt-6 flex justify-center border-b border-white/10 sticky top-24 z-20 bg-black/90 xl:top-0">
         {tabs.map((tab) => (
           <button
             key={tab}
@@ -108,7 +108,7 @@ export default function FriendsPage({
             transition={{ duration: 0.3 }}
           >
             {activeTab === "Friends" && (
-              <div className="page-align-start max-w-4xl mx-auto">
+              <div className="w-full">
                 <AddFriendSearch currentUserId={currentUserId} />
 
                 {isLoadingFriends ? (
@@ -120,7 +120,7 @@ export default function FriendsPage({
                     No friends yet. Start adding some!
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     {friends?.map((user) => (
                       <FriendCard
                         key={user.id}
@@ -139,7 +139,7 @@ export default function FriendsPage({
             )}
 
             {activeTab === "Requests" && (
-              <div className="page-align-start max-w-4xl mx-auto">
+              <div className="w-full">
                 {isLoadingRequests ? (
                   <div className="flex justify-center ">
                     <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -149,7 +149,7 @@ export default function FriendsPage({
                     No incoming friend requests.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2  gap-6">
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     {requests?.map((user) => (
                       <FriendCard
                         key={user.id}
@@ -168,7 +168,7 @@ export default function FriendsPage({
             )}
 
             {activeTab === "Sent" && (
-              <div className="page-align-start max-w-4xl mx-auto">
+              <div className="w-full">
                 {isLoadingSent ? (
                   <div className="flex justify-center ">
                     <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -178,7 +178,7 @@ export default function FriendsPage({
                     No sent friend requests.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2  gap-6">
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     {sent?.map((user) => (
                       <FriendCard
                         key={user.id}

@@ -14,11 +14,11 @@ export default async function MyRecommendationsPage() {
 
   if (hasNoRecs) {
     return (
-      <main className="page-gutter min-h-screen bg-black px-7  pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)] xl:pt-32">
-        <h1 className="text-2xl font-bold mb-4">
-          Your Movie/Show Recommendations are Empty
+      <main className="page-gutter page-listing min-h-screen bg-black px-7  pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)]">
+        <h1 className="mb-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+          Your Recommendations
         </h1>
-        <p className="text-gray-400 mb-6 font-[family-name:var(--font-geist-mono)]">
+        <p className="mb-8 text-sm leading-6 text-white/55">
           You haven&apos;t recommended anything yet. Start{" "}
           <Link
             href="/browse"
@@ -33,20 +33,21 @@ export default async function MyRecommendationsPage() {
   }
 
   return (
-    <main className="page-gutter min-h-screen relative bg-black px-7 pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)] xl:pt-32">
+    <main className="page-gutter page-listing min-h-screen relative bg-black px-7 pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)]">
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
 
-      <h1 className="text-2xl font-bold mb-2">Your Recommendations</h1>
-      <p className="text-gray-600 mb-8 font-[family-name:var(--font-geist-mono)]">
+      <h1 className="mb-3 text-2xl font-semibold tracking-tight sm:text-3xl">Your Recommendations</h1>
+      <p className="mb-8 text-sm leading-6 text-white/55">
         Here are the movies and shows you&apos;ve recommended.
       </p>
 
       {publicRecs.length > 0 && (
         <Section title="Public">
-          {publicRecs.map((item) => (
+          {publicRecs.map((item, index) => (
             <FilmCard
               key={item.recommendation_id}
               item={item}
+              priority={index < 6}
               userId={userId}
               isDeleteRecommendation
             />
@@ -56,10 +57,11 @@ export default async function MyRecommendationsPage() {
 
       {privateRecs.length > 0 && (
         <Section title="Private">
-          {privateRecs.map((item) => (
+          {privateRecs.map((item, index) => (
             <FilmCard
               key={item.recommendation_id}
               item={item}
+              priority={publicRecs.length === 0 && index < 6}
               userId={userId}
               isDeleteRecommendation
             />

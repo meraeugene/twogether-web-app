@@ -6,6 +6,7 @@ import MessageThreadView from "./MessageThreadView";
 import OnlineFriendsList from "./OnlineFriendsList";
 import MessageRequestList from "./MessageRequestList";
 import { HiArrowLeft } from "react-icons/hi";
+import { MessagesSquare } from "lucide-react";
 
 export default function MessagesClient({
   currentUserId,
@@ -29,7 +30,7 @@ export default function MessagesClient({
   >(undefined);
 
   return (
-    <div className="flex flex-col  lg:grid lg:grid-cols-[400px_1fr]  rounded-xl border border-white/10">
+    <div className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-white/10 lg:grid lg:min-h-[520px] lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
       {/* Left Panel - Thread List */}
       <div
         className={`bg-black/20 lg:border-r border-r-0  border-white/10 ${
@@ -182,7 +183,16 @@ export default function MessagesClient({
       </div>
 
       {/* Right Panel - Thread View */}
-      <div className="bg-black/10 relative">
+      <div className="relative min-w-0 bg-black/10">
+        {!selectedThreadId && (
+          <div className="hidden h-full min-h-[360px] flex-col items-center justify-center gap-4 px-6 py-12 text-center lg:flex">
+            <MessagesSquare className="h-9 w-9 text-white/25" strokeWidth={1.5} aria-hidden="true" />
+            <div>
+              <h2 className="text-base font-medium text-white/80">Choose a conversation</h2>
+              <p className="mt-2 text-sm text-white/45">Select a chat to read and send messages.</p>
+            </div>
+          </div>
+        )}
         {selectedThreadId && selectedUserId && (
           <>
             {/* Mobile Back Button */}

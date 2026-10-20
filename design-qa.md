@@ -2,6 +2,13 @@
 
 final result: blocked
 
+## Account-page layout and sign-in update
+
+- Watchlist, Recos, My Recos, Friends, Chats, and both profile routes now use the shared 32px desktop top inset, including empty states. Desktop left and right page gutters are both 32px. Mobile header clearance is retained.
+- Poster grids use six columns on wide screens with consistent 24px gaps; six-item Recos pages no longer wrap as five posters plus one. Friend grids use the full content width, while profile information remains centered at a readable width. Friend/profile tabs have matching spacing and clear the mobile header when sticky. Chats uses bounded sidebar columns, a flexible conversation pane, and a centered empty state.
+- My Recos' loading boundary is removed. Desktop and mobile navigation fully prefetch it, and the first row of posters gets priority. Sidebar sign-in renders the existing library's Google icon and retains the Google OAuth action.
+- TypeScript, ESLint, and render/source checks passed for shared page insets, Google sign-in markup, Chats' empty state, and removal of the My Recos loading boundary. Actual browser layout comparison remains unavailable.
+
 ## Floating browse switcher
 
 - Latest blend refinement: the hero artwork, video, and shade now share a masked visual layer that fades to transparency at the lower edge, revealing the same page gradient used by the shelves. The shade uses warmer burgundy tones on desktop and mobile. Titles, buttons, and sound controls sit outside the mask to keep their opacity and interactions intact. Stylesheet syntax passed; browser visual comparison remains unavailable.

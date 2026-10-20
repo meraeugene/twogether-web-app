@@ -15,8 +15,9 @@ export default function RecosClient({
     recos.filter((r) => r.genres?.includes(genre));
 
   return (
-    <main className="page-gutter relative min-h-screen overflow-hidden bg-black px-7 pb-16 pt-28 xl:pt-32">
+    <main className="page-gutter page-listing relative min-h-screen overflow-hidden bg-black px-7 pb-16 pt-28 font-[family-name:var(--font-geist-sans)] text-white">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
+      <h1 className="sr-only">Recommendations</h1>
       <LatestRecoRow items={recos} />
 
       {genres.map((genre) => {

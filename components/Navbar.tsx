@@ -113,7 +113,7 @@ function MobileLink({
     <motion.div variants={fadeUp}>
       <Link
         href={href}
-        prefetch={href === "/recos" || href === "/watchlist" ? true : undefined}
+        prefetch={["/recos", "/watchlist", "/my-recommendations"].includes(href) ? true : undefined}
         onClick={onClick}
         className={`text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3 ${
           active

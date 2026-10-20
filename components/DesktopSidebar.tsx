@@ -5,10 +5,11 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
   Clapperboard, Compass, Heart, History,
-  Library, LogIn, LogOut, MessagesSquare, Search, Settings,
+  Library, LogOut, MessagesSquare, Search, Settings,
   Star, UserRound, Users, WandSparkles,
   type LucideIcon,
 } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 import type { CurrentUser } from "@/types/user";
 import { moreNavItems, primaryNavItems, recoNavItems, socialNavItems } from "./NavItems";
 import styles from "./DesktopSidebar.module.css";
@@ -54,7 +55,7 @@ function SidebarLink({ href, label, pathname, Icon, tooltipHandlers }: {
   const active = pathname === href || pathname.startsWith(`${href}/`);
   return (
     <Link href={href} aria-label={label} aria-current={active ? "page" : undefined} {...tooltipHandlers}
-      prefetch={href === "/recos" || href === "/watchlist" ? true : undefined}
+      prefetch={["/recos", "/watchlist", "/my-recommendations"].includes(href) ? true : undefined}
       className={`${styles.item} ${active ? styles.active : ""}`}>
       <span className={styles.icon}><Icon size={18} strokeWidth={1.6} aria-hidden="true" /></span>
     </Link>
@@ -180,8 +181,8 @@ export default function DesktopSidebar({
               </button>
             </div>
           </> : user === null ? (
-            <button type="button" onClick={onLogin} className={styles.signIn} aria-label="Sign in" {...getTooltipHandlers("Sign in")}>
-              <span className={styles.icon}><LogIn size={18} strokeWidth={1.6} aria-hidden="true" /></span>
+            <button type="button" onClick={onLogin} className={styles.signIn} aria-label="Sign in with Google" {...getTooltipHandlers("Sign in with Google")}>
+              <span className={styles.icon}><FcGoogle size={18} aria-hidden="true" /></span>
             </button>
           ) : null}
         </div>
