@@ -182,7 +182,7 @@ export default function WatchPlayer({
 
       {/* TV Controls */}
       {type === "tv" && (
-        <div className="space-y-6 border-t border-white/10 pt-6">
+        <div className="space-y-6 border-t border-white/10 pt-6 font-[family-name:var(--font-geist-sans)]">
           {hasEpisodeTitles ? (
             <>
               {/* Season Selector */}
@@ -192,6 +192,8 @@ export default function WatchPlayer({
                   return (
                     <button
                       key={season}
+                      type="button"
+                      aria-pressed={isActive}
                       onClick={() => {
                         setSelectedSeason(season);
                         setSelectedEpisode(1);
@@ -217,20 +219,24 @@ export default function WatchPlayer({
                   return (
                     <button
                       key={ep}
+                      type="button"
+                      aria-pressed={isActive}
+                      aria-label={`Episode ${ep}: ${title}`}
+                      title={`Episode ${ep}: ${title}`}
                       onClick={() => setSelectedEpisode(ep)}
-                      className={`flex cursor-pointer items-center gap-2 overflow-hidden rounded-xl px-4 py-2 text-xs transition sm:text-sm
+                      className={`flex h-20 min-w-0 cursor-pointer items-center gap-3 overflow-hidden rounded-xl px-4 text-left text-sm leading-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white
                         ${
                           isActive
                             ? "bg-red-600 text-white font-semibold"
                             : "bg-white/10 text-white/60 hover:bg-white/20"
                         }`}
                     >
-                      <TbPlayerPlayFilled className="shrink-0 text-base" />
+                      <TbPlayerPlayFilled aria-hidden="true" className="shrink-0 text-base" />
                       <span className="shrink-0 whitespace-nowrap">
                         Ep {ep}
                       </span>
-                      <span className="min-w-0 flex-1 text-left md:whitespace-normal">
-                        - {title}
+                      <span className="line-clamp-2 min-w-0 flex-1 break-words">
+                        {title}
                       </span>
                     </button>
                   );

@@ -60,10 +60,10 @@ export default function FriendsPage({
   );
 
   const tabButtonClass = (tab: string) =>
-    `px-6 py-3 text-sm font-medium transition-all cursor-pointer ${
+    `shrink-0 border-b-2 px-4 py-3 text-sm font-medium transition-colors cursor-pointer sm:px-6 ${
       activeTab === tab
-        ? "border-b-2 border-red-500 text-white"
-        : "text-white/60 hover:text-white"
+        ? "border-red-500 text-white"
+        : "border-transparent text-white/60 hover:text-white"
     }`;
 
   return (
@@ -85,10 +85,12 @@ export default function FriendsPage({
       </motion.div>
 
       {/* Tabs */}
-      <div className="mt-6 flex justify-center border-b border-white/10 sticky top-24 z-20 bg-black/90 xl:top-0">
+      <div className="relative z-10 mx-auto mt-6 flex w-fit max-w-full overflow-x-auto border-b border-white/10">
         {tabs.map((tab) => (
           <button
             key={tab}
+            type="button"
+            aria-pressed={activeTab === tab}
             onClick={() => setActiveTab(tab)}
             className={tabButtonClass(tab)}
           >
