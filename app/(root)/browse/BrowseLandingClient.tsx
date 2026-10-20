@@ -40,13 +40,13 @@ export default function BrowseLandingClient() {
       <section className={styles.hero} aria-label="Find your next watch">
         <BrowseHero movies={featured.data?.heroes} />
       </section>
+      <nav className={styles.categories} aria-label="Browse categories">
+        {categories.map((item) => (
+          <button key={item.id} type="button" aria-pressed={category === item.id}
+            aria-controls="browse-movies" onClick={() => setCategory(item.id)}>{item.label}</button>
+        ))}
+      </nav>
       <div className={styles.content}>
-        <nav className={styles.categories} aria-label="Browse categories">
-          {categories.map((item) => (
-            <button key={item.id} type="button" aria-pressed={category === item.id}
-              aria-controls="browse-movies" onClick={() => setCategory(item.id)}>{item.label}</button>
-          ))}
-        </nav>
         <BrowseMovieShelf id="browse-movies" title={category === "featured" ? "Worth a watch" : `Trending ${activeCategory.label}`}
           href={activeCategory.href} items={items} isLoading={isLoading} error={Boolean(error)} priority
           onRetry={retry} />

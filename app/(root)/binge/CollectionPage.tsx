@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+/* eslint-disable @next/next/no-img-element -- Collection artwork loads directly from the source CDN. */
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Clock3, Film, Play } from "lucide-react";
@@ -92,36 +92,36 @@ function CollectionRow({
   }, [collection.movies.length]);
 
   return (
-    <article className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0c] shadow-[0_28px_90px_rgba(0,0,0,.24)] transition duration-300 hover:border-white/20">
+    <article className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0c] bg-[radial-gradient(ellipse_at_top_right,rgba(185,28,28,0.28),transparent_65%),linear-gradient(135deg,#1c0b11_0%,#0b0b0c_75%)] shadow-[0_28px_90px_rgba(0,0,0,.24)] transition duration-300 hover:border-white/20">
       {backdrop && (
-        <Image
+        <img
           src={backdrop}
           alt=""
-          fill
-          sizes="(min-width: 1024px) 34vw, 100vw"
-          className="pointer-events-none -z-10 object-cover opacity-[0.09] blur-2xl transition duration-500 group-hover:opacity-[0.14]"
+          loading="lazy"
+          decoding="async"
+          className="pointer-events-none absolute inset-0 h-full w-full -z-10 object-cover opacity-[0.09] blur-2xl transition duration-500 group-hover:opacity-[0.14]"
         />
       )}
 
       <div className="grid lg:min-h-[310px] lg:grid-cols-[35%_1fr]">
         <div className="relative min-h-[230px] overflow-hidden lg:min-h-full">
           {backdrop ? (
-            <Image
+            <img
               src={backdrop}
               alt={`${collection.collection_name} artwork`}
-              fill
-              priority={priority}
-              sizes="(min-width: 1024px) 35vw, 100vw"
-              className="object-cover transition duration-700 group-hover:scale-[1.025]"
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "auto"}
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.025]"
             />
           ) : firstMovie?.poster_url ? (
-            <Image
+            <img
               src={firstMovie.poster_url}
               alt={`${collection.collection_name} artwork`}
-              fill
-              priority={priority}
-              sizes="(min-width: 1024px) 35vw, 100vw"
-              className="object-cover object-top transition duration-700 group-hover:scale-[1.025]"
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "auto"}
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.025]"
             />
           ) : null}
           <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_58%,#0b0b0c_100%)] max-lg:bg-[linear-gradient(0deg,#0b0b0c_0%,transparent_55%)]" />
@@ -237,11 +237,9 @@ function CollectionRow({
 export default function CollectionPage({
   genre,
   searchQuery = "",
-  onHeroBackdropsChange,
 }: {
   genre: string;
   searchQuery?: string;
-  onHeroBackdropsChange?: (backdrops: string[]) => void;
 }) {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
@@ -283,23 +281,6 @@ export default function CollectionPage({
       ),
     [collections],
   );
-  const heroBackdrops = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          uniqueCollections
-            .flatMap((collection) => collection.movies)
-            .map((movie) => movie.backdrop_url)
-            .filter((image): image is string => Boolean(image)),
-        ),
-      ).slice(0, 12),
-    [uniqueCollections],
-  );
-
-  useEffect(() => {
-    onHeroBackdropsChange?.(heroBackdrops);
-  }, [heroBackdrops, onHeroBackdropsChange]);
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {

@@ -95,7 +95,7 @@ export default function TopMovies() {
       </div>
 
       {/* CONTENT SECTION */}
-      <div className="relative z-20 flex flex-col gap-12 lg:gap-0 lg:flex-row  lg:items-end justify-between  px-6 sm:px-8 lg:px-20 md:py-10   lg:h-screen">
+      <div className="page-gutter relative z-20 flex flex-col gap-12 lg:gap-0 lg:flex-row  lg:items-end justify-between  px-6 sm:px-8 md:py-10   lg:h-screen">
         {/* MOVIE CONTENT */}
         <div className="max-w-4xl ">
           <AnimatePresence mode="wait">

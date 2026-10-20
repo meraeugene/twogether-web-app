@@ -181,7 +181,7 @@ export default function TabbedProfileView({
 
   return (
     <div
-      className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col   pt-28 lg:px-24 relative xl:px-32 2xl:px-26 xl:pt-32 pb-16 text-white px-7
+      className="page-gutter min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col   pt-28 relative xl:pt-32 pb-16 text-white px-7
 "
     >
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
@@ -334,7 +334,7 @@ export default function TabbedProfileView({
               transition={{ duration: 0.3 }}
             >
               {activeTab === "Profile" && (
-                <div className="max-w-4xl mx-auto">
+                <div className="page-align-start max-w-4xl mx-auto">
                   <div className="mb-6">
                     <InfoCard
                       icon={<FaFileAlt />}
@@ -375,7 +375,7 @@ export default function TabbedProfileView({
                     No recommendations yet!
                   </div>
                 ) : (
-                  <div className="grid max-w-4xl mx-auto grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                  <div className="page-align-start grid max-w-4xl mx-auto grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {userRecommendations.map((item) => (
                       <FilmCard key={item.tmdb_id} item={item} />
                     ))}
@@ -388,7 +388,7 @@ export default function TabbedProfileView({
                     Nothing here yet!
                   </div>
                 ) : (
-                  <div className="grid max-w-4xl mx-auto grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                  <div className="page-align-start grid max-w-4xl mx-auto grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {userWatchList.map((item) => (
                       <FilmCard key={item.tmdb_id} item={item} />
                     ))}
@@ -397,7 +397,7 @@ export default function TabbedProfileView({
 
               {activeTab === "Friends" && (
                 <div className="text-white/80">
-                  <div className="grid max-w-5xl mx-auto grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
+                  <div className="page-align-start grid max-w-5xl mx-auto grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
                     {loadingUserFriends ? (
                       <div className="col-span-full flex justify-center">
                         <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>

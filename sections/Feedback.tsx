@@ -76,7 +76,7 @@ const Feedback = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] md:w-[700px] lg:w-[800px] h-[350px] md:h-[450px] lg:h-[500px] bg-red-900/10 blur-[120px] rounded-full pointer-events-none" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+      <div className="page-gutter page-width relative z-10 max-w-7xl mx-auto px-6 sm:px-8">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16 md:mb-20 lg:mb-24">
           <div className="max-w-2xl">

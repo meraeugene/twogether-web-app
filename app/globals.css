@@ -68,6 +68,9 @@
 :root {
   --background: #0a0a0a;
   --foreground: #ffffff;
+  --page-gutter: 24px;
+  --page-gutter-left: 32px;
+  --page-gradient: linear-gradient(135deg, rgb(185 28 28 / 20%) 0%, rgb(0 0 0 / 5%) 50%, rgb(153 27 27 / 10%) 100%);
 }
 
 html {
@@ -79,6 +82,38 @@ html {
 body {
   background: var(--background); /* Set in your :root or Tailwind config */
   color: var(--foreground);
+}
+
+.page-gutter.min-h-screen {
+  background-image: var(--page-gradient);
+}
+
+/* Page spacing is shared so route-specific breakpoints cannot add a second
+   large gutter beside the desktop navigation. Card and form padding is local. */
+@media (min-width: 1024px) {
+  .page-gutter {
+    padding-inline: var(--page-gutter);
+    padding-left: var(--page-gutter-left);
+  }
+
+  .page-width {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  .page-align-start {
+    margin-left: 0;
+    margin-right: auto;
+  }
+}
+
+/* The desktop sidebar leaves the top of content pages free. Smaller screens
+   retain clearance for the fixed top header. */
+@media (min-width: 1280px) {
+  .page-listing {
+    padding-top: 32px;
+  }
 }
 
 /* A single compositor-friendly shimmer is calmer and cheaper than pulsing

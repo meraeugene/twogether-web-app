@@ -87,8 +87,10 @@ export default async function RootLayout({
       >
         <Toaster position="top-center" />
         <Header initialUser={initialUser} />
-        {children}
-        <Footer />
+        <div className="app-content">
+          {children}
+          <Footer />
+        </div>
       </body>
     </html>
   );

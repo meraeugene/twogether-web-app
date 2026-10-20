@@ -15,7 +15,7 @@ export default function AppError({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-black px-6 pb-16 pt-28 text-white lg:px-24 xl:px-32">
+    <div className="page-gutter min-h-screen bg-black px-6 pb-16 pt-28 text-white">
       <div className="mx-auto max-w-xl rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 shadow-2xl backdrop-blur-xl">
         <div className="mb-3 inline-flex rounded-full border border-red-500/25 bg-red-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-red-300">
           Something went wrong

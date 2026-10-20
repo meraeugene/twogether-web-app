@@ -31,10 +31,10 @@
 .resultArrow { width: 14px; height: 14px; flex-shrink: 0; color: #8894a9; }
 .skeletonList { overflow: hidden; border-radius: 12px; }
 .skeletonRow { display: flex; align-items: center; gap: 12px; min-height: 68px; padding: 8px 12px; }
-.skeletonImage { width: 36px; height: 52px; flex-shrink: 0; border-radius: 6px; background: #ffffff10; }
+.skeletonImage { width: 36px; height: 52px; flex-shrink: 0; overflow: hidden; border-radius: 6px; background: #ffffff10; }
 .skeletonArtist { height: 36px; border-radius: 50%; }
 .skeletonCopy { display: flex; flex: 1; flex-direction: column; gap: 9px; }
-.skeletonCopy > span { width: 55%; height: 10px; border-radius: 4px; background: #ffffff12; }
+.skeletonCopy > span { width: 55%; height: 10px; overflow: hidden; border-radius: 4px; background: #ffffff12; }
 .skeletonCopy > span + span { width: 28%; height: 8px; background: #ffffff09; }
 .footer { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; flex-wrap: wrap; gap: 12px; padding: 14px 26px; border-top: 1px solid #ffffff10; color: #8f99ad; font-size: 10px; }
 .footer button { display: inline-flex; align-items: center; gap: 8px; min-height: 30px; color: #d5dae5; cursor: pointer; }

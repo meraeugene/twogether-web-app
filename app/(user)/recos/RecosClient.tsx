@@ -15,7 +15,7 @@ export default function RecosClient({
     recos.filter((r) => r.genres?.includes(genre));
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black px-7 pb-16 pt-28 lg:px-24 xl:px-32 xl:pt-32 2xl:px-26">
+    <main className="page-gutter relative min-h-screen overflow-hidden bg-black px-7 pb-16 pt-28 xl:pt-32">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
       <LatestRecoRow items={recos} />
 

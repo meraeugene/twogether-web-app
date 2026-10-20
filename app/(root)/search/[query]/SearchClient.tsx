@@ -113,7 +113,7 @@ export default function SearchClient({
             </h1>
           </div>
 
-          <div className="container mx-auto px-0 py-8 sm:py-12 lg:py-16">
+          <div className="page-width container mx-auto px-0 py-8 sm:py-12 lg:py-16">
             <div className="flex flex-col gap-8 sm:gap-10 lg:flex-row lg:items-end lg:gap-12">
               {/* 2. The Poster-Style Portrait */}
               <div className="relative z-10 w-full shrink-0 max-w-[250px] sm:max-w-[300px] md:max-w-[320px]">

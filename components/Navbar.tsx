@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiX } from "react-icons/hi";
@@ -19,10 +19,9 @@ import { CurrentUser } from "@/types/user";
 import { signOut } from "@/actions/authActions";
 import type { Variants } from "framer-motion";
 import { createClient } from "@/utils/supabase/client";
-import { ChevronDown, Compass, LayoutGrid } from "lucide-react";
-import { FaUserFriends } from "react-icons/fa";
 import AccountSettingsMenu from "@/components/AccountSettingsMenu";
 import { FiSearch } from "react-icons/fi";
+import DesktopSidebar from "./DesktopSidebar";
 
 const SearchOverlay = dynamic(() => import("@/components/SearchOverlay"), { ssr: false });
 const preloadSearch = () => { void import("@/components/SearchOverlay"); };
@@ -51,113 +50,6 @@ const shell =
   "bg-[#161618]/92 backdrop-blur-2xl border border-white/[0.09] " +
   "shadow-[0_0_0_0.5px_rgba(255,255,255,0.04)_inset,0_16px_48px_rgba(0,0,0,0.75)]";
 
-function Tip({ label }: { label: string }) {
-  return (
-    <span className="pointer-events-none absolute top-[calc(100%+10px)] left-1/2 -translate-x-1/2 z-[9999] whitespace-nowrap rounded-[8px] px-[10px] py-[5px] text-[11.5px] font-medium text-white/80 bg-[#141416]/97 border border-white/[0.11] shadow-[0_8px_24px_rgba(0,0,0,0.65)] opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-[130ms] ease-out">
-      {label}
-    </span>
-  );
-}
-
-function NavIcon({
-  href,
-  icon,
-  label,
-  active,
-  onClick,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-  active: boolean;
-  onClick?: () => void;
-}) {
-  return (
-    <Link
-      href={href}
-      onClick={onClick}
-      className={`group relative inline-flex items-center gap-2 px-3 h-[40px] rounded-[11px] text-sm font-medium transition-all duration-150 ${
-        active
-          ? "bg-white/[0.12] text-white ring-1 ring-inset ring-white/[0.14]"
-          : "text-white/55 hover:text-white/90 hover:bg-white/[0.08]"
-      }`}
-    >
-      <span className="text-[18px]">{icon}</span>
-      <span className="leading-none whitespace-nowrap">{label}</span>
-    </Link>
-  );
-}
-
-function DesktopDropdown({
-  label,
-  active,
-  items,
-  pathname,
-  open,
-  onToggle,
-  onClose,
-  icon,
-}: {
-  label: string;
-  active: boolean;
-  items: { href: string; icon: React.ReactNode; label: string }[];
-  pathname: string;
-  open: boolean;
-  onToggle: () => void;
-  onClose: () => void;
-  icon: React.ReactNode;
-}) {
-  return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={onToggle}
-        className={`inline-flex h-[40px] items-center gap-2 rounded-[11px] px-3 text-sm font-medium transition-all duration-150 ${
-          active
-            ? "bg-white/[0.12] text-white ring-1 ring-inset ring-white/[0.14]"
-            : "text-white/55 hover:bg-white/[0.08] hover:text-white/90"
-        } cursor-pointer`}
-      >
-        <span className="text-[18px]">{icon}</span>
-        <span className="leading-none whitespace-nowrap">{label}</span>
-        <ChevronDown
-          className={`h-4 w-4 transition-transform duration-200 ${
-            open ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      <div
-        className={`absolute left-0 top-[calc(100%+12px)] z-[80] min-w-[200px] rounded-[18px] border border-white/[0.1] bg-[#111113]/96 p-2 shadow-[0_18px_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl transition-all duration-200 ease-out ${
-          open
-            ? "pointer-events-auto translate-y-0 opacity-100"
-            : "pointer-events-none translate-y-2 opacity-0"
-        }`}
-      >
-        {items.map((item) => {
-          const isActive = pathname.startsWith(item.href);
-
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onClose}
-              className={`flex items-center gap-3 rounded-[12px] px-3 py-2.5 text-sm transition-colors ${
-                isActive
-                  ? "bg-white/[0.1] text-white"
-                  : "text-white/70 hover:bg-white/[0.06] hover:text-white"
-              }`}
-            >
-              <span className="text-[18px]">{item.icon}</span>
-              <span className="whitespace-nowrap">{item.label}</span>
-            </Link>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 function GoogleIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -174,8 +66,6 @@ function GoogleIcon({ className }: { className?: string }) {
   );
 }
 
-// Desktop: matches NavIcon ghost style (no background, muted text, hover glow)
-// Mobile: matches MobileLink ghost style (bordered card row)
 function LoginButton({
   onClick,
   mobile,
@@ -206,12 +96,6 @@ function LoginButton({
   );
 }
 
-const Sep = () => (
-  <div className="w-[12px] flex items-center justify-center">
-    <span className="w-px h-[20px] bg-white/[0.09]" />
-  </div>
-);
-
 function MobileLink({
   href,
   icon,
@@ -229,6 +113,7 @@ function MobileLink({
     <motion.div variants={fadeUp}>
       <Link
         href={href}
+        prefetch={href === "/recos" || href === "/watchlist" ? true : undefined}
         onClick={onClick}
         className={`text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3 ${
           active
@@ -246,30 +131,12 @@ function MobileLink({
 export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
   const [isPending, startTransition] = useTransition();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [recosOpen, setRecosOpen] = useState(false);
-  const [socialsOpen, setSocialsOpen] = useState(false);
-  const [moreOpen, setMoreOpen] = useState(false);
-  const [hide, setHide] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isMac, setIsMac] = useState(false);
   const searchShortcut = isMac ? "⌘ K" : "Ctrl K";
   const closeSearch = useCallback(() => setSearchOpen(false), []);
-  const lastY = useRef(0);
-  const recosRef = useRef<HTMLDivElement | null>(null);
-  const socialsRef = useRef<HTMLDivElement | null>(null);
-  const moreRef = useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
   const isAuthLoading = typeof user === "undefined";
-  const recosActive = recoNavItems.some((item) =>
-    pathname.startsWith(item.href),
-  );
-  const socialsActive = socialNavItems.some((item) =>
-    pathname.startsWith(item.href),
-  );
-  const moreActive = moreNavItems.some((item) =>
-    pathname.startsWith(item.href),
-  );
-
   const logout = () => startTransition(async () => await signOut());
   const close = () => setMenuOpen(false);
   const profileHref = user ? `/profile/${user.username}/${user.id}` : "#";
@@ -284,10 +151,6 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
       event.preventDefault();
       if (document.querySelector('dialog[open], [aria-modal="true"]')) return;
       setMenuOpen(false);
-      setRecosOpen(false);
-      setSocialsOpen(false);
-      setMoreOpen(false);
-      setHide(false);
       preloadSearch();
       setSearchOpen(true);
     };
@@ -306,43 +169,7 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
   };
 
   useEffect(() => {
-    const fn = () => {
-      const y = window.scrollY;
-      if (Math.abs(y - lastY.current) < 10) return;
-      setHide(y > lastY.current && y > 80);
-      lastY.current = y;
-    };
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        recosRef.current &&
-        !recosRef.current.contains(event.target as Node)
-      ) {
-        setRecosOpen(false);
-      }
-      if (
-        socialsRef.current &&
-        !socialsRef.current.contains(event.target as Node)
-      ) {
-        setSocialsOpen(false);
-      }
-      if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
-        setMoreOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    setRecosOpen(false);
-    setSocialsOpen(false);
-    setMoreOpen(false);
+    setMenuOpen(false);
     setSearchOpen(false);
   }, [pathname]);
 
@@ -351,131 +178,13 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
   }
 
   return (
-    <motion.div
-      animate={{ y: hide ? -100 : 0, opacity: hide ? 0 : 1 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className={`fixed top-5 left-1/2 -translate-x-1/2 z-[60] overflow-visible w-[calc(100%-32px)] max-w-[440px] xl:w-auto xl:max-w-none font-[family-name:var(--font-geist-sans)] ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
-    >
-      {/* ── DESKTOP BAR ── */}
+    <>
+      <DesktopSidebar user={user} pathname={pathname} loggingOut={isPending} searchOpen={searchOpen}
+        searchShortcut={searchShortcut} onSearch={() => setSearchOpen(true)}
+        onPreloadSearch={preloadSearch} onLogin={handleLogin} onLogout={logout} />
       <div
-        className={`hidden  bg-black xl:inline-flex items-center space-x-2 px-[8px] py-[6px] rounded-full ${shell}`}
+        className={`fixed top-5 left-1/2 -translate-x-1/2 z-[60] overflow-visible w-[calc(100%-32px)] max-w-[440px] xl:hidden font-[family-name:var(--font-geist-sans)] ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
       >
-        <Link
-          href="/"
-          className="text-md font-black uppercase tracking-[-0.02em] text-white font-[family-name:var(--font-geist-mono)] px-3 mr-1 leading-none hover:opacity-80 transition-opacity"
-        >
-          <span className="text-red-500">Two</span>gether
-        </Link>
-
-        <Sep />
-
-        {isAuthLoading ? (
-          <>
-            <div className="h-[40px] w-[174px] rounded-[11px] bg-white/[0.06] animate-pulse" />
-            <Sep />
-            <div className="h-[40px] w-[96px] rounded-[11px] bg-white/[0.06] animate-pulse" />
-          </>
-        ) : (
-          (user ? primaryNavItems : guestLinks).map((item) => (
-            <NavIcon
-              key={item.href}
-              href={item.href}
-              icon={item.icon}
-              label={item.label}
-              active={pathname === item.href}
-            />
-          ))
-        )}
-
-        <button type="button" aria-label="Open search" aria-haspopup="dialog" aria-expanded={searchOpen}
-          aria-keyshortcuts="Control+K Meta+K"
-          onPointerEnter={preloadSearch} onFocus={preloadSearch}
-          onClick={() => setSearchOpen(true)}
-          className="group relative flex h-[40px] shrink-0 cursor-pointer items-center justify-center gap-2 rounded-[11px] px-3 text-white/55 transition-colors hover:bg-white/[0.08] hover:text-white focus-visible:outline-2 focus-visible:outline-white/70">
-          <FiSearch className="h-[19px] w-[19px]" aria-hidden="true" />
-          <kbd aria-hidden="true" className="rounded-md border border-white/15 bg-white/5 px-1.5 py-0.5 font-sans text-[10px] font-medium leading-4 whitespace-nowrap text-white/50">{searchShortcut}</kbd>
-          <Tip label={`Search (${searchShortcut})`} />
-        </button>
-
-        {isAuthLoading ? null : user ? (
-          <>
-            <Sep />
-            <div ref={recosRef}>
-              <DesktopDropdown
-                label="Explore"
-                items={recoNavItems}
-                active={recosActive}
-                pathname={pathname}
-                open={recosOpen}
-                onToggle={() => {
-                  setSocialsOpen(false);
-                  setMoreOpen(false);
-                  setRecosOpen((prev) => !prev);
-                }}
-                onClose={() => setRecosOpen(false)}
-                icon={<Compass className="h-[18px] w-[18px]" />}
-              />
-            </div>
-            <div ref={socialsRef}>
-              <DesktopDropdown
-                label="Socials"
-                items={socialNavItems}
-                active={socialsActive}
-                pathname={pathname}
-                open={socialsOpen}
-                onToggle={() => {
-                  setRecosOpen(false);
-                  setMoreOpen(false);
-                  setSocialsOpen((prev) => !prev);
-                }}
-                onClose={() => setSocialsOpen(false)}
-                icon={<FaUserFriends className="text-lg" />}
-              />
-            </div>
-            <div ref={moreRef}>
-              <DesktopDropdown
-                label="More"
-                items={moreNavItems}
-                active={moreActive}
-                pathname={pathname}
-                open={moreOpen}
-                onToggle={() => {
-                  setRecosOpen(false);
-                  setSocialsOpen(false);
-                  setMoreOpen((prev) => !prev);
-                }}
-                onClose={() => setMoreOpen(false)}
-                icon={<LayoutGrid className="h-[18px] w-[18px]" />}
-              />
-            </div>
-            <Sep />
-            <NavIcon
-              href={profileHref}
-              icon={<HiOutlineUserCircle />}
-              label="Profile"
-              active={pathname === profileHref}
-            />
-            <AccountSettingsMenu compact />
-            <div
-              onClick={logout}
-              className="group relative flex items-center justify-center w-[40px] h-[40px] rounded-[11px] text-[20px] text-white/40 hover:text-red-400 hover:bg-red-500/[0.12] transition-all duration-150 cursor-pointer"
-            >
-              {isPending ? (
-                <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <RiLogoutCircleLine />
-              )}
-              <Tip label={isPending ? "Logging out…" : "Logout"} />
-            </div>
-          </>
-        ) : (
-          <>
-            <Sep />
-            <LoginButton onClick={handleLogin} />
-          </>
-        )}
-      </div>
-
       {/* ── MOBILE TOP BAR ── */}
       <div
         className={`xl:hidden bg-black flex items-center justify-between px-5 p-3 ${shell} ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
@@ -638,7 +347,8 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
       {searchOpen && <SearchOverlay onClose={closeSearch} />}
-    </motion.div>
+    </>
   );
 }

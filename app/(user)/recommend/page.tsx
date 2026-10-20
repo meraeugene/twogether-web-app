@@ -155,7 +155,7 @@ const RecommendPage = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="min-h-screen flex flex-col justify-center items-center pt-28 pb-16 bg-black text-white px-7 relative overflow-hidden lg:pt-32 "
+      className="page-gutter min-h-screen flex flex-col justify-center items-center pt-28 pb-16 bg-black text-white px-7 relative overflow-hidden lg:pt-32 "
     >
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
       {/* Steps Progress */}

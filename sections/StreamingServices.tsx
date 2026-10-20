@@ -157,7 +157,7 @@ export default function StreamingServices() {
         />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+      <div className="page-gutter page-width relative z-10 max-w-7xl mx-auto px-6 sm:px-8">
         {/* HEADER */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 sm:gap-8 mb-10 sm:mb-14 md:mb-20">
           <div className="max-w-2xl">

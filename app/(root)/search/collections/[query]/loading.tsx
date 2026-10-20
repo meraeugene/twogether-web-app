@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <main className="min-h-screen bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white font-[family-name:var(--font-geist-sans)]">
+    <main className="page-gutter page-listing min-h-screen bg-black pb-16 pt-28 px-7 text-white font-[family-name:var(--font-geist-sans)]">
       <div className="space-y-16">
         {[...Array(3)].map((_, index) => (
           <section key={index}>

@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import FilmCard from "@/components/FilmCard";
-import { FiInfo, FiPause, FiPlay, FiVolume2, FiVolumeX } from "react-icons/fi";
+import { FiInfo, FiPlay, FiVolume2, FiVolumeX } from "react-icons/fi";
 import type { TMDBFeaturedResult } from "@/types/tmdb";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
@@ -19,6 +19,7 @@ const NO_MOVIES: TMDBFeaturedResult[] = [];
 export default function BrowseHero({ movies = NO_MOVIES }: { movies?: TMDBFeaturedResult[] }) {
   const [playlist, setPlaylist] = useState<{ movies: TMDBFeaturedResult[]; index: number }>({ movies: [], index: 0 });
   const mutedPreference = useRef(false);
+  const handleMutedChange = useCallback((muted: boolean) => { mutedPreference.current = muted; }, []);
 
   useEffect(() => {
     const playable = movies.filter((movie) => movie.trailer_key && movie.backdrop_url);
@@ -37,9 +38,9 @@ export default function BrowseHero({ movies = NO_MOVIES }: { movies?: TMDBFeatur
     });
   }, []);
   const movie = playlist.movies[playlist.index];
-  return <BrowseHeroContent key={movie?.trailer_key ?? "no-trailer"} movie={movie}
+  return <BrowseHeroContent key={movie ? `${movie.id}-${movie.trailer_key}` : "no-trailer"} movie={movie}
     onNext={nextMovie} canAutoAdvance={playlist.movies.length > 1} initialMuted={mutedPreference.current}
-    onMutedChange={(muted) => { mutedPreference.current = muted; }} />;
+    onMutedChange={handleMutedChange} />;
 }
 
 function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMutedChange }: {
@@ -55,6 +56,7 @@ function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMute
   const [playing, setPlaying] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
   const [muted, setMuted] = useState(initialMuted);
+  const startingMuted = useRef(initialMuted);
   const [ready, setReady] = useState(false);
   const [blocked, setBlocked] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -79,6 +81,8 @@ function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMute
     if (!host || !trailerKey) return;
     let cancelled = false;
     let unavailable = false;
+    let advancing = false;
+    let triedMutedAutoplay = startingMuted.current;
     let currentPlayer: YouTubePlayer | undefined;
     const fail = () => {
       if (cancelled || unavailable) return;
@@ -102,7 +106,7 @@ function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMute
         width: "100%",
         height: "100%",
         playerVars: {
-          autoplay: 1, mute: initialMuted ? 1 : 0, controls: 0, playsinline: 1, rel: 0,
+          autoplay: 1, mute: startingMuted.current ? 1 : 0, controls: 0, playsinline: 1, rel: 0,
           loop: canAutoAdvance ? 0 : 1, playlist: trailerKey, disablekb: 1, origin: window.location.origin,
         },
         events: {
@@ -112,7 +116,7 @@ function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMute
             player.current = target;
             try {
               target.getIframe().title = `${title ?? "Featured film"} official trailer`;
-              if (initialMuted) target.mute();
+              if (startingMuted.current) target.mute();
               else target.unMute();
               target.playVideo();
               setReady(true);
@@ -127,10 +131,27 @@ function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMute
               setHasPlayed(true);
               setBlocked(false);
             }
-            if (data === 0 && canAutoAdvance) onNext();
+            if (data === 0 && canAutoAdvance && !advancing) {
+              advancing = true;
+              onNext();
+            }
           },
           onAutoplayBlocked: () => {
             if (cancelled || unavailable) return;
+            // Browsers often block autoplay with sound, including the next trailer.
+            if (!triedMutedAutoplay && currentPlayer) {
+              triedMutedAutoplay = true;
+              try {
+                currentPlayer.mute();
+                setMuted(true);
+                onMutedChange(true);
+                currentPlayer.playVideo();
+                return;
+              } catch {
+                fail();
+                return;
+              }
+            }
             setBlocked(true);
             setPlaying(false);
           },
@@ -147,7 +168,7 @@ function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMute
       try { currentPlayer?.destroy(); } catch { /* The iframe may already be gone. */ }
       host.replaceChildren();
     };
-  }, [trailerKey, title, initialMuted, canAutoAdvance, onNext]);
+  }, [trailerKey, title, canAutoAdvance, onNext, onMutedChange]);
 
   useEffect(() => {
     if (!failed || !canAutoAdvance) return;
@@ -192,13 +213,15 @@ function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMute
       current.playVideo();
     });
   };
-  const href = movie ? `/tmdb/watch/movie/${movie.id}/${getSlugFromTitle(movie.title)}` : "/browse/movies";
+  const href = movie ? `/tmdb/watch/${movie.type}/${movie.id}/${getSlugFromTitle(movie.title)}` : "/browse/movies";
 
   return (
     <div ref={container} className={styles.heroMedia}>
-      {movie?.backdrop_url && <img className={styles.backdrop} src={movie.backdrop_url} alt="" fetchPriority="high" />}
-      {trailerKey && <div ref={videoContainer} className={`${styles.video} ${playing && !failed ? styles.videoPlaying : ""}`} />}
-      <div className={styles.shade} />
+      <div className={styles.heroVisual}>
+        {movie?.backdrop_url && <img className={styles.backdrop} src={movie.backdrop_url} alt="" fetchPriority="high" />}
+        {trailerKey && <div ref={videoContainer} className={`${styles.video} ${playing && !failed ? styles.videoPlaying : ""}`} />}
+        <div className={styles.shade} />
+      </div>
       {movie && (
         <div className={styles.feature}>
           <Link href={href} className={styles.featureTitle}>
@@ -207,18 +230,19 @@ function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMute
           <p className={styles.featureMeta}><span>{movie.year}</span>{movie.genres.slice(0, 2).map((genre) => <span key={genre}>{genre === "Science Fiction" ? "Sci-Fi" : genre}</span>)}</p>
           {movie.synopsis?.trim() && <p className={styles.synopsis}>{movie.synopsis}</p>}
           <div className={styles.heroActions}>
-            <button className={styles.heroPlay} type="button" disabled={!ready || failed} aria-label={playing ? "Pause trailer" : muted ? "Play trailer" : "Play trailer with sound"}
-              title={playing ? "Pause" : "Play"} onClick={() => playing ? runPlayer((current) => current.pauseVideo()) : playTrailer()}>
-              {playing ? <FiPause aria-hidden="true" /> : <FiPlay aria-hidden="true" />}
-              <span>{playing ? "Pause" : "Play"}</span>
-            </button>
+            <Link className={styles.heroPlay} href={href} aria-label={`Play ${movie.title}`}>
+              <FiPlay aria-hidden="true" />
+              <span>Play</span>
+            </Link>
             <FilmCard item={adaptTMDBToRecommendation(movie)} renderTrigger={(openPreview) => (
               <button className={styles.heroInfo} type="button" onClick={openPreview} aria-haspopup="dialog">
                 <FiInfo aria-hidden="true" /><span>More Info</span>
               </button>
             )} />
           </div>
-          <p className={styles.playbackHint} role="status">{failed ? canAutoAdvance ? "Loading the next trailer…" : "Trailer unavailable." : blocked ? "Tap play to start the trailer." : ""}</p>
+          <p className={styles.playbackHint} role="status">{failed ? canAutoAdvance ? "Loading the next trailer…" : "Trailer unavailable." : blocked ? (
+            <button type="button" className="cursor-pointer underline underline-offset-4" onClick={playTrailer}>Start trailer</button>
+          ) : ""}</p>
         </div>
       )}
       {movie && <button className={styles.soundControl} type="button" disabled={!ready || failed}

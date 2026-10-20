@@ -16,7 +16,7 @@ const Features = () => {
       <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-red-600/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[30%] h-[30%] bg-red-900/10 blur-[100px] rounded-full pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+      <div className="page-gutter page-width relative z-10 max-w-7xl mx-auto px-6 sm:px-8">
         {/* HEADER */}
         <div className="mb-16 md:mb-20 lg:mb-24 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
           <motion.div

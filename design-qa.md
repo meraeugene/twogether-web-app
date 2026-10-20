@@ -2,7 +2,46 @@
 
 final result: blocked
 
+## Floating browse switcher
+
+- Latest blend refinement: the hero artwork, video, and shade now share a masked visual layer that fades to transparency at the lower edge, revealing the same page gradient used by the shelves. The shade uses warmer burgundy tones on desktop and mobile. Titles, buttons, and sound controls sit outside the mask to keep their opacity and interactions intact. Stylesheet syntax passed; browser visual comparison remains unavailable.
+- The category switcher now sits directly between the hero and content as a centered sibling. Its negative top margin equals half its height, placing its center on the hero's lower edge at desktop and mobile sizes. A dark translucent background and shadow separate it from the trailer and page gradient; shelves keep space below it.
+- Stylesheet parsing and collection-gradient compilation passed. Browser visual comparison remains unavailable.
+
+## Chrono and Binge simplification
+
+- Escape now closes the open saga switcher. The keyboard listener is installed only while it is open and removed on close or unmount; body scrolling is restored by the existing drawer cleanup.
+- Latest collection styling: collection cards use a burgundy-to-black base with a soft red glow in the upper-right corner. Poster artwork and collection controls retain their existing layout. Tailwind compilation confirmed the card gradient.
+- Latest styling follow-up: red/black gradients are restored through a shared page-background token for page wrappers and Browse. Removed the black/red circular markers from franchise-switcher options; selected styling and aria-pressed still identify the chosen franchise. Stylesheet syntax and Tailwind compilation passed; rendered visual review remains unavailable.
+- Chrono's large introductory heading, route statistics, and standalone journey toolbar have been removed. Stop/Begin the Journey and Explore Another Saga now sit inside the Story Map header, beside the single franchise heading. Timeline scrolling and saga switching retain their existing behavior.
+- Binge's artwork hero, promotional headline, backdrop rotation, and hero-only loading/preloading logic have been removed. The page now starts with a compact collection heading, search form, genre filters, and collection results at the shared desktop inset. CollectionPage no longer computes or reports hero backdrops.
+- Passed: TypeScript, ESLint, and mocked render/interaction checks for control placement, journey toggling, saga switching and drawer dismissal, Binge search/clear/genre selection, and query-string navigation. Browser visual comparison remains unavailable.
+
+## Desktop sidebar update
+
+- Chrono tooltip follow-up: scroll dismissal now checks the event source. Unrelated auto-scrolling timelines and content rails no longer dismiss a sidebar tooltip; viewport scrolling and scrolling ancestors of the hovered icon still dismiss it. Escape, pointer leave, blur, resize, and route-change behavior are retained.
+- Latest requested change: replace the shared top navigation on large screens with a premium left sidebar. This supersedes the older top-header notes below.
+- Latest refinement at widths of 1280px and above: a fixed 48px icon rail with a 56px content gutter. The enclosing background, border, blur, shadow, and rounded corners have been removed; the active page highlight has 10px rounded corners. Browse hero content and shelves use 24px inner margins on desktop to reduce the combined left inset. Hover and keyboard focus never widen the sidebar. Custom tooltips identify each icon on hover or focus and render outside the scroll container to avoid clipping; scrolling, resizing, navigating, Escape, or leaving the control dismisses them. Section headings remain available to assistive technology. Short windows scroll the navigation independently.
+- Discovery, collection, and social links are grouped; search, sign-in, profile, settings, and sign-out retain their existing actions. Recos and Watchlist retain full route prefetching. Smaller screens retain the existing mobile top menu.
+- Latest behavior: both the desktop sidebar and mobile/tablet top header stay visible at all times. Hidden-state props, slide-away styles, edge recovery targets, and the remaining idle timer and scroll listeners have been removed. Menu and search interactions remain available.
+- Passed: TypeScript, ESLint, guest/authenticated/loading server-render checks, nested active-route checks, search and pending logout states, and a live `/browse` HTTP 200 smoke check.
+- Earlier verification passed compiled stylesheet parsing and checks for the content gutter, desktop breakpoint, and reduced-motion rules. The subsequent slim-rail and always-visible changes remove expansion and hiding.
+- Tooltip handler checks passed with mocked browser events: pointer hover, keyboard focus, touch exclusion, portal placement, Escape, scroll/resize dismissal, leaving the control, blur, and listener cleanup. Updated CSS syntax parsed successfully. These checks do not replace browser visual verification.
+- Latest hover refinement: hovered and keyboard-focused icons share the active page's rounded red highlight. Tooltips attach pointer enter/leave handlers to whole controls, skip duplicate updates for the same control, ignore leave/blur events from an old control, and avoid reopening on mouse-click focus. TypeScript, ESLint, and mocked regression checks for those transitions passed; actual browser flicker verification remains unavailable.
+- Visual comparison and real pointer/keyboard checks remain blocked: no in-app Browser, Computer Use runtime, or Node REPL is exposed in this session. No screenshot, visual acceptance, or browser interaction pass is claimed.
+
 ## Reference and capture
+
+### Shared page spacing update
+
+- Latest movie/Chrono refinement: movie details, standard and AI watch pages, Chrono, and watch loading states now use the same 32px desktop top inset as search/category pages. Chrono's decorative divider moves above its content at the sidebar breakpoint. Tooltip spacing is reduced from 12px to 4px beside the icon control; active navigation keeps its rounded red fill with no side marker, and mouse focus has no outline.
+- Latest follow-up: main-page left gutters increase from 24px to 32px, with right gutters staying at 24px. Browse hero and shelves use the same left inset. Category and search pages, including search loading states, use 32px top padding at 1280px and above; smaller screens retain 112px clearance for the fixed header rather than the former 144px large-screen padding.
+- Search-modal loading now shimmers each image and text bar independently instead of the full results list. Mocked render checks passed for all 12 shapes across four rows, artist circles versus title posters, and skipped skeletons for short or cached queries. TypeScript, ESLint, CSS parsing, and Tailwind compilation passed for this follow-up; browser visual review remains unavailable.
+- Page wrappers now share a 24px horizontal gutter from 1024px upward. Removed the older 64–128px desktop padding utilities from browse categories, recommendations, watchlists, search, watch pages, Chrono, friends, messages, profiles, recommendation forms, settings, onboarding, error, and loading states.
+- Binge sections and homepage content sections use the same gutter. Structural width caps in Binge, Chrono, artist search, and homepage sections no longer add centered outer whitespace on desktop. Profile and friend lists align to the page's left edge while retaining their readable widths; centered form and hero content keep their intended alignment.
+- Browse uses the shared gutter variable for its hero, shelves, and sound control. The existing 56px desktop sidebar offset is applied once by the app shell. Mobile spacing below 1024px is unchanged.
+- Browser visual verification remains unavailable; source coverage, stylesheet, lint, and TypeScript checks are recorded separately from rendered layout acceptance.
+- Passed for this spacing update: a source audit of all 30 padded page/loading wrappers, ESLint on 39 updated components, TypeScript, stylesheet syntax, and Tailwind compilation confirming the shared gutter overrides responsive utility padding at 1024px and above.
 
 - Source visual truth: the user's attached Twogether browse mockup, 1487 × 1058 pixels, visible in the conversation. No local source-image path is available.
 - Implementation: http://127.0.0.1:3000/browse.

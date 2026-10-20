@@ -104,10 +104,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
         <div className={styles.results} aria-busy={loading}>
           {loading && <>
             <span className="sr-only" role="status">Searching</span>
-            <div className={`${styles.skeletonList} skeleton-shimmer`} aria-hidden="true">
+            <div className={styles.skeletonList} aria-hidden="true">
               {Array.from({ length: 4 }, (_, index) => <div key={index} className={styles.skeletonRow}>
-                <span className={`${styles.skeletonImage} ${kind === "artists" ? styles.skeletonArtist : ""}`} />
-                <span className={styles.skeletonCopy}><span /><span /></span>
+                <span className={`${styles.skeletonImage} skeleton-shimmer ${kind === "artists" ? styles.skeletonArtist : ""}`} />
+                <span className={styles.skeletonCopy}><span className="skeleton-shimmer" /><span className="skeleton-shimmer" /></span>
               </div>)}
             </div>
           </>}

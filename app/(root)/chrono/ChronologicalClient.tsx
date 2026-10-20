@@ -2,7 +2,7 @@
 
 import useSWR from "swr";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
@@ -47,11 +47,16 @@ export default function ChronologicalClient() {
     };
   }, [isOpen]);
 
-  const groupedFranchiseCount = useMemo(
-    () =>
-      FRANCHISE_GROUPS.reduce((total, group) => total + group.items.length, 0),
-    [],
-  );
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented || event.isComposing) return;
+      event.preventDefault();
+      setIsOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen]);
 
   useEffect(() => {
     const viewport = routeViewportRef.current;
@@ -162,80 +167,10 @@ export default function ChronologicalClient() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#040404]  pb-20  pt-28 lg:pt-36 px-7 lg:px-24 xl:px-32 2xl:px-26 text-white font-[family-name:var(--font-geist-sans)] sm:px-7 ">
+    <div className="page-gutter page-listing relative min-h-screen overflow-hidden bg-[#040404]  pb-20  pt-28 px-7 text-white font-[family-name:var(--font-geist-sans)] sm:px-7 ">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.18),transparent_28%),linear-gradient(135deg,rgba(127,29,29,0.14),transparent_36%),linear-gradient(180deg,#090909_0%,#040404_45%,#020202_100%)]" />
 
-      <div className="pointer-events-none hidden lg:block absolute inset-x-0 top-26 h-px bg-gradient-to-r from-transparent via-red-500/30 to-transparent" />
-
-      <section className="relative mx-auto max-w-[1480px]">
-        <div className="mb-10 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
-          <div className="max-w-4xl">
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-red-500/25 bg-red-500/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-red-100/80">
-              Chronological Route
-            </span>
-            <h1 className="text-4xl font-semibold tracking-[-0.045em] text-white sm:text-5xl lg:text-6xl">
-              {data.name}
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/62 sm:text-base">
-              Follow every chapter from the earliest story point to the final
-              release.
-            </p>
-          </div>
-
-          <div className="grid gap-3 text-sm text-white/60 sm:grid-cols-2 xl:max-w-lg">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 backdrop-blur-sm">
-              <div className="text-[10px] uppercase tracking-[0.24em] text-white/35">
-                Franchise
-              </div>
-              <div className="mt-2 text-sm font-medium text-white/90">
-                {groupedFranchiseCount} routes
-              </div>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 backdrop-blur-sm">
-              <div className="text-[10px] uppercase tracking-[0.24em] text-white/35">
-                Sequence
-              </div>
-              <div className="mt-2 text-sm font-medium text-white/90">
-                {data.movies.length} connected stops
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-8 flex flex-col gap-4 rounded-[2rem] border border-white/10 bg-white/[0.03] p-5 backdrop-blur-sm lg:flex-row lg:items-center lg:justify-between lg:p-6">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs uppercase tracking-[0.28em] text-white/45">
-              Start to End
-            </span>
-            <p className="text-sm text-white/55">
-              The route can auto-move in the background, and you can stop it
-              anytime while keeping the scrollbar hidden.
-            </p>
-          </div>
-
-          <div className="chrono-scroll flex shrink-0 items-center gap-3 overflow-x-auto flex-col md:flex-row pb-1">
-            <button
-              onClick={() => setIsAutoMoving((current) => !current)}
-              className="inline-flex flex-none cursor-pointer items-center justify-center gap-3 self-start rounded-full border border-white/10 w-full md:w-fit bg-white/[0.04] px-5 py-3 text-sm font-semibold whitespace-nowrap text-white transition duration-300 hover:bg-white/[0.08]"
-            >
-              {isAutoMoving ? (
-                <Pause className="h-4 w-4" />
-              ) : (
-                <Play className="h-4 w-4" />
-              )}
-              {isAutoMoving ? "Stop the Journey" : "Begin the Journey"}
-            </button>
-
-            <button
-              onClick={() => setIsOpen(true)}
-              className="inline-flex flex-none cursor-pointer items-center justify-center w-full md:w-fit gap-3 self-start rounded-full border border-red-500/20 bg-red-500/10 px-5 py-3 text-sm font-semibold whitespace-nowrap text-white transition duration-300 hover:border-red-400/40 hover:bg-red-500/15"
-            >
-              <AiOutlineFieldTime className="h-5 w-5 text-red-300" />
-              Explore Another Saga
-            </button>
-          </div>
-        </div>
-
+      <section className="page-width relative mx-auto max-w-[1480px]">
         <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_80px_rgba(0,0,0,0.35)] md:p-8">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(239,68,68,0.12),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(248,113,113,0.08),transparent_24%)]" />
 
@@ -249,23 +184,32 @@ export default function ChronologicalClient() {
                   {data.movies.length} entries
                 </span>
               </div>
-              <h2 className="text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
+              <h1 className="text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
                 {data.name}
-              </h2>
+              </h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-white/58">
-                Each card is positioned as a route stop, alternating above and
-                below the path to make the chronology easy to scan at a glance.
+                Follow the story in chronological order.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.22em] text-white/45">
-              <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-2">
-                Beginning
-              </span>
-              <span className="h-px w-10 bg-gradient-to-r from-red-400/60 to-transparent" />
-              <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-2">
-                Finale
-              </span>
+            <div className="flex shrink-0 flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsAutoMoving((current) => !current)}
+                aria-pressed={!isAutoMoving}
+                className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/[0.08]"
+              >
+                {isAutoMoving ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
+                {isAutoMoving ? "Stop the Journey" : "Begin the Journey"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-red-400/40 hover:bg-red-500/15"
+              >
+                <AiOutlineFieldTime className="h-5 w-5 text-red-300" aria-hidden="true" />
+                Explore Another Saga
+              </button>
             </div>
           </div>
 
@@ -437,6 +381,7 @@ export default function ChronologicalClient() {
                       {items.map(({ key, label }) => (
                         <button
                           key={key}
+                          aria-pressed={selectedFranchise === key}
                           onClick={() => {
                             setSelectedFranchise(key);
                             setIsOpen(false);
@@ -449,13 +394,6 @@ export default function ChronologicalClient() {
                           }`}
                         >
                           <span>{label}</span>
-                          <span
-                            className={`h-2.5 w-2.5 rounded-full ${
-                              selectedFranchise === key
-                                ? "bg-black"
-                                : "bg-red-400/70"
-                            }`}
-                          />
                         </button>
                       ))}
                     </div>

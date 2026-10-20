@@ -273,7 +273,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black px-7 pb-16 pt-28 text-white lg:px-24 xl:px-32 xl:pt-32 2xl:px-26">
+    <main className="page-gutter relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black px-7 pb-16 pt-28 text-white xl:pt-32">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       <div className="mb-8 flex flex-wrap justify-center gap-2 text-sm">

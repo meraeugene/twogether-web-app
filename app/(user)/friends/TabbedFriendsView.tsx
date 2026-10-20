@@ -67,7 +67,7 @@ export default function FriendsPage({
     }`;
 
   return (
-    <div className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-black text-white px-7  pt-28 pb-16 lg:px-24 xl:px-32 2xl:px-26 xl:pt-32 relative">
+    <div className="page-gutter min-h-screen font-[family-name:var(--font-geist-sans)] bg-black text-white px-7  pt-28 pb-16 xl:pt-32 relative">
       <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
 
       {/* Hero Banner */}
@@ -108,7 +108,7 @@ export default function FriendsPage({
             transition={{ duration: 0.3 }}
           >
             {activeTab === "Friends" && (
-              <div className="max-w-4xl mx-auto">
+              <div className="page-align-start max-w-4xl mx-auto">
                 <AddFriendSearch currentUserId={currentUserId} />
 
                 {isLoadingFriends ? (
@@ -139,7 +139,7 @@ export default function FriendsPage({
             )}
 
             {activeTab === "Requests" && (
-              <div className="max-w-4xl mx-auto">
+              <div className="page-align-start max-w-4xl mx-auto">
                 {isLoadingRequests ? (
                   <div className="flex justify-center ">
                     <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -168,7 +168,7 @@ export default function FriendsPage({
             )}
 
             {activeTab === "Sent" && (
-              <div className="max-w-4xl mx-auto">
+              <div className="page-align-start max-w-4xl mx-auto">
                 {isLoadingSent ? (
                   <div className="flex justify-center ">
                     <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>

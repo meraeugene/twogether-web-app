@@ -73,7 +73,7 @@ export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
               variants={itemVariants}
               layout
             >
-              <FilmCard item={item} />
+              <FilmCard item={item} priority={page === 0} />
             </motion.div>
           ))}
         </motion.div>

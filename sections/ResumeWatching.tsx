@@ -37,7 +37,7 @@ export default function ResumeWatching() {
         <div className="absolute inset-0 opacity-[0.025] pointer-events-none bg-[radial-gradient(#fb2c36_0.9px,transparent_0.9px)] [background-size:26px_26px]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div className="page-gutter page-width relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
         <div className="mb-10 flex flex-col gap-6 md:mb-14 md:grid md:grid-cols-[minmax(0,1.35fr)_minmax(260px,0.8fr)] md:items-end md:gap-10 xl:flex xl:flex-row xl:justify-between">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-red-400/80">

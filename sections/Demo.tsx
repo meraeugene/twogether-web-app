@@ -24,7 +24,7 @@ const Demo = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] md:w-[500px] lg:w-[600px] h-[400px] md:h-[500px] lg:h-[600px] bg-red-600/5 blur-[120px] rounded-full" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+      <div className="page-gutter page-width relative z-10 max-w-7xl mx-auto px-6 sm:px-8">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* LEFT SIDE */}
           <div className="lg:col-span-7 space-y-6">

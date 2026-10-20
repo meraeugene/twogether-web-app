@@ -25,7 +25,7 @@ export default function BrowseAnimeClient({ genre }: { genre?: string }) {
   }, [genre]);
 
   return (
-    <main className="min-h-screen relative bg-black pb-16 pt-28 lg:pt-36 px-7 lg:px-24 xl:px-16 2xl:px-26 text-white font-(family-name:--font-geist-sans)">
+    <main className="page-gutter page-listing min-h-screen relative bg-black pb-16 pt-28 px-7 text-white font-(family-name:--font-geist-sans)">
       <div className="absolute inset-0 bg-linear-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
       <section className="mb-16">
         <BackButton />

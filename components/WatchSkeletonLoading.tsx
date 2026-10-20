@@ -3,7 +3,7 @@ const pulse =
 
 const WatchSkeletonLoading = () => {
   return (
-    <main className="relative min-h-screen bg-black px-7 pb-16 pt-28 text-white lg:px-24 xl:px-16 xl:pt-34 2xl:px-26">
+    <main className="page-gutter page-listing relative min-h-screen bg-black px-7 pb-16 pt-28 text-white">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
 
       <div className="relative space-y-8">
