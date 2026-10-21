@@ -2,7 +2,6 @@
 
 import WatchPlayer from "@/app/(user)/watch/[id]/[movieTitle]/WatchPlayer";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { useState } from "react";
 import { Sparkles, Star } from "lucide-react";
 import ToggleWatchlistButton from "@/app/(user)/watch/[id]/[movieTitle]/ToggleWatchlistButton";
@@ -220,24 +219,22 @@ export default function TMDBWatchPage({
       {recommendation && (
         <section className="relative mt-12 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-5 text-white shadow-[0_28px_90px_rgba(0,0,0,.3)] sm:p-7 lg:p-9">
           {recommendation.backdrop_url && (
-            <Image
+            <img
               src={recommendation.backdrop_url}
               alt=""
-              fill
-              sizes="100vw"
-              className="pointer-events-none -z-10 object-cover opacity-[0.07] blur-2xl"
+              loading="lazy"
+              className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover opacity-[0.07] blur-2xl"
             />
           )}
 
           <div className="grid gap-7 lg:grid-cols-[210px_1fr] lg:gap-10">
             {recommendation.poster_url && (
               <div className="relative mx-auto aspect-[2/3] w-full max-w-[210px] overflow-hidden rounded-2xl border border-white/15 bg-white/[0.05] shadow-2xl shadow-black/45 lg:mx-0">
-                <Image
+                <img
                   src={recommendation.poster_url}
                   alt={`${recommendation.title} poster`}
-                  fill
-                  sizes="210px"
-                  className="object-cover"
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
               </div>
             )}
@@ -349,12 +346,11 @@ export default function TMDBWatchPage({
                   >
                     <div className="relative aspect-[2/3] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] transition duration-300 group-hover/cast:-translate-y-1 group-hover/cast:border-white/30 group-hover/cast:shadow-[0_16px_40px_rgba(0,0,0,.4)]">
                       {member.profile_url ? (
-                        <Image
+                        <img
                           src={member.profile_url}
                           alt={member.name}
-                          fill
-                          sizes="148px"
-                          className="object-cover transition duration-500 group-hover/cast:scale-[1.04]"
+                          loading="lazy"
+                          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover/cast:scale-[1.04]"
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center bg-white/[0.04] px-3 text-center text-2xl font-bold text-white/25">
