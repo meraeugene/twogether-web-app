@@ -90,6 +90,7 @@
   .section + .section { margin-top: 10px; padding-top: 10px; border-top: 1px solid #ffffff0a; }
   :is(.item, .search, .profile, .signIn):is(:hover, :focus-visible),
   .active, .profile[aria-current="page"] { color: #f46b77; background: #f43f4c0c; }
+  .active, .profile[aria-current="page"] { border-radius: 8px; }
   .authStatus { display: grid; place-items: center; height: 40px; color: #777780; }
   .account { flex-shrink: 0; margin-top: 10px; padding-top: 8px; border-top: 1px solid #ffffff0a; }
   .logout:disabled { opacity: .45; cursor: wait; }

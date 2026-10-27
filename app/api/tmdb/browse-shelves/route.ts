@@ -55,11 +55,11 @@ export async function GET(request: NextRequest) {
   const apiKey = process.env.TMDB_API_KEY;
   if (!apiKey) return NextResponse.json({ error: "Movie service is unavailable." }, { status: 503 });
   const genre = request.nextUrl.searchParams.get("genre") || undefined;
-  const config = genre ? BROWSE_CATEGORY_SHELVES[category].find((item) => item.genre === genre) : undefined;
-  if (genre && !config) return NextResponse.json({ error: "Unknown genre for this category." }, { status: 400 });
+  const genreMap = category === "movies" ? TMDB_GENRE_MAP : TV_GENRE_MAP;
+  if (genre && !Object.prototype.hasOwnProperty.call(genreMap, genre)) return NextResponse.json({ error: "Unknown genre for this category." }, { status: 400 });
   const page = Math.min(500, Math.max(1, Math.floor(Number(request.nextUrl.searchParams.get("page")) || 1)));
   try {
-    if (genre) {
+    if (genre || request.nextUrl.searchParams.get("view") === "grid") {
       return NextResponse.json({ items: await fetchTitles(category, apiKey, genre, page), shelves: [] }, {
         headers: { "Cache-Control": `public, max-age=${CACHE_SECONDS}, stale-while-revalidate=300` },
       });

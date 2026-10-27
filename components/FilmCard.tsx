@@ -37,6 +37,8 @@ function FilmCard({
   orderNumber,
   priority = false,
   renderTrigger,
+  previewContainer,
+  onPreviewChange,
 }: {
   item: Recommendation;
   isDeleteRecommendation?: boolean;
@@ -47,6 +49,8 @@ function FilmCard({
   orderNumber?: number;
   priority?: boolean;
   renderTrigger?: (openPreview: () => void) => React.ReactNode;
+  previewContainer?: HTMLElement | null;
+  onPreviewChange?: (open: boolean, trigger?: HTMLElement) => void;
 }) {
   const [isPending, startTransition] = useTransition();
   const [isVisible, setIsVisible] = useState(true);
@@ -69,19 +73,24 @@ function FilmCard({
 
     const trigger = document.activeElement;
     closePreviewButton.current?.focus();
+    onPreviewChange?.(true, trigger instanceof HTMLElement ? trigger : undefined);
     window.dispatchEvent(new Event(TRAILER_PREVIEW_OPEN_EVENT));
     const fn = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setCinemaOpen(false);
+      if (e.key !== "Escape" || e.defaultPrevented || e.isComposing) return;
+      e.preventDefault();
+      e.stopPropagation();
+      setCinemaOpen(false);
     };
     window.addEventListener("keydown", fn);
     return () => {
       window.removeEventListener("keydown", fn);
-      if (trigger instanceof HTMLElement && trigger.isConnected) trigger.focus();
+      onPreviewChange?.(false);
+      if (!onPreviewChange && trigger instanceof HTMLElement && trigger.isConnected) trigger.focus({ preventScroll: true });
     };
-  }, [cinemaOpen]);
+  }, [cinemaOpen, onPreviewChange]);
 
   useEffect(() => {
-    if (!cinemaOpen) return;
+    if (!cinemaOpen || previewContainer) return;
     const previousOverflow = document.body.style.overflow;
     const previousPadding = document.body.style.paddingRight;
     const scrollBarWidth =
@@ -93,7 +102,7 @@ function FilmCard({
       document.body.style.overflow = previousOverflow;
       document.body.style.paddingRight = previousPadding;
     };
-  }, [cinemaOpen]);
+  }, [cinemaOpen, previewContainer]);
 
   const getWatchHref = () => {
     const slug = getSlugFromTitle(item.title);
@@ -498,7 +507,7 @@ function FilmCard({
               </div>
             </motion.div>
           </AnimatePresence>,
-          document.body,
+          previewContainer ?? document.body,
         )
       : null;
 

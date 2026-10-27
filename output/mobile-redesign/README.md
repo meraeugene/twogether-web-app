@@ -1,5 +1,15 @@
 # Mobile layout verification
 
+## Search genres, trailer previews, and active sidebar corners
+
+Desktop active navigation items now have an 8px corner radius. The sidebar retains its full-height glass surface with zero outer corner radius.
+
+Search discovery offers Movies and TV Shows with Trending plus all 19 movie genres and 12 TV genres. Each selection loads up to 12 posters through a single grid API request. Clicking a poster or a typed movie/TV suggestion opens its trailer preview inside the search dialog. Closing the preview restores search state and focus; Watch Now navigates to the title. Artist results still navigate to filmographies.
+
+TypeScript and ESLint passed for the changed source. Live API checks returned matching Animation movies and Documentary TV shows and rejected Horror as a TV genre. Browser checks at 320px and 390px found no horizontal overflow. Genre previews, keyboard suggestion selection, Escape dismissal, focus restoration, and Watch Now navigation passed. Artist selection reached Christopher Nolan's filmography. Desktop computed styles confirm 8px active corners and 0px sidebar corners. YouTube playback inside search did not initialize consistently during this session; preview behavior and the existing unavailable fallback were verified, but playback for every clip was not.
+
+Screenshots: `search-genres-phone.jpg` and `search-sidebar-desktop.jpg`.
+
 ## Animated header, trailer playback, and full-height sidebar
 
 The mobile drawer now expands and collapses over 240ms, fades its backdrop, and crossfades the burger/close icons. The closing drawer stays mounted for its exit transition; closed links are inert and hidden from accessibility navigation. Escape and backdrop dismissal restore focus to the burger. Reduced-motion preferences disable these transitions.

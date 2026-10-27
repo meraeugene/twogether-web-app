@@ -2,11 +2,13 @@
 
 /* eslint-disable @next/next/no-img-element -- Suggestions use small images directly from the TMDB CDN. */
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiArrowRight, FiFilm, FiSearch, FiUser } from "react-icons/fi";
-import { Clock3, X } from "lucide-react";
+import { Clock3, Play, X } from "lucide-react";
 import SearchDiscovery from "./SearchDiscovery";
+import FilmCard from "./FilmCard";
+import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import { readRecentSearches, saveRecentSearch, clearRecentSearches, type RecentSearch } from "@/utils/recentSearches";
 import type { SearchKind, SearchSuggestion } from "@/types/search";
 import { cachedSuggestions, loadSearchSuggestions, searchCacheKey, suggestionHref } from "@/utils/searchAutocomplete";
@@ -16,7 +18,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const previewReturnFocus = useRef<HTMLElement | null>(null);
   const [query, setQuery] = useState("");
+  const [previewHost, setPreviewHost] = useState<HTMLDivElement | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [kind, setKind] = useState<SearchKind>("all");
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -28,6 +33,17 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   const suggestions = matchingResponse?.items ?? cached ?? [];
   const loading = trimmed.length >= 2 && !matchingResponse && !cached;
   const failed = matchingResponse?.failed;
+  const handlePreviewChange = useCallback((open: boolean, trigger?: HTMLElement) => {
+    if (open) previewReturnFocus.current = trigger && trigger !== document.body ? trigger : inputRef.current;
+    setPreviewOpen(open);
+  }, []);
+
+  useEffect(() => {
+    if (previewOpen || !previewReturnFocus.current) return;
+    // The panel is no longer inert after this commit, so its trigger can focus.
+    if (previewReturnFocus.current.isConnected) previewReturnFocus.current.focus({ preventScroll: true });
+    previewReturnFocus.current = null;
+  }, [previewOpen]);
 
   useEffect(() => {
     setRecentSearches(readRecentSearches());
@@ -74,11 +90,21 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
     onClose();
     router.push(suggestionHref(suggestion));
   };
+  const resultButton = (suggestion: SearchSuggestion, index: number, activate: () => void) => (
+    <button id={`header-search-option-${index}`} type="button" role="option" aria-selected={activeIndex === index}
+      tabIndex={-1} className={styles.result} onMouseDown={(event) => event.preventDefault()}
+      onMouseEnter={() => setActiveIndex(index)} onClick={activate}>
+      {suggestion.image_url ? <img className={suggestion.category === "person" ? styles.artistImage : undefined} src={suggestion.image_url} alt="" width={44} height={60} decoding="async" />
+        : <span className={`${styles.imageFallback} ${suggestion.category === "person" ? styles.artistImage : ""}`}>{suggestion.category === "person" ? <FiUser /> : <FiFilm />}</span>}
+      <span className={styles.resultCopy}><strong>{suggestion.label}</strong><span>{suggestion.category === "movie" ? "Movie" : suggestion.category === "tv" ? "TV show" : "Artist"}{suggestion.subtitle ? ` · ${suggestion.subtitle}` : ""}</span></span>
+      {suggestion.category === "person" ? <FiArrowRight className={styles.resultArrow} aria-hidden="true" /> : <Play className={styles.resultArrow} aria-hidden="true" />}
+    </button>
+  );
 
   return (
     <dialog ref={dialogRef} className={styles.dialog} aria-label="Search movies, shows, and artists"
-      onCancel={(event) => { event.preventDefault(); onClose(); }}>
-      <div className={styles.panel}>
+      onCancel={(event) => { event.preventDefault(); if (!previewOpen) onClose(); }}>
+      <div className={styles.panel} inert={previewOpen} aria-hidden={previewOpen}>
         <div className={styles.topbar}>
           <span className={styles.brand}><span>t<span>.</span></span>Discover</span>
           <button type="button" onClick={onClose} className={styles.close} aria-label="Close search"><X aria-hidden="true" /><span>Close</span><kbd>Esc</kbd></button>
@@ -89,7 +115,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
         </div>
         <form className={styles.form} role="search" onSubmit={(event) => {
           event.preventDefault();
-          if (activeIndex >= 0 && suggestions[activeIndex]) selectSuggestion(suggestions[activeIndex]);
+          if (activeIndex >= 0 && suggestions[activeIndex]) document.getElementById(`header-search-option-${activeIndex}`)?.click();
           else searchAll();
         }}>
           <FiSearch aria-hidden="true" />
@@ -122,7 +148,8 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             </section>}
             <SearchDiscovery kind={kind}
               onQuery={(value, selectedKind) => { setQuery(value); setKind(selectedKind); setActiveIndex(-1); inputRef.current?.focus(); }}
-              onNavigate={onClose} onTitle={(title) => { saveRecentSearch(title, "titles"); onClose(); }} />
+              onNavigate={onClose} onTitle={(title) => saveRecentSearch(title, "titles")}
+              previewContainer={previewHost} onPreviewChange={handlePreviewChange} />
           </>}
           {loading && <>
             <span className="sr-only" role="status">Searching</span>
@@ -137,14 +164,11 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
               <ul id="header-search-results" role="listbox" aria-label="Search suggestions">
                 {suggestions.map((suggestion, index) => (
                   <li key={`${suggestion.category}-${suggestion.id}`} role="presentation">
-                    <button id={`header-search-option-${index}`} type="button" role="option" aria-selected={activeIndex === index}
-                      tabIndex={-1} className={styles.result} onMouseDown={(event) => event.preventDefault()}
-                      onMouseEnter={() => setActiveIndex(index)} onClick={() => selectSuggestion(suggestion)}>
-                      {suggestion.image_url ? <img className={suggestion.category === "person" ? styles.artistImage : undefined} src={suggestion.image_url} alt="" width={44} height={60} decoding="async" />
-                        : <span className={`${styles.imageFallback} ${suggestion.category === "person" ? styles.artistImage : ""}`}>{suggestion.category === "person" ? <FiUser /> : <FiFilm />}</span>}
-                      <span className={styles.resultCopy}><strong>{suggestion.label}</strong><span>{suggestion.category === "movie" ? "Movie" : suggestion.category === "tv" ? "TV show" : "Artist"}{suggestion.subtitle ? ` · ${suggestion.subtitle}` : ""}</span></span>
-                      <FiArrowRight className={styles.resultArrow} aria-hidden="true" />
-                    </button>
+                    {suggestion.category === "person" ? resultButton(suggestion, index, () => selectSuggestion(suggestion))
+                      : <FilmCard item={adaptTMDBToRecommendation({ id: suggestion.id, type: suggestion.category, title: suggestion.label,
+                        poster_url: suggestion.image_url ?? null, year: suggestion.subtitle, genres: [] })}
+                        previewContainer={previewHost} onPreviewChange={handlePreviewChange}
+                        renderTrigger={openPreview => resultButton(suggestion, index, () => { saveRecentSearch(suggestion.label, "titles"); openPreview(); })} />}
                   </li>
                 ))}
               </ul>
@@ -155,6 +179,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
           {trimmed && <button type="button" onClick={searchAll}>{kind === "artists" ? "See all artists" : "See all results"} <FiArrowRight aria-hidden="true" /></button>}
         </div>}
       </div>
+      <div ref={setPreviewHost} />
     </dialog>
   );
 }
