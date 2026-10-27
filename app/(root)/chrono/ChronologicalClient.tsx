@@ -12,6 +12,7 @@ import { FaPlay } from "react-icons/fa";
 import { Pause, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ErrorMessage from "@/components/ErrorMessage";
+import ChronoSkeleton from "./ChronoSkeleton";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -150,11 +151,7 @@ export default function ChronologicalClient() {
   }, [data, isAutoMoving]);
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-black">
-        <div className="h-8 w-8 animate-spin rounded-full border-3 border-white/30 border-t-white" />
-      </div>
-    );
+    return <ChronoSkeleton />;
   }
 
   if (error || !data) return <ErrorMessage />;
@@ -171,169 +168,165 @@ export default function ChronologicalClient() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.18),transparent_28%),linear-gradient(135deg,rgba(127,29,29,0.14),transparent_36%),linear-gradient(180deg,#090909_0%,#040404_45%,#020202_100%)]" />
 
       <section className="page-width relative mx-auto max-w-[1480px]">
-        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_80px_rgba(0,0,0,0.35)] md:p-8">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(239,68,68,0.12),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(248,113,113,0.08),transparent_24%)]" />
-
-          <div className="relative z-10 mb-6 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-3xl">
-              <div className="mb-3 flex flex-wrap items-center gap-3">
-                <span className="rounded-full border border-red-400/25 bg-red-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.26em] text-red-100/80">
-                  Story Map
-                </span>
-                <span className="text-xs uppercase tracking-[0.24em] text-white/35">
-                  {data.movies.length} entries
-                </span>
-              </div>
-              <h1 className="text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
-                {data.name}
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/58">
-                Follow the story in chronological order.
-              </p>
+        <div className="relative z-10 mb-6 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <div className="mb-3 flex flex-wrap items-center gap-3">
+              <span className="rounded-full border border-red-400/25 bg-red-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.26em] text-red-100/80">
+                Story Map
+              </span>
+              <span className="text-xs uppercase tracking-[0.24em] text-white/35">
+                {data.movies.length} entries
+              </span>
             </div>
-
-            <div className="flex shrink-0 flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setIsAutoMoving((current) => !current)}
-                aria-pressed={!isAutoMoving}
-                className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/[0.08]"
-              >
-                {isAutoMoving ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
-                {isAutoMoving ? "Stop the Journey" : "Begin the Journey"}
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsOpen(true)}
-                className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-red-400/40 hover:bg-red-500/15"
-              >
-                <AiOutlineFieldTime className="h-5 w-5 text-red-300" aria-hidden="true" />
-                Explore Another Saga
-              </button>
-            </div>
+            <h1 className="text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
+              {data.name}
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/58">
+              Follow the story in chronological order.
+            </p>
           </div>
 
-          <div
-            ref={routeViewportRef}
-            className="chrono-scroll relative z-10 overflow-x-auto overflow-y-hidden pb-4 [contain:layout_paint] [will-change:scroll-position]"
-          >
-            <div className="relative min-w-max px-2 py-4 md:px-4 md:pb-36 md:pt-8">
-              <div className="pointer-events-none absolute left-0 right-0 top-[8.2rem] h-px bg-gradient-to-r from-red-400/0 via-red-400/35 to-red-400/0" />
-              <div className="pointer-events-none absolute left-6 top-[8.2rem] h-3 w-3 -translate-y-1/2 rounded-full border border-red-300/50 bg-[#050505] shadow-[0_0_18px_rgba(248,113,113,0.35)]" />
-              <div className="pointer-events-none absolute right-6 top-[8.2rem] h-3 w-3 -translate-y-1/2 rounded-full border border-red-300/50 bg-[#050505] shadow-[0_0_18px_rgba(248,113,113,0.35)]" />
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsAutoMoving((current) => !current)}
+              aria-pressed={!isAutoMoving}
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/[0.08]"
+            >
+              {isAutoMoving ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
+              {isAutoMoving ? "Stop the Journey" : "Begin the Journey"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-red-400/40 hover:bg-red-500/15"
+            >
+              <AiOutlineFieldTime className="h-5 w-5 text-red-300" aria-hidden="true" />
+              Explore Another Saga
+            </button>
+          </div>
+        </div>
 
-              <div className="flex min-w-max items-start gap-4 md:gap-0">
-                {data.movies.map((movie, index) => {
-                  const isEven = index % 2 === 0;
-                  const isFirst = index === 0;
-                  const isLast = index === data.movies.length - 1;
+        <div
+          ref={routeViewportRef}
+          className="chrono-scroll relative z-10 overflow-x-auto overflow-y-hidden pb-4 [contain:layout_paint] [will-change:scroll-position]"
+        >
+          <div className="relative min-w-max px-2 py-4 md:px-4 md:pb-36 md:pt-8">
+            <div className="pointer-events-none absolute left-0 right-0 top-[8.2rem] h-px bg-gradient-to-r from-red-400/0 via-red-400/35 to-red-400/0" />
+            <div className="pointer-events-none absolute left-6 top-[8.2rem] h-3 w-3 -translate-y-1/2 rounded-full border border-red-300/50 bg-[#050505] shadow-[0_0_18px_rgba(248,113,113,0.35)]" />
+            <div className="pointer-events-none absolute right-6 top-[8.2rem] h-3 w-3 -translate-y-1/2 rounded-full border border-red-300/50 bg-[#050505] shadow-[0_0_18px_rgba(248,113,113,0.35)]" />
 
-                  return (
+            <div className="flex min-w-max items-start gap-4 md:gap-0">
+              {data.movies.map((movie, index) => {
+                const isEven = index % 2 === 0;
+                const isFirst = index === 0;
+                const isLast = index === data.movies.length - 1;
+
+                return (
+                  <div
+                    key={`${movie.tmdb_id}-${movie.type}-${index}`}
+                    className="relative flex items-start md:items-stretch"
+                  >
                     <div
-                      key={`${movie.tmdb_id}-${movie.type}-${index}`}
-                      className="relative flex items-start md:items-stretch"
+                      className={`w-[230px] shrink-0 [contain:layout_paint_style] [content-visibility:auto] [contain-intrinsic-size:280px_680px] md:w-[280px] ${
+                        isEven ? "md:translate-y-0" : "md:translate-y-28"
+                      }`}
                     >
-                      <div
-                        className={`w-[230px] shrink-0 [contain:layout_paint_style] [content-visibility:auto] [contain-intrinsic-size:280px_680px] md:w-[280px] ${
-                          isEven ? "md:translate-y-0" : "md:translate-y-28"
-                        }`}
-                      >
-                        <div className="rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] p-4 shadow-[0_16px_50px_rgba(0,0,0,0.28)] transition duration-300 hover:border-white/15">
-                          <div className="mb-4 flex items-center justify-between gap-3">
-                            <span className="text-[10px] font-semibold uppercase tracking-[0.26em] text-white/38">
-                              {isFirst
-                                ? "Start"
-                                : isLast
-                                  ? "Finale"
-                                  : `Stop ${index + 1}`}
-                            </span>
-                            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-red-400/20 bg-red-500/10 text-[10px] font-semibold text-red-100/80">
-                              {String(index + 1).padStart(2, "0")}
-                            </span>
-                          </div>
+                      <div className="rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] p-4 shadow-[0_16px_50px_rgba(0,0,0,0.28)] transition duration-300 hover:border-white/15">
+                        <div className="mb-4 flex items-center justify-between gap-3">
+                          <span className="text-[10px] font-semibold uppercase tracking-[0.26em] text-white/38">
+                            {isFirst
+                              ? "Start"
+                              : isLast
+                                ? "Finale"
+                                : `Stop ${index + 1}`}
+                          </span>
+                          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-red-400/20 bg-red-500/10 text-[10px] font-semibold text-red-100/80">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                        </div>
 
-                          <div className="group relative">
-                            <div className="relative overflow-hidden rounded-[1.4rem] bg-[#141414]">
-                              <Image
-                                src={
-                                  movie.poster_url?.startsWith("http")
-                                    ? movie.poster_url
-                                    : `https://image.tmdb.org/t/p/w500${movie.poster_url}`
-                                }
-                                alt={movie.title}
-                                width={500}
-                                height={750}
-                                sizes="(min-width: 768px) 248px, 198px"
-                                quality={72}
-                                className="aspect-[2/3] w-full object-cover transition duration-500 group-hover:scale-105 group-hover:brightness-50"
-                              />
+                        <div className="group relative">
+                          <div className="relative overflow-hidden rounded-[1.4rem] bg-[#141414]">
+                            <Image
+                              src={
+                                movie.poster_url?.startsWith("http")
+                                  ? movie.poster_url
+                                  : `https://image.tmdb.org/t/p/w500${movie.poster_url}`
+                              }
+                              alt={movie.title}
+                              width={500}
+                              height={750}
+                              sizes="(min-width: 768px) 248px, 198px"
+                              quality={72}
+                              className="aspect-[2/3] w-full object-cover transition duration-500 group-hover:scale-105 group-hover:brightness-50"
+                            />
 
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 via-45% to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 via-45% to-transparent" />
 
-                              <div className="absolute inset-0 hidden items-center justify-center opacity-0 transition duration-300 group-hover:flex group-hover:opacity-100">
-                                <button
-                                  onClick={() => handleWatchNow(movie)}
-                                  className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white shadow-[0_0_35px_rgba(239,68,68,0.45)] transition duration-300 hover:scale-110 hover:bg-red-600"
-                                >
-                                  <FaPlay className="text-lg" />
-                                </button>
-                              </div>
-                            </div>
-
-                            <div className="mt-4">
-                              <h3 className="text-lg font-semibold leading-snug text-white">
-                                {movie.title}
-                              </h3>
-
-                              {(movie.year || movie.duration) && (
-                                <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-white/60">
-                                  {movie.year && (
-                                    <span className="text-white/80">
-                                      {movie.year}
-                                    </span>
-                                  )}
-                                  {movie.year && movie.duration && (
-                                    <span className="text-white/35">|</span>
-                                  )}
-                                  {movie.duration && (
-                                    <span>{movie.duration} min</span>
-                                  )}
-                                </div>
-                              )}
-
-                              {movie.comment && (
-                                <p className="mt-3 line-clamp-3 text-sm leading-6 text-white/58">
-                                  {movie.comment}
-                                </p>
-                              )}
-
+                            <div className="absolute inset-0 hidden items-center justify-center opacity-0 transition duration-300 group-hover:flex group-hover:opacity-100">
                               <button
                                 onClick={() => handleWatchNow(movie)}
-                                className="mt-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-semibold text-white transition duration-300 hover:border-red-400/40 hover:bg-red-500/15 md:hidden"
+                                className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white shadow-[0_0_35px_rgba(239,68,68,0.45)] transition duration-300 hover:scale-110 hover:bg-red-600"
                               >
-                                <FaPlay className="text-xs" />
-                                Watch Now
+                                <FaPlay className="text-lg" />
                               </button>
                             </div>
                           </div>
+
+                          <div className="mt-4">
+                            <h3 className="text-lg font-semibold leading-snug text-white">
+                              {movie.title}
+                            </h3>
+
+                            {(movie.year || movie.duration) && (
+                              <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-white/60">
+                                {movie.year && (
+                                  <span className="text-white/80">
+                                    {movie.year}
+                                  </span>
+                                )}
+                                {movie.year && movie.duration && (
+                                  <span className="text-white/35">|</span>
+                                )}
+                                {movie.duration && (
+                                  <span>{movie.duration} min</span>
+                                )}
+                              </div>
+                            )}
+
+                            {movie.comment && (
+                              <p className="mt-3 line-clamp-3 text-sm leading-6 text-white/58">
+                                {movie.comment}
+                              </p>
+                            )}
+
+                            <button
+                              onClick={() => handleWatchNow(movie)}
+                              className="mt-4 inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-semibold text-white transition duration-300 hover:border-red-400/40 hover:bg-red-500/15 md:hidden"
+                            >
+                              <FaPlay className="text-xs" />
+                              Watch Now
+                            </button>
+                          </div>
                         </div>
                       </div>
-
-                      {!isLast && (
-                        <div className="pointer-events-none relative w-24 shrink-0">
-                          <div className="absolute left-0 top-[8.15rem] h-px w-24 bg-gradient-to-r from-red-400/45 to-red-300/15" />
-                          <div
-                            className={`absolute left-1/2 top-[8.15rem] w-px bg-gradient-to-b from-red-400/40 to-transparent ${
-                              isEven ? "h-28" : "-translate-y-28 h-28"
-                            }`}
-                          />
-                          <div className="absolute left-1/2 top-[8.15rem] h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-300/70 shadow-[0_0_18px_rgba(248,113,113,0.45)]" />
-                        </div>
-                      )}
                     </div>
-                  );
-                })}
-              </div>
+
+                    {!isLast && (
+                      <div className="pointer-events-none relative w-24 shrink-0">
+                        <div className="absolute left-0 top-[8.15rem] h-px w-24 bg-gradient-to-r from-red-400/45 to-red-300/15" />
+                        <div
+                          className={`absolute left-1/2 top-[8.15rem] w-px bg-gradient-to-b from-red-400/40 to-transparent ${
+                            isEven ? "h-28" : "-translate-y-28 h-28"
+                          }`}
+                        />
+                        <div className="absolute left-1/2 top-[8.15rem] h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-300/70 shadow-[0_0_18px_rgba(248,113,113,0.45)]" />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

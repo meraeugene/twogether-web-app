@@ -1,46 +1,12 @@
-import Skeleton from "@/components/ui/Skeleton";
-
-const rowHeaderPulse = "rounded-xl";
-
-function RecosRowSkeleton() {
-  return (
-    <section className="relative z-10 mb-16 space-y-6">
-      <div className="flex items-center justify-between">
-        <Skeleton className={`${rowHeaderPulse} h-9 w-44`} />
-        <div className="flex gap-3">
-          <Skeleton className={`${rowHeaderPulse} h-10 w-10 rounded-full`} />
-          <Skeleton className={`${rowHeaderPulse} h-10 w-10 rounded-full`} />
-        </div>
-      </div>
-
-      <div className="media-grid grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <Skeleton key={index} className="aspect-[2/3] w-full rounded-lg" />
-        ))}
-      </div>
-
-      <div className="flex justify-center gap-2">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <Skeleton
-            key={index}
-            className={`${rowHeaderPulse} h-2 rounded-full ${
-              index === 0 ? "w-6" : "w-2"
-            }`}
-          />
-        ))}
-      </div>
-    </section>
-  );
-}
+import { LoadingPage } from "@/components/PageSkeletons";
+import RowSkeleton from "@/app/(user)/recos/RowSkeleton";
 
 export default function RecosSkeletonLoading() {
   return (
-    <main className="page-gutter relative min-h-screen overflow-hidden bg-black px-7 pb-16 pt-28 xl:pt-32">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
-
-      <RecosRowSkeleton />
-      <RecosRowSkeleton />
-      <RecosRowSkeleton />
-    </main>
+    <LoadingPage label="Loading recommendations">
+      <RowSkeleton title="Latest Reco" />
+      <RowSkeleton />
+      <RowSkeleton />
+    </LoadingPage>
   );
 }

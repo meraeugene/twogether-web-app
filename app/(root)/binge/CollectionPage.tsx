@@ -10,37 +10,13 @@ import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { fetcher } from "@/utils/swr/fetcher";
 import ErrorMessage from "@/components/ErrorMessage";
 import FilmCard from "@/components/FilmCard";
+import CollectionSkeleton from "@/components/CollectionSkeleton";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 
 function formatRuntime(minutes: number) {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
   return `${hours}h ${remainingMinutes.toString().padStart(2, "0")}m`;
-}
-
-function CollectionSkeleton() {
-  return (
-    <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-4 sm:p-5">
-      <div className="skeleton-shimmer grid min-h-[280px] gap-6 lg:grid-cols-[34%_1fr]">
-        <div className="rounded-2xl bg-white/[0.07]" />
-        <div className="flex min-w-0 flex-col justify-center gap-5 py-3">
-          <div className="h-8 w-2/5 rounded bg-white/[0.08]" />
-          <div className="h-4 w-1/4 rounded bg-white/[0.06]" />
-          <div className="flex min-w-0 gap-2 overflow-hidden">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <div
-                key={index}
-                className="w-[112px] shrink-0 sm:w-[124px] xl:w-[calc((100%-2rem)/5)]"
-              >
-                <div className="aspect-[2/3] rounded-xl bg-white/[0.07]" />
-                <div className="mt-2 h-4 w-4/5 rounded bg-white/[0.06]" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function CollectionRow({

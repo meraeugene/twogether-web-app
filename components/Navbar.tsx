@@ -173,20 +173,6 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
     setSearchOpen(false);
   }, [pathname]);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
-    };
-    window.addEventListener("keydown", handleEscape);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleEscape);
-    };
-  }, [menuOpen]);
-
   if (hideOnboarding) {
     return null;
   }
@@ -197,11 +183,11 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
         searchShortcut={searchShortcut} onSearch={() => setSearchOpen(true)}
         onPreloadSearch={preloadSearch} onLogin={handleLogin} onLogout={logout} />
       <div
-        className={`mobile-header-shell fixed top-0 left-0 md:top-5 md:left-1/2 md:-translate-x-1/2 z-[60] overflow-visible w-full md:w-[calc(100%-32px)] md:max-w-[440px] xl:hidden font-[family-name:var(--font-geist-sans)] ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
+        className={`fixed top-5 left-1/2 -translate-x-1/2 z-[60] overflow-visible w-[calc(100%-32px)] max-w-[440px] xl:hidden font-[family-name:var(--font-geist-sans)] ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
       >
       {/* ── MOBILE TOP BAR ── */}
       <div
-        className={`mobile-topbar xl:hidden bg-black flex items-center justify-between px-5 p-3 ${shell} ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
+        className={`xl:hidden bg-black flex items-center justify-between px-5 p-3 ${shell} ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
       >
         <Link
           href="/"
@@ -215,16 +201,14 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
             aria-keyshortcuts="Control+K Meta+K"
             onPointerEnter={preloadSearch} onFocus={preloadSearch}
             onClick={() => { close(); setSearchOpen(true); }}
-            className="flex h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-full px-2 text-white/75 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-white/70">
+            className="flex h-9 min-w-9 cursor-pointer items-center justify-center gap-2 rounded-full px-2 text-white/75 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-white/70">
             <FiSearch className="h-5 w-5" aria-hidden="true" />
             <kbd aria-hidden="true" className="hidden rounded-md border border-white/15 bg-white/5 px-1.5 py-0.5 font-sans text-[10px] font-medium leading-4 whitespace-nowrap text-white/50 sm:inline-block">{searchShortcut}</kbd>
           </button>
           <button
             onClick={() => setMenuOpen((p) => !p)}
             aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            className="flex h-11 w-11 items-center justify-center text-white xl:hidden text-2xl -mr-2"
+            className="text-white xl:hidden text-2xl p-1 -mr-1"
           >
             {menuOpen ? <HiX /> : <HiOutlineMenuAlt3 />}
           </button>
@@ -235,13 +219,12 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            id="mobile-navigation"
             key="mobile-menu"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="mobile-menu relative 2xl:hidden border-t border-white/10 p-4 flex flex-col text-white rounded-b-3xl bg-black max-h-[65vh] overflow-y-auto"
+            className="relative 2xl:hidden border-t border-white/10 p-4 flex flex-col text-white rounded-b-3xl bg-black max-h-[65vh] overflow-y-auto"
           >
             <motion.div
               initial="hidden"

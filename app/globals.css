@@ -91,7 +91,8 @@ body {
     --page-gutter: 16px;
     --page-gutter-left: max(var(--page-gutter), env(safe-area-inset-left));
     --page-gutter-right: max(var(--page-gutter), env(safe-area-inset-right));
-    --mobile-header-height: calc(56px + env(safe-area-inset-top));
+    /* Clearance for the original floating navigation. */
+    --mobile-header-height: calc(92px + env(safe-area-inset-top));
   }
 
   html { scroll-padding-top: calc(var(--mobile-header-height) + 16px); }
@@ -123,30 +124,6 @@ body {
   }
   .page-gutter :is(input, textarea, select) { font-size: 16px; }
 
-  .mobile-header-shell {
-    top: 0;
-    left: 0;
-    width: 100%;
-    max-width: none;
-    transform: none;
-    translate: none;
-    border-radius: 0;
-  }
-  .mobile-topbar {
-    min-height: var(--mobile-header-height);
-    padding: env(safe-area-inset-top) var(--page-gutter-right) 0 var(--page-gutter-left);
-    border: 0;
-    border-bottom: 1px solid rgb(255 255 255 / 8%);
-    border-radius: 0;
-    background: rgb(10 10 10 / 94%);
-    box-shadow: none;
-  }
-  .mobile-menu {
-    max-height: calc(100dvh - var(--mobile-header-height));
-    padding: 16px var(--page-gutter-right) max(24px, env(safe-area-inset-bottom)) var(--page-gutter-left);
-    overscroll-behavior: contain;
-    border-radius: 0;
-  }
   .mobile-footer {
     padding: 20px var(--page-gutter-left) max(20px, env(safe-area-inset-bottom));
     font-size: 12px;

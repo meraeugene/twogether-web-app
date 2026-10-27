@@ -38,7 +38,7 @@ export default function BrowseLandingClient() {
     <main className={styles.page}>
       <h1 className="sr-only">Browse movies and shows</h1>
       <section className={styles.hero} aria-label="Find your next watch">
-        <BrowseHero movies={featured.data?.heroes} />
+        <BrowseHero movies={featured.data?.heroes} isLoading={featured.isLoading} />
       </section>
       <nav className={styles.categories} aria-label="Browse categories">
         {categories.map((item) => (

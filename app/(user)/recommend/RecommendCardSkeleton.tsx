@@ -1,14 +1,14 @@
-const RecommendCardSkeleton = () => {
+import Skeleton from "@/components/ui/Skeleton";
+
+export default function RecommendCardSkeleton() {
   return (
-    <div className="animate-pulse rounded-lg lg:p-2">
-      <div className="w-full aspect-[2/3] bg-white/10 rounded mb-3" />
-      <div className="h-4 bg-white/10 w-full  mb-2 " />
-      <div className="flex justify-between gap-8">
-        <div className="h-3 bg-white/10  w-[70%]" />
-        <div className="h-3 bg-white/10  w-[30%]" />
+    <div className="rounded-lg py-4 text-left lg:p-2 lg:py-2" aria-hidden="true">
+      <Skeleton className="mb-2 aspect-[2/3] w-full rounded" />
+      <Skeleton className="h-6 w-4/5" />
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <Skeleton className="h-5 w-20" /><Skeleton className="h-6 w-12 rounded-sm" />
       </div>
+      <Skeleton className="mt-3 h-9 w-full rounded-md lg:hidden" />
     </div>
   );
-};
-
-export default RecommendCardSkeleton;
+}

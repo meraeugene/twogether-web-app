@@ -5,6 +5,7 @@ import { fetcher } from "@/utils/swr/fetcher";
 import { BiStar } from "react-icons/bi";
 import TMDBReviewCard from "./TMDBReviewCard";
 import { TMDBMovieReview } from "@/types/tmdbMovieReview";
+import { WatchReviewsSkeleton } from "@/components/WatchSkeletonLoading";
 
 export default function TMDBMovieReviews({ tmdbId }: { tmdbId: number }) {
   const {
@@ -14,9 +15,7 @@ export default function TMDBMovieReviews({ tmdbId }: { tmdbId: number }) {
   } = useSWR<TMDBMovieReview[]>(`/api/tmdb/reviews/${tmdbId}`, fetcher);
 
   if (isLoading) {
-    return (
-      <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin mt-12" />
-    );
+    return <WatchReviewsSkeleton />;
   }
 
   if (error) {

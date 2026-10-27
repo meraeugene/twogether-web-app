@@ -1,10 +1,11 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Skeleton from "@/components/ui/Skeleton";
 
 const TMDBSuggestionSkeleton = () => {
   return (
-    <section className="mt-16">
+    <section className="watch-section relative mt-16" aria-busy="true" aria-label="Loading suggestions">
       {/* Header with nav buttons */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl md:text-3xl font-bold ">You May Also Like</h2>
@@ -23,24 +24,28 @@ const TMDBSuggestionSkeleton = () => {
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="w-full rounded-sm overflow-hidden shadow-lg animate-pulse"
+            className="w-full rounded-sm overflow-hidden shadow-lg"
           >
             {/* Poster */}
-            <div className="relative aspect-[2/3] w-full bg-white/10 rounded-lg" />
+            <Skeleton className="relative aspect-[2/3] w-full rounded-lg" />
 
             {/* Info */}
-            <div className="flex-1 text-sm py-2 space-y-2">
-              <div className="h-4 w-3/4 mt-2 bg-white/10 rounded" />
-              <div className="flex mt-3 items-center justify-between">
+            <div className="flex-1 pt-4">
+              <Skeleton className="mb-3 h-9 w-full rounded-md lg:hidden" />
+              <Skeleton className="h-6 w-3/4 rounded" />
+              <div className="flex mt-1 flex-wrap items-center justify-between gap-2">
                 <div className="flex gap-2">
-                  <div className="h-3 w-8 bg-white/10 rounded" />
-                  <div className="h-3 w-8 bg-white/10 rounded" />
+                  <Skeleton className="h-5 w-8 rounded" />
+                  <Skeleton className="h-5 w-8 rounded" />
                 </div>
-                <div className="h-4 w-10 bg-white/10 rounded-sm" />
+                <Skeleton className="h-6 w-12 rounded-sm" />
               </div>
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-8 flex justify-center gap-2">
+        <Skeleton className="h-2 w-6 rounded-full" /><Skeleton className="h-2 w-2 rounded-full" /><Skeleton className="h-2 w-2 rounded-full" />
       </div>
     </section>
   );

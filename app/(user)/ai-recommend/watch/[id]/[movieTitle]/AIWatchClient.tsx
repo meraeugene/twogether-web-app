@@ -34,7 +34,7 @@ export default function AIWatchClient({
     (r) => r.tmdb_id === Number(tmdbId),
   );
 
-  if (!hasHydrated) return <WatchSkeletonLoading />;
+  if (!hasHydrated) return <WatchSkeletonLoading variant="ai" />;
 
   if (!recommendation) {
     return <ErrorMessage />;

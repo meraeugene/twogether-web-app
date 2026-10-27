@@ -3,6 +3,7 @@
 import useSWRInfinite from "swr/infinite";
 import { useEffect, useRef, useMemo } from "react";
 import FilmCard from "@/components/FilmCard";
+import { FilmCardSkeleton } from "@/components/FilmGridSkeleton";
 import { TMDBEnrichedResult, TMDBBrowseCategoryResponse } from "@/types/tmdb";
 import { fetcher as fetchJSON } from "@/utils/swr/fetcher";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
@@ -74,7 +75,7 @@ export default function TrendingTMDBTVShowsList({ genre }: { genre?: string }) {
         <div className="media-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-6 gap-8">
           {Array.from({ length: 18 }).map((_, i) => (
             <div key={i}>
-              <div className="aspect-2/3 w-full rounded-md bg-white/10 animate-pulse" />
+              <FilmCardSkeleton />
             </div>
           ))}
         </div>

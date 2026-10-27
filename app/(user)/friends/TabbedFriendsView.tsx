@@ -10,6 +10,7 @@ import {
 } from "@/actions/social/friendActions";
 import useSWR from "swr";
 import { AddFriendSearch } from "./AddFriendSearch";
+import { FriendCardsSkeleton } from "@/components/PageSkeletons";
 
 const tabs = ["Friends", "Requests", "Sent"];
 
@@ -114,9 +115,7 @@ export default function FriendsPage({
                 <AddFriendSearch currentUserId={currentUserId} />
 
                 {isLoadingFriends ? (
-                  <div className="flex justify-center ">
-                    <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  </div>
+                  <FriendCardsSkeleton />
                 ) : friends?.length === 0 ? (
                   <div className="text-center text-white/50  ">
                     No friends yet. Start adding some!
@@ -143,9 +142,7 @@ export default function FriendsPage({
             {activeTab === "Requests" && (
               <div className="w-full">
                 {isLoadingRequests ? (
-                  <div className="flex justify-center ">
-                    <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  </div>
+                  <FriendCardsSkeleton />
                 ) : requests?.length === 0 ? (
                   <div className="text-center text-white/50 ">
                     No incoming friend requests.
@@ -172,9 +169,7 @@ export default function FriendsPage({
             {activeTab === "Sent" && (
               <div className="w-full">
                 {isLoadingSent ? (
-                  <div className="flex justify-center ">
-                    <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  </div>
+                  <FriendCardsSkeleton />
                 ) : sent?.length === 0 ? (
                   <div className="text-center text-white/50 ">
                     No sent friend requests.

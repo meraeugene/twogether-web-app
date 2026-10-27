@@ -13,10 +13,11 @@ import { loadYouTubeIframeApi, type YouTubePlayer } from "@/utils/youtubeIframeA
 import { shuffleMovies } from "@/utils/shuffleMovies";
 import { TRAILER_PREVIEW_OPEN_EVENT } from "@/constants/trailerPreview";
 import styles from "./browse.module.css";
+import { BrowseHeroSkeleton } from "@/components/DiscoverySkeletons";
 
 const NO_MOVIES: TMDBFeaturedResult[] = [];
 
-export default function BrowseHero({ movies = NO_MOVIES }: { movies?: TMDBFeaturedResult[] }) {
+export default function BrowseHero({ movies = NO_MOVIES, isLoading = false }: { movies?: TMDBFeaturedResult[]; isLoading?: boolean }) {
   const [playlist, setPlaylist] = useState<{ movies: TMDBFeaturedResult[]; index: number }>({ movies: [], index: 0 });
   const mutedPreference = useRef(false);
   const handleMutedChange = useCallback((muted: boolean) => { mutedPreference.current = muted; }, []);
@@ -38,6 +39,7 @@ export default function BrowseHero({ movies = NO_MOVIES }: { movies?: TMDBFeatur
     });
   }, []);
   const movie = playlist.movies[playlist.index];
+  if (isLoading) return <BrowseHeroSkeleton />;
   return <BrowseHeroContent key={movie ? `${movie.id}-${movie.trailer_key}` : "no-trailer"} movie={movie}
     onNext={nextMovie} canAutoAdvance={playlist.movies.length > 1} initialMuted={mutedPreference.current}
     onMutedChange={handleMutedChange} />;

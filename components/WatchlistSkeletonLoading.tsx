@@ -1,25 +1,14 @@
 import { FilmCardSkeleton } from "@/components/FilmGridSkeleton";
-import Skeleton from "@/components/ui/Skeleton";
-
-const pulse = "rounded-xl";
+import { LoadingPage } from "@/components/PageSkeletons";
 
 export default function WatchlistSkeletonLoading() {
   return (
-    <main className="page-gutter relative min-h-screen bg-black px-7 pb-16 pt-28 text-white xl:pt-32">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
-
-      <div className="relative space-y-6">
-        <section className="space-y-3">
-          <Skeleton className={`${pulse} h-10 w-56`} />
-          <Skeleton className={`${pulse} h-4 w-full max-w-lg rounded-md`} />
-        </section>
-
-        <section className="media-grid grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          {Array.from({ length: 12 }).map((_, index) => (
-            <FilmCardSkeleton key={index} />
-          ))}
-        </section>
+    <LoadingPage label="Loading your watchlist">
+      <h1 className="mb-3 text-2xl font-semibold tracking-tight sm:text-3xl">Your Watchlist</h1>
+      <p className="mb-8 text-sm leading-6 text-white/55">Here are the Movies/Shows you&apos;ve added to your Watchlist.</p>
+      <div className="media-grid grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6">
+        {Array.from({ length: 12 }, (_, index) => <FilmCardSkeleton key={index} />)}
       </div>
-    </main>
+    </LoadingPage>
   );
 }

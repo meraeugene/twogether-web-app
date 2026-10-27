@@ -1,0 +1,201 @@
+[
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading your watchlist",
+    "url": "/layout-preview?view=watchlist",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading recommendations",
+    "url": "/layout-preview?view=recos",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading friends",
+    "url": "/layout-preview?view=friends",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading chats",
+    "url": "/layout-preview?view=messages",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading profile",
+    "url": "/layout-preview?view=profile",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading profile settings",
+    "url": "/layout-preview?view=edit",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading recommendation form",
+    "url": "/layout-preview?view=recommend",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading AI recommendations",
+    "url": "/layout-preview?view=ai",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading movies and shows",
+    "url": "/layout-preview?view=browse",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading titles",
+    "url": "/layout-preview?view=category",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading binge collections",
+    "url": "/layout-preview?view=binge",
+    "width": 380
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading chronological story map",
+    "url": "/layout-preview?view=chrono",
+    "width": 380
+  },
+  {
+    "grids": [
+      {
+        "columns": "194.925px 194.938px 194.938px 194.925px 194.938px 194.938px",
+        "gap": "28px"
+      }
+    ],
+    "hasError": false,
+    "scrollWidth": 1430,
+    "status": "Loading watch details",
+    "url": "/layout-preview?view=watch",
+    "width": 1430
+  },
+  {
+    "grids": [
+      {
+        "columns": "198.262px 198.262px 198.262px 198.275px 198.262px 198.262px",
+        "gap": "24px"
+      }
+    ],
+    "hasError": false,
+    "scrollWidth": 1430,
+    "status": "Loading your watchlist",
+    "url": "/layout-preview?view=watchlist",
+    "width": 1430
+  },
+  {
+    "grids": [
+      {
+        "columns": "198.262px 198.262px 198.262px 198.275px 198.262px 198.262px",
+        "gap": "24px"
+      },
+      {
+        "columns": "198.262px 198.262px 198.262px 198.275px 198.262px 198.262px",
+        "gap": "24px"
+      }
+    ],
+    "hasError": false,
+    "scrollWidth": 1430,
+    "status": "Loading recommendations",
+    "url": "/layout-preview?view=recos",
+    "width": 1430
+  },
+  {
+    "grids": [],
+    "hasError": false,
+    "scrollWidth": 1430,
+    "status": "Loading chats",
+    "url": "/layout-preview?view=messages",
+    "width": 1430
+  },
+  {
+    "grids": [],
+    "hasError": false,
+    "scrollWidth": 1430,
+    "status": "Loading profile",
+    "url": "/layout-preview?view=profile",
+    "width": 1430
+  },
+  {
+    "grids": [
+      {
+        "columns": "191.6px 191.6px 191.6px 191.6px 191.6px 191.6px",
+        "gap": "32px"
+      }
+    ],
+    "hasError": false,
+    "scrollWidth": 1430,
+    "status": "Loading titles",
+    "url": "/layout-preview?view=category",
+    "width": 1430
+  },
+  {
+    "grids": [],
+    "hasError": false,
+    "scrollWidth": 1430,
+    "status": "Loading binge collections",
+    "url": "/layout-preview?view=binge",
+    "width": 1430
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 310,
+    "status": "Loading watch details",
+    "url": "/layout-preview?view=watch",
+    "width": 310
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 310,
+    "status": "Loading chats",
+    "url": "/layout-preview?view=messages",
+    "width": 310
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 310,
+    "status": "Loading titles",
+    "url": "/layout-preview?view=category",
+    "width": 310
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 310,
+    "status": "Loading recommendation form",
+    "url": "/layout-preview?view=recommend",
+    "width": 310
+  },
+  {
+    "hasError": false,
+    "scrollWidth": 380,
+    "status": "Loading friends",
+    "url": "/layout-preview?view=friends",
+    "width": 380
+  }
+]

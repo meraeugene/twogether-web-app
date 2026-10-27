@@ -1,6 +1,20 @@
 # Mobile layout verification
 
-Implemented shared 16px, safe-area-aware mobile gutters; a 56px full-width header; full-width 16:9 watch players; unboxed movie credits; compact poster grids; full-screen search and AI chat; mobile action sheets; full-width collection/profile/friend/chat surfaces; and horizontally scrolling server, season, and collection-genre controls.
+Implemented shared 16px, safe-area-aware mobile gutters; full-width 16:9 watch players; unboxed movie credits; compact poster grids; full-screen search and AI chat; mobile action sheets; full-width collection/profile/friend/chat surfaces; and horizontally scrolling server, season, and collection-genre controls.
+
+## Header, Chrono, and loading corrections
+
+- Restored `components/Navbar.tsx` byte for byte from the commit before the mobile redesign. Removed its mobile CSS overrides and restored clearance for the original floating header.
+- Removed Chrono's enclosing card, border, background, shadow, and additional padding. Its story cards and journey controls remain in place.
+- Added page-specific loading routes for browse categories, collections, search, TMDB watch details, watchlist, recommendations, profiles, and Chrono. Replaced existing generic spinner pages for friends, chats, profile editing, and recommendation forms.
+- Matched poster grids, title/metadata spacing, mobile player dimensions, unboxed credits, cast rails, friend cards, and chat lists to their loaded UI. Collections and discovery heroes now use matching inline placeholders too.
+- Checked 12 skeleton page types at a 390px phone viewport, representative layouts at 320px, and desktop grids/panels at 1440px. Recorded measurements in `loading-layout-checks.json`: no horizontal overflow or rendering errors in the recorded cases.
+- Used a temporary development-only preview route to render the real loading components without authenticating. Removed that route after verification. This checks loading component layout, not authenticated actions.
+- The loaded movie player and its skeleton both begin at 168px on mobile and span the content width. The restored header and live Chrono page were also visually checked.
+
+Current screenshots: `chrono-unboxed-phone.jpg`, `watch-restored-header-phone.jpg`, and `watchlist-skeleton-phone.jpg`. The original three screenshots below predate the header correction.
+
+## Initial mobile checks
 
 Browser checks against the local development server with live TMDB data:
 

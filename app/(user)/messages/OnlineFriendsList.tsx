@@ -6,6 +6,7 @@ import {
 } from "@/actions/social/messageActions";
 import Image from "next/image";
 import useSWR from "swr";
+import { ThreadListSkeleton } from "@/components/PageSkeletons";
 
 export default function OnlineFriendsList({
   currentUserId,
@@ -31,24 +32,7 @@ export default function OnlineFriendsList({
     },
   );
 
-  if (isLoading) {
-    return (
-      <div className="border-t border-white/10  p-4 space-y-2">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-3 rounded-xl bg-white/5 p-2 animate-pulse"
-          >
-            <div className="h-11 w-11 rounded-full bg-white/10" />
-            <div className="flex-1 space-y-2">
-              <div className="h-3 w-1/2 rounded bg-white/10" />
-              <div className="h-3 w-3/4 rounded bg-white/10" />
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
+  if (isLoading) return <ThreadListSkeleton />;
 
   if (!friends || friends.length === 0) {
     return (
