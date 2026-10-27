@@ -1,0 +1,93 @@
+.mobileHeader, .backdrop { display: none; }
+
+@media (max-width: 1279px) {
+  .mobileHeader {
+    display: block;
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 60;
+    padding-top: env(safe-area-inset-top);
+    border-bottom: 1px solid #ffffff0f;
+    background: #0a0a0af5;
+    backdrop-filter: blur(12px);
+    font-family: var(--font-geist-sans), Arial, sans-serif;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 56px;
+    padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    width: 36px;
+    height: 44px;
+    flex-shrink: 0;
+    color: #fafafa;
+    text-decoration: none;
+  }
+  .brandMark { padding-right: 4px; font-size: 29px; line-height: 1; font-weight: 800; letter-spacing: -4px; }
+  .brandMark > span { color: #f43f4c; }
+  .shortcuts { display: flex; margin-left: auto; }
+  .actions { display: flex; }
+  .control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 10px;
+    color: #93939e;
+    background: transparent;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color .15s, background .15s;
+  }
+  .control svg, .menuLink svg { flex-shrink: 0; width: 18px; height: 18px; stroke-width: 1.6; }
+  .control:hover, .menuLink:hover { color: #ededf0; background: #ffffff05; }
+  .control.active, .control[aria-expanded="true"], .menuLink[aria-current="page"] { color: #f46b77; background: #f43f4c0c; }
+  .backdrop { display: block; position: fixed; inset: 0; z-index: 55; border: 0; background: #0008; }
+
+  .menu {
+    max-height: calc(100dvh - var(--mobile-header-height));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 8px max(16px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    border-top: 1px solid #ffffff0a;
+    background: #0a0a0a;
+  }
+  .section + .section { margin-top: 12px; padding-top: 12px; border-top: 1px solid #ffffff0a; }
+  .sectionTitle { margin: 8px 10px; color: #777780; font-size: 11px; line-height: 16px; }
+  .menuGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .menuLink {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    min-width: 0;
+    padding: 10px;
+    border: 0;
+    border-radius: 10px;
+    color: #93939e;
+    background: transparent;
+    text-decoration: none;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+    cursor: pointer;
+  }
+  .menuLink:disabled { opacity: .45; cursor: wait; }
+  .accountStatus { padding: 12px 10px; color: #777780; font-size: 13px; }
+  .mobileHeader :is(a, button):focus-visible { outline: 2px solid #f8828c; outline-offset: -2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control, .menuLink { transition: none; }
+}

@@ -70,6 +70,7 @@
   --foreground: #ffffff;
   --page-gutter: 32px;
   --page-gutter-left: var(--page-gutter);
+  --mobile-header-height: calc(56px + env(safe-area-inset-top));
   --page-gradient: linear-gradient(135deg, rgb(185 28 28 / 20%) 0%, rgb(0 0 0 / 5%) 50%, rgb(153 27 27 / 10%) 100%);
 }
 
@@ -91,8 +92,6 @@ body {
     --page-gutter: 16px;
     --page-gutter-left: max(var(--page-gutter), env(safe-area-inset-left));
     --page-gutter-right: max(var(--page-gutter), env(safe-area-inset-right));
-    /* Clearance for the original floating navigation. */
-    --mobile-header-height: calc(92px + env(safe-area-inset-top));
   }
 
   html { scroll-padding-top: calc(var(--mobile-header-height) + 16px); }
@@ -162,6 +161,10 @@ body {
   .mobile-filter-rail { flex-wrap: nowrap; overflow-x: auto; padding-block: 2px; scrollbar-width: none; }
   .mobile-filter-rail::-webkit-scrollbar { display: none; }
   .mobile-filter-rail > button { min-height: 44px; }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .page-gutter.min-h-screen { padding-top: calc(var(--mobile-header-height) + 24px); }
 }
 
 .page-gutter.min-h-screen {

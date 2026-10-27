@@ -1,151 +1,60 @@
 "use client";
 
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiX } from "react-icons/hi";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  moreNavItems,
-  primaryNavItems,
-  recoNavItems,
-  socialNavItems,
-} from "./NavItems";
-import { RiLogoutCircleLine, RiMovieAiLine } from "react-icons/ri";
-import { BiMoviePlay } from "react-icons/bi";
-import { AiOutlineFieldTime } from "react-icons/ai";
 import { usePathname } from "next/navigation";
-import { CurrentUser } from "@/types/user";
-import { signOut } from "@/actions/authActions";
-import type { Variants } from "framer-motion";
-import { createClient } from "@/utils/supabase/client";
-import AccountSettingsMenu from "@/components/AccountSettingsMenu";
-import { FiSearch } from "react-icons/fi";
+import { Compass, LogOut, Menu, Search, Settings, UserRound, X } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
+import { moreNavItems, primaryNavItems, recoNavItems, socialNavItems } from "./NavItems";
+import { navigationIcons } from "./navigationIcons";
 import DesktopSidebar from "./DesktopSidebar";
+import { signOut } from "@/actions/authActions";
+import { createClient } from "@/utils/supabase/client";
+import type { CurrentUser } from "@/types/user";
+import styles from "./Navbar.module.css";
 
 const SearchOverlay = dynamic(() => import("@/components/SearchOverlay"), { ssr: false });
 const preloadSearch = () => { void import("@/components/SearchOverlay"); };
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring", stiffness: 320, damping: 26 },
-  },
-};
-
-const stagger: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } },
-};
-
-const guestLinks = [
-  { href: "/browse", icon: <RiMovieAiLine />, label: "Browse" },
-  { href: "/binge", icon: <BiMoviePlay />, label: "Binge" },
-  { href: "/chrono", icon: <AiOutlineFieldTime />, label: "Chrono" },
-];
-
-const shell =
-  "bg-[#161618]/92 backdrop-blur-2xl border border-white/[0.09] " +
-  "shadow-[0_0_0_0.5px_rgba(255,255,255,0.04)_inset,0_16px_48px_rgba(0,0,0,0.75)]";
-
-function GoogleIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="currentColor"
-    >
-      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
-      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-    </svg>
-  );
-}
-
-function LoginButton({
-  onClick,
-  mobile,
-}: {
-  onClick: () => void;
-  mobile?: boolean;
-}) {
-  if (mobile) {
-    return (
-      <button
-        onClick={onClick}
-        className="text-lg font-semibold tracking-wide text-white/90 px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3 w-full"
-      >
-        <GoogleIcon className="w-5 h-5 text-white/60" />
-        Sign in
-      </button>
-    );
-  }
-
-  return (
-    <button
-      onClick={onClick}
-      className="group cursor-pointer relative flex items-center justify-center gap-2 h-[40px] px-4 rounded-[11px] text-sm font-semibold text-white/40 hover:text-white/90 hover:bg-white/[0.08] transition-all duration-150"
-    >
-      <GoogleIcon className="w-[18px] h-[18px]" />
-      Sign in
-    </button>
-  );
-}
-
-function MobileLink({
-  href,
-  icon,
-  label,
-  active,
-  onClick,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <motion.div variants={fadeUp}>
-      <Link
-        href={href}
-        prefetch={["/recos", "/watchlist", "/my-recommendations"].includes(href) ? true : undefined}
-        onClick={onClick}
-        className={`text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3 ${
-          active
-            ? "bg-white text-black border-white/20"
-            : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
-        }`}
-      >
-        <span className={active ? "text-black" : "text-white/80"}>{icon}</span>
-        {label}
-      </Link>
-    </motion.div>
-  );
-}
+type NavItem = { href: string; label: string };
 
 export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
-  const [isPending, startTransition] = useTransition();
+  const pathname = usePathname();
+  const [loggingOut, startTransition] = useTransition();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isMac, setIsMac] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const menuPanel = useRef<HTMLElement>(null);
+  const hideOnboarding = pathname.startsWith("/onboarding");
   const searchShortcut = isMac ? "⌘ K" : "Ctrl K";
   const closeSearch = useCallback(() => setSearchOpen(false), []);
-  const pathname = usePathname();
-  const isAuthLoading = typeof user === "undefined";
-  const logout = () => startTransition(async () => await signOut());
-  const close = () => setMenuOpen(false);
-  const profileHref = user ? `/profile/${user.username}/${user.id}` : "#";
-  const hideOnboarding = pathname.startsWith("/onboarding");
+  const closeMenu = () => setMenuOpen(false);
+  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+  const discoverItems = [...primaryNavItems.filter(item => item.href !== "/watchlist"), ...moreNavItems];
+  const libraryItems = [...primaryNavItems.filter(item => item.href === "/watchlist"), ...recoNavItems];
+  const shortcuts = user
+    ? [{ href: "/browse", label: "Browse" }, { href: "/watchlist", label: "Watchlist" }, { href: "/messages", label: "Chats" }]
+    : discoverItems;
+
+  const openSearch = () => {
+    closeMenu();
+    preloadSearch();
+    setSearchOpen(true);
+  };
+  const logout = () => startTransition(async () => { await signOut(); });
+  const handleLogin = async () => {
+    closeMenu();
+    await createClient().auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin + "/auth/callback?next=/recos" },
+    });
+  };
 
   useEffect(() => {
     setIsMac(/Mac|iPhone|iPad|iPod/.test(navigator.userAgent));
     if (hideOnboarding) return;
-    const openSearchWithKeyboard = (event: KeyboardEvent) => {
+    const onKeyDown = (event: KeyboardEvent) => {
       if (event.defaultPrevented || event.isComposing || event.repeat || event.altKey || event.shiftKey
         || !(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "k") return;
       event.preventDefault();
@@ -154,200 +63,99 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
       preloadSearch();
       setSearchOpen(true);
     };
-    window.addEventListener("keydown", openSearchWithKeyboard);
-    return () => window.removeEventListener("keydown", openSearchWithKeyboard);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [hideOnboarding]);
-
-  const handleLogin = async () => {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/recos`,
-      },
-    });
-  };
 
   useEffect(() => {
     setMenuOpen(false);
     setSearchOpen(false);
   }, [pathname]);
 
-  if (hideOnboarding) {
-    return null;
-  }
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    menuPanel.current?.querySelector<HTMLElement>("a, button")?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      menuButton.current?.focus();
+    };
+    const desktop = window.matchMedia("(min-width: 1280px)");
+    const onDesktop = () => { if (desktop.matches) setMenuOpen(false); };
+    window.addEventListener("keydown", onKeyDown);
+    desktop.addEventListener("change", onDesktop);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+      desktop.removeEventListener("change", onDesktop);
+    };
+  }, [menuOpen]);
+
+  const renderLinks = (items: NavItem[]) => items.map(({ href, label }) => {
+    const Icon = navigationIcons[href] ?? Compass;
+    return <Link key={href} href={href} onClick={closeMenu} className={styles.menuLink}
+      aria-current={isActive(href) ? "page" : undefined}
+      prefetch={["/recos", "/watchlist", "/my-recommendations"].includes(href) ? true : undefined}>
+      <Icon aria-hidden="true" /><span>{label}</span>
+    </Link>;
+  });
+  const section = (label: string, items: NavItem[]) => (
+    <div className={styles.section}>
+      <p className={styles.sectionTitle}>{label}</p>
+      <div className={styles.menuGrid}>{renderLinks(items)}</div>
+    </div>
+  );
+
+  if (hideOnboarding) return null;
 
   return (
     <>
-      <DesktopSidebar user={user} pathname={pathname} loggingOut={isPending} searchOpen={searchOpen}
-        searchShortcut={searchShortcut} onSearch={() => setSearchOpen(true)}
-        onPreloadSearch={preloadSearch} onLogin={handleLogin} onLogout={logout} />
-      <div
-        className={`fixed top-5 left-1/2 -translate-x-1/2 z-[60] overflow-visible w-[calc(100%-32px)] max-w-[440px] xl:hidden font-[family-name:var(--font-geist-sans)] ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
-      >
-      {/* ── MOBILE TOP BAR ── */}
-      <div
-        className={`xl:hidden bg-black flex items-center justify-between px-5 p-3 ${shell} ${menuOpen ? "rounded-t-[18px]" : "rounded-full"}`}
-      >
-        <Link
-          href="/"
-          onClick={close}
-          className="text-xl font-extrabold uppercase tracking-[-0.02em] text-white font-[family-name:var(--font-geist-mono)] leading-none"
-        >
-          <span className="text-red-500">Two</span>gether
-        </Link>
-        <div className="flex items-center gap-1">
-          <button type="button" aria-label="Open search" aria-haspopup="dialog" aria-expanded={searchOpen}
-            aria-keyshortcuts="Control+K Meta+K"
-            onPointerEnter={preloadSearch} onFocus={preloadSearch}
-            onClick={() => { close(); setSearchOpen(true); }}
-            className="flex h-9 min-w-9 cursor-pointer items-center justify-center gap-2 rounded-full px-2 text-white/75 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-white/70">
-            <FiSearch className="h-5 w-5" aria-hidden="true" />
-            <kbd aria-hidden="true" className="hidden rounded-md border border-white/15 bg-white/5 px-1.5 py-0.5 font-sans text-[10px] font-medium leading-4 whitespace-nowrap text-white/50 sm:inline-block">{searchShortcut}</kbd>
-          </button>
-          <button
-            onClick={() => setMenuOpen((p) => !p)}
-            aria-label="Toggle menu"
-            className="text-white xl:hidden text-2xl p-1 -mr-1"
-          >
-            {menuOpen ? <HiX /> : <HiOutlineMenuAlt3 />}
-          </button>
+      <DesktopSidebar user={user} pathname={pathname} loggingOut={loggingOut} searchOpen={searchOpen}
+        searchShortcut={searchShortcut} onSearch={openSearch} onPreloadSearch={preloadSearch}
+        onLogin={handleLogin} onLogout={logout} />
+      {menuOpen && <button type="button" className={styles.backdrop} onClick={closeMenu} aria-label="Close navigation" tabIndex={-1} />}
+      <header className={styles.mobileHeader}>
+        <div className={styles.bar}>
+          <Link href="/" className={styles.brand} onClick={closeMenu} aria-label="Twogether home">
+            <span className={styles.brandMark} aria-hidden="true">t<span>.</span></span>
+          </Link>
+          <nav className={styles.shortcuts} aria-label="Mobile shortcuts">
+            {shortcuts.map(({ href, label }) => {
+              const Icon = navigationIcons[href] ?? Compass;
+              return <Link key={href} href={href} onClick={closeMenu} title={label} aria-label={label}
+                aria-current={isActive(href) ? "page" : undefined}
+                className={styles.control + (isActive(href) ? " " + styles.active : "")}>
+                <Icon aria-hidden="true" />
+              </Link>;
+            })}
+          </nav>
+          <div className={styles.actions}>
+            <button type="button" className={styles.control} aria-label="Open search" title="Search"
+              aria-haspopup="dialog" aria-expanded={searchOpen} aria-keyshortcuts="Control+K Meta+K"
+              onPointerEnter={preloadSearch} onFocus={preloadSearch} onClick={openSearch}>
+              <Search aria-hidden="true" />
+            </button>
+            <button ref={menuButton} type="button" className={styles.control} aria-label="Toggle menu"
+              aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(value => !value)}>
+              {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+            </button>
+          </div>
         </div>
-      </div>
-
-      {/* ── MOBILE DRAWER ── */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            key="mobile-menu"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="relative 2xl:hidden border-t border-white/10 p-4 flex flex-col text-white rounded-b-3xl bg-black max-h-[65vh] overflow-y-auto"
-          >
-            <motion.div
-              initial="hidden"
-              animate="show"
-              exit="hidden"
-              variants={stagger}
-              className="relative z-10 flex flex-col gap-4"
-            >
-              {isAuthLoading ? (
-                <motion.div
-                  variants={fadeUp}
-                  className="h-14 rounded-lg border border-white/10 bg-white/5 animate-pulse"
-                />
-              ) : user ? (
-                <>
-                  <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
-                    Discover
-                  </h3>
-                  {primaryNavItems.map((item) => (
-                    <MobileLink
-                      key={item.href}
-                      {...item}
-                      active={pathname === item.href}
-                      onClick={close}
-                    />
-                  ))}
-                  {moreNavItems.map((item) => (
-                    <MobileLink
-                      key={item.href}
-                      {...item}
-                      active={pathname.startsWith(item.href)}
-                      onClick={close}
-                    />
-                  ))}
-
-                  <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
-                    My Space
-                  </h3>
-                  {recoNavItems.map((item) => (
-                    <MobileLink
-                      key={item.href}
-                      {...item}
-                      active={pathname.startsWith(item.href)}
-                      onClick={close}
-                    />
-                  ))}
-
-                  <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
-                    Socials
-                  </h3>
-                  {socialNavItems.map((item) => (
-                    <MobileLink
-                      key={item.href}
-                      {...item}
-                      active={pathname.startsWith(item.href)}
-                      onClick={close}
-                    />
-                  ))}
-
-                  <h3 className="text-xs text-white/60 uppercase px-1 mt-2">
-                    Account
-                  </h3>
-                  <MobileLink
-                    href={profileHref}
-                    icon={<HiOutlineUserCircle />}
-                    label="Profile"
-                    active={pathname === profileHref}
-                    onClick={close}
-                  />
-
-                  <motion.div variants={fadeUp}>
-                    <AccountSettingsMenu mobile onClick={close} />
-                  </motion.div>
-
-                  <motion.div variants={fadeUp}>
-                    <button
-                      onClick={logout}
-                      disabled={isPending}
-                      className="text-lg font-semibold tracking-wide text-white/90 px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3 w-full"
-                    >
-                      {isPending ? (
-                        <>
-                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Logging out
-                        </>
-                      ) : (
-                        <>
-                          <RiLogoutCircleLine />
-                          Logout
-                        </>
-                      )}
-                    </button>
-                  </motion.div>
-                </>
-              ) : (
-                <>
-                  {guestLinks.map(({ href, icon, label }) => (
-                    <MobileLink
-                      key={href}
-                      href={href}
-                      icon={icon}
-                      label={label}
-                      active={pathname === href}
-                      onClick={close}
-                    />
-                  ))}
-
-                  <motion.div variants={fadeUp}>
-                    <LoginButton
-                      mobile
-                      onClick={() => {
-                        close();
-                        handleLogin();
-                      }}
-                    />
-                  </motion.div>
-                </>
-              )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      </div>
+        {menuOpen && <nav ref={menuPanel} id="mobile-navigation" className={styles.menu} aria-label="Mobile navigation">
+          {section("Discover", discoverItems)}
+          {user && <>{section("Your collection", libraryItems)}{section("Together", socialNavItems)}</>}
+          <div className={styles.section}>
+            {user ? <div className={styles.menuGrid}>
+              <Link href={"/profile/" + user.username + "/" + user.id} className={styles.menuLink} onClick={closeMenu}><UserRound aria-hidden="true" />Profile</Link>
+              <Link href="/settings/delete-account" className={styles.menuLink} onClick={closeMenu}><Settings aria-hidden="true" />Settings</Link>
+              <button type="button" className={styles.menuLink} onClick={logout} disabled={loggingOut}><LogOut aria-hidden="true" />{loggingOut ? "Signing out…" : "Sign out"}</button>
+            </div> : user === null ? <button type="button" onClick={handleLogin} className={styles.menuLink}><FcGoogle aria-hidden="true" />Sign in with Google</button>
+              : <p className={styles.accountStatus} role="status">Connecting your account…</p>}
+          </div>
+        </nav>}
+      </header>
       {searchOpen && <SearchOverlay onClose={closeSearch} />}
     </>
   );

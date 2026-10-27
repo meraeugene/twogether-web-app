@@ -1,5 +1,15 @@
 # Mobile layout verification
 
+## Simple mobile header
+
+The latest header follows the desktop sidebar: the same `t.` mark, shared Lucide destination icons, muted gray controls, and coral active state. A compact full-width row contains destination shortcuts, search, and a menu for the remaining navigation and account actions. Safe-area and page clearance values are shared with the loading layouts. The desktop sidebar keeps its existing appearance.
+
+Removed the homepage's floating feedback launcher. The regular feedback form remains available on the homepage.
+
+Verified the header fits at 320px and 390px without horizontal page overflow, uses 44px touch controls, opens and closes search, navigates from its menu, closes on Escape with focus returned to the menu button, and restores background scrolling. At 1440px the mobile header is hidden and the desktop sidebar remains visible. The homepage has no feedback launcher and still renders its feedback form. Screenshot: `simple-mobile-header.jpg`.
+
+The sections below describe earlier revisions and their verification history.
+
 Implemented shared 16px, safe-area-aware mobile gutters; full-width 16:9 watch players; unboxed movie credits; compact poster grids; full-screen search and AI chat; mobile action sheets; full-width collection/profile/friend/chat surfaces; and horizontally scrolling server, season, and collection-genre controls.
 
 ## Header, Chrono, and loading corrections

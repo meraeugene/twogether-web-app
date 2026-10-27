@@ -8,7 +8,6 @@ import FeedbackForm from "@/sections/FeedbackForm";
 import Hero from "@/sections/Hero";
 import StreamingServices from "@/sections/StreamingServices";
 import { buildMetadata } from "@/app/seo";
-import ReviewBotPrompt from "@/components/ReviewBotPrompt";
 import ResumeWatching from "@/sections/ResumeWatching";
 
 export const metadata: Metadata = buildMetadata({
@@ -30,7 +29,6 @@ export default function Home() {
       <Features />
       <FeedbackForm />
       <Faqs />
-      <ReviewBotPrompt />
     </main>
   );
 }

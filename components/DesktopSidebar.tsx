@@ -4,27 +4,14 @@ import { useCallback, useEffect, useRef, useState, type FocusEventHandler, type 
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
-  Clapperboard, Compass, Heart, History,
-  Library, LogOut, MessagesSquare, Search, Settings,
-  Star, UserRound, Users, WandSparkles,
+  Compass, LogOut, Search, Settings, UserRound,
   type LucideIcon,
 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import type { CurrentUser } from "@/types/user";
 import { moreNavItems, primaryNavItems, recoNavItems, socialNavItems } from "./NavItems";
 import styles from "./DesktopSidebar.module.css";
-
-const icons: Record<string, LucideIcon> = {
-  "/browse": Compass,
-  "/binge": Clapperboard,
-  "/chrono": History,
-  "/watchlist": Library,
-  "/recos": Star,
-  "/my-recommendations": Heart,
-  "/ai-recommend": WandSparkles,
-  "/friends": Users,
-  "/messages": MessagesSquare,
-};
+import { navigationIcons } from "./navigationIcons";
 
 type SidebarProps = {
   user: CurrentUser | null | undefined;
@@ -123,7 +110,7 @@ export default function DesktopSidebar({
   const profileHref = user ? `/profile/${user.username}/${user.id}` : "#";
   const displayName = user?.full_name?.trim() || user?.username || "Your profile";
   const renderLinks = (items: { href: string; label: string }[]) => items.map((item) => (
-    <SidebarLink key={item.href} {...item} pathname={pathname} Icon={icons[item.href] ?? Compass}
+    <SidebarLink key={item.href} {...item} pathname={pathname} Icon={navigationIcons[item.href] ?? Compass}
       tooltipHandlers={getTooltipHandlers(item.label)} />
   ));
 
