@@ -1,5 +1,17 @@
 # Mobile layout verification
 
+## Animated header, trailer playback, and full-height sidebar
+
+The mobile drawer now expands and collapses over 240ms, fades its backdrop, and crossfades the burger/close icons. The closing drawer stays mounted for its exit transition; closed links are inert and hidden from accessibility navigation. Escape and backdrop dismissal restore focus to the burger. Reduced-motion preferences disable these transitions.
+
+Film-card previews now initialize a controlled YouTube player with muted inline autoplay, an Unmute button, a manual Play trailer fallback, and bounded loading/error states. The player script warms on the preview tap alongside any missing movie details. Closing the preview destroys the iframe and restores scrolling/focus. This replaces the sound-on, noninteractive iframe. See the [YouTube event reference](https://developers.google.com/youtube/iframe_api_reference#onAutoplayBlocked) and [Chrome autoplay guidance](https://developer.chrome.com/blog/autoplay).
+
+The desktop sidebar fills the viewport from top to bottom with zero corner radius, a translucent tint, one glass blur, and a subtle right divider. Removed the inset black capsule, its shadow, and rounded hover backgrounds.
+
+Verified the menu at 320px and 390px, its opening/closing transitions, Escape/backdrop focus restoration, and the 900px-tall desktop sidebar at 1440px. In the real Interstellar preview, the video progressed from 31 to 45 seconds while switching from muted to audible playback, and continued beyond 90 seconds after muting again. Closing/reopening removed the old iframe and restarted playback. An Inception embed did not initialize in this browser session and reached the unavailable fallback; playback for that clip was not verified. TypeScript and ESLint pass.
+
+Current screenshots: `animated-header-phone.jpg`, `trailer-autoplay-phone.jpg`, and `full-height-glass-sidebar.jpg`.
+
 ## Watch-page header clearance
 
 Added a 24px gap below the floating header for watch pages below 1280px. The shared rule also applies to their loading skeletons. Removed the redundant phone-only override. At 390px and 1024px, the player starts at 106px and clears the header by approximately 24px. Desktop keeps its existing 32px page padding. The 390px page has no horizontal overflow. Screenshot: `watch-header-clearance-phone.jpg`.

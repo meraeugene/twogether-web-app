@@ -24,6 +24,8 @@ import Link from "next/link";
 import { VisualHeartRating } from "./VisualHeartRating";
 import { toast } from "sonner";
 import { TRAILER_PREVIEW_OPEN_EVENT } from "@/constants/trailerPreview";
+import TrailerPreviewPlayer from "./TrailerPreviewPlayer";
+import { loadYouTubeIframeApi } from "@/utils/youtubeIframeApi";
 
 function FilmCard({
   item,
@@ -118,6 +120,8 @@ function FilmCard({
 
   const openCinema = async () => {
     setCinemaOpen(true);
+    // Warm the player alongside any missing trailer details, only after a tap.
+    void loadYouTubeIframeApi().catch(() => {});
     // Opening the modal is a strong intent signal. Warm only this detail page
     // while the viewer reads, instead of prefetching every card in the grid.
     const href = getWatchHref();
@@ -195,9 +199,6 @@ function FilmCard({
     transition: { delay: 0.07 * i, duration: 0.28 },
   });
 
-  const trailerUrl = previewTrailerKey
-    ? `https://www.youtube.com/embed/${previewTrailerKey}?autoplay=1&mute=0&controls=0&loop=1&playlist=${previewTrailerKey}&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&vq=hd1080`
-    : null;
   const tvMetaLabel = previewItem.episodes ? `${previewItem.episodes}EPS` : "TV Series";
   const runtimeLabel =
     previewItem.type === "movie"
@@ -229,18 +230,9 @@ function FilmCard({
             >
               {/* Fullscreen trailer area; flex-1 fills the remaining height. */}
               <div className="relative w-full h-full flex-1 bg-[#06030a] overflow-hidden flex items-center justify-center ">
-                {trailerUrl ? (
+                {previewTrailerKey ? (
                   <div className="relative w-full aspect-9/12 md:aspect-video z-10 transition-all duration-700 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
-                    {/* The Video Container with "Zoomed-Out" Letterbox Feel */}
-                    <div className="absolute inset-0 overflow-hidden">
-                      <iframe
-                        loading="eager"
-                        src={`${trailerUrl}&controls=0&modestbranding=1&rel=0`}
-                        className="w-full h-[120%] -translate-y-[8%] pointer-events-none scale-[1.1]"
-                        allow="autoplay; encrypted-media; fullscreen"
-                        title={`${item.title} trailer`}
-                      />
-                    </div>
+                    <TrailerPreviewPlayer key={previewTrailerKey} videoId={previewTrailerKey} title={item.title} posterUrl={item.poster_url} />
                   </div>
                 ) : (
                   <img

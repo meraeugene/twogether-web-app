@@ -47,17 +47,18 @@
   }
   .sidebar {
     position: absolute;
-    inset: 12px auto 12px 4px;
+    inset: 0;
     display: flex;
     flex-direction: column;
-    width: 48px;
-    padding: 8px 4px;
+    width: 56px;
+    padding: 12px 6px;
     overflow: hidden;
-    border: 1px solid var(--glass-border);
-    border-radius: 18px;
+    border: 0;
+    border-right: 1px solid #ffffff12;
+    border-radius: 0;
     color: #ededf0;
-    background: var(--glass-background);
-    box-shadow: var(--glass-shadow);
+    background: linear-gradient(180deg, #ffffff0a, #ffffff02), #0c0c0c33;
+    box-shadow: none;
     -webkit-backdrop-filter: blur(18px) saturate(1.15);
     backdrop-filter: blur(18px) saturate(1.15);
     pointer-events: auto;
@@ -88,7 +89,7 @@
   .navigation::-webkit-scrollbar { display: none; }
   .section + .section { margin-top: 10px; padding-top: 10px; border-top: 1px solid #ffffff0a; }
   :is(.item, .search, .profile, .signIn):is(:hover, :focus-visible),
-  .active, .profile[aria-current="page"] { border-radius: 10px; color: #f46b77; background: #f43f4c0c; }
+  .active, .profile[aria-current="page"] { color: #f46b77; background: #f43f4c0c; }
   .authStatus { display: grid; place-items: center; height: 40px; color: #777780; }
   .account { flex-shrink: 0; margin-top: 10px; padding-top: 8px; border-top: 1px solid #ffffff0a; }
   .logout:disabled { opacity: .45; cursor: wait; }

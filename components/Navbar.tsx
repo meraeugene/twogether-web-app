@@ -29,7 +29,10 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
   const hideOnboarding = pathname.startsWith("/onboarding");
   const searchShortcut = isMac ? "⌘ K" : "Ctrl K";
   const closeSearch = useCallback(() => setSearchOpen(false), []);
-  const closeMenu = () => setMenuOpen(false);
+  const closeMenu = () => {
+    setMenuOpen(false);
+    if (menuOpen) menuButton.current?.focus();
+  };
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
   const discoverItems = [...primaryNavItems.filter(item => item.href !== "/watchlist"), ...moreNavItems];
   const libraryItems = [...primaryNavItems.filter(item => item.href === "/watchlist"), ...recoNavItems];
@@ -112,7 +115,8 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
       <DesktopSidebar user={user} pathname={pathname} loggingOut={loggingOut} searchOpen={searchOpen}
         searchShortcut={searchShortcut} onSearch={openSearch} onPreloadSearch={preloadSearch}
         onLogin={handleLogin} onLogout={logout} />
-      {menuOpen && <button type="button" className={styles.backdrop} onClick={closeMenu} aria-label="Close navigation" tabIndex={-1} />}
+      <button type="button" className={`${styles.backdrop} ${menuOpen ? styles.backdropVisible : ""}`}
+        onClick={closeMenu} aria-label="Close navigation" aria-hidden={!menuOpen} tabIndex={-1} />
       <header className={`${styles.mobileHeader} ${menuOpen ? styles.expanded : ""}`}>
         <div className={styles.bar}>
           <Link href="/" className={styles.brand} onClick={closeMenu} aria-label="Twogether home">
@@ -126,22 +130,27 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
             </button>
             <button ref={menuButton} type="button" className={`${styles.control} ${styles.menuToggle}`} aria-label="Toggle menu"
               aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(value => !value)}>
-              {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+              <Menu className={`${styles.menuIcon} ${menuOpen ? styles.iconHidden : ""}`} aria-hidden="true" />
+              <X className={`${styles.menuIcon} ${menuOpen ? "" : styles.iconHidden}`} aria-hidden="true" />
             </button>
           </div>
         </div>
-        {menuOpen && <nav ref={menuPanel} id="mobile-navigation" className={styles.menu} aria-label="Mobile navigation">
-          {section("Discover", discoverItems)}
-          {user && <>{section("Your collection", libraryItems)}{section("Together", socialNavItems)}</>}
-          <div className={styles.section}>
-            {user ? <div className={styles.menuGrid}>
-              <Link href={"/profile/" + user.username + "/" + user.id} className={styles.menuLink} onClick={closeMenu}><UserRound aria-hidden="true" />Profile</Link>
-              <Link href="/settings/delete-account" className={styles.menuLink} onClick={closeMenu}><Settings aria-hidden="true" />Settings</Link>
-              <button type="button" className={styles.menuLink} onClick={logout} disabled={loggingOut}><LogOut aria-hidden="true" />{loggingOut ? "Signing out…" : "Sign out"}</button>
-            </div> : user === null ? <button type="button" onClick={handleLogin} className={styles.menuLink}><FcGoogle aria-hidden="true" />Sign in with Google</button>
-              : <p className={styles.accountStatus} role="status">Connecting your account…</p>}
+        <div className={`${styles.menuReveal} ${menuOpen ? styles.menuVisible : ""}`} inert={!menuOpen} aria-hidden={!menuOpen}>
+          <div className={styles.menuClip}>
+            <nav ref={menuPanel} id="mobile-navigation" className={styles.menu} aria-label="Mobile navigation">
+              {section("Discover", discoverItems)}
+              {user && <>{section("Your collection", libraryItems)}{section("Together", socialNavItems)}</>}
+              <div className={styles.section}>
+                {user ? <div className={styles.menuGrid}>
+                  <Link href={"/profile/" + user.username + "/" + user.id} className={styles.menuLink} onClick={closeMenu}><UserRound aria-hidden="true" />Profile</Link>
+                  <Link href="/settings/delete-account" className={styles.menuLink} onClick={closeMenu}><Settings aria-hidden="true" />Settings</Link>
+                  <button type="button" className={styles.menuLink} onClick={logout} disabled={loggingOut}><LogOut aria-hidden="true" />{loggingOut ? "Signing out…" : "Sign out"}</button>
+                </div> : user === null ? <button type="button" onClick={handleLogin} className={styles.menuLink}><FcGoogle aria-hidden="true" />Sign in with Google</button>
+                  : <p className={styles.accountStatus} role="status">Connecting your account…</p>}
+              </div>
+            </nav>
           </div>
-        </nav>}
+        </div>
       </header>
       {searchOpen && <SearchOverlay onClose={closeSearch} />}
     </>
