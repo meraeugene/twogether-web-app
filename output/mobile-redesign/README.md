@@ -1,5 +1,17 @@
 # Mobile layout verification
 
+## Profile loading, floating header, and larger Chrono cards
+
+Scoped the edit-profile Suspense fallback to the editor page and removed its parent route loader, so it no longer wraps the public profile's own loading boundary. Profile content now renders independently of the client-side friend-status request; the friend button stays disabled while that request loads.
+
+Restored the original floating capsule header and red/white Twogether wordmark with icon-only search and burger controls. The header uses one 12px blur surface with no animated layout or filter transitions. Its safe-area-aware clearance is shared by pages, players, and skeletons.
+
+Chrono cards now measure about 320px at a 390px phone viewport, with 24px connectors instead of the former 112px effective gap. At 1440px, cards are 340px wide with 32px connectors and a 64px stagger. The skeleton shares the same card and connector CSS. Automatic movement is slower and pauses on touch or keyboard focus.
+
+Verified 320px and 390px phone layouts and the 1440px desktop layout without horizontal page overflow. Checked menu focus restoration, Escape dismissal, full-screen search at 320 x 740, and keyboard scrolling in Chrono. Rendered the actual Chrono and profile loading components through a temporary development-only preview: Chrono card widths/connector gaps match the loaded UI, and the profile preview renders one loading page. Removed the preview route afterward. The real profile route redirects to sign-in/home in the unauthenticated local session, so authenticated profile navigation was not exercised. TypeScript and ESLint pass for the changed source files.
+
+Current screenshot: `chrono-larger-cards-phone.jpg`.
+
 ## Original red-and-black palette restored
 
 Restored the exact `--page-gradient` from commit `360a814`, the original black/white base colors, and matching red ambient overlays. Returned the glass styling to the darker pre-boost finish. Header/menu surfaces, search backgrounds, poster fallbacks, and the browser theme color use neutral black with red accents instead of the later blue/purple tints and bright fills.

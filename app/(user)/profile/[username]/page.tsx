@@ -1,8 +1,18 @@
 import { getUserByUsername } from "@/actions/authActions";
 import EditProfileForm from "./EditProfileForm";
 import ErrorMessage from "@/components/ErrorMessage";
+import { Suspense } from "react";
+import { EditProfilePageSkeleton } from "@/components/PageSkeletons";
 
-export default async function Page({
+export default function Page({ params }: { params: Promise<{ username: string }> }) {
+  return (
+    <Suspense fallback={<EditProfilePageSkeleton />}>
+      <EditProfileContent params={params} />
+    </Suspense>
+  );
+}
+
+async function EditProfileContent({
   params,
 }: {
   params: Promise<{ username: string }>;

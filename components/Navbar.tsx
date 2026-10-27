@@ -113,11 +113,10 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
         searchShortcut={searchShortcut} onSearch={openSearch} onPreloadSearch={preloadSearch}
         onLogin={handleLogin} onLogout={logout} />
       {menuOpen && <button type="button" className={styles.backdrop} onClick={closeMenu} aria-label="Close navigation" tabIndex={-1} />}
-      <header className={styles.mobileHeader}>
+      <header className={`${styles.mobileHeader} ${menuOpen ? styles.expanded : ""}`}>
         <div className={styles.bar}>
           <Link href="/" className={styles.brand} onClick={closeMenu} aria-label="Twogether home">
-            <span className={styles.brandMark} aria-hidden="true">t<span>.</span></span>
-            <span className={styles.wordmark} aria-hidden="true">Twogether</span>
+            <span className={styles.wordmark} aria-hidden="true"><span>Two</span>gether</span>
           </Link>
           <div className={styles.actions}>
             <button type="button" className={styles.control} aria-label="Open search" title="Search"
@@ -128,7 +127,6 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
             <button ref={menuButton} type="button" className={`${styles.control} ${styles.menuToggle}`} aria-label="Toggle menu"
               aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(value => !value)}>
               {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-              <span>{menuOpen ? "Close" : "Menu"}</span>
             </button>
           </div>
         </div>

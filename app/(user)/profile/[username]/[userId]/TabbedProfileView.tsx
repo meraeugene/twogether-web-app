@@ -192,7 +192,6 @@ export default function TabbedProfileView({
         style={{ backgroundImage: `url('/hero.png')` }}
       >
         <div className="absolute  inset-0 bg-black/70 backdrop-blur-sm " />
-        {!loadingFriendStatus && (
           <motion.div
             className="relative  z-10 flex flex-col items-center  justify-center h-full text-center"
             initial={{ opacity: 0, y: -10 }}
@@ -237,10 +236,10 @@ export default function TabbedProfileView({
                 {/* Add Friend */}
                 <button
                   onClick={handleAddFriendToggle}
-                  disabled={friendCooldown}
+                  disabled={friendCooldown || loadingFriendStatus}
                   className={` transition text-sm px-4 py-2 rounded-full flex items-center gap-2 text-white
                         ${
-                          friendCooldown
+                          friendCooldown || loadingFriendStatus
                             ? "opacity-50 cursor-not-allowed"
                             : "cursor-pointer"
                         }
@@ -302,7 +301,6 @@ export default function TabbedProfileView({
               </div>
             )}
           </motion.div>
-        )}
       </div>
 
       {/* Tabs */}
@@ -325,7 +323,6 @@ export default function TabbedProfileView({
       </div>
 
       {/* Animated Tab Content */}
-      {!loadingFriendStatus && (
         <div className=" py-8 ">
           <AnimatePresence mode="wait">
             <motion.div
@@ -451,7 +448,6 @@ export default function TabbedProfileView({
             </motion.div>
           </AnimatePresence>
         </div>
-      )}
 
       <MessageModal
         open={showMessageModal}

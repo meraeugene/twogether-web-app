@@ -1,0 +1,53 @@
+.track {
+  --node-y: 160px;
+  position: relative;
+  width: max-content;
+  padding: 16px 0;
+}
+
+.row, .stop { display: flex; align-items: flex-start; }
+.item {
+  width: clamp(248px, 82vw, 340px);
+  flex-shrink: 0;
+  contain: layout paint style;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+.card { padding: 14px; }
+.title { font-size: 20px; line-height: 1.35; }
+.connector { position: relative; width: 24px; flex-shrink: 0; pointer-events: none; }
+.connector::before {
+  content: "";
+  position: absolute;
+  top: var(--node-y);
+  inset-inline: 0;
+  height: 1px;
+  background: #f8717166;
+}
+.connector svg { display: none; }
+.connector::after {
+  content: "";
+  position: absolute;
+  top: var(--node-y);
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #fca5a5;
+}
+
+@media (min-width: 768px) {
+  .track { padding: 32px 0 96px; }
+  .item { width: 320px; }
+  .staggered { transform: translateY(64px); }
+  .card { padding: 16px; }
+  .title { font-size: 22px; }
+  .connector { width: 32px; }
+  .connector::before { display: none; }
+  .connector svg { display: block; position: absolute; top: calc(var(--node-y) - 4px); width: 100%; height: 72px; overflow: visible; }
+  .connector::after { top: calc(var(--node-y) + 32px); }
+}
+
+@media (min-width: 1280px) { .item { width: 340px; } }
+@media (min-width: 1536px) { .item { width: 360px; } }

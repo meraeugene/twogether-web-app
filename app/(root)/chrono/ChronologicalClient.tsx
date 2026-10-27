@@ -13,6 +13,8 @@ import { Pause, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ErrorMessage from "@/components/ErrorMessage";
 import ChronoSkeleton from "./ChronoSkeleton";
+import ChronoConnector from "./ChronoConnector";
+import styles from "./chrono.module.css";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -69,7 +71,7 @@ export default function ChronologicalClient() {
     let currentLeft = viewport.scrollLeft;
     let maxScrollLeft = viewport.scrollWidth - viewport.clientWidth;
     let isVisible = false;
-    const speed = 80;
+    const speed = 40;
 
     const updateBounds = () => {
       maxScrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
@@ -209,14 +211,15 @@ export default function ChronologicalClient() {
 
         <div
           ref={routeViewportRef}
+          role="region"
+          aria-label="Chronological story timeline"
+          tabIndex={0}
+          onPointerDown={() => setIsAutoMoving(false)}
+          onFocusCapture={() => setIsAutoMoving(false)}
           className="chrono-scroll relative z-10 overflow-x-auto overflow-y-hidden pb-4 [contain:layout_paint] [will-change:scroll-position]"
         >
-          <div className="relative min-w-max px-2 py-4 md:px-4 md:pb-36 md:pt-8">
-            <div className="pointer-events-none absolute left-0 right-0 top-[8.2rem] h-px bg-gradient-to-r from-red-400/0 via-red-400/35 to-red-400/0" />
-            <div className="pointer-events-none absolute left-6 top-[8.2rem] h-3 w-3 -translate-y-1/2 rounded-full border border-red-300/50 bg-[#050505] shadow-[0_0_18px_rgba(248,113,113,0.35)]" />
-            <div className="pointer-events-none absolute right-6 top-[8.2rem] h-3 w-3 -translate-y-1/2 rounded-full border border-red-300/50 bg-[#050505] shadow-[0_0_18px_rgba(248,113,113,0.35)]" />
-
-            <div className="flex min-w-max items-start gap-4 md:gap-0">
+          <div className={styles.track}>
+            <div className={styles.row}>
               {data.movies.map((movie, index) => {
                 const isEven = index % 2 === 0;
                 const isFirst = index === 0;
@@ -225,14 +228,12 @@ export default function ChronologicalClient() {
                 return (
                   <div
                     key={`${movie.tmdb_id}-${movie.type}-${index}`}
-                    className="relative flex items-start md:items-stretch"
+                    className={styles.stop}
                   >
                     <div
-                      className={`w-[230px] shrink-0 [contain:layout_paint_style] [content-visibility:auto] [contain-intrinsic-size:280px_680px] md:w-[280px] ${
-                        isEven ? "md:translate-y-0" : "md:translate-y-28"
-                      }`}
+                      className={`${styles.item} ${isEven ? "" : styles.staggered}`}
                     >
-                      <div className="glass-surface rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] p-4 shadow-[0_16px_50px_rgba(0,0,0,0.28)] transition duration-300 hover:border-white/15">
+                      <div className={`${styles.card} glass-surface rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] shadow-[0_16px_50px_rgba(0,0,0,0.28)] transition duration-300 hover:border-white/15`}>
                         <div className="mb-4 flex items-center justify-between gap-3">
                           <span className="text-[10px] font-semibold uppercase tracking-[0.26em] text-white/38">
                             {isFirst
@@ -257,7 +258,7 @@ export default function ChronologicalClient() {
                               alt={movie.title}
                               width={500}
                               height={750}
-                              sizes="(min-width: 768px) 248px, 198px"
+                              sizes="(min-width: 1536px) 326px, (min-width: 1280px) 306px, (min-width: 768px) 286px, (max-width: 414px) calc(82vw - 30px), 310px"
                               quality={72}
                               className="aspect-[2/3] w-full object-cover transition duration-500 group-hover:scale-105 group-hover:brightness-50"
                             />
@@ -267,6 +268,7 @@ export default function ChronologicalClient() {
                             <div className="absolute inset-0 hidden items-center justify-center opacity-0 transition duration-300 group-hover:flex group-hover:opacity-100">
                               <button
                                 onClick={() => handleWatchNow(movie)}
+                                aria-label={`Watch ${movie.title}`}
                                 className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white shadow-[0_0_35px_rgba(239,68,68,0.45)] transition duration-300 hover:scale-110 hover:bg-red-600"
                               >
                                 <FaPlay className="text-lg" />
@@ -275,7 +277,7 @@ export default function ChronologicalClient() {
                           </div>
 
                           <div className="mt-4">
-                            <h3 className="text-lg font-semibold leading-snug text-white">
+                            <h3 className={`${styles.title} font-semibold text-white`}>
                               {movie.title}
                             </h3>
 
@@ -313,17 +315,7 @@ export default function ChronologicalClient() {
                       </div>
                     </div>
 
-                    {!isLast && (
-                      <div className="pointer-events-none relative w-24 shrink-0">
-                        <div className="absolute left-0 top-[8.15rem] h-px w-24 bg-gradient-to-r from-red-400/45 to-red-300/15" />
-                        <div
-                          className={`absolute left-1/2 top-[8.15rem] w-px bg-gradient-to-b from-red-400/40 to-transparent ${
-                            isEven ? "h-28" : "-translate-y-28 h-28"
-                          }`}
-                        />
-                        <div className="absolute left-1/2 top-[8.15rem] h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-300/70 shadow-[0_0_18px_rgba(248,113,113,0.45)]" />
-                      </div>
-                    )}
+                    {!isLast && <ChronoConnector descending={isEven} />}
                   </div>
                 );
               })}
