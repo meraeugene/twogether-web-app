@@ -1,5 +1,15 @@
 # Mobile layout verification
 
+## Stronger Apple-inspired frosted material
+
+Increased glass translucency by reducing the shared dark tint from 78% to 38%, increasing surface blur from 18px to 32px, and increasing backdrop saturation. Layered highlights, brighter upper edges, inset reflections, and softer elevation shadows make the material visible over both artwork and dark backgrounds. Header and search controls now use capsule shapes. Search uses a more transparent full-screen backdrop, with brighter secondary labels for readability.
+
+The shared material applies to existing cards, controls, fields, header/menu surfaces, desktop navigation, and browse controls. Posters remain sharp, and page structure, watch clearance, and navigation behavior are unchanged. Solid material fallbacks are included for browsers without backdrop-filter support.
+
+Browser verification: the 390px collection page has no horizontal overflow and computes `blur(32px) saturate(1.7)` on glass surfaces. The menu remains readable over artwork and closes with Escape. Full-screen search fits at 320 x 740 and 1440 x 900 without horizontal overflow, returns suggestions, and highlights the correct result with Arrow Down. This revision changes styles only; no JavaScript or layout logic changed.
+
+Current screenshots: `frosted-glass-phone.jpg`, `frosted-search-phone.jpg`, and `frosted-search-desktop.jpg`.
+
 ## Glass finish, immersive watch pages, and discovery search
 
 The latest revision uses shared glass surfaces, soft ambient backgrounds, quieter borders, and glossy controls across page layouts, collection/Chrono/friend/profile cards, message panels, forms, modal sheets, and their skeletons. Posters use lightweight shadows rather than backdrop blur. Movie credits and the Chrono timeline remain unboxed.

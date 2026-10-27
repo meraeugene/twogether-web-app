@@ -101,8 +101,10 @@
   .card h3 { font-size: 14px; }
   .card > p { font-size: 12px; }
 }
-.categories { border-color: var(--glass-border); background: var(--glass-background); box-shadow: var(--glass-shadow); backdrop-filter: blur(24px) saturate(1.2); }
-.heroPlay, .heroInfo { border-radius: 14px; }
-.heroInfo { border: 1px solid var(--glass-border); background: var(--glass-background); box-shadow: inset 0 1px 0 #ffffff0d; backdrop-filter: blur(16px); }
+.categories { border-color: var(--glass-border); border-top-color: #ffffff70; background: var(--glass-background); box-shadow: var(--glass-shadow); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)); backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)); }
+.categories button[aria-pressed="true"] { background: var(--glass-control-background); box-shadow: var(--glass-control-shadow); }
+.heroPlay, .heroInfo { border-radius: 999px; }
+.heroInfo, .soundControl { border: 1px solid var(--glass-border); border-top-color: #ffffff70; background: var(--glass-control-background); box-shadow: var(--glass-control-shadow); -webkit-backdrop-filter: blur(24px) saturate(var(--glass-saturation)); backdrop-filter: blur(24px) saturate(var(--glass-saturation)); }
+.heroInfo:hover, .soundControl:hover:not(:disabled) { background: var(--glass-control-background); border-color: #ffffff70; }
 @media (hover: hover) { .card:hover .poster { box-shadow: 0 16px 40px #0006, 0 0 0 1px #ffffff30; } }
 @media (prefers-reduced-motion: reduce) { .video, .posterOverlay, .cardPlay, .poster > img, .heroPlay, .heroInfo, .soundControl { transition: none; } }
