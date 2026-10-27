@@ -1,7 +1,7 @@
-.page { min-height: 100vh; padding-bottom: 64px; background: #030405; background-image: var(--page-gradient); color: #f7f7f8; font-family: var(--font-geist-sans), Arial, sans-serif; }
+.page { min-height: 100vh; padding-bottom: 64px; background: #030303; background-image: var(--page-gradient); color: #f7f7f8; font-family: var(--font-geist-sans), Arial, sans-serif; }
 .hero { position: relative; height: clamp(540px, 36.3vw, 700px); isolation: isolate; }
 .heroMedia { position: absolute; inset: 0; overflow: hidden; z-index: -1; }
-.heroVisual { --hero-fade: linear-gradient(to bottom, #000 0%, #000 58%, #000e 72%, #0006 90%, transparent 100%); position: absolute; inset: 0; overflow: hidden; background: #0b1118; -webkit-mask-image: var(--hero-fade); mask-image: var(--hero-fade); }
+.heroVisual { --hero-fade: linear-gradient(to bottom, #000 0%, #000 58%, #000e 72%, #0006 90%, transparent 100%); position: absolute; inset: 0; overflow: hidden; background: #0b0b0b; -webkit-mask-image: var(--hero-fade); mask-image: var(--hero-fade); }
 .backdrop { width: 100%; height: 100%; object-fit: cover; object-position: center 43%; }
 .video { position: absolute; top: 50%; left: 50%; width: 100%; height: 56.25vw; min-height: 100%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 1.2s ease; pointer-events: none; }
 .video iframe { position: absolute; width: 100%; height: 100%; inset: 0; }
@@ -41,7 +41,7 @@
 .shelfHeading > a:hover { color: #fff; }
 .grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 30px 20px; }
 .card { display: block; width: 100%; min-width: 0; border-radius: 10px; text-align: left; cursor: pointer; }
-.poster { position: relative; display: grid; place-items: center; aspect-ratio: 2 / 2.94; overflow: hidden; border-radius: 14px; background: #15131e; box-shadow: 0 12px 32px #0004, 0 0 0 1px #ffffff14; }
+.poster { position: relative; display: grid; place-items: center; aspect-ratio: 2 / 2.94; overflow: hidden; border-radius: 14px; background: #141414; box-shadow: 0 12px 32px #0004, 0 0 0 1px #ffffff14; }
 .poster > img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease, opacity .35s ease; }
 .poster > svg { width: 40px; height: 40px; color: #717888; }
 .card h3 { margin: 10px 2px 2px; font-size: 16px; font-weight: 600; line-height: 1.4; letter-spacing: -.03em; }
@@ -101,10 +101,8 @@
   .card h3 { font-size: 14px; }
   .card > p { font-size: 12px; }
 }
-.categories { border-color: var(--glass-border); border-top-color: #ffffff70; background: var(--glass-background); box-shadow: var(--glass-shadow); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)); backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)); }
-.categories button[aria-pressed="true"] { background: var(--glass-control-background); box-shadow: var(--glass-control-shadow); }
-.heroPlay, .heroInfo { border-radius: 999px; }
-.heroInfo, .soundControl { border: 1px solid var(--glass-border); border-top-color: #ffffff70; background: var(--glass-control-background); box-shadow: var(--glass-control-shadow); -webkit-backdrop-filter: blur(24px) saturate(var(--glass-saturation)); backdrop-filter: blur(24px) saturate(var(--glass-saturation)); }
-.heroInfo:hover, .soundControl:hover:not(:disabled) { background: var(--glass-control-background); border-color: #ffffff70; }
+.categories { border-color: var(--glass-border); background: var(--glass-background); box-shadow: var(--glass-shadow); backdrop-filter: blur(24px) saturate(1.2); }
+.heroPlay, .heroInfo { border-radius: 14px; }
+.heroInfo { border: 1px solid var(--glass-border); background: var(--glass-background); box-shadow: inset 0 1px 0 #ffffff0d; backdrop-filter: blur(16px); }
 @media (hover: hover) { .card:hover .poster { box-shadow: 0 16px 40px #0006, 0 0 0 1px #ffffff30; } }
 @media (prefers-reduced-motion: reduce) { .video, .posterOverlay, .cardPlay, .poster > img, .heroPlay, .heroInfo, .soundControl { transition: none; } }

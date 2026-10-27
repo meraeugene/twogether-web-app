@@ -1,5 +1,11 @@
 # Mobile layout verification
 
+## Original red-and-black palette restored
+
+Restored the exact `--page-gradient` from commit `360a814`, the original black/white base colors, and matching red ambient overlays. Returned the glass styling to the darker pre-boost finish. Header/menu surfaces, search backgrounds, poster fallbacks, and the browser theme color use neutral black with red accents instead of the later blue/purple tints and bright fills.
+
+Verified the gradient matches the original source exactly, the 390px collection page has no horizontal overflow, and the search dialog retains its full viewport height with the dark red/black background. Browser theme color is `#0a0a0a`. Current screenshot: `restored-red-black-phone.jpg`.
+
 ## Stronger Apple-inspired frosted material
 
 Increased glass translucency by reducing the shared dark tint from 78% to 38%, increasing surface blur from 18px to 32px, and increasing backdrop saturation. Layered highlights, brighter upper edges, inset reflections, and softer elevation shadows make the material visible over both artwork and dark backgrounds. Header and search controls now use capsule shapes. Search uses a more transparent full-screen backdrop, with brighter secondary labels for readability.
