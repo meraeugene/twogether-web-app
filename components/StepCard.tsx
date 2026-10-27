@@ -18,7 +18,7 @@ export function TextInputCard({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full outline-none p-4 border border-white/10 rounded-lg text-sm  lg:text-lg bg-black/80 text-white placeholder-white/40 backdrop-blur-sm font-[family-name:var(--font-geist-mono)]"
+      className="glass-input w-full outline-none p-4 border border-white/10 rounded-lg text-sm  lg:text-lg bg-black/80 text-white placeholder-white/40 backdrop-blur-sm font-[family-name:var(--font-geist-mono)]"
     />
   );
 }
@@ -142,7 +142,7 @@ export function TextareaCard({
         }
       }}
       rows={5}
-      className="w-full p-4 border border-white/10 rounded-lg lg:text-lg bg-black/80 text-white placeholder-white/40 backdrop-blur-sm font-[family-name:var(--font-geist-mono)] resize-none"
+      className="glass-input w-full p-4 border border-white/10 rounded-lg lg:text-lg bg-black/80 text-white placeholder-white/40 backdrop-blur-sm font-[family-name:var(--font-geist-mono)] resize-none"
     />
   );
 }

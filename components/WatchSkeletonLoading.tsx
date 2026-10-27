@@ -53,8 +53,8 @@ export function WatchReviewsSkeleton() {
 
 export default function WatchSkeletonLoading({ variant = "recommendation" }: { variant?: "tmdb" | "recommendation" | "ai" }) {
   return (
-    <LoadingPage label="Loading watch details">
-      <Skeleton className="mb-3 h-11 w-11 rounded-full md:mb-6 md:h-8 md:w-12 md:rounded-md lg:h-9 lg:w-16" />
+    <LoadingPage label="Loading watch details" className="watch-page">
+      <Skeleton className="hidden xl:block mb-3 h-11 w-11 rounded-full md:mb-6 md:h-8 md:w-12 md:rounded-md lg:h-9 lg:w-16" />
       {variant === "recommendation" ? (
         <div className="flex flex-col gap-10 xl:flex-row">
           <div className="min-w-0 flex-1 space-y-10"><PlayerSkeleton /><SummarySkeleton /><WatchReviewsSkeleton /></div>

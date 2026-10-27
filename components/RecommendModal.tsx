@@ -62,7 +62,7 @@ export default function RecommendModal({
           transition={{ duration: 0.2, ease: "easeOut" }}
         >
           <motion.div
-            className="mobile-sheet w-full max-w-xs sm:max-w-sm md:max-w-md p-5 sm:p-6 rounded-xl  text-white border border-white/10 bg-white/5 shadow-xl "
+            className="glass-surface mobile-sheet w-full max-w-xs sm:max-w-sm md:max-w-md p-5 sm:p-6 rounded-xl  text-white border border-white/10 bg-white/5 shadow-xl "
             initial={{ scale: 0.96, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.96, opacity: 0 }}

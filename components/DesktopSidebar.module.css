@@ -47,16 +47,19 @@
   }
   .sidebar {
     position: absolute;
-    inset: 12px auto 12px 0;
+    inset: 12px auto 12px 4px;
     display: flex;
     flex-direction: column;
     width: 48px;
     padding: 8px 4px;
     overflow: hidden;
-    border: 0;
-    border-radius: 0;
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
     color: #ededf0;
-    background: transparent;
+    background: var(--glass-background);
+    box-shadow: var(--glass-shadow);
+    -webkit-backdrop-filter: blur(18px) saturate(1.15);
+    backdrop-filter: blur(18px) saturate(1.15);
     pointer-events: auto;
   }
   .brand { display: flex; align-items: center; justify-content: center; flex-shrink: 0; height: 40px; margin-bottom: 12px; text-decoration: none; }

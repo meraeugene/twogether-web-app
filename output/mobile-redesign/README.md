@@ -1,5 +1,24 @@
 # Mobile layout verification
 
+## Glass finish, immersive watch pages, and discovery search
+
+The latest revision uses shared glass surfaces, soft ambient backgrounds, quieter borders, and glossy controls across page layouts, collection/Chrono/friend/profile cards, message panels, forms, modal sheets, and their skeletons. Posters use lightweight shadows rather than backdrop blur. Movie credits and the Chrono timeline remain unboxed.
+
+The mobile/tablet header now has a wordmark, search, and a labeled Menu button. Its drawer contains icons and text for destinations. Watch-page back buttons and their skeleton placeholders are hidden below 1280px; the player begins directly below the 64px mobile header.
+
+Search is a native full-screen dialog on mobile and desktop. The initial view includes live TMDB spotlight posters and category links. Artist mode offers starter names. The latest six searches are stored locally on the device and can be cleared. Existing keyboard autocomplete, category filters, and title/artist routing remain in use.
+
+Verification:
+
+- At 390px the watch back button is hidden, the player begins at 64px, and it spans the full content width. At 320px the header and watch page do not overflow horizontally.
+- Search covers the full 320 × 740 and 1440 × 900 viewports without horizontal overflow. The initial view renders real spotlight titles and four category links.
+- Typing Interstellar, pressing Arrow Down, and pressing Enter opened `/tmdb/watch/movie/157336/interstellar`. Reopening search displayed the recent-search chip; clearing recent searches removed it.
+- Selecting the Christopher Nolan artist prompt populated artist search and returned artist suggestions. Closing search and opening/closing the mobile menu retained working focus and keyboard behavior.
+- The collection page uses the shared glass surfaces, retains its full-width mobile artwork and open edges, and does not overflow at phone width.
+- TypeScript passed. ESLint passed with the two existing image-optimization warnings on the TMDB watch page. Authenticated actions and third-party video playback were not part of these layout checks.
+
+Current previews: `premium-search-phone.jpg`, `premium-search-desktop.jpg`, `premium-watch-phone.jpg`, and `premium-binge-phone.jpg`.
+
 ## Simple mobile header
 
 The latest header follows the desktop sidebar: the same `t.` mark, shared Lucide destination icons, muted gray controls, and coral active state. A compact full-width row contains destination shortcuts, search, and a menu for the remaining navigation and account actions. Safe-area and page clearance values are shared with the loading layouts. The desktop sidebar keeps its existing appearance.

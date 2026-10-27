@@ -62,7 +62,8 @@ export default function ToggleWatchlistButton({
     <button
       onClick={handleToggle}
       disabled={isPending}
-      className={`inline-flex w-full items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-sm font-medium transition-all duration-200 md:w-fit
+      aria-pressed={isInList}
+      className={`glass-control inline-flex w-full items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-sm font-medium transition-all duration-200 md:w-fit
         ${
           isInList
             ? "border-red-500/40 bg-red-600 text-white hover:bg-red-500"

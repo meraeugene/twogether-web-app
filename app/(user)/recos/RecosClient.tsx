@@ -16,7 +16,7 @@ export default function RecosClient({
 
   return (
     <main className="page-gutter page-listing relative min-h-screen overflow-hidden bg-black px-7 pb-16 pt-28 font-[family-name:var(--font-geist-sans)] text-white">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
+      <div className="pointer-events-none absolute inset-0 page-ambient" />
       <h1 className="sr-only">Recommendations</h1>
       <LatestRecoRow items={recos} />
 

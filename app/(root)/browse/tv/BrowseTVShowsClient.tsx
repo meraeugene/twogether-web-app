@@ -26,7 +26,7 @@ export default function BrowseTVShowsClient({ genre }: { genre?: string }) {
 
   return (
     <main className="page-gutter page-listing min-h-screen relative bg-black pb-16 pt-28 px-7 text-white font-[family-name:var(--font-geist-sans)]">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+      <div className="absolute inset-0 page-ambient pointer-events-none" />
 
       <section className="mb-16">
         <BackButton />

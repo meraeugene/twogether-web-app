@@ -41,7 +41,7 @@
 .shelfHeading > a:hover { color: #fff; }
 .grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 30px 20px; }
 .card { display: block; width: 100%; min-width: 0; border-radius: 10px; text-align: left; cursor: pointer; }
-.poster { position: relative; display: grid; place-items: center; aspect-ratio: 2 / 2.94; overflow: hidden; border-radius: 10px; background: #15181f; }
+.poster { position: relative; display: grid; place-items: center; aspect-ratio: 2 / 2.94; overflow: hidden; border-radius: 14px; background: #15131e; box-shadow: 0 12px 32px #0004, 0 0 0 1px #ffffff14; }
 .poster > img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease, opacity .35s ease; }
 .poster > svg { width: 40px; height: 40px; color: #717888; }
 .card h3 { margin: 10px 2px 2px; font-size: 16px; font-weight: 600; line-height: 1.4; letter-spacing: -.03em; }
@@ -97,8 +97,12 @@
   .shelfHeading h2 { font-size: 26px; }
   .shelfHeading > a { font-size: 12px; gap: 3px; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
-  .poster { border-radius: 8px; }
+  .poster { border-radius: 12px; }
   .card h3 { font-size: 14px; }
   .card > p { font-size: 12px; }
 }
+.categories { border-color: var(--glass-border); background: var(--glass-background); box-shadow: var(--glass-shadow); backdrop-filter: blur(24px) saturate(1.2); }
+.heroPlay, .heroInfo { border-radius: 14px; }
+.heroInfo { border: 1px solid var(--glass-border); background: var(--glass-background); box-shadow: inset 0 1px 0 #ffffff0d; backdrop-filter: blur(16px); }
+@media (hover: hover) { .card:hover .poster { box-shadow: 0 16px 40px #0006, 0 0 0 1px #ffffff30; } }
 @media (prefers-reduced-motion: reduce) { .video, .posterOverlay, .cardPlay, .poster > img, .heroPlay, .heroInfo, .soundControl { transition: none; } }

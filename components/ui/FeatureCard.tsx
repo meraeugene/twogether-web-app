@@ -21,7 +21,7 @@ export function FeatureCard({
   return (
     <motion.div
       className={cn(
-        "relative overflow-hidden p-8 md:p-6 bg-black/40 border border-red-500/20 rounded-xl group hover:border-red-500/50 transition-all duration-300",
+        "glass-surface relative overflow-hidden p-8 md:p-6 bg-black/40 border border-red-500/20 rounded-xl group hover:border-red-500/50 transition-all duration-300",
         className
       )}
       {...props}

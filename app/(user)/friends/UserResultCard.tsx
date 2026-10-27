@@ -41,7 +41,7 @@ export function UserResultCard({
   };
 
   return (
-    <div className="bg-black border border-white/10 px-2 py-4 rounded-md shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 flex-wrap">
+    <div className="glass-surface bg-black border border-white/10 px-2 py-4 rounded-md shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 flex-wrap">
       <div className="flex items-center gap-4">
         <Image
           src={user.avatar_url || "/default-avatar.png"}

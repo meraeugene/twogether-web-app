@@ -184,7 +184,7 @@ export default function TabbedProfileView({
       className="page-gutter page-listing min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col   pt-28 relative pb-16 text-white px-7
 "
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+      <div className="absolute inset-0 page-ambient pointer-events-none" />
 
       {/* Banner */}
       <div

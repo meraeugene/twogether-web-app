@@ -6,7 +6,7 @@ import { cn } from "@/utils/cn";
 export function LoadingPage({ children, label, centered = false, className }: { children: ReactNode; label: string; centered?: boolean; className?: string }) {
   return (
     <main aria-busy="true" className={cn("page-gutter relative min-h-screen bg-black px-7 pb-16 pt-28 font-[family-name:var(--font-geist-sans)] text-white", centered ? "flex flex-col items-center justify-center" : "page-listing", className)}>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
+      <div className="pointer-events-none absolute inset-0 page-ambient" />
       <span role="status" className="sr-only">{label}</span>
       <div aria-hidden="true" className="relative w-full">{children}</div>
     </main>
@@ -19,7 +19,7 @@ export function TabsSkeleton({ count = 4 }: { count?: number }) {
 
 export function FriendCardsSkeleton() {
   return <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">{Array.from({ length: 4 }, (_, index) => (
-    <div key={index} className="rounded-xl border border-white/10 bg-white/5 p-4">
+    <div key={index} className="glass-surface rounded-xl border border-white/10 bg-white/5 p-4">
       <div className="mb-5 flex items-start gap-4"><Skeleton className="h-12 w-12 shrink-0 rounded-full" /><div className="min-w-0 flex-1 space-y-2"><Skeleton className="h-6 w-3/4" /><Skeleton className="h-5 w-1/2" /></div></div>
       <div className="flex flex-wrap justify-end gap-2"><Skeleton className="h-7 w-20 rounded-full" /><Skeleton className="h-7 w-28 rounded-full" /></div>
     </div>
@@ -43,7 +43,7 @@ export function ThreadListSkeleton() {
 export function MessagesPageSkeleton() {
   return <LoadingPage label="Loading chats">
     <h1 className="relative mb-6 text-2xl font-semibold tracking-tight sm:text-3xl">Chats</h1>
-    <div className="mobile-chat mobile-bleed relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-white/10 lg:grid lg:min-h-[520px] lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
+    <div className="glass-surface mobile-chat mobile-bleed relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-white/10 lg:grid lg:min-h-[520px] lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
       <div className="bg-black/20 lg:border-r lg:border-white/10">
         <div className="grid grid-cols-2 border-b border-white/10">{[0, 1].map(index => <div key={index} className="border-white/10 px-2 py-4 first:border-r"><Skeleton className="mx-auto mb-2 h-4 w-20" /><div className="flex gap-2"><Skeleton className="h-7 w-full rounded-full" /><Skeleton className="h-7 w-full rounded-full" /></div></div>)}</div>
         <ThreadListSkeleton />
@@ -55,7 +55,7 @@ export function MessagesPageSkeleton() {
 
 function ProfileInfoSkeleton() {
   return (
-    <div className="flex items-start gap-3 rounded-lg border border-white/10 bg-white/5 p-4">
+    <div className="glass-surface flex items-start gap-3 rounded-lg border border-white/10 bg-white/5 p-4">
       <Skeleton className="mt-1 h-5 w-5 shrink-0" />
       <div className="min-w-0 flex-1 space-y-2">
         <Skeleton className="h-5 w-28 max-w-full" />

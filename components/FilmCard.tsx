@@ -525,7 +525,7 @@ function FilmCard({
           className="group/movie w-full cursor-pointer rounded-2xl border border-transparent p-2 text-left transition duration-200 hover:border-white/15 hover:bg-white/[0.075] focus-visible:border-white/30 focus-visible:bg-white/[0.075] focus-visible:outline-none"
           title={item.title}
         >
-          <div className="relative aspect-[2/3] overflow-hidden rounded-xl border border-white/10 bg-white/[0.05] transition duration-200 group-hover/movie:border-white/40 group-hover/movie:shadow-[0_12px_35px_rgba(0,0,0,.45)]">
+          <div className="poster-surface relative aspect-[2/3] overflow-hidden rounded-xl border border-white/10 bg-white/[0.05] transition duration-200 group-hover/movie:border-white/40 group-hover/movie:shadow-[0_12px_35px_rgba(0,0,0,.45)]">
             {item.poster_url && (
               <img
                 src={item.poster_url}
@@ -570,7 +570,7 @@ function FilmCard({
         <AnimatePresence>
           {isVisible && (
             <motion.div className="w-full">
-              <div className="relative aspect-2/3 w-full overflow-hidden rounded-md bg-[#141414] shadow-md cursor-pointer">
+              <div className="poster-surface relative aspect-2/3 w-full overflow-hidden rounded-md bg-[#141414] shadow-md cursor-pointer">
                 <img
                   src={item.poster_url || "/placeholder.jpg"}
                   alt={item.title}

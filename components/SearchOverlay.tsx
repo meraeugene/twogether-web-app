@@ -5,6 +5,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiArrowRight, FiFilm, FiSearch, FiUser } from "react-icons/fi";
+import { Clock3, X } from "lucide-react";
+import SearchDiscovery from "./SearchDiscovery";
+import { readRecentSearches, saveRecentSearch, clearRecentSearches, type RecentSearch } from "@/utils/recentSearches";
 import type { SearchKind, SearchSuggestion } from "@/types/search";
 import { cachedSuggestions, loadSearchSuggestions, searchCacheKey, suggestionHref } from "@/utils/searchAutocomplete";
 import styles from "./SearchOverlay.module.css";
@@ -14,6 +17,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
+  const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [kind, setKind] = useState<SearchKind>("all");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [response, setResponse] = useState<{ key: string; items: SearchSuggestion[]; failed?: boolean } | null>(null);
@@ -26,6 +30,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   const failed = matchingResponse?.failed;
 
   useEffect(() => {
+    setRecentSearches(readRecentSearches());
     const dialog = dialogRef.current;
     if (!dialog) return;
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -60,19 +65,28 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
 
   const searchAll = () => {
     if (!trimmed) return;
+    saveRecentSearch(trimmed, kind);
     onClose();
     router.push(`/search/${encodeURIComponent(trimmed)}${kind === "all" ? "" : `?kind=${kind}`}`);
   };
   const selectSuggestion = (suggestion: SearchSuggestion) => {
+    saveRecentSearch(suggestion.label, suggestion.category === "person" ? "artists" : "titles");
     onClose();
     router.push(suggestionHref(suggestion));
   };
 
   return (
     <dialog ref={dialogRef} className={styles.dialog} aria-label="Search movies, shows, and artists"
-      onCancel={(event) => { event.preventDefault(); onClose(); }}
-      onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+      onCancel={(event) => { event.preventDefault(); onClose(); }}>
       <div className={styles.panel}>
+        <div className={styles.topbar}>
+          <span className={styles.brand}><span>t<span>.</span></span>Discover</span>
+          <button type="button" onClick={onClose} className={styles.close} aria-label="Close search"><X aria-hidden="true" /><span>Close</span><kbd>Esc</kbd></button>
+        </div>
+        <div className={styles.heading}>
+          <p>YOUR NEXT GREAT WATCH</p>
+          <h2>Find something worth watching.</h2>
+        </div>
         <form className={styles.form} role="search" onSubmit={(event) => {
           event.preventDefault();
           if (activeIndex >= 0 && suggestions[activeIndex]) selectSuggestion(suggestions[activeIndex]);
@@ -92,7 +106,6 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                 : index <= 0 ? suggestions.length - 1 : index - 1);
             }} />
           <button type="submit" className={styles.submit} disabled={!trimmed} aria-label="Search all results"><FiArrowRight aria-hidden="true" /></button>
-          <button type="button" onClick={onClose} className={styles.close} aria-label="Close search"><span className="md:hidden" aria-hidden="true">Close</span><span className="hidden md:inline" aria-hidden="true">Esc</span></button>
         </form>
         <div className={styles.filters} role="group" aria-label="Search category">
           {([{ id: "all", label: "All" }, { id: "titles", label: "Movies & TV" }, { id: "artists", label: "Artists" }] as const).map((filter) => (
@@ -102,6 +115,15 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
           ))}
         </div>
         <div className={styles.results} aria-busy={loading}>
+          {trimmed.length < 2 && <>
+            {recentSearches.length > 0 && <section className={styles.recent}>
+              <div className={styles.sectionHeading}><h3>Pick up your search</h3><button type="button" onClick={() => { clearRecentSearches(); setRecentSearches([]); }}>Clear recent</button></div>
+              <div className={styles.chips}>{recentSearches.map(item => <button key={`${item.kind}-${item.query}`} type="button" onClick={() => { setQuery(item.query); setKind(item.kind); setActiveIndex(-1); inputRef.current?.focus(); }}><Clock3 aria-hidden="true" />{item.query}</button>)}</div>
+            </section>}
+            <SearchDiscovery kind={kind}
+              onQuery={(value, selectedKind) => { setQuery(value); setKind(selectedKind); setActiveIndex(-1); inputRef.current?.focus(); }}
+              onNavigate={onClose} onTitle={(title) => { saveRecentSearch(title, "titles"); onClose(); }} />
+          </>}
           {loading && <>
             <span className="sr-only" role="status">Searching</span>
             <div className={styles.skeletonList} aria-hidden="true">
@@ -128,10 +150,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
               </ul>
             ) : !loading && trimmed.length >= 2 ? <p className={styles.message} role="status">{failed ? "Suggestions are unavailable. Press Enter to search." : kind === "artists" ? "No artists found. Try another name." : "No matches yet. Try another search."}</p> : null}
         </div>
-        <div className={styles.footer}>
+        {trimmed && <div className={styles.footer}>
           <span className="hidden md:inline">Arrow keys to choose · Enter to open</span>
           {trimmed && <button type="button" onClick={searchAll}>{kind === "artists" ? "See all artists" : "See all results"} <FiArrowRight aria-hidden="true" /></button>}
-        </div>
+        </div>}
       </div>
     </dialog>
   );

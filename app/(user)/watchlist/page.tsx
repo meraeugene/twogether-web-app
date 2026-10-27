@@ -39,7 +39,7 @@ export default async function WatchlistPage() {
 
   return (
     <main className="page-gutter page-listing relative flex min-h-screen flex-col bg-black px-7 pb-16 pt-28 font-[family-name:var(--font-geist-sans)] text-white">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10" />
+      <div className="pointer-events-none absolute inset-0 page-ambient" />
       <div className="relative">
         <h1 className="mb-3 text-2xl font-semibold tracking-tight sm:text-3xl">Your Watchlist</h1>
         <p className="mb-8 text-sm leading-6 text-white/55">

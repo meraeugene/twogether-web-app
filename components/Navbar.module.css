@@ -7,9 +7,11 @@
     inset: 0 0 auto;
     z-index: 60;
     padding-top: env(safe-area-inset-top);
-    border-bottom: 1px solid #ffffff0f;
-    background: #0a0a0af5;
-    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    background: linear-gradient(120deg, #ffffff0d, #ffffff02), #101017d9;
+    box-shadow: inset 0 1px 0 #ffffff0d, 0 12px 40px #0000001a;
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
+    backdrop-filter: blur(24px) saturate(1.3);
     font-family: var(--font-geist-sans), Arial, sans-serif;
   }
 
@@ -17,14 +19,14 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    min-height: 56px;
+    min-height: 64px;
     padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
   }
 
   .brand {
     display: flex;
     align-items: center;
-    width: 36px;
+    gap: 10px;
     height: 44px;
     flex-shrink: 0;
     color: #fafafa;
@@ -32,8 +34,8 @@
   }
   .brandMark { padding-right: 4px; font-size: 29px; line-height: 1; font-weight: 800; letter-spacing: -4px; }
   .brandMark > span { color: #f43f4c; }
-  .shortcuts { display: flex; margin-left: auto; }
-  .actions { display: flex; }
+  .wordmark { font-size: 17px; font-weight: 650; letter-spacing: -.04em; }
+  .actions { display: flex; gap: 8px; margin-left: auto; }
   .control {
     display: flex;
     align-items: center;
@@ -41,15 +43,17 @@
     flex-shrink: 0;
     width: 44px;
     height: 44px;
-    border: 0;
-    border-radius: 10px;
-    color: #93939e;
-    background: transparent;
+    border: 1px solid #ffffff12;
+    border-radius: 14px;
+    color: #c8c6d2;
+    background: linear-gradient(145deg, #ffffff0d, #ffffff03);
+    box-shadow: inset 0 1px 0 #ffffff08;
     text-decoration: none;
     cursor: pointer;
     transition: color .15s, background .15s;
   }
   .control svg, .menuLink svg { flex-shrink: 0; width: 18px; height: 18px; stroke-width: 1.6; }
+  .menuToggle { width: auto; min-width: 88px; gap: 9px; padding-inline: 13px; font-size: 13px; font-weight: 550; }
   .control:hover, .menuLink:hover { color: #ededf0; background: #ffffff05; }
   .control.active, .control[aria-expanded="true"], .menuLink[aria-current="page"] { color: #f46b77; background: #f43f4c0c; }
   .backdrop { display: block; position: fixed; inset: 0; z-index: 55; border: 0; background: #0008; }
@@ -60,25 +64,25 @@
     overscroll-behavior: contain;
     padding: 8px max(16px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
     border-top: 1px solid #ffffff0a;
-    background: #0a0a0a;
+    background: linear-gradient(150deg, #ffffff06, transparent), #101017e8;
   }
   .section + .section { margin-top: 12px; padding-top: 12px; border-top: 1px solid #ffffff0a; }
-  .sectionTitle { margin: 8px 10px; color: #777780; font-size: 11px; line-height: 16px; }
-  .menuGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .sectionTitle { margin: 12px 12px 8px; color: #9893a9; font-size: 10px; line-height: 16px; text-transform: uppercase; letter-spacing: .14em; }
+  .menuGrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .menuLink {
     display: flex;
     align-items: center;
     gap: 10px;
     min-height: 44px;
     min-width: 0;
-    padding: 10px;
-    border: 0;
-    border-radius: 10px;
-    color: #93939e;
+    padding: 12px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    color: #c0bccb;
     background: transparent;
     text-decoration: none;
     text-align: left;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 500;
     line-height: 20px;
     cursor: pointer;

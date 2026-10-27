@@ -3,7 +3,7 @@ import Skeleton from "@/components/ui/Skeleton";
 export function FilmCardSkeleton() {
   return (
     <div className="relative w-full font-(family-name:--font-geist-sans)">
-      <Skeleton className="aspect-2/3 w-full rounded-md shadow-md" />
+      <Skeleton className="poster-surface aspect-2/3 w-full rounded-md shadow-md" />
       <div className="mt-4 mb-3">
         <Skeleton className="h-6 w-4/5 rounded" />
         <div className="mt-1 flex flex-wrap items-center justify-between gap-2">

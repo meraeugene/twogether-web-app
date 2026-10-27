@@ -45,11 +45,11 @@ export default async function WatchPage({
   );
 
   return (
-    <main className="page-gutter page-listing min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 relative text-white">
+    <main className="watch-page page-gutter page-listing min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-7 pt-28 pb-16 relative text-white">
       {/* Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+      <div className="absolute inset-0 page-ambient pointer-events-none" />
 
-      <BackButton />
+      <BackButton className="hidden xl:inline-flex" />
 
       <div className="flex flex-col  xl:flex-row  gap-10">
         <div className="flex-1 space-y-10">

@@ -34,7 +34,7 @@ export default async function MyRecommendationsPage() {
 
   return (
     <main className="page-gutter page-listing min-h-screen relative bg-black px-7 pt-28 pb-16 text-white font-[family-name:var(--font-geist-sans)]">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+      <div className="absolute inset-0 page-ambient pointer-events-none" />
 
       <h1 className="mb-3 text-2xl font-semibold tracking-tight sm:text-3xl">Your Recommendations</h1>
       <p className="mb-8 text-sm leading-6 text-white/55">

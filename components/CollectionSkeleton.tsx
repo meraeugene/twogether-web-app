@@ -2,7 +2,7 @@ import Skeleton from "@/components/ui/Skeleton";
 
 export default function CollectionSkeleton() {
   return (
-    <article aria-hidden="true" className="mobile-collection mobile-bleed relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0c] shadow-[0_28px_90px_rgba(0,0,0,.24)]">
+    <article aria-hidden="true" className="glass-surface mobile-collection mobile-bleed relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0c] shadow-[0_28px_90px_rgba(0,0,0,.24)]">
       <div className="grid lg:min-h-[310px] lg:grid-cols-[35%_1fr]">
         <Skeleton className="min-h-[230px] rounded-none lg:min-h-full" />
         <div className="mobile-collection-body flex min-w-0 flex-col justify-between gap-7 p-5 sm:p-7 sm:pb-5 lg:p-8 lg:pb-5">

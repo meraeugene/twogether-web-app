@@ -13,7 +13,7 @@ export function InfoCard({
 }) {
   return (
     <motion.div
-      className={`flex items-start gap-3 p-4 rounded-lg bg-white/5 backdrop-blur border border-white/10 ${className}`}
+      className={`glass-surface flex items-start gap-3 p-4 rounded-lg bg-white/5 backdrop-blur border border-white/10 ${className}`}
       initial={{ opacity: 0, y: 5 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}

@@ -148,7 +148,7 @@ export function FriendCard({
   };
 
   return (
-    <motion.div className="p-4 bg-white/5 rounded-xl border border-white/10 gap-4">
+    <motion.div className="glass-surface p-4 bg-white/5 rounded-xl border border-white/10 gap-4">
       <div className="flex items-start gap-4 mb-5">
         <div className="w-12 h-12 rounded-full overflow-hidden">
           <Image

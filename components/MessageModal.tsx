@@ -38,7 +38,7 @@ export default function MessageModal({
           transition={{ duration: 0.2 }}
         >
           <motion.div
-            className="mobile-sheet w-full max-w-xs sm:max-w-md p-4 sm:p-6 rounded-xl shadow-xl border border-white/10 bg-white/10 text-white backdrop-blur-2xl"
+            className="glass-surface mobile-sheet w-full max-w-xs sm:max-w-md p-4 sm:p-6 rounded-xl shadow-xl border border-white/10 bg-white/10 text-white backdrop-blur-2xl"
             initial={{ scale: 0.96, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.96, opacity: 0 }}

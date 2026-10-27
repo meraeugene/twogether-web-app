@@ -16,7 +16,7 @@ export default async function Page({
 
   return (
     <main className="page-gutter page-listing min-h-screen font-[family-name:var(--font-geist-sans)] bg-black  px-7  pt-28 pb-16 relative text-white">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+      <div className="absolute inset-0 page-ambient pointer-events-none" />
       <EditProfileForm user={user} />
     </main>
   );

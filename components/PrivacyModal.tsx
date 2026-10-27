@@ -43,7 +43,7 @@ export function PrivacyModal({
           transition={{ duration: 0.2, ease: "easeOut" }}
         >
           <motion.div
-            className="mobile-sheet w-full max-w-xs sm:max-w-sm md:max-w-md p-5 sm:p-6 rounded-2xl shadow-xl border border-white/10 bg-white/10 text-white backdrop-blur-2xl"
+            className="glass-surface mobile-sheet w-full max-w-xs sm:max-w-sm md:max-w-md p-5 sm:p-6 rounded-2xl shadow-xl border border-white/10 bg-white/10 text-white backdrop-blur-2xl"
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}

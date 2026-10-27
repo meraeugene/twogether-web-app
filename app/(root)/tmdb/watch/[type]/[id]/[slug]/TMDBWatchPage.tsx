@@ -95,10 +95,10 @@ export default function TMDBWatchPage({
   };
 
   return (
-    <main className="page-gutter page-listing min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-6 pt-28 pb-16 relative text-white ">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+    <main className="watch-page page-gutter page-listing min-h-screen font-[family-name:var(--font-geist-sans)] bg-black flex flex-col px-6 pt-28 pb-16 relative text-white ">
+      <div className="absolute inset-0 page-ambient pointer-events-none" />
 
-      <BackButton />
+      <BackButton className="hidden xl:inline-flex" />
 
       {recommendation && (
         <WatchPlayer
@@ -166,7 +166,7 @@ export default function TMDBWatchPage({
                         exit={{ opacity: 0, y: -8, scale: 0.96 }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
                         onClick={() => setOpen(true)}
-                        className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-medium text-white transition hover:bg-white/[0.1] md:w-fit"
+                        className="glass-control inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-medium text-white transition hover:bg-white/[0.1] md:w-fit"
                       >
                         <Sparkles className="w-4 h-4" />
                         Recommend This!

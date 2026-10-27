@@ -169,7 +169,7 @@ export default function WatchPlayer({
               type="button"
               aria-pressed={activeUrlIndex === index}
               onClick={() => setCurrentUrlIndex(index)}
-              className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition sm:w-auto
+              className={`glass-control flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition sm:w-auto
               ${
                 activeUrlIndex === index
                   ? "bg-red-600 text-white font-semibold"
@@ -201,7 +201,7 @@ export default function WatchPlayer({
                         setSelectedSeason(season);
                         setSelectedEpisode(1);
                       }}
-                      className={`w-full cursor-pointer rounded-xl px-3 py-2 text-sm font-medium transition sm:w-auto sm:px-4
+                      className={`glass-control w-full cursor-pointer rounded-xl px-3 py-2 text-sm font-medium transition sm:w-auto sm:px-4
                         ${
                           isActive
                             ? "bg-red-600 text-white font-semibold"
@@ -227,7 +227,7 @@ export default function WatchPlayer({
                       aria-label={`Episode ${ep}: ${title}`}
                       title={`Episode ${ep}: ${title}`}
                       onClick={() => setSelectedEpisode(ep)}
-                      className={`flex h-20 min-w-0 cursor-pointer items-center gap-3 overflow-hidden rounded-xl px-4 text-left text-sm leading-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white
+                      className={`glass-control flex h-20 min-w-0 cursor-pointer items-center gap-3 overflow-hidden rounded-xl px-4 text-left text-sm leading-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white
                         ${
                           isActive
                             ? "bg-red-600 text-white font-semibold"

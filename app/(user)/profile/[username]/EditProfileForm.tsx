@@ -219,7 +219,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           <input
             value={form.username}
             readOnly
-            className="w-full p-3 rounded bg-black/20 text-white/70 border border-white/10 cursor-not-allowed outline-none"
+            className="glass-input w-full p-3 rounded bg-black/20 text-white/70 border border-white/10 cursor-not-allowed outline-none"
           />
         </div>
 
@@ -228,7 +228,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           <input
             value={form.display_name}
             onChange={(e) => setForm({ ...form, display_name: e.target.value })}
-            className="w-full p-3 rounded bg-black/30 border border-white/10"
+            className="glass-input w-full p-3 rounded bg-black/30 border border-white/10"
           />
         </div>
 
@@ -237,7 +237,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           <textarea
             value={form.bio}
             onChange={(e) => setForm({ ...form, bio: e.target.value })}
-            className="w-full p-3 rounded bg-black/30 border border-white/10"
+            className="glass-input w-full p-3 rounded bg-black/30 border border-white/10"
             rows={3}
           />
         </div>

@@ -191,7 +191,7 @@ export default function ChronologicalClient() {
               type="button"
               onClick={() => setIsAutoMoving((current) => !current)}
               aria-pressed={!isAutoMoving}
-              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/[0.08]"
+              className="glass-control inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/[0.08]"
             >
               {isAutoMoving ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
               {isAutoMoving ? "Stop the Journey" : "Begin the Journey"}
@@ -199,7 +199,7 @@ export default function ChronologicalClient() {
             <button
               type="button"
               onClick={() => setIsOpen(true)}
-              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-red-400/40 hover:bg-red-500/15"
+              className="glass-control inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-red-400/40 hover:bg-red-500/15"
             >
               <AiOutlineFieldTime className="h-5 w-5 text-red-300" aria-hidden="true" />
               Explore Another Saga
@@ -232,7 +232,7 @@ export default function ChronologicalClient() {
                         isEven ? "md:translate-y-0" : "md:translate-y-28"
                       }`}
                     >
-                      <div className="rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] p-4 shadow-[0_16px_50px_rgba(0,0,0,0.28)] transition duration-300 hover:border-white/15">
+                      <div className="glass-surface rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] p-4 shadow-[0_16px_50px_rgba(0,0,0,0.28)] transition duration-300 hover:border-white/15">
                         <div className="mb-4 flex items-center justify-between gap-3">
                           <span className="text-[10px] font-semibold uppercase tracking-[0.26em] text-white/38">
                             {isFirst

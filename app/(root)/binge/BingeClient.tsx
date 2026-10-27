@@ -50,7 +50,7 @@ export default function BingeClient() {
       <header className="mb-6 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Binge collections</h1>
         <form onSubmit={handleSubmit} role="search" aria-label="Search collections"
-          className="flex w-full items-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] p-1.5 focus-within:border-white/35 lg:max-w-xl">
+          className="glass-surface flex w-full items-center gap-2 rounded-xl border border-white/15 bg-white/[0.03] p-1.5 focus-within:border-white/35 lg:max-w-xl">
           <Search className="ml-2 h-4 w-4 shrink-0 text-white/50" aria-hidden="true" />
           <input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)}
             aria-label="Search movie collections" placeholder="Search franchises or collections"
@@ -65,7 +65,7 @@ export default function BingeClient() {
       <div className="mobile-filter-rail mobile-rail flex flex-wrap gap-2" role="group" aria-label="Collection genres">
         {BINGE_GENRES.map((genre) => (
           <button key={genre} type="button" onClick={() => handleGenreChange(genre)} aria-pressed={genre === selectedGenre}
-            className={`shrink-0 cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition ${genre === selectedGenre
+            className={`glass-control shrink-0 cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition ${genre === selectedGenre
               ? "border-red-400/30 bg-red-500/15 text-red-300"
               : "border-white/10 bg-transparent text-white/60 hover:border-white/25 hover:text-white"}`}>
             {genre}

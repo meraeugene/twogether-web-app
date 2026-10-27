@@ -20,7 +20,7 @@ export default function ChronoSkeleton() {
               {Array.from({ length: 4 }, (_, index) => (
                 <div key={index} className="flex items-start md:items-stretch">
                   <div className={`w-[230px] shrink-0 md:w-[280px] ${index % 2 ? "md:translate-y-28" : ""}`}>
-                    <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-4">
+                    <div className="glass-surface rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-4">
                       <div className="mb-4 flex items-center justify-between"><Skeleton className="h-4 w-16" /><Skeleton className="h-8 w-8 rounded-full" /></div>
                       <Skeleton className="aspect-[2/3] w-full rounded-[1.4rem]" />
                       <Skeleton className="mt-4 h-7 w-4/5" />

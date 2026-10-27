@@ -146,7 +146,7 @@ export default function AIRecommendClient() {
 
   return (
     <div className="page-gutter min-h-screen  flex flex-col px-7 md:px-15 items-center justify-center relative  bg-black text-white font-[family-name:var(--font-geist-sans)]">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+      <div className="absolute inset-0 page-ambient pointer-events-none" />
 
       <AnimatePresence mode="wait">
         {!loading && recommendations.length === 0 && (

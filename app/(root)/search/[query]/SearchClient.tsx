@@ -82,7 +82,7 @@ export default function SearchClient({
 
   return (
     <>
-      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-red-700/20 via-black/5 to-red-800/10" />
+      <div className="pointer-events-none absolute inset-0 page-ambient" />
 
       <Link
         prefetch={false}

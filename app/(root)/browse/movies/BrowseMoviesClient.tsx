@@ -37,7 +37,7 @@ export default function BrowseMoviesClient() {
 
   return (
     <main className="page-gutter page-listing min-h-screen relative bg-black pb-16 pt-28 px-7 text-white font-[family-name:var(--font-geist-sans)]">
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700/20 via-black/5 to-red-800/10 pointer-events-none" />
+      <div className="absolute inset-0 page-ambient pointer-events-none" />
 
       <section className="mb-16">
         <BackButton />
@@ -56,7 +56,7 @@ export default function BrowseMoviesClient() {
           </h1>
 
           <select
-            className="rounded-md border border-red-900 bg-black px-4 py-2 text-sm text-white transition duration-200 cursor-pointer hover:border-red-500 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="glass-control rounded-md border border-red-900 bg-black px-4 py-2 text-sm text-white transition duration-200 cursor-pointer hover:border-red-500 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
             value={selectedGenre}
             onChange={(e) => handleGenreChange(e.target.value)}
           >

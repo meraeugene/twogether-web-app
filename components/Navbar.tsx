@@ -33,9 +33,6 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
   const discoverItems = [...primaryNavItems.filter(item => item.href !== "/watchlist"), ...moreNavItems];
   const libraryItems = [...primaryNavItems.filter(item => item.href === "/watchlist"), ...recoNavItems];
-  const shortcuts = user
-    ? [{ href: "/browse", label: "Browse" }, { href: "/watchlist", label: "Watchlist" }, { href: "/messages", label: "Chats" }]
-    : discoverItems;
 
   const openSearch = () => {
     closeMenu();
@@ -120,26 +117,18 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
         <div className={styles.bar}>
           <Link href="/" className={styles.brand} onClick={closeMenu} aria-label="Twogether home">
             <span className={styles.brandMark} aria-hidden="true">t<span>.</span></span>
+            <span className={styles.wordmark} aria-hidden="true">Twogether</span>
           </Link>
-          <nav className={styles.shortcuts} aria-label="Mobile shortcuts">
-            {shortcuts.map(({ href, label }) => {
-              const Icon = navigationIcons[href] ?? Compass;
-              return <Link key={href} href={href} onClick={closeMenu} title={label} aria-label={label}
-                aria-current={isActive(href) ? "page" : undefined}
-                className={styles.control + (isActive(href) ? " " + styles.active : "")}>
-                <Icon aria-hidden="true" />
-              </Link>;
-            })}
-          </nav>
           <div className={styles.actions}>
             <button type="button" className={styles.control} aria-label="Open search" title="Search"
               aria-haspopup="dialog" aria-expanded={searchOpen} aria-keyshortcuts="Control+K Meta+K"
               onPointerEnter={preloadSearch} onFocus={preloadSearch} onClick={openSearch}>
               <Search aria-hidden="true" />
             </button>
-            <button ref={menuButton} type="button" className={styles.control} aria-label="Toggle menu"
+            <button ref={menuButton} type="button" className={`${styles.control} ${styles.menuToggle}`} aria-label="Toggle menu"
               aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(value => !value)}>
               {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+              <span>{menuOpen ? "Close" : "Menu"}</span>
             </button>
           </div>
         </div>
