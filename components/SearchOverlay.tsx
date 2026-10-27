@@ -92,7 +92,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                 : index <= 0 ? suggestions.length - 1 : index - 1);
             }} />
           <button type="submit" className={styles.submit} disabled={!trimmed} aria-label="Search all results"><FiArrowRight aria-hidden="true" /></button>
-          <button type="button" onClick={onClose} className={styles.close} aria-label="Close search">Esc</button>
+          <button type="button" onClick={onClose} className={styles.close} aria-label="Close search"><span className="md:hidden" aria-hidden="true">Close</span><span className="hidden md:inline" aria-hidden="true">Esc</span></button>
         </form>
         <div className={styles.filters} role="group" aria-label="Search category">
           {([{ id: "all", label: "All" }, { id: "titles", label: "Movies & TV" }, { id: "artists", label: "Artists" }] as const).map((filter) => (
@@ -129,7 +129,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             ) : !loading && trimmed.length >= 2 ? <p className={styles.message} role="status">{failed ? "Suggestions are unavailable. Press Enter to search." : kind === "artists" ? "No artists found. Try another name." : "No matches yet. Try another search."}</p> : null}
         </div>
         <div className={styles.footer}>
-          <span>Arrow keys to choose · Enter to open</span>
+          <span className="hidden md:inline">Arrow keys to choose · Enter to open</span>
           {trimmed && <button type="button" onClick={searchAll}>{kind === "artists" ? "See all artists" : "See all results"} <FiArrowRight aria-hidden="true" /></button>}
         </div>
       </div>

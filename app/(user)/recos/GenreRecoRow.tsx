@@ -67,7 +67,7 @@ export default function GenreRecoRow({
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={page}
-          className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6"
+          className="media-grid grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6"
           variants={containerVariants}
           initial="hidden"
           animate="visible"

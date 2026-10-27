@@ -13,7 +13,7 @@ function RecosRowSkeleton() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+      <div className="media-grid grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         {Array.from({ length: 6 }).map((_, index) => (
           <Skeleton key={index} className="aspect-[2/3] w-full rounded-lg" />
         ))}

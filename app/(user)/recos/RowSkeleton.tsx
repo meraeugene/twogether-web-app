@@ -7,7 +7,7 @@ export default function RowSkeleton({ title }: { title: string }) {
         </h2>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
+      <div className="media-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
         {Array.from({ length: 6 }).map((_, idx) => (
           <div
             key={idx}

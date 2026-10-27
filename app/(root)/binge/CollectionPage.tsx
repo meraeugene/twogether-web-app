@@ -92,7 +92,7 @@ function CollectionRow({
   }, [collection.movies.length]);
 
   return (
-    <article className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0c] bg-[radial-gradient(ellipse_at_top_right,rgba(185,28,28,0.28),transparent_65%),linear-gradient(135deg,#1c0b11_0%,#0b0b0c_75%)] shadow-[0_28px_90px_rgba(0,0,0,.24)] transition duration-300 hover:border-white/20">
+    <article className="mobile-collection mobile-bleed group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0c] bg-[radial-gradient(ellipse_at_top_right,rgba(185,28,28,0.28),transparent_65%),linear-gradient(135deg,#1c0b11_0%,#0b0b0c_75%)] shadow-[0_28px_90px_rgba(0,0,0,.24)] transition duration-300 hover:border-white/20">
       {backdrop && (
         <img
           src={backdrop}
@@ -132,7 +132,7 @@ function CollectionRow({
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-col justify-between gap-7 p-5 sm:p-7 sm:pb-5 lg:p-8 lg:pb-5">
+        <div className="mobile-collection-body flex min-w-0 flex-col justify-between gap-7 p-5 sm:p-7 sm:pb-5 lg:p-8 lg:pb-5">
           <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
             <div>
               <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">

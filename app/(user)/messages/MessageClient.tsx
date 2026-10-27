@@ -30,7 +30,7 @@ export default function MessagesClient({
   >(undefined);
 
   return (
-    <div className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-white/10 lg:grid lg:min-h-[520px] lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
+    <div className="mobile-chat mobile-bleed relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-white/10 lg:grid lg:min-h-[520px] lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
       {/* Left Panel - Thread List */}
       <div
         className={`bg-black/20 lg:border-r border-r-0  border-white/10 ${

@@ -80,7 +80,7 @@ export default function TMDBReviewForm({
   };
 
   return (
-    <div className="w-full xl:max-w-1/2 mt-16">
+    <div className="watch-section relative w-full xl:max-w-1/2 mt-16">
       <form action={handleSubmit} className="space-y-6">
         {/* Header */}
         <div className="relative">

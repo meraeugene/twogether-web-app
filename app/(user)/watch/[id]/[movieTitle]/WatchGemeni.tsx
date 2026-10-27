@@ -57,7 +57,7 @@ export default function WatchGemeni({
           setIsOpen(true);
           document.body.style.overflow = "hidden";
         }}
-        aria-label="Open feedback panel"
+        aria-label="Ask AI about this title"
         className="group cursor-pointer fixed bottom-4 right-4 z-50 h-12 w-12 overflow-hidden  rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 hover:scale-[1.05] hover:border-red-400/40 hover:shadow-[0_24px_70px_rgba(220,38,38,0.18)] active:scale-[0.98] sm:h-14 sm:w-14"
       >
         <div className="relative flex h-full w-full items-center justify-center">
@@ -79,7 +79,7 @@ export default function WatchGemeni({
       {/* Chat Panel */}
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed bottom-0 right-0 w-full md:w-[400px] h-[70vh] bg-black/90 border-t md:border-l border-white/10 z-50  md:rounded-tr-none rounded-t-2xl md:rounded-tl-2xl shadow-lg flex flex-col overflow-hidden backdrop-blur-sm">
+          <div className="mobile-ai-chat fixed bottom-0 right-0 w-full md:w-[400px] h-[70vh] bg-black/90 border-t md:border-l border-white/10 z-[90] md:rounded-tr-none rounded-t-2xl md:rounded-tl-2xl shadow-lg flex flex-col overflow-hidden backdrop-blur-sm">
             {/* Header */}
             <div className="flex items-start justify-between px-4 py-3 border-b border-white/10 bg-black/80">
               <div className="flex flex-col gap-2">

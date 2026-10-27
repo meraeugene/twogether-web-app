@@ -138,8 +138,8 @@ export default function WatchPlayer({
 
   if (!hasPlayableUrl || !streamSrc) {
     return (
-      <div className="space-y-6 font-[family-name:var(--font-geist-mono)]">
-        <div className="flex aspect-video items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] px-6 text-center text-sm text-white/60">
+      <div className="watch-player space-y-6 font-[family-name:var(--font-geist-mono)]">
+        <div className="watch-screen mobile-bleed flex aspect-video items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] px-6 text-center text-sm text-white/60">
           This stream is unavailable right now. Please try another title later.
         </div>
       </div>
@@ -147,12 +147,13 @@ export default function WatchPlayer({
   }
 
   return (
-    <div className="space-y-8 font-[family-name:var(--font-geist-mono)]">
+    <div className="watch-player space-y-4 md:space-y-8 font-[family-name:var(--font-geist-sans)]">
       {/* Video Player */}
-      <div className="h-[16rem] w-full overflow-hidden rounded-2xl border border-white/10 shadow-xl sm:aspect-video sm:h-auto">
+      <div className="watch-screen mobile-bleed aspect-video w-full overflow-hidden rounded-2xl border border-white/10 shadow-xl">
         <iframe
           key={streamSrc}
           src={streamSrc}
+          title="Movie and TV player"
           className="h-full w-full overflow-hidden"
           allowFullScreen
           loading="lazy"
@@ -161,10 +162,12 @@ export default function WatchPlayer({
 
       {/* Server Selector */}
       {showServerSelector && safeUrls.length > 1 ? (
-        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+        <div className="watch-servers grid grid-cols-2 gap-2 sm:flex sm:flex-wrap" role="group" aria-label="Streaming servers">
           {safeUrls.map((_, index) => (
             <button
               key={index}
+              type="button"
+              aria-pressed={activeUrlIndex === index}
               onClick={() => setCurrentUrlIndex(index)}
               className={`flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition sm:w-auto
               ${
@@ -186,7 +189,7 @@ export default function WatchPlayer({
           {hasEpisodeTitles ? (
             <>
               {/* Season Selector */}
-              <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap">
+              <div className="watch-seasons grid grid-cols-3 gap-2 sm:flex sm:flex-wrap" role="group" aria-label="Seasons">
                 {availableSeasons.map((season) => {
                   const isActive = selectedSeason === season;
                   return (

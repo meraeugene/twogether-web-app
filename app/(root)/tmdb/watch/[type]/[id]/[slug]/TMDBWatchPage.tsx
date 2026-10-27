@@ -133,7 +133,7 @@ export default function TMDBWatchPage({
       )}
 
       {recommendation && (
-        <div className="mt-8 space-y-5 font-[family-name:var(--font-geist-mono)] text-white">
+        <div className="watch-summary relative mt-8 space-y-5 font-[family-name:var(--font-geist-mono)] text-white">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex justify-between w-full flex-wrap gap-4 flex-col md:flex-row  lg:items-center">
               <h1 className="text-2xl md:text-4xl font-bold font-[family-name:var(--font-geist-sans)] leading-tight">
@@ -217,19 +217,10 @@ export default function TMDBWatchPage({
       )}
 
       {recommendation && (
-        <section className="relative mt-12 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-5 text-white shadow-[0_28px_90px_rgba(0,0,0,.3)] sm:p-7 lg:p-9">
-          {recommendation.backdrop_url && (
-            <img
-              src={recommendation.backdrop_url}
-              alt=""
-              loading="lazy"
-              className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover opacity-[0.07] blur-2xl"
-            />
-          )}
-
-          <div className="grid gap-7 lg:grid-cols-[210px_1fr] lg:gap-10">
+        <section aria-labelledby="watch-details-heading" className="watch-section relative mt-12 border-t border-white/10 pt-8 text-white">
+          <div className="grid grid-cols-[80px_minmax(0,1fr)] items-start gap-x-5 gap-y-6 sm:grid-cols-[120px_minmax(0,1fr)] lg:grid-cols-[210px_1fr] lg:gap-x-10">
             {recommendation.poster_url && (
-              <div className="relative mx-auto aspect-[2/3] w-full max-w-[210px] overflow-hidden rounded-2xl border border-white/15 bg-white/[0.05] shadow-2xl shadow-black/45 lg:mx-0">
+              <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-white/[0.05] lg:row-span-2 lg:rounded-2xl">
                 <img
                   src={recommendation.poster_url}
                   alt={`${recommendation.title} poster`}
@@ -239,11 +230,11 @@ export default function TMDBWatchPage({
               </div>
             )}
 
-            <div className="min-w-0">
+            <div className={`min-w-0 ${recommendation.poster_url ? "" : "col-span-full lg:col-start-2"}`}>
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-400">
                 More details
               </p>
-              <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+              <h2 id="watch-details-heading" className="mt-2 text-xl font-bold leading-tight tracking-tight sm:text-3xl">
                 About {recommendation.title}
               </h2>
               {recommendation.tagline && (
@@ -252,7 +243,8 @@ export default function TMDBWatchPage({
                 </p>
               )}
 
-              <dl className="mt-6 grid grid-cols-2 gap-x-5 gap-y-5 sm:grid-cols-3 xl:grid-cols-4">
+            </div>
+              <dl className="col-span-full grid min-w-0 grid-cols-2 gap-x-5 gap-y-6 break-words sm:grid-cols-3 lg:col-span-1 lg:col-start-2 xl:grid-cols-4 [&_dt]:text-[11px] [&_dt]:tracking-[0.12em] [&_dt]:text-white/50 [&_dd]:text-[15px] [&_dd]:leading-relaxed">
                 {recommendation.tmdb_rating ? (
                   <div>
                     <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
@@ -316,7 +308,6 @@ export default function TMDBWatchPage({
                     </div>
                   )}
               </dl>
-            </div>
           </div>
 
           {recommendation.cast && recommendation.cast.length > 0 && (
@@ -335,7 +326,7 @@ export default function TMDBWatchPage({
                 </p>
               </div>
 
-              <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:none] sm:gap-4 [&::-webkit-scrollbar]:hidden">
+              <div className="mobile-rail flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:none] sm:gap-4 [&::-webkit-scrollbar]:hidden">
                 {recommendation.cast.map((member) => (
                   <Link
                     key={member.id}
@@ -381,7 +372,7 @@ export default function TMDBWatchPage({
       <TMDBMovieReviews tmdbId={recommendation.tmdb_id} />
 
       {!currentUserId && (
-        <div className="w-full xl:max-w-1/2 mt-16">
+        <div className="watch-section relative w-full xl:max-w-1/2 mt-16">
           <div className="relative mb-8">
             <div className="absolute -top-2 -left-4 w-12 h-0.5 bg-red-500 transform -rotate-12" />
             <div className="absolute -top-1 -left-2 w-8 h-0.5 bg-red-300 transform -rotate-12" />

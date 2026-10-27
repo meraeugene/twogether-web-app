@@ -80,7 +80,7 @@ export default function RecommendStepMovieSearch({
         className="w-full p-4  mb-0 rounded-lg bg-black/80 text-white placeholder-white/40 border border-white/10 text-lg"
       />
 
-      <div className="grid grid-cols-2 mt-4 md:grid-cols-3 lg:grid-cols-3 gap-4 ">
+      <div className="media-grid grid grid-cols-2 mt-4 md:grid-cols-3 lg:grid-cols-3 gap-4 ">
         {isLoading &&
           Array.from({ length: 6 }).map((_, i) => (
             <RecommendCardSkeleton key={i} />

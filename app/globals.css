@@ -84,6 +84,109 @@ body {
   color: var(--foreground);
 }
 
+/* Mobile pages share one gutter. Media can deliberately bleed through it;
+   text and controls keep a comfortable, safe-area-aware reading edge. */
+@media (max-width: 767px) {
+  :root {
+    --page-gutter: 16px;
+    --page-gutter-left: max(var(--page-gutter), env(safe-area-inset-left));
+    --page-gutter-right: max(var(--page-gutter), env(safe-area-inset-right));
+    --mobile-header-height: calc(56px + env(safe-area-inset-top));
+  }
+
+  html { scroll-padding-top: calc(var(--mobile-header-height) + 16px); }
+  body { min-width: 0; }
+  .app-content { min-width: 0; }
+  .page-gutter {
+    padding-left: var(--page-gutter-left);
+    padding-right: var(--page-gutter-right);
+  }
+  .page-gutter.min-h-screen {
+    min-height: 100svh;
+    padding-top: calc(var(--mobile-header-height) + 20px);
+    padding-bottom: max(32px, env(safe-area-inset-bottom));
+  }
+  .page-width { width: 100%; max-width: none; margin-inline: 0; }
+  .media-grid { column-gap: 12px; row-gap: 24px; }
+  .mobile-bleed {
+    width: calc(100% + var(--page-gutter-left) + var(--page-gutter-right));
+    max-width: none;
+    margin-left: calc(-1 * var(--page-gutter-left));
+    margin-right: calc(-1 * var(--page-gutter-right));
+  }
+  .mobile-rail {
+    margin-left: calc(-1 * var(--page-gutter-left));
+    margin-right: calc(-1 * var(--page-gutter-right));
+    padding-left: var(--page-gutter-left);
+    padding-right: var(--page-gutter-right);
+    scroll-padding-inline: var(--page-gutter-left) var(--page-gutter-right);
+  }
+  .page-gutter :is(input, textarea, select) { font-size: 16px; }
+
+  .mobile-header-shell {
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    transform: none;
+    translate: none;
+    border-radius: 0;
+  }
+  .mobile-topbar {
+    min-height: var(--mobile-header-height);
+    padding: env(safe-area-inset-top) var(--page-gutter-right) 0 var(--page-gutter-left);
+    border: 0;
+    border-bottom: 1px solid rgb(255 255 255 / 8%);
+    border-radius: 0;
+    background: rgb(10 10 10 / 94%);
+    box-shadow: none;
+  }
+  .mobile-menu {
+    max-height: calc(100dvh - var(--mobile-header-height));
+    padding: 16px var(--page-gutter-right) max(24px, env(safe-area-inset-bottom)) var(--page-gutter-left);
+    overscroll-behavior: contain;
+    border-radius: 0;
+  }
+  .mobile-footer {
+    padding: 20px var(--page-gutter-left) max(20px, env(safe-area-inset-bottom));
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .watch-player { position: relative; min-width: 0; }
+  .watch-screen { aspect-ratio: 16 / 9; height: auto; border: 0; border-radius: 0; box-shadow: none; background: #000; }
+  .watch-servers, .watch-seasons {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    padding-block: 2px;
+    scrollbar-width: none;
+  }
+  :is(.watch-servers, .watch-seasons)::-webkit-scrollbar { display: none; }
+  :is(.watch-servers, .watch-seasons) > button { width: auto; min-height: 44px; flex-shrink: 0; }
+  .watch-summary { margin-top: 24px; font-family: var(--font-geist-sans), Arial, sans-serif; }
+  .watch-summary h1 { font-size: 28px; line-height: 1.15; letter-spacing: -.035em; }
+  .watch-summary > p { font-size: 16px; line-height: 1.7; }
+  .watch-section { margin-top: 32px; }
+  .watch-review-card { padding-inline: 0; border-inline: 0; border-radius: 0; background: transparent; }
+  .mobile-sheet-backdrop { z-index: 90; align-items: flex-end; padding: 0; }
+  .mobile-sheet {
+    width: 100%; max-width: none; max-height: 90dvh; overflow-y: auto;
+    padding: 24px var(--page-gutter-right) max(24px, env(safe-area-inset-bottom)) var(--page-gutter-left);
+    border-radius: 24px 24px 0 0; background: #141416;
+  }
+  .mobile-sheet :is(input, textarea, select) { font-size: 16px; }
+  .mobile-sheet button { min-height: 44px; }
+  .mobile-chat { min-height: calc(100svh - var(--mobile-header-height) - 88px); border-inline: 0; border-radius: 0; }
+  .mobile-ai-chat { height: 100dvh; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); border: 0; border-radius: 0; background: #0a0a0a; }
+  .mobile-ai-chat :is(input, textarea) { font-size: 16px; }
+  .mobile-banner, .mobile-collection { border-inline: 0; border-radius: 0; box-shadow: none; }
+  .mobile-collection-body { padding-inline: var(--page-gutter-left) var(--page-gutter-right); }
+  .mobile-filter-rail { flex-wrap: nowrap; overflow-x: auto; padding-block: 2px; scrollbar-width: none; }
+  .mobile-filter-rail::-webkit-scrollbar { display: none; }
+  .mobile-filter-rail > button { min-height: 44px; }
+}
+
 .page-gutter.min-h-screen {
   background-image: var(--page-gradient);
 }

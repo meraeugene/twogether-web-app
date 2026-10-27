@@ -30,7 +30,7 @@ export default function TMDBMovieReviews({ tmdbId }: { tmdbId: number }) {
 
   if (!reviews || reviews.length === 0) {
     return (
-      <div className="w-full xl:max-w-1/2 mt-16">
+      <div className="watch-section relative w-full xl:max-w-1/2 mt-16">
         <div className="relative mb-8">
           <div className="absolute -top-2 -left-4 w-12 h-0.5 bg-red-500 transform -rotate-12" />
           <div className="absolute -top-1 -left-2 w-8 h-0.5 bg-red-300 transform -rotate-12" />
@@ -49,7 +49,7 @@ export default function TMDBMovieReviews({ tmdbId }: { tmdbId: number }) {
   }
 
   return (
-    <div className="w-full xl:max-w-1/2 mt-16">
+    <div className="watch-section relative w-full xl:max-w-1/2 mt-16">
       {/* Header */}
       <div className="relative mb-8">
         <div className="absolute -top-2 -left-4 w-12 h-0.5 bg-red-500 transform -rotate-12" />

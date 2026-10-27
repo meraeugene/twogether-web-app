@@ -45,7 +45,7 @@ export default async function WatchlistPage() {
         <p className="mb-8 text-sm leading-6 text-white/55">
           Here are the Movies/Shows you&apos;ve added to your Watchlist.
         </p>
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6">
+        <div className="media-grid grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6">
           {items.map((item, index) => (
             <FilmCard
               key={item.tmdb_id}

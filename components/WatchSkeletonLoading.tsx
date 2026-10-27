@@ -10,11 +10,11 @@ const WatchSkeletonLoading = () => {
         <div className="h-9 w-14 animate-pulse rounded-md bg-white/10" />
 
         <section
-          className={`${pulse} h-[16rem] w-full sm:aspect-video sm:h-auto`}
+          className={`${pulse} watch-screen mobile-bleed aspect-video w-full`}
         />
 
         <section className="space-y-5">
-          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+          <div className="media-grid grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
             <div className={`${pulse} h-10 w-full`} />
             <div className={`${pulse} h-10 w-full`} />
             <div className={`${pulse} h-10 w-full`} />
@@ -43,7 +43,7 @@ const WatchSkeletonLoading = () => {
 
         <section className="space-y-4">
           <div className="h-7 w-56 animate-pulse rounded bg-white/10" />
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
+          <div className="media-grid grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
             {Array.from({ length: 5 }).map((_, index) => (
               <div key={index} className="space-y-2">
                 <div className={`${pulse} aspect-[2/3] w-full`} />

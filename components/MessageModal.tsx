@@ -31,14 +31,14 @@ export default function MessageModal({
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+          className="mobile-sheet-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
           <motion.div
-            className="w-full max-w-xs sm:max-w-md p-4 sm:p-6 rounded-xl shadow-xl border border-white/10 bg-white/10 text-white backdrop-blur-2xl"
+            className="mobile-sheet w-full max-w-xs sm:max-w-md p-4 sm:p-6 rounded-xl shadow-xl border border-white/10 bg-white/10 text-white backdrop-blur-2xl"
             initial={{ scale: 0.96, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.96, opacity: 0 }}

@@ -40,16 +40,18 @@
 .footer button { display: inline-flex; align-items: center; gap: 8px; min-height: 30px; color: #d5dae5; cursor: pointer; }
 .footer button > svg { width: 12px; height: 12px; }
 .panel button:focus-visible { outline: 2px solid #e7eaf2; outline-offset: 3px; }
-@media (max-width: 640px) {
-  .dialog { padding: 84px 12px 20px; }
-  .panel { max-height: calc(100dvh - 104px); border-radius: 21px; }
+@media (max-width: 767px) {
+  .dialog { padding: 0; background: #0a0a0a; }
+  .panel { width: 100%; height: 100dvh; max-height: none; padding-top: env(safe-area-inset-top); border: 0; border-radius: 0; background: #0a0a0a; box-shadow: none; }
   .form { padding: 0 14px 0 18px; gap: 12px; height: 68px; }
   .form input { font-size: 16px; }
   .form > svg { width: 17px; height: 17px; }
-  .close { min-height: 32px; padding: 0 7px; }
-  .submit { width: 32px; height: 32px; }
+  .close { min-height: 44px; padding: 0 10px; }
+  .submit { width: 44px; height: 44px; }
   .filters { padding: 12px 14px 8px; }
   .result { gap: 12px; padding: 8px; }
-  .footer { padding: 12px 20px; }
+  .results { flex: 1; }
+  .filters button { min-height: 44px; }
+  .footer { padding: 12px 20px max(16px, env(safe-area-inset-bottom)); }
 }
 @media (prefers-reduced-motion: reduce) { .result, .filters button { transition: none; } }

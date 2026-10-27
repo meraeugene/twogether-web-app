@@ -11,7 +11,7 @@ export default function WatchSuggestions({
   suggestions: Recommendation[];
 }) {
   return (
-    <aside className="w-full xl:w-[15%] 2xl:w-[10%] space-y-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:block gap-7">
+    <aside className="w-full xl:w-[15%] 2xl:w-[10%] space-y-4 media-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:block gap-7">
       {suggestions.map((rec) => (
         <div
           key={rec.recommendation_id}

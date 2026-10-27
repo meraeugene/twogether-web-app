@@ -57,7 +57,7 @@ export default async function BingeSearchPage({
               <h1 className="text-2xl lg:text-3xl font-semibold mb-4 text-white">
                 {collection.collection_name}
               </h1>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-6">
+              <div className="media-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 xl:grid-cols-5 gap-6">
                 {collection.movies.map((movie) => {
                   const adapted = adaptTMDBToRecommendation(movie);
                   return <FilmCard key={adapted.id} item={adapted} />;

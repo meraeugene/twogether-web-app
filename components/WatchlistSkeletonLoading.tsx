@@ -14,7 +14,7 @@ export default function WatchlistSkeletonLoading() {
           <Skeleton className={`${pulse} h-4 w-full max-w-lg rounded-md`} />
         </section>
 
-        <section className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+        <section className="media-grid grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
           {Array.from({ length: 12 }).map((_, index) => (
             <FilmCardSkeleton key={index} />
           ))}

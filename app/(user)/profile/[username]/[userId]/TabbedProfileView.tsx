@@ -188,7 +188,7 @@ export default function TabbedProfileView({
 
       {/* Banner */}
       <div
-        className="relative px-2  w-full rounded-md overflow-hidden bg-cover bg-center h-80 sm:h-96 md:h-[20rem] "
+        className="mobile-banner mobile-bleed relative px-2 w-full rounded-md overflow-hidden bg-cover bg-center h-80 sm:h-96 md:h-[20rem] "
         style={{ backgroundImage: `url('/hero.png')` }}
       >
         <div className="absolute  inset-0 bg-black/70 backdrop-blur-sm " />
@@ -377,7 +377,7 @@ export default function TabbedProfileView({
                     No recommendations yet!
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6">
+                  <div className="media-grid grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6">
                     {userRecommendations.map((item) => (
                       <FilmCard key={item.tmdb_id} item={item} />
                     ))}
@@ -390,7 +390,7 @@ export default function TabbedProfileView({
                     Nothing here yet!
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6">
+                  <div className="media-grid grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6">
                     {userWatchList.map((item) => (
                       <FilmCard key={item.tmdb_id} item={item} />
                     ))}

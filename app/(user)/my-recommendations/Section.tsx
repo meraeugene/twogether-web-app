@@ -18,7 +18,7 @@ export const Section = ({
         <Icon className="text-white/60 text-sm" />
         <span>{title}</span>
       </h2>
-      <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6">
+      <div className="media-grid grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6">
         {children}
       </div>
     </section>

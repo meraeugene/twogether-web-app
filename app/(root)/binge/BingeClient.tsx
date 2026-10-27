@@ -62,7 +62,7 @@ export default function BingeClient() {
         </form>
       </header>
 
-      <div className="flex flex-wrap gap-2" role="group" aria-label="Collection genres">
+      <div className="mobile-filter-rail mobile-rail flex flex-wrap gap-2" role="group" aria-label="Collection genres">
         {BINGE_GENRES.map((genre) => (
           <button key={genre} type="button" onClick={() => handleGenreChange(genre)} aria-pressed={genre === selectedGenre}
             className={`shrink-0 cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition ${genre === selectedGenre

@@ -71,13 +71,13 @@
   .soundControl { bottom: calc(8% + 28px); }
   .categories { margin-bottom: 24px; }
 }
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .page { padding-bottom: 40px; }
   .hero { height: 660px; }
   .video { width: 1174px; height: 660px; }
   .backdrop { object-position: 62% center; }
   .shade { background: linear-gradient(0deg, #1b080c 0%, #14060930 65%, #03040540), linear-gradient(90deg, #0e0407bd, #03040515); }
-  .feature { bottom: 26px; left: 6%; right: 6%; width: auto; }
+  .feature { bottom: 26px; left: var(--page-gutter-left); right: var(--page-gutter-right); width: auto; }
   .featureTitle { width: min(280px, 100%); }
   .featureTitle img { max-height: 78px; }
   .featureTitle > span { font-size: 34px; }
@@ -85,18 +85,18 @@
   .featureMeta span + span::before { margin-right: 8px; }
   .synopsis { max-width: 440px; margin-bottom: 18px; font-size: 14px; line-height: 1.55; }
   .heroActions { max-width: calc(100% - 56px); gap: 8px; }
-  .heroPlay, .heroInfo { min-height: 42px; gap: 8px; padding: 0 14px; font-size: 13px; }
+  .heroPlay, .heroInfo { min-height: 44px; gap: 8px; padding: 0 16px; font-size: 14px; }
   .heroPlay > svg, .heroInfo > svg { width: 18px; height: 18px; }
-  .soundControl { right: 6%; bottom: 54px; width: 42px; height: 42px; }
+  .soundControl { right: var(--page-gutter-right); bottom: 54px; width: 44px; height: 44px; }
   .soundControl > svg { width: 18px; height: 18px; }
-  .content { width: 88%; }
-  .categories { --switcher-height: 49px; padding: 4px; margin-bottom: 24px; }
-  .categories button { font-size: 11px; }
+  .content { width: auto; margin-left: var(--page-gutter-left); margin-right: var(--page-gutter-right); }
+  .categories { --switcher-height: 54px; width: calc(100% - var(--page-gutter-left) - var(--page-gutter-right)); padding: 4px; margin-bottom: 24px; }
+  .categories button { font-size: 12px; }
   .shelfHeading { margin-bottom: 14px; }
   .shelf + .shelf { margin-top: 36px; }
   .shelfHeading h2 { font-size: 26px; }
   .shelfHeading > a { font-size: 12px; gap: 3px; }
-  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 25px 14px; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
   .poster { border-radius: 8px; }
   .card h3 { font-size: 14px; }
   .card > p { font-size: 12px; }

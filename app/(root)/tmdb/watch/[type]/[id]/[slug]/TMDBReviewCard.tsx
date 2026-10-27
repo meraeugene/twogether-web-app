@@ -16,12 +16,12 @@ const TMDBReviewCard = ({ review }: { review: TMDBMovieReview }) => {
   });
 
   return (
-    <div className="group relative border border-white/10 bg-black/20 backdrop-blur-sm">
+    <div className="watch-review-card group relative border border-white/10 bg-black/20 backdrop-blur-sm">
       {/* Decorative corners */}
       <div className="absolute -top-1 -left-1 w-4 h-4 border-l-2 border-t-2 border-red-500" />
       <div className="absolute -bottom-1 -right-1 w-4 h-4 border-r-2 border-b-2 border-red-500" />
 
-      <div className="p-6 space-y-4">
+      <div className="px-0 py-5 md:p-6 space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">

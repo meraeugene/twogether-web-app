@@ -173,7 +173,7 @@ export default function SearchClient({
             </div>
 
             {adaptedArtistMovies.length === 0 && <p className="mt-5 text-sm text-white/55">Movie credits are not available for this artist yet.</p>}
-            <div className="mt-5 grid grid-cols-2 gap-4 sm:gap-6 lg:gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">
+            <div className="mt-5 media-grid grid grid-cols-2 gap-4 sm:gap-6 lg:gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">
               {adaptedArtistMovies.map((item) => (
                 <div key={item.id} className="space-y-2">
                   <FilmCard item={item} />
@@ -187,7 +187,7 @@ export default function SearchClient({
           No results found.
         </p>
       ) : (
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">
+        <div className="media-grid grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">
           {results.map((item) => (
             <FilmCard key={item.id} item={item} />
           ))}

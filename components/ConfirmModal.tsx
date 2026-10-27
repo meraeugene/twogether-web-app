@@ -25,14 +25,14 @@ export default function ConfirmModal({
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6 md:px-8 bg-black/80 backdrop-blur-md"
+          className="mobile-sheet-backdrop fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6 md:px-8 bg-black/80 backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
         >
           <motion.div
-            className="w-full max-w-xs sm:max-w-sm md:max-w-md p-5 sm:p-6 rounded-2xl shadow-xl border border-white/10 bg-white/10 text-white backdrop-blur-2xl"
+            className="mobile-sheet w-full max-w-xs sm:max-w-sm md:max-w-md p-5 sm:p-6 rounded-2xl shadow-xl border border-white/10 bg-white/10 text-white backdrop-blur-2xl"
             initial={{ scale: 0.96, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.96, opacity: 0 }}

@@ -318,7 +318,7 @@ export default function AIRecommendClient() {
                     </div>
                   </motion.div>
                 ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 pb-16">
+                  <div className="media-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 pb-16">
                     {recommendations.map((item) => (
                       <FilmCard key={item.recommendation_id} item={item} />
                     ))}

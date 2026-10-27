@@ -75,7 +75,7 @@ export default function FriendsPage({
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="relative w-full aspect-[3/1] sm:aspect-[5/2] md:aspect-[16/5] lg:aspect-[16/4] xl:aspect-[16/3] max-h-[500px] xl:max-h-[200px] border border-white/10 rounded-3xl overflow-hidden shadow-xl"
+        className="mobile-banner mobile-bleed relative w-full aspect-[3/1] sm:aspect-[5/2] md:aspect-[16/5] lg:aspect-[16/4] xl:aspect-[16/3] max-h-[500px] xl:max-h-[200px] border border-white/10 rounded-3xl overflow-hidden shadow-xl"
       >
         {/* Background Image */}
         <div

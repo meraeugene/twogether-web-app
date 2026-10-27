@@ -59,13 +59,14 @@ export default function TMDBSuggestions({
   };
 
   return (
-    <section className="mt-16">
+    <section className="watch-section relative mt-16">
       {/* Header with nav buttons */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl md:text-3xl font-bold">You May Also Like</h2>
 
         <div className="flex gap-3">
           <motion.button
+            aria-label="Previous suggestions"
             onClick={handlePrev}
             disabled={slide === 0}
             className="p-2 md:p-3 rounded-full cursor-pointer bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 transition-colors"
@@ -77,6 +78,7 @@ export default function TMDBSuggestions({
           </motion.button>
 
           <motion.button
+            aria-label="Next suggestions"
             onClick={handleNext}
             disabled={slide >= totalSlides - 1}
             className="p-2 md:p-3 rounded-full cursor-pointer bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 transition-colors"
@@ -93,7 +95,7 @@ export default function TMDBSuggestions({
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={slide}
-          className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6 gap-7"
+          className="w-full media-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6 gap-7"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -176,6 +178,8 @@ export default function TMDBSuggestions({
         {Array.from({ length: totalSlides }, (_, index) => (
           <motion.button
             key={index}
+            aria-label={`Show suggestion page ${index + 1}`}
+            aria-current={slide === index ? "page" : undefined}
             onClick={() => setSlide(index)}
             className={`w-2 h-2 cursor-pointer rounded-full transition-all duration-300 ${
               slide === index

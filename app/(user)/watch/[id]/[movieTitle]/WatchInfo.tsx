@@ -74,7 +74,7 @@ export default function WatchInfo({
   };
 
   return (
-    <div className="space-y-5 font-[family-name:var(--font-geist-mono)] text-white ">
+    <div className="watch-summary space-y-5 font-[family-name:var(--font-geist-mono)] text-white ">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex justify-between w-full flex-wrap gap-4 flex-col md:flex-row  lg:items-center">
           <h1 className="text-2xl md:text-4xl font-bold font-[family-name:var(--font-geist-sans)] leading-tight">
