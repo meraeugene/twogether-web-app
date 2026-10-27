@@ -162,7 +162,6 @@ body {
     line-height: 1.7;
   }
   .watch-player { position: relative; min-width: 0; }
-  .page-gutter.watch-page { padding-top: var(--mobile-header-height); }
   .watch-screen { aspect-ratio: 16 / 9; height: auto; border: 0; border-radius: 0; box-shadow: none; background: #000; }
   .watch-servers, .watch-seasons {
     display: flex;
@@ -201,7 +200,7 @@ body {
   .page-gutter.min-h-screen { padding-top: calc(var(--mobile-header-height) + 24px); }
 }
 @media (max-width: 1279px) {
-  .page-gutter.watch-page { padding-top: var(--mobile-header-height); }
+  .page-gutter.watch-page { padding-top: calc(var(--mobile-header-height) + 24px); }
 }
 
 .page-gutter.min-h-screen {

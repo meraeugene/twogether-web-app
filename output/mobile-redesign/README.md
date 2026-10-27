@@ -1,5 +1,9 @@
 # Mobile layout verification
 
+## Watch-page header clearance
+
+Added a 24px gap below the floating header for watch pages below 1280px. The shared rule also applies to their loading skeletons. Removed the redundant phone-only override. At 390px and 1024px, the player starts at 106px and clears the header by approximately 24px. Desktop keeps its existing 32px page padding. The 390px page has no horizontal overflow. Screenshot: `watch-header-clearance-phone.jpg`.
+
 ## Profile loading, floating header, and larger Chrono cards
 
 Scoped the edit-profile Suspense fallback to the editor page and removed its parent route loader, so it no longer wraps the public profile's own loading boundary. Profile content now renders independently of the client-side friend-status request; the friend button stays disabled while that request loads.
