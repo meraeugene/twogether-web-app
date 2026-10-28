@@ -2,14 +2,31 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRef, useState } from "react";
 
 const AiFeatures = () => {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const images = [
     "/demo/ai1.png",
     "/demo/ai2.png",
     "/demo/ai3.png",
     "/demo/ai4.png",
   ];
+
+  const showImage = (index: number) => {
+    const carousel = carouselRef.current;
+    const slide = carousel?.children[index] as HTMLElement | undefined;
+    const firstSlide = carousel?.firstElementChild as HTMLElement | null;
+    if (!carousel || !slide || !firstSlide) return;
+
+    carousel.scrollTo({
+      left: slide.offsetLeft - firstSlide.offsetLeft,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+    });
+  };
 
   return (
     <section
@@ -63,8 +80,30 @@ const AiFeatures = () => {
           </motion.p>
         </div>
 
-        {/* PHONE GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+        {/* PHONE SHOWCASE */}
+        <div
+          ref={carouselRef}
+          id="intelligence-showcase"
+          role="region"
+          aria-label="AI feature phone previews"
+          aria-roledescription="carousel"
+          tabIndex={0}
+          onScroll={(event) => {
+            const carousel = event.currentTarget;
+            const first = carousel.children[0] as HTMLElement;
+            const second = carousel.children[1] as HTMLElement;
+            const step = second.offsetLeft - first.offsetLeft;
+            if (step > 0) {
+              setActiveIndex(
+                Math.max(
+                  0,
+                  Math.min(images.length - 1, Math.round(carousel.scrollLeft / step)),
+                ),
+              );
+            }
+          }}
+          className="relative flex gap-8 overflow-x-auto overscroll-x-contain snap-x snap-mandatory pb-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-red-500 lg:grid lg:grid-cols-4 lg:gap-10 lg:overflow-visible lg:pb-0"
+        >
           {images.map((src, i) => (
             <motion.div
               key={i}
@@ -77,7 +116,10 @@ const AiFeatures = () => {
                 stiffness: 40,
               }}
               viewport={{ once: true }}
-              className={`relative flex justify-center ${
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} of ${images.length}`}
+              className={`relative flex w-full shrink-0 snap-center justify-center lg:w-auto ${
                 i % 2 === 0 ? "lg:translate-y-16" : ""
               }`}
             >
@@ -93,6 +135,7 @@ const AiFeatures = () => {
                     alt={`AI Feature Showcase ${i + 1}`}
                     fill
                     unoptimized
+                    draggable={false}
                     className="object-cover"
                   />
 
@@ -110,6 +153,32 @@ const AiFeatures = () => {
               <div className="absolute hidden md:block -right-1 top-[28%] w-[3px] h-16 bg-neutral-800 rounded-r-sm" />
             </motion.div>
           ))}
+        </div>
+
+        <div className="mt-3 flex flex-col items-center gap-3 lg:hidden">
+          <p className="text-xs text-neutral-400">Swipe to explore</p>
+          <div
+            className="flex items-center gap-1"
+            aria-label="Choose a phone preview"
+          >
+            {images.map((src, index) => (
+              <button
+                key={src}
+                type="button"
+                aria-label={`Show AI feature ${index + 1}`}
+                aria-controls="intelligence-showcase"
+                aria-current={activeIndex === index ? "true" : undefined}
+                onClick={() => showImage(index)}
+                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-red-500"
+              >
+                <span
+                  className={`h-1.5 rounded-full transition-all motion-reduce:transition-none ${
+                    activeIndex === index ? "w-6 bg-red-500" : "w-1.5 bg-white/25"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>

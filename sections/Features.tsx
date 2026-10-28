@@ -2,9 +2,6 @@
 
 import { motion } from "framer-motion";
 import { features } from "@/data/features";
-import { Shield, Zap, Users, Globe, Tv, Sparkles } from "lucide-react";
-
-const icons = [Zap, Users, Shield, Globe, Tv, Sparkles];
 
 const Features = () => {
   return (
@@ -48,8 +45,6 @@ const Features = () => {
         {/* FEATURE STRIPS */}
         <div className="flex flex-col gap-px bg-white/5 border border-white/5 rounded-[2rem] md:rounded-[3rem] overflow-hidden">
           {features.map((feature, index) => {
-            const Icon = icons[index % icons.length];
-
             return (
               <motion.div
                 key={index}
@@ -64,15 +59,6 @@ const Features = () => {
                   <span className="text-xs font-mono text-red-500 md:text-neutral-600 group-hover:text-red-500 transition-colors">
                     /0{index + 1}
                   </span>
-
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-red-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <Icon
-                      className="md:text-white text-red-500 group-hover:text-red-500 transition-colors relative"
-                      size={26}
-                      strokeWidth={1.5}
-                    />
-                  </div>
 
                   <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-white uppercase tracking-tight">
                     {feature.title}

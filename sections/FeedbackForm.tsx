@@ -4,7 +4,6 @@ import { useTransition, useState } from "react";
 import { toast } from "sonner";
 import { submitFeedback } from "@/actions/feedbackActions";
 import { mutate } from "swr";
-import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
 import { motion } from "framer-motion";
 
 const FeedbackForm = () => {
@@ -140,13 +139,6 @@ const FeedbackForm = () => {
                     <span className="text-[11px] font-black uppercase tracking-[0.3em] text-white">
                       {isPending ? "Recording" : "Start Record"}
                     </span>
-
-                    <div className="ml-2 w-7 h-7 md:w-8 md:h-8 rounded-full border border-white/5 flex items-center justify-center group-hover:rotate-180 transition-transform duration-700">
-                      <HiOutlineChatBubbleLeftRight
-                        size={16}
-                        className="text-neutral-500 group-hover:text-white"
-                      />
-                    </div>
                   </div>
 
                   <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
