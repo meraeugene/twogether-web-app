@@ -54,7 +54,7 @@ export default function SearchGenreRow({ category, genre, onTitle, previewContai
                 {movie.poster_url ? <img src={movie.poster_url} alt="" width={300} height={450} loading="lazy" /> : <Clapperboard aria-hidden="true" />}
                 <span><Play aria-hidden="true" /></span>
               </div>
-              <h4>{movie.title}</h4><p>{movie.year || (movie.type === "tv" ? "TV show" : "Movie")}</p>
+              <h4><span className="mobile-movie-title" title={movie.title}>{movie.title}</span></h4><p>{movie.year || (movie.type === "tv" ? "TV show" : "Movie")}</p>
             </button>} />
         ))}
       </div>}

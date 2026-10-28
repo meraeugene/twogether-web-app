@@ -267,20 +267,20 @@ function FilmCard({
                   key={`${item.tmdb_id}-${item.type}-mobile`}
                   className="absolute lg:hidden bottom-8 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none max-w-xs md:max-w-full w-full  "
                 >
-                  <div className="flex flex-col items-center gap-2">
+                  <div className="flex w-full min-w-0 flex-col items-center gap-2">
                     <span className="text-[8px] md:text-[10px] tracking-[0.3em] uppercase text-white/40 font-medium">
                       Trailer Preview
                     </span>
 
                     <h1
-                      className="text-white font-black italic uppercase tracking-tighter"
+                      className="max-md:w-full text-white font-black italic uppercase tracking-tighter"
                       style={{
                         fontSize: "clamp(1.3rem,3vw,4rem)",
                         lineHeight: "1.1",
                         filter: "drop-shadow(0 0 20px rgba(255,255,255,0.2))",
                       }}
                     >
-                      {item.title}
+                      <span className="mobile-movie-title" title={item.title}>{item.title}</span>
                     </h1>
                   </div>
                 </div>
@@ -547,7 +547,7 @@ function FilmCard({
             </span>
           </div>
           <p className="mt-2 break-words text-sm font-medium leading-5 text-white/70 transition group-hover/movie:text-white">
-            {item.title}
+            <span className="mobile-movie-title" title={item.title}>{item.title}</span>
           </p>
         </button>
         {cinemaOverlay}
@@ -611,7 +611,9 @@ function FilmCard({
                 </div>
               </div>
               <div className="mt-4 mb-3">
-                <div className="text-base font-semibold  ">{item.title}</div>
+                <div className="text-base font-semibold">
+                  <span className="mobile-movie-title" title={item.title}>{item.title}</span>
+                </div>
 
                 <div className="flex items-center justify-between flex-wrap gap-2 text-sm text-white/60 mt-1">
                   <span className="flex items-center gap-2">

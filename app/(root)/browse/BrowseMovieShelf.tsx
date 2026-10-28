@@ -47,7 +47,7 @@ export default function BrowseMovieShelf({ id, title, href, items, isLoading, er
                       {item.poster_url ? <img src={item.poster_url} alt={`${movieTitle} poster`} width={500} height={750} loading={priority ? "eager" : "lazy"} /> : <FiFilm aria-label="Poster unavailable" />}
                       <span className={styles.posterOverlay} aria-hidden="true"><span className={styles.cardPlay}><FiPlay /></span></span>
                     </div>
-                    <h3>{movieTitle}</h3>
+                    <h3><span className="mobile-movie-title" title={movieTitle}>{movieTitle}</span></h3>
                     <p>{item.year || item.release_date?.slice(0, 4) || item.first_air_date?.slice(0, 4) || "Coming soon"}</p>
                   </button>
               )} />

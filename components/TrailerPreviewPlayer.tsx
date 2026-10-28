@@ -128,7 +128,7 @@ export default function TrailerPreviewPlayer({ videoId, title, posterUrl }: {
               })}>
               <Play size={18} aria-hidden="true" />Play trailer
             </button>
-          ) : <span role="status" className="flex items-center gap-2 rounded-full bg-black/70 px-4 py-2 text-sm text-white/80"><LoaderCircle className="animate-spin motion-reduce:animate-none" size={18} aria-hidden="true" />Loading trailer</span>}
+          ) : <span role="status" className="flex items-center rounded-full bg-black/70 p-3 text-white/80"><LoaderCircle className="animate-spin motion-reduce:animate-none" size={18} aria-hidden="true" /><span className="sr-only">Loading trailer</span></span>}
       </div>}
       {ready && <button type="button" aria-label={muted ? "Unmute trailer" : "Mute trailer"} aria-pressed={!muted}
         className="absolute left-4 top-4 z-40 flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-white/20 bg-black/70 px-4 py-2 text-xs font-medium text-white"
