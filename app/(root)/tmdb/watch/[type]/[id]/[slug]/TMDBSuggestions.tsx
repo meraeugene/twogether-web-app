@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import useSWR from "swr";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import Image from "next/image";
 import { FaPlay } from "react-icons/fa";
 import { ChevronLeft, ChevronRight } from "lucide-react";

@@ -140,7 +140,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         formData.set("avatar_url", avatarUrl || "");
 
         await updateUserProfile(formData, user.username);
-        router.push(`/profile/${user.username}/${user.id}`);
+        router.push(`/profile/${user.username}/${user.id}`, { scroll: false });
       } catch (err) {
         console.error("Error updating profile:", err);
       }

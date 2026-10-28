@@ -30,7 +30,7 @@ import {
 import { FriendRequestStatus, UserPreview } from "@/types/friends";
 import { IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import useSWR from "swr";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import {
   getOrCreateThread,
   sendMessage,
@@ -172,7 +172,7 @@ export default function TabbedProfileView({
         setShowMessageModal(false);
 
         toast.success("Message sent successfully!");
-        router.push(`/messages`);
+        router.push(`/messages`, { scroll: false });
       } catch (err) {
         console.error("Failed to send message:", err);
       }

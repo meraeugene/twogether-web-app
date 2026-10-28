@@ -2,7 +2,7 @@ import { getCurrentUser } from "@/actions/authActions";
 import { getWatchlistByUserId } from "@/actions/watchlistActions";
 import ErrorMessage from "@/components/ErrorMessage";
 import FilmCard from "@/components/FilmCard";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 
 export const dynamic = "force-dynamic";
 

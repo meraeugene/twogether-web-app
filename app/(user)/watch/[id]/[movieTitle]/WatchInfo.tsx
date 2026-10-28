@@ -3,7 +3,7 @@
 import { Recommendation } from "@/types/recommendation";
 import ToggleWatchlistButton from "@/app/(user)/watch/[id]/[movieTitle]/ToggleWatchlistButton";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { createRecommendation } from "@/actions/recommendationActions";

@@ -11,7 +11,7 @@ import { useState, useTransition } from "react";
 import { FaEnvelope, FaUser } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { FaUserXmark } from "react-icons/fa6";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import MessageModal from "@/components/MessageModal";
 import {
   getOrCreateThread,
@@ -68,7 +68,7 @@ export function FriendCard({
         // Step 3: Close the modal
         setShowMessageModal(false);
 
-        router.push(`/messages`);
+        router.push(`/messages`, { scroll: false });
       } catch (err) {
         console.error("Failed to send message:", err);
       }

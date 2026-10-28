@@ -1,7 +1,7 @@
 import { getCurrentUserRecommendations } from "@/actions/recommendationActions";
 import FilmCard from "@/components/FilmCard";
 import ErrorMessage from "@/components/ErrorMessage";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import { Section } from "./Section";
 
 export default async function MyRecommendationsPage() {

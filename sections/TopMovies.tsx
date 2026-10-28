@@ -13,7 +13,7 @@ import {
   VolumeX,
   Volume2,
 } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 
 interface Movie {
   id: string | number;

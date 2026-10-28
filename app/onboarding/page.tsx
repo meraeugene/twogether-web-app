@@ -125,7 +125,7 @@ export default function OnboardingPage() {
     }
 
     toast.success("Welcome to Twogether, your movie journey starts now!");
-    router.push("/recos");
+    router.push("/recos", { scroll: false });
   };
 
   const currentKey = steps[step].key;

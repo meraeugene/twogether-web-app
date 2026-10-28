@@ -30,7 +30,7 @@ export default function TwogetherHero() {
       return;
     }
 
-    router.push("/recos");
+    router.push("/recos", { scroll: false });
   };
 
   return (

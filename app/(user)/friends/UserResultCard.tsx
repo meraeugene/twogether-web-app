@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import { useState, useTransition } from "react";
 import { sendFriendRequest } from "@/actions/social/friendActions";
 import { FaUserPlus, FaUser } from "react-icons/fa";

@@ -83,12 +83,12 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
     if (!trimmed) return;
     saveRecentSearch(trimmed, kind);
     onClose();
-    router.push(`/search/${encodeURIComponent(trimmed)}${kind === "all" ? "" : `?kind=${kind}`}`);
+    router.push(`/search/${encodeURIComponent(trimmed)}${kind === "all" ? "" : `?kind=${kind}`}`, { scroll: false });
   };
   const selectSuggestion = (suggestion: SearchSuggestion) => {
     saveRecentSearch(suggestion.label, suggestion.category === "person" ? "artists" : "titles");
     onClose();
-    router.push(suggestionHref(suggestion));
+    router.push(suggestionHref(suggestion), { scroll: false });
   };
   const resultButton = (suggestion: SearchSuggestion, index: number, activate: () => void) => (
     <button id={`header-search-option-${index}`} type="button" role="option" aria-selected={activeIndex === index}

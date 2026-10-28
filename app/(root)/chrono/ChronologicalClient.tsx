@@ -161,7 +161,7 @@ export default function ChronologicalClient() {
   const handleWatchNow = (movie: Recommendation) => {
     const slug = getSlugFromTitle(movie.title);
     if (movie.is_tmdb_recommendation && movie.recommended_by?.id === "tmdb") {
-      router.push(`/tmdb/watch/${movie.type}/${movie.tmdb_id}/${slug}`);
+      router.push(`/tmdb/watch/${movie.type}/${movie.tmdb_id}/${slug}`, { scroll: false });
     }
   };
 

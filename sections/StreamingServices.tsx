@@ -15,7 +15,7 @@ import {
   RotateCcw,
   Pause,
 } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 
 type Trailer = {
   id: number;

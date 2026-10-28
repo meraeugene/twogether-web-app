@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type FocusEventHandler, type PointerEventHandler } from "react";
 import { createPortal } from "react-dom";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import {
   Compass, LogOut, Search, Settings, UserRound,
   type LucideIcon,

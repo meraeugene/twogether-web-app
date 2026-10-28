@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import { usePathname } from "next/navigation";
 import { Compass, LogOut, Menu, Search, Settings, UserRound, X } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";

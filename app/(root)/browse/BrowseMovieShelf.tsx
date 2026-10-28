@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element -- Movie posters use the TMDB source CDN. */
 
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import { FiChevronRight, FiFilm, FiPlay } from "react-icons/fi";
 import type { TMDBEnrichedResult } from "@/types/tmdb";
 import FilmCard from "@/components/FilmCard";

@@ -20,7 +20,7 @@ import { PrivacyModal } from "./PrivacyModal";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { MdDelete } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import { VisualHeartRating } from "./VisualHeartRating";
 import { toast } from "sonner";
 import { TRAILER_PREVIEW_OPEN_EVENT } from "@/constants/trailerPreview";
@@ -200,7 +200,7 @@ function FilmCard({
 
   const handleClick = () => {
     const href = getWatchHref();
-    if (href) router.push(href);
+    if (href) router.push(href, { scroll: false });
   };
 
   const stagger = (i: number) => ({

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import { IoMdAdd } from "react-icons/io";
 
 const RecommendButton = () => {

@@ -16,7 +16,7 @@ import TMDBReviewForm from "./TMDBReviewForm";
 import TMDBMovieReviews from "./TMDBMovieReviews";
 import { AnimatePresence, motion } from "framer-motion";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 
 const WatchGemeni = dynamic(
   () => import("@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni"),

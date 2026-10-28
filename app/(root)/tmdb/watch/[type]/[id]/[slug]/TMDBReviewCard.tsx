@@ -4,7 +4,7 @@
 import { BiUser } from "react-icons/bi";
 import TMDBStarRating from "./TMDBStarRating";
 import { TMDBMovieReview } from "@/types/tmdbMovieReview";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 
 const TMDBReviewCard = ({ review }: { review: TMDBMovieReview }) => {
   const createdAt = new Date(review.created_at).toLocaleDateString("en-US", {

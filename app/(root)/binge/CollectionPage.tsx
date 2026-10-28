@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- Collection artwork loads directly from the source CDN. */
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Clock3, Film, Play } from "lucide-react";
 import useSWRInfinite from "swr/infinite";

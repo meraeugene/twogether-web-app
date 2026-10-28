@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import NavigationScroll from "@/components/NavigationScroll";
 import { Toaster } from "sonner";
 import {
   buildMetadata,
@@ -88,6 +89,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <NavigationScroll />
         <Toaster position="top-center" />
         <Header initialUser={initialUser} />
         <div className="app-content">

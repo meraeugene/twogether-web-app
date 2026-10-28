@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import { ArrowUpRight, Clapperboard, History, Sparkles, Tv, UserRound } from "lucide-react";
 import { TMDB_GENRE_MAP } from "@/constants/tmdbGenres";
 import { TV_GENRE_MAP } from "@/constants/browseShelves";

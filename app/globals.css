@@ -128,6 +128,10 @@ html {
   scrollbar-color: rgba(212, 212, 212, 0.62) #060606; /* thumb | track for Firefox */
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
 body {
   background: var(--background); /* Set in your :root or Tailwind config */
   color: var(--foreground);

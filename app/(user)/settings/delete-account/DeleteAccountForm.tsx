@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState, useTransition } from "react";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import { AlertTriangle, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { deleteAccount } from "@/actions/accountActions";

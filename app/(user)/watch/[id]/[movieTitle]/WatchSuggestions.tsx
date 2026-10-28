@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import Image from "next/image";
 import { Recommendation } from "@/types/recommendation";
 import { FaPlay } from "react-icons/fa";

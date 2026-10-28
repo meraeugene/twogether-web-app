@@ -1,7 +1,7 @@
 "use client";
 
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import FilmCard from "@/components/FilmCard";
 import { FiArrowRight } from "react-icons/fi";
 import { TMDBEnrichedResult } from "@/types/tmdb";

@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element -- Full-bleed TMDB artwork uses the source CDN. */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/NavigationLink";
 import FilmCard from "@/components/FilmCard";
 import { FiInfo, FiPlay, FiVolume2, FiVolumeX } from "react-icons/fi";
 import type { TMDBFeaturedResult } from "@/types/tmdb";

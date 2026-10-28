@@ -59,7 +59,7 @@ const RecommendPage = () => {
     }
 
     toast.success("Boom! Your recommendation just hit the screen ");
-    router.push("/recos");
+    router.push("/recos", { scroll: false });
   };
 
   const nextStepCheck = () => {
