@@ -1,4 +1,7 @@
-﻿import Image from "next/image";
+"use client";
+
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const slides = [
   [
@@ -12,6 +15,46 @@ const slides = [
 ];
 
 const AiFeatures = () => {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const showSlide = useCallback((index: number) => {
+    const carousel = carouselRef.current;
+    const slide = carousel?.children[index] as HTMLElement | undefined;
+    const firstSlide = carousel?.firstElementChild as HTMLElement | null;
+    if (!carousel || !slide || !firstSlide) return;
+
+    carousel.scrollTo({
+      left: slide.offsetLeft - firstSlide.offsetLeft,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+    });
+  }, []);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      const carousel = carouselRef.current;
+      const gallery = carousel?.parentElement;
+      if (!carousel || !gallery || document.hidden) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (
+        (window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+          gallery.matches(":hover")) ||
+        gallery.querySelector(":focus-visible")
+      ) {
+        return;
+      }
+
+      const bounds = carousel.getBoundingClientRect();
+      if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
+
+      showSlide((activeIndex + 1) % slides.length);
+    }, 5000);
+
+    return () => window.clearInterval(interval);
+  }, [activeIndex, showSlide]);
+
   return (
     <section
       id="features"
@@ -38,36 +81,72 @@ const AiFeatures = () => {
           </p>
         </div>
 
-        <div
-          id="intelligence-showcase"
-          role="region"
-          aria-label="AI feature screenshots"
-          aria-roledescription="carousel"
-          tabIndex={0}
-          className="relative flex min-w-0 snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-red-500 [&::-webkit-scrollbar]:hidden"
-        >
-          {slides.map((slide, index) => (
-            <div
-              key={slide[0].src}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${index + 1} of ${slides.length}`}
-              className="grid w-full shrink-0 snap-center grid-cols-2 items-start gap-3 sm:gap-6"
-            >
-              {slide.map((image) => (
-                <Image
-                  key={image.src}
-                  src={image.src}
-                  alt={image.alt}
-                  width={750}
-                  height={1648}
-                  unoptimized
-                  draggable={false}
-                  className="mx-auto block h-auto w-full max-w-[320px]"
+        <div className="min-w-0">
+          <div
+            ref={carouselRef}
+            id="intelligence-showcase"
+            role="region"
+            aria-label="AI feature screenshots"
+            aria-roledescription="carousel"
+            tabIndex={0}
+            onScroll={(event) => {
+              const carousel = event.currentTarget;
+              const first = carousel.children[0] as HTMLElement;
+              const second = carousel.children[1] as HTMLElement;
+              const step = second.offsetLeft - first.offsetLeft;
+              if (step > 0) {
+                setActiveIndex(
+                  Math.max(
+                    0,
+                    Math.min(slides.length - 1, Math.round(carousel.scrollLeft / step)),
+                  ),
+                );
+              }
+            }}
+            className="relative flex min-w-0 snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-red-500 [&::-webkit-scrollbar]:hidden"
+          >
+            {slides.map((slide, index) => (
+              <div
+                key={slide[0].src}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${index + 1} of ${slides.length}`}
+                className="grid w-full shrink-0 snap-center grid-cols-2 items-start gap-3 sm:gap-6"
+              >
+                {slide.map((image) => (
+                  <Image
+                    key={image.src}
+                    src={image.src}
+                    alt={image.alt}
+                    width={750}
+                    height={1648}
+                    unoptimized
+                    draggable={false}
+                    className="mx-auto block h-auto w-full max-w-[320px] rounded-lg border border-white/15"
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex justify-center" role="group" aria-label="Choose a slide">
+            {slides.map((slide, index) => (
+              <button
+                key={slide[0].src}
+                type="button"
+                aria-label={`Show slide ${index + 1}`}
+                aria-controls="intelligence-showcase"
+                aria-current={activeIndex === index ? "true" : undefined}
+                onClick={() => showSlide(index)}
+                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-red-500"
+              >
+                <span
+                  className={`h-1.5 rounded-full transition-all motion-reduce:transition-none ${
+                    activeIndex === index ? "w-6 bg-red-500" : "w-1.5 bg-white/25"
+                  }`}
                 />
-              ))}
-            </div>
-          ))}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>
