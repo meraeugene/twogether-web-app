@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element -- Preview artwork uses the source CDN. */
 
 import { useEffect, useRef, useState } from "react";
-import { LoaderCircle, Play, Volume2, VolumeX } from "lucide-react";
+import { Play, Volume2, VolumeX } from "lucide-react";
 import { loadYouTubeIframeApi, type YouTubePlayer } from "@/utils/youtubeIframeApi";
 
 type Playback = "loading" | "playing" | "paused" | "blocked" | "error";
@@ -117,9 +117,9 @@ export default function TrailerPreviewPlayer({ videoId, title, posterUrl }: {
         {posterUrl && <img src={posterUrl} alt="" className="absolute inset-0 h-full w-full object-cover brightness-50" />}
         <div ref={host} className="absolute inset-0 [&_iframe]:h-[120%] [&_iframe]:w-full [&_iframe]:-translate-y-[8%] [&_iframe]:scale-[1.1]" />
       </div>
-      {playback !== "playing" && <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center p-6">
+      {(playback === "error" || playback === "blocked" || playback === "paused") && <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center p-6">
         {playback === "error" ? <p role="status" className="max-w-xs rounded-xl bg-black/80 px-5 py-4 text-center text-sm text-white/80">Trailer unavailable. You can still watch this title below.</p>
-          : playback === "blocked" || playback === "paused" ? (
+          : (
             <button type="button" className="pointer-events-auto flex min-h-12 cursor-pointer items-center gap-2 rounded-full border border-white/20 bg-black/80 px-5 py-3 text-sm font-semibold text-white"
               onClick={() => control((current) => {
                 if (muted) current.mute(); else current.unMute();
@@ -128,7 +128,7 @@ export default function TrailerPreviewPlayer({ videoId, title, posterUrl }: {
               })}>
               <Play size={18} aria-hidden="true" />Play trailer
             </button>
-          ) : <span role="status" className="flex items-center rounded-full bg-black/70 p-3 text-white/80"><LoaderCircle className="animate-spin motion-reduce:animate-none" size={18} aria-hidden="true" /><span className="sr-only">Loading trailer</span></span>}
+          )}
       </div>}
       {ready && <button type="button" aria-label={muted ? "Unmute trailer" : "Mute trailer"} aria-pressed={!muted}
         className="absolute left-4 top-4 z-40 flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-white/20 bg-black/70 px-4 py-2 text-xs font-medium text-white"

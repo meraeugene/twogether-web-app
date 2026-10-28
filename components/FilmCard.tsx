@@ -25,6 +25,7 @@ import { VisualHeartRating } from "./VisualHeartRating";
 import { toast } from "sonner";
 import { TRAILER_PREVIEW_OPEN_EVENT } from "@/constants/trailerPreview";
 import TrailerPreviewPlayer from "./TrailerPreviewPlayer";
+import MovieTitle from "./MovieTitle";
 import { loadYouTubeIframeApi } from "@/utils/youtubeIframeApi";
 
 function FilmCard({
@@ -280,7 +281,7 @@ function FilmCard({
                         filter: "drop-shadow(0 0 20px rgba(255,255,255,0.2))",
                       }}
                     >
-                      <span className="mobile-movie-title" title={item.title}>{item.title}</span>
+                      <MovieTitle title={item.title} />
                     </h1>
                   </div>
                 </div>
@@ -547,7 +548,7 @@ function FilmCard({
             </span>
           </div>
           <p className="mt-2 break-words text-sm font-medium leading-5 text-white/70 transition group-hover/movie:text-white">
-            <span className="mobile-movie-title" title={item.title}>{item.title}</span>
+            <MovieTitle title={item.title} />
           </p>
         </button>
         {cinemaOverlay}
@@ -612,7 +613,7 @@ function FilmCard({
               </div>
               <div className="mt-4 mb-3">
                 <div className="text-base font-semibold">
-                  <span className="mobile-movie-title" title={item.title}>{item.title}</span>
+                  <MovieTitle title={item.title} />
                 </div>
 
                 <div className="flex items-center justify-between flex-wrap gap-2 text-sm text-white/60 mt-1">

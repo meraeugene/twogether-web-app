@@ -6,6 +6,7 @@ import Link from "next/link";
 import { FiChevronRight, FiFilm, FiPlay } from "react-icons/fi";
 import type { TMDBEnrichedResult } from "@/types/tmdb";
 import FilmCard from "@/components/FilmCard";
+import MovieTitle from "@/components/MovieTitle";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
 import styles from "./browse.module.css";
 
@@ -47,7 +48,7 @@ export default function BrowseMovieShelf({ id, title, href, items, isLoading, er
                       {item.poster_url ? <img src={item.poster_url} alt={`${movieTitle} poster`} width={500} height={750} loading={priority ? "eager" : "lazy"} /> : <FiFilm aria-label="Poster unavailable" />}
                       <span className={styles.posterOverlay} aria-hidden="true"><span className={styles.cardPlay}><FiPlay /></span></span>
                     </div>
-                    <h3><span className="mobile-movie-title" title={movieTitle}>{movieTitle}</span></h3>
+                    <h3><MovieTitle title={movieTitle} /></h3>
                     <p>{item.year || item.release_date?.slice(0, 4) || item.first_air_date?.slice(0, 4) || "Coming soon"}</p>
                   </button>
               )} />
