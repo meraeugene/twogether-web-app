@@ -1,49 +1,17 @@
-﻿"use client";
+﻿import Image from "next/image";
 
-import Image from "next/image";
-import { useRef, useState } from "react";
-
-const previews = [
-  {
-    src: "/demo/ai1.png",
-    title: "Find your next watch",
-    description: "Start with a mood, a genre, or something you already love.",
-  },
-  {
-    src: "/demo/ai2.png",
-    title: "Discover your AI picks",
-    description: "Explore recommendations that match what you have in mind.",
-  },
-  {
-    src: "/demo/ai3.png",
-    title: "Press play",
-    description: "Go from a recommendation straight to your next episode.",
-  },
-  {
-    src: "/demo/ai4.png",
-    title: "Watch with Gemini",
-    description: "Ask questions and explore the story as you watch.",
-  },
+const slides = [
+  [
+    { src: "/demo/ai1.png", alt: "Find your next watch" },
+    { src: "/demo/ai2.png", alt: "Discover your AI picks" },
+  ],
+  [
+    { src: "/demo/ai3.png", alt: "Press play" },
+    { src: "/demo/ai4.png", alt: "Watch with Gemini" },
+  ],
 ];
 
 const AiFeatures = () => {
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const showImage = (index: number) => {
-    const carousel = carouselRef.current;
-    const slide = carousel?.children[index] as HTMLElement | undefined;
-    const firstSlide = carousel?.firstElementChild as HTMLElement | null;
-    if (!carousel || !slide || !firstSlide) return;
-
-    carousel.scrollTo({
-      left: slide.offsetLeft - firstSlide.offsetLeft,
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "instant"
-        : "smooth",
-    });
-  };
-
   return (
     <section
       id="features"
@@ -68,111 +36,38 @@ const AiFeatures = () => {
             Discover your next favorite, press play, and explore the story with
             Gemini. Take a look at how it works.
           </p>
-
-          <div className="mt-8 hidden border-t border-white/10 pt-6 lg:block">
-            <p className="font-mono text-xs tracking-widest text-red-400">
-              {String(activeIndex + 1).padStart(2, "0")} / 04
-            </p>
-            <h3 className="mt-3 text-2xl font-medium text-white">
-              {previews[activeIndex].title}
-            </h3>
-            <p className="mt-2 max-w-sm text-sm leading-relaxed text-neutral-400">
-              {previews[activeIndex].description}
-            </p>
-          </div>
         </div>
 
-        <div className="min-w-0">
-          <div
-            ref={carouselRef}
-            id="intelligence-showcase"
-            role="region"
-            aria-label="AI feature screenshots"
-            aria-roledescription="carousel"
-            tabIndex={0}
-            onScroll={(event) => {
-              const carousel = event.currentTarget;
-              const first = carousel.children[0] as HTMLElement;
-              const second = carousel.children[1] as HTMLElement;
-              const step = second.offsetLeft - first.offsetLeft;
-              if (step > 0) {
-                setActiveIndex(
-                  Math.max(
-                    0,
-                    Math.min(previews.length - 1, Math.round(carousel.scrollLeft / step)),
-                  ),
-                );
-              }
-            }}
-            className="relative flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-red-500 [&::-webkit-scrollbar]:hidden"
-          >
-            {previews.map((preview, index) => (
-              <figure
-                key={preview.src}
-                role="group"
-                aria-roledescription="slide"
-                aria-label={`${index + 1} of ${previews.length}: ${preview.title}`}
-                className="m-0 flex w-full shrink-0 snap-center flex-col items-center"
-              >
+        <div
+          id="intelligence-showcase"
+          role="region"
+          aria-label="AI feature screenshots"
+          aria-roledescription="carousel"
+          tabIndex={0}
+          className="relative flex min-w-0 snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-red-500 [&::-webkit-scrollbar]:hidden"
+        >
+          {slides.map((slide, index) => (
+            <div
+              key={slide[0].src}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${index + 1} of ${slides.length}`}
+              className="grid w-full shrink-0 snap-center grid-cols-2 items-start gap-3 sm:gap-6"
+            >
+              {slide.map((image) => (
                 <Image
-                  src={preview.src}
-                  alt={preview.title}
+                  key={image.src}
+                  src={image.src}
+                  alt={image.alt}
                   width={750}
                   height={1648}
                   unoptimized
                   draggable={false}
-                  className="block h-auto w-full max-w-[300px] sm:max-w-[320px]"
+                  className="mx-auto block h-auto w-full max-w-[320px]"
                 />
-                <figcaption className="mt-5 max-w-sm text-center lg:sr-only">
-                  <h3 className="text-lg font-medium text-white">{preview.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-400">
-                    {preview.description}
-                  </p>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-
-          <div className="mt-6 flex items-center justify-between gap-2 border-t border-white/10 pt-3">
-            <button
-              type="button"
-              aria-controls="intelligence-showcase"
-              disabled={activeIndex === 0}
-              onClick={() => showImage(activeIndex - 1)}
-              className="min-h-11 cursor-pointer text-xs text-neutral-300 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-red-500 disabled:cursor-default disabled:opacity-25"
-            >
-              Previous
-            </button>
-            <div className="flex items-center" role="group" aria-label="Choose a screenshot">
-              {previews.map((preview, index) => (
-                <button
-                  key={preview.src}
-                  type="button"
-                  aria-label={`Show screenshot ${index + 1}: ${preview.title}`}
-                  aria-controls="intelligence-showcase"
-                  aria-current={activeIndex === index ? "true" : undefined}
-                  onClick={() => showImage(index)}
-                  className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-red-500"
-                >
-                  <span
-                    className={`h-1.5 rounded-full transition-all motion-reduce:transition-none ${
-                      activeIndex === index ? "w-6 bg-red-500" : "w-1.5 bg-white/25"
-                    }`}
-                  />
-                </button>
               ))}
             </div>
-            <button
-              type="button"
-              aria-controls="intelligence-showcase"
-              disabled={activeIndex === previews.length - 1}
-              onClick={() => showImage(activeIndex + 1)}
-              className="min-h-11 cursor-pointer text-xs text-neutral-300 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-red-500 disabled:cursor-default disabled:opacity-25"
-            >
-              Next
-            </button>
-          </div>
-          <p className="mt-2 text-center text-[11px] text-neutral-500">Swipe to explore</p>
+          ))}
         </div>
       </div>
     </section>
