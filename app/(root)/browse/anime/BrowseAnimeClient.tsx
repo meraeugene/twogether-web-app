@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
 import { browsePlaceholders } from "@/constants/placeholders";
 import TrendingTMDBAnimeList from "./TrendingTMDBAnimeList";
-import BackButton from "@/components/BackButton";
 
 export default function BrowseAnimeClient({ genre }: { genre?: string }) {
   const router = useRouter();
@@ -28,8 +27,6 @@ export default function BrowseAnimeClient({ genre }: { genre?: string }) {
     <main className="page-gutter page-listing min-h-screen relative bg-black pb-16 pt-28 px-7 text-white font-(family-name:--font-geist-sans)">
       <div className="absolute inset-0 page-ambient pointer-events-none" />
       <section className="mb-16">
-        <BackButton />
-
         <div className="max-w-2xl mx-auto w-full mt-2">
           <PlaceholdersAndVanishInput
             placeholders={browsePlaceholders}

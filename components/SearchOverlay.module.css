@@ -60,7 +60,10 @@
 .sectionHeading h3 { margin: 0; font-size: 16px; font-weight: 550; letter-spacing: -.025em; color: #e7dfef; }
 .sectionHeading > span { color: #8d819d; font-size: 11px; }
 .sectionHeading > button { min-height: 32px; padding: 0 8px; color: #a79ab9; font-size: 11px; cursor: pointer; }
-.discoveryGrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
+.genreRow { min-width: 0; margin-top: 28px; }
+.discoveryGrid { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 80px) / 6); gap: 16px; align-items: start; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; padding-block: 4px 14px; }
+.discoveryGrid > * { min-width: 0; scroll-snap-align: start; }
+.discoveryGrid::-webkit-scrollbar { display: none; }
 .discoveryCard { min-width: 0; width: 100%; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; text-decoration: none; }
 .discoveryPoster { position: relative; display: grid; place-items: center; aspect-ratio: 2 / 3; overflow: hidden; border: 1px solid #ffffff15; border-radius: 12px; background: #ffffff05; box-shadow: 0 8px 24px #0003; }
 .discoveryPoster > img { width: 100%; height: 100%; object-fit: cover; transition: transform .25s, opacity .25s; }
@@ -109,10 +112,12 @@
   .result { gap: 12px; min-height: 90px; }
   .resultCopy strong { font-size: 14px; }
   .discovery { gap: 28px; }
-  .discoveryGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 12px; }
+  .discoveryGrid { grid-auto-columns: clamp(130px, 38vw, 180px); gap: 12px; }
   .sectionHeading > span { display: none; }
   .discoveryCard h4 { font-size: 12px; }
-  .genreChips { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); grid-auto-columns: max-content; overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 8px; scrollbar-width: thin; }
+  .genreChips { display: flex; flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 8px; scrollbar-width: none; }
+  .genreChips::-webkit-scrollbar { display: none; }
+  .genreChips > button { flex-shrink: 0; }
   .genreChips button { white-space: nowrap; }
   .destinationGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .destination { gap: 10px; padding: 16px 12px; }

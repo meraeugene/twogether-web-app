@@ -36,10 +36,9 @@ export function BrowsePageSkeleton() {
 
 export function BrowseCategorySkeleton({ movies = false }: { movies?: boolean }) {
   return <LoadingPage label="Loading titles"><section className="mb-16">
-    <Skeleton className="mb-3 h-11 w-11 rounded-full md:mb-6 md:h-8 md:w-12 md:rounded-md lg:h-9 lg:w-16" />
     <div className="mx-auto mt-2 w-full max-w-2xl"><Skeleton className="h-12 w-full rounded-full" /></div>
     <div className={`mt-6 mb-10 flex flex-col gap-4 ${movies ? "md:flex-row md:justify-between" : "items-center lg:items-start"}`}><Skeleton className="h-8 w-56 md:h-9" />{movies && <Skeleton className="h-10 w-full rounded-md md:w-44" />}</div>
-    <div className="media-grid grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6">{Array.from({ length: 12 }, (_, index) => <FilmCardSkeleton key={index} />)}</div>
+    <div className="mobile-movie-rail media-grid grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6">{Array.from({ length: 12 }, (_, index) => <FilmCardSkeleton key={index} />)}</div>
   </section></LoadingPage>;
 }
 
@@ -53,7 +52,7 @@ export function BingePageSkeleton() {
 
 export function SearchPageSkeleton() {
   return <LoadingPage label="Loading search results">
-    <Skeleton className="mb-6 h-9 w-14 rounded-md" /><Skeleton className="mx-auto mb-8 h-12 w-full max-w-2xl rounded-full" /><Skeleton className="mb-6 h-7 w-80 max-w-full md:h-9" />
+    <Skeleton className="mx-auto mb-8 h-12 w-full max-w-2xl rounded-full" /><Skeleton className="mb-6 h-7 w-80 max-w-full md:h-9" />
     <div className="media-grid grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5">{Array.from({ length: 10 }, (_, index) => <FilmCardSkeleton key={index} />)}</div>
   </LoadingPage>;
 }
@@ -61,8 +60,7 @@ export function SearchPageSkeleton() {
 export function CollectionSearchPageSkeleton() {
   return (
     <LoadingPage label="Loading collection results">
-      <Skeleton className="mb-3 h-11 w-11 rounded-full md:mb-6 md:h-8 md:w-12 md:rounded-md lg:h-9 lg:w-16" />
-      <div className="space-y-10">
+        <div className="space-y-10">
         {Array.from({ length: 2 }, (_, row) => <section key={row}>
           <Skeleton className="mb-4 h-8 w-64 max-w-full lg:h-9" />
           <div className="media-grid grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">

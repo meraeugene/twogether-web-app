@@ -8,6 +8,7 @@ import { TextInputCard } from "@/components/StepCard";
 import { recommendMoviesListWithAI } from "@/actions/geminiActions";
 import { TMDBEnrichedResult } from "@/types/tmdb";
 import FilmCard from "@/components/FilmCard";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { adaptAIGeneratedToRecommendation } from "@/utils/adaptAIGeneratedToRecommendation";
 import { formatPromptTitle } from "@/utils/ai-recommend/formatPromptTitle";
 import { useAIRecommendations } from "@/stores/useAIRecommendation";
@@ -51,8 +52,6 @@ async function mapWithConcurrency<TInput, TOutput>(
 
 export default function AIRecommendClient() {
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [loadingMessage, setLoadingMessage] = useState("");
 
   const {
     recommendations,
@@ -71,8 +70,6 @@ export default function AIRecommendClient() {
     }
 
     setLoading(true);
-    setProgress(5);
-    setLoadingMessage("Summoning hidden gems from the movie multiverse...");
 
     try {
       const { titles, reason } = await recommendMoviesListWithAI(prompt);
@@ -85,10 +82,6 @@ export default function AIRecommendClient() {
       const uniqueTitles = Array.from(
         new Set(titles.map((title) => title.trim()).filter(Boolean)),
       );
-      const total = uniqueTitles.length;
-      let completed = 0;
-
-      setLoadingMessage("Hunting across galaxies for your match...");
 
       const settledResults = await mapWithConcurrency(
         uniqueTitles,
@@ -106,9 +99,6 @@ export default function AIRecommendClient() {
           } catch (err) {
             console.error(`Failed to fetch ${title}`, err);
             return null;
-          } finally {
-            completed += 1;
-            setProgress(Math.round((completed / total) * 100));
           }
         },
       );
@@ -119,8 +109,6 @@ export default function AIRecommendClient() {
 
       const filtered = uniqueById(results).slice(0, AI_RECOMMENDATION_TARGET);
 
-      setLoadingMessage("Magic complete. Let's hit play!");
-
       setRecommendations(
         filtered.map((m) => ({
           ...adaptAIGeneratedToRecommendation(m),
@@ -129,7 +117,6 @@ export default function AIRecommendClient() {
       );
 
       setReason(reason);
-      setLoadingMessage("Ready! Enjoy your curated list.");
     } catch (err) {
       console.error(err);
     } finally {
@@ -269,56 +256,9 @@ export default function AIRecommendClient() {
             <section aria-label="AI Recommendations">
               <div className=" mt-6">
                 {loading ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="fixed inset-0 z-[100] bg-black/10 backdrop-blur-xs flex flex-col items-center justify-center px-6 overflow-hidden"
-                  >
-                    <div className="w-7 h-7 rounded-full animate-spin mb-4 bg-gradient-to-r from-cyan-300 via-pink-500 to-violet-600 p-[4px]">
-                      <div className="bg-black w-full h-full rounded-full" />
-                    </div>
-
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.4, ease: "easeInOut" }}
-                      className="flex flex-col items-center justify-center  gap-3 text-center z-10"
-                    >
-                      <motion.p
-                        key={loadingMessage}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.4 }}
-                        className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-400 text-base md:text-lg text-center px-4 break-words max-w-xl mx-auto"
-                      >
-                        {loadingMessage}
-                      </motion.p>
-
-                      <p className="text-white/60 text-xs md:text-sm max-w-xs mx-auto animate-pulse">
-                        Please stay on this page while we generate your movie
-                        and show recommendations.
-                      </p>
-                    </motion.div>
-
-                    <div className="w-full max-w-sm z-10 mt-4">
-                      <div className="h-4 bg-white/10 rounded-full overflow-hidden">
-                        <motion.div
-                          className="h-full bg-gradient-to-r from-purple-900 via-indigo-500 to-pink-500"
-                          initial={{ width: 0 }}
-                          animate={{ width: `${progress}%` }}
-                          transition={{ duration: 0.3, ease: "easeOut" }}
-                        />
-                      </div>
-                      <p className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-400 font-bold text-sm mt-2 text-center">
-                        {progress}%
-                      </p>
-                    </div>
-                  </motion.div>
+                  <LoadingSpinner label="Generating AI recommendations" />
                 ) : (
-                  <div className="media-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 pb-16">
+                  <div className="mobile-movie-rail media-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 pb-16">
                     {recommendations.map((item) => (
                       <FilmCard key={item.recommendation_id} item={item} />
                     ))}

@@ -10,6 +10,7 @@ const BackButton = ({ className }: { className?: string }) => {
   return (
     <button
       type="button"
+      data-page-back
       aria-label="Go back"
       onClick={() => {
         router.back();

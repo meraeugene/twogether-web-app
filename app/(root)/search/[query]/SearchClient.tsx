@@ -6,9 +6,7 @@ import { browsePlaceholders } from "@/constants/placeholders";
 import { ArtistMovie, ArtistProfile } from "@/types/artistSearch";
 import { Recommendation } from "@/types/recommendation";
 import { getStreamUrls } from "@/utils/getStreamUrls";
-import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 
@@ -83,14 +81,6 @@ export default function SearchClient({
   return (
     <>
       <div className="pointer-events-none absolute inset-0 page-ambient" />
-
-      <Link
-        prefetch={false}
-        href="/browse"
-        className="mb-6 inline-flex items-center justify-center rounded-md bg-white px-4 py-2 text-red-600 transition hover:bg-red-600 hover:text-white"
-      >
-        <ArrowLeft size={20} />
-      </Link>
 
       <div className="mx-auto mb-8 w-full max-w-2xl">
         <PlaceholdersAndVanishInput

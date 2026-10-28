@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Skeleton from "@/components/ui/Skeleton";
 import { FilmCardSkeleton } from "@/components/FilmGridSkeleton";
 import { cn } from "@/utils/cn";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export function LoadingPage({ children, label, centered = false, className }: { children: ReactNode; label: string; centered?: boolean; className?: string }) {
   return (
@@ -91,9 +92,7 @@ export function EditProfilePageSkeleton() {
 }
 
 export function AIRecommendPageSkeleton() {
-  return <LoadingPage label="Loading AI recommendations" centered className="md:px-15 md:pt-0 md:pb-0"><div className="mx-auto w-full max-w-xl text-center">
-    <Skeleton className="mx-auto h-44 w-44 rounded-full" /><Skeleton className="mx-auto mb-6 h-9 w-64 max-w-full" /><Skeleton className="h-[58px] w-full rounded-lg" /><div className="mt-6 rounded-xl border border-white/10 bg-white/10 p-2"><Skeleton className="h-12 w-full rounded-xl" /></div>
-  </div></LoadingPage>;
+  return <main className="page-gutter flex min-h-svh items-center justify-center bg-black text-white" aria-busy="true"><LoadingSpinner label="Loading AI recommendations" /></main>;
 }
 
 export function RecommendPageSkeleton() {

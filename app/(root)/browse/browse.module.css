@@ -96,7 +96,9 @@
   .shelf + .shelf { margin-top: 36px; }
   .shelfHeading h2 { font-size: 26px; }
   .shelfHeading > a { font-size: 12px; gap: 3px; }
-  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
+  .grid { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: clamp(136px, 40vw, 190px); gap: 12px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; padding-block: 4px 16px; }
+  .grid > * { min-width: 0; scroll-snap-align: start; }
+  .grid::-webkit-scrollbar { display: none; }
   .poster { border-radius: 12px; }
   .card h3 { font-size: 14px; }
   .card > p { font-size: 12px; }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Recommendation } from "@/types/recommendation";
@@ -14,8 +15,9 @@ import {
 const ITEMS_PER_PAGE = 6;
 
 export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
+  const isMobile = useIsMobile();
   const [page, setPage] = useState(0);
-  const maxPage = Math.ceil(items.length / ITEMS_PER_PAGE) - 1;
+  const maxPage = Math.max(0, Math.ceil(items.length / ITEMS_PER_PAGE) - 1);
 
   const handleNext = () => {
     if (page < maxPage) setPage(page + 1);
@@ -25,7 +27,7 @@ export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
     if (page > 0) setPage(page - 1);
   };
 
-  const paginated = items.slice(
+  const paginated = isMobile ? items : items.slice(
     page * ITEMS_PER_PAGE,
     (page + 1) * ITEMS_PER_PAGE,
   );
@@ -34,7 +36,7 @@ export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
     <section className="mb-16">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl md:text-3xl font-semibold">Latest Reco</h2>{" "}
-        <div className="flex gap-3">
+        <div className="hidden gap-3 md:flex">
           <motion.button
             onClick={handlePrev}
             disabled={page === 0}
@@ -60,8 +62,8 @@ export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
 
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
-          key={page}
-          className="media-grid grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6"
+          key={isMobile ? "mobile" : page}
+          className="mobile-movie-rail media-grid grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-6"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -69,7 +71,7 @@ export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
         >
           {paginated.map((item) => (
             <motion.div
-              key={`${item.recommendation_id}-${page}`}
+              key={item.recommendation_id}
               variants={itemVariants}
               layout
             >
@@ -79,7 +81,7 @@ export default function LatestRecoRow({ items }: { items: Recommendation[] }) {
         </motion.div>
       </AnimatePresence>
 
-      {maxPage > 0 && (
+      {!isMobile && maxPage > 0 && (
         <div className="flex justify-center mt-8 gap-2">
           {Array.from({ length: maxPage + 1 }, (_, index) => (
             <motion.button

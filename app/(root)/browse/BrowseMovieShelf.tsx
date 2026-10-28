@@ -35,7 +35,7 @@ export default function BrowseMovieShelf({ id, title, href, items, isLoading, er
           <button type="button" onClick={onRetry}>Try again</button>
         </div>
       ) : !items?.length ? <p className={styles.empty}>No titles here just yet. Try another category.</p> : (
-        <div className={styles.grid}>
+        <div className={styles.grid} tabIndex={0} role="group" aria-label={`${title} titles, swipe left or right to explore`}>
           {items.map((item) => {
             const movieTitle = item.title || item.name || "Untitled";
             return (

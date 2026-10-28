@@ -5,8 +5,7 @@ import MessageThreadList from "./MessageThreadList";
 import MessageThreadView from "./MessageThreadView";
 import OnlineFriendsList from "./OnlineFriendsList";
 import MessageRequestList from "./MessageRequestList";
-import { HiArrowLeft } from "react-icons/hi";
-import { MessagesSquare } from "lucide-react";
+import { MessagesSquare, X } from "lucide-react";
 
 export default function MessagesClient({
   currentUserId,
@@ -195,7 +194,7 @@ export default function MessagesClient({
         )}
         {selectedThreadId && selectedUserId && (
           <>
-            {/* Mobile Back Button */}
+            {/* Close the active conversation on smaller screens. */}
             <div className="lg:hidden p-2 border-b border-white/10 ">
               <button
                 onClick={() => {
@@ -203,9 +202,9 @@ export default function MessagesClient({
                   setSelectedUserId(null);
                 }}
                 className="text-white hover:text-red-500 transition p-2"
-                aria-label="Back"
+                aria-label="Close conversation"
               >
-                <HiArrowLeft className="text-xl" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 

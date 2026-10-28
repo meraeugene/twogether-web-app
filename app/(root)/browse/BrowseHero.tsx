@@ -19,7 +19,7 @@ const NO_MOVIES: TMDBFeaturedResult[] = [];
 
 export default function BrowseHero({ movies = NO_MOVIES, isLoading = false }: { movies?: TMDBFeaturedResult[]; isLoading?: boolean }) {
   const [playlist, setPlaylist] = useState<{ movies: TMDBFeaturedResult[]; index: number }>({ movies: [], index: 0 });
-  const mutedPreference = useRef(false);
+  const mutedPreference = useRef(true);
   const handleMutedChange = useCallback((muted: boolean) => { mutedPreference.current = muted; }, []);
 
   useEffect(() => {
@@ -208,13 +208,19 @@ function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMute
     };
   }, [ready]);
 
-  const playTrailer = () => {
-    runPlayer((current) => {
-      if (muted) current.mute();
-      else current.unMute();
-      current.playVideo();
-    });
-  };
+  useEffect(() => {
+    if (!blocked || failed) return;
+    // Retry on the next interaction if the browser blocks even muted autoplay.
+    const retry = () => {
+      try { player.current?.playVideo(); } catch { /* Keep the poster visible. */ }
+    };
+    window.addEventListener("pointerdown", retry);
+    window.addEventListener("keydown", retry);
+    return () => {
+      window.removeEventListener("pointerdown", retry);
+      window.removeEventListener("keydown", retry);
+    };
+  }, [blocked, failed]);
   const href = movie ? `/tmdb/watch/${movie.type}/${movie.id}/${getSlugFromTitle(movie.title)}` : "/browse/movies";
 
   return (
@@ -242,15 +248,17 @@ function BrowseHeroContent({ movie, onNext, canAutoAdvance, initialMuted, onMute
               </button>
             )} />
           </div>
-          <p className={styles.playbackHint} role="status">{failed ? canAutoAdvance ? "Loading the next trailer…" : "Trailer unavailable." : blocked ? (
-            <button type="button" className="cursor-pointer underline underline-offset-4" onClick={playTrailer}>Start trailer</button>
-          ) : ""}</p>
+          <p className={styles.playbackHint} role="status">{failed ? canAutoAdvance ? "Loading the next trailer…" : "Trailer unavailable." : ""}</p>
         </div>
       )}
       {movie && <button className={styles.soundControl} type="button" disabled={!ready || failed}
         aria-label={muted ? "Unmute trailer" : "Mute trailer"} aria-pressed={muted}
         title={muted ? "Unmute" : "Mute"} onClick={() => {
-          runPlayer((current) => muted ? current.unMute() : current.mute());
+          runPlayer((current) => {
+            if (muted) current.unMute();
+            else current.mute();
+            current.playVideo();
+          });
           setMuted(!muted);
           onMutedChange(!muted);
         }}>{muted ? <FiVolumeX aria-hidden="true" /> : <FiVolume2 aria-hidden="true" />}</button>}

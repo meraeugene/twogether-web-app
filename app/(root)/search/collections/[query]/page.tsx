@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import BackButton from "@/components/BackButton";
 import FilmCard from "@/components/FilmCard";
 import { EnrichedCollection } from "@/types/binge";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
@@ -35,8 +34,6 @@ export default async function BingeSearchPage({
   return (
     <main className="page-gutter page-listing min-h-screen bg-black pb-16 pt-28 px-7 text-white relative font-[family-name:var(--font-geist-sans)]">
       <div className="absolute inset-0 page-ambient pointer-events-none" />
-
-      <BackButton />
 
       {results.length === 0 ? (
         <div className="text-left text-sm md:text-base lg:text-lg text-white/70  space-y-2">

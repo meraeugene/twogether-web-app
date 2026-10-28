@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
 import { browsePlaceholders } from "@/constants/placeholders";
 import TrendingTMDBTVShowsList from "./TrendingTMDBTVShowsList";
-import BackButton from "@/components/BackButton";
 
 export default function BrowseTVShowsClient({ genre }: { genre?: string }) {
   const router = useRouter();
@@ -29,8 +28,6 @@ export default function BrowseTVShowsClient({ genre }: { genre?: string }) {
       <div className="absolute inset-0 page-ambient pointer-events-none" />
 
       <section className="mb-16">
-        <BackButton />
-
         <div className="max-w-2xl mx-auto w-full mt-2">
           <PlaceholdersAndVanishInput
             placeholders={browsePlaceholders}
