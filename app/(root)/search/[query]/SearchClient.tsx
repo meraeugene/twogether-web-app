@@ -1,14 +1,11 @@
 "use client";
 
 import FilmCard from "@/components/FilmCard";
-import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
-import { browsePlaceholders } from "@/constants/placeholders";
 import { ArtistMovie, ArtistProfile } from "@/types/artistSearch";
 import { Recommendation } from "@/types/recommendation";
 import { getStreamUrls } from "@/utils/getStreamUrls";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useMemo, useState, useTransition } from "react";
+import { useMemo } from "react";
 
 type SearchClientProps = {
   query: string;
@@ -23,10 +20,6 @@ export default function SearchClient({
   artist,
   artistMovies,
 }: SearchClientProps) {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isPending, startTransition] = useTransition();
-
   const hasArtistResults = Boolean(artist);
 
   const biography = useMemo(() => {
@@ -65,30 +58,9 @@ export default function SearchClient({
     });
   }, [artistMovies]);
 
-  const handleSubmit = (e?: React.FormEvent, submittedValue?: string) => {
-    e?.preventDefault();
-
-    if (isPending) return;
-
-    const trimmed = (submittedValue ?? searchQuery).trim();
-    if (!trimmed) return;
-
-    startTransition(() => {
-      router.push(`/search/${encodeURIComponent(trimmed)}`);
-    });
-  };
-
   return (
     <>
       <div className="pointer-events-none absolute inset-0 page-ambient" />
-
-      <div className="mx-auto mb-8 w-full max-w-2xl">
-        <PlaceholdersAndVanishInput
-          placeholders={browsePlaceholders}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onSubmit={handleSubmit}
-        />
-      </div>
 
       <h1 className="mb-6 text-xl font-bold md:text-3xl lg:text-3xl">
         Search results for: <span className="text-red-500">{query}</span>

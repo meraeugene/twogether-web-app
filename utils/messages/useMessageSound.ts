@@ -1,37 +1,38 @@
-// utils/useMessageSound.ts
-import { useRef, useEffect } from "react";
+import { useCallback, useRef, useEffect } from "react";
 
 export function useMessageSound() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const interactedRef = useRef(false);
 
-  // Attach global click listener once to unlock audio
   useEffect(() => {
     const handleUserGesture = () => {
       if (!audioRef.current) {
         audioRef.current = new Audio("/sounds/message.mp3");
+        audioRef.current.preload = "auto";
+        audioRef.current.loop = false;
+        audioRef.current.load();
       }
-      audioRef.current.load(); // Ensures it's initialized
-
-      // Try to play silently just to unlock
-      audioRef.current.volume = 0;
-      audioRef.current.play().catch(() => {});
       interactedRef.current = true;
-
-      // Cleanup listener after first interaction
-      window.removeEventListener("click", handleUserGesture);
+      window.removeEventListener("pointerdown", handleUserGesture);
+      window.removeEventListener("keydown", handleUserGesture);
     };
 
-    window.addEventListener("click", handleUserGesture);
-    return () => window.removeEventListener("click", handleUserGesture);
+    window.addEventListener("pointerdown", handleUserGesture);
+    window.addEventListener("keydown", handleUserGesture);
+    return () => {
+      window.removeEventListener("pointerdown", handleUserGesture);
+      window.removeEventListener("keydown", handleUserGesture);
+      audioRef.current?.pause();
+      audioRef.current = null;
+      interactedRef.current = false;
+    };
   }, []);
 
-  return () => {
-    if (interactedRef.current && audioRef.current) {
-      audioRef.current.volume = 1;
-      audioRef.current.play().catch((err) => {
-        console.warn("Audio play blocked", err);
-      });
-    }
-  };
+  return useCallback(() => {
+    const audio = audioRef.current;
+    if (!interactedRef.current || !audio) return;
+    audio.pause();
+    audio.currentTime = 0;
+    void audio.play().catch(() => { /* Browser sound permissions may still block playback. */ });
+  }, []);
 }

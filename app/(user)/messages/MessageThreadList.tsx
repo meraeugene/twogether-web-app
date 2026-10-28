@@ -9,6 +9,7 @@ import { MessageThread } from "@/types/messages";
 import { useMessageSound } from "@/utils/messages/useMessageSound";
 import { useEffect, useRef } from "react";
 import { isEmojiOnly } from "@/utils/messages/isEmoji";
+import { getMessageNotifications } from "@/utils/messages/messageNotifications";
 
 export default function MessageThreadList({
   userId,
@@ -37,26 +38,16 @@ export default function MessageThreadList({
   );
 
   const playSound = useMessageSound();
-  const lastMessageIdsRef = useRef<Map<string, string>>(new Map());
+  const notificationsRef = useRef<{ userId: string; seenMessageIds: Set<string> | null }>({ userId, seenMessageIds: null });
 
   useEffect(() => {
     if (!threads) return;
 
-    threads.forEach((thread: MessageThread) => {
-      const lastSeenId = lastMessageIdsRef.current.get(thread.thread_id);
-      const currentId = thread.last_message_id;
-
-      const isNewMessage =
-        thread.unread_count > 0 &&
-        thread.last_message_sender_id !== userId &&
-        currentId &&
-        currentId !== lastSeenId;
-
-      if (isNewMessage) {
-        playSound();
-        lastMessageIdsRef.current.set(thread.thread_id, currentId);
-      }
-    });
+    const previous = notificationsRef.current.userId === userId ? notificationsRef.current.seenMessageIds : null;
+    const { seenMessageIds, shouldNotify } = getMessageNotifications(threads, previous, userId);
+    notificationsRef.current = { userId, seenMessageIds };
+    // A batch of incoming messages should produce a single sound.
+    if (shouldNotify) playSound();
   }, [threads, userId, playSound]);
 
   if (isLoading) return <ThreadListSkeleton />;

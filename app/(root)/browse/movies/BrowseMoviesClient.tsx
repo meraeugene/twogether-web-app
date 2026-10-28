@@ -3,8 +3,6 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { GENRES } from "@/constants/genre";
 import { useMemo, useState } from "react";
-import { PlaceholdersAndVanishInput } from "@/components/ui/PlaceholdersAndVanishInput";
-import { browsePlaceholders } from "@/constants/placeholders";
 import TrendingTMDBMovieList from "./TrendingTMDBMovieList";
 
 export default function BrowseMoviesClient() {
@@ -13,21 +11,12 @@ export default function BrowseMoviesClient() {
 
   const initialGenre = searchParams.get("genre") || "Trending";
   const [selectedGenre, setSelectedGenre] = useState(initialGenre);
-  const [searchQuery, setSearchQuery] = useState("");
 
   const handleGenreChange = (genre: string) => {
     setSelectedGenre(genre);
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("genre", genre);
     router.replace(`?${newParams.toString()}`);
-  };
-
-  const handleSubmit = (e?: React.FormEvent, submittedValue?: string) => {
-    e?.preventDefault();
-    const trimmed = (submittedValue ?? searchQuery).trim();
-    if (trimmed) {
-      router.push(`/search/${encodeURIComponent(trimmed)}`);
-    }
   };
 
   const trendingList = useMemo(() => {
@@ -39,14 +28,6 @@ export default function BrowseMoviesClient() {
       <div className="absolute inset-0 page-ambient pointer-events-none" />
 
       <section className="mb-16">
-        <div className="max-w-2xl mx-auto w-full mt-2">
-          <PlaceholdersAndVanishInput
-            placeholders={browsePlaceholders}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onSubmit={handleSubmit}
-          />
-        </div>
-
         <div className="flex w-full flex-col md:flex-row justify-between gap-4 mb-10 text-center mt-6">
           <h1 className="font-semibold text-2xl md:text-3xl ">
             {selectedGenre} Movies
