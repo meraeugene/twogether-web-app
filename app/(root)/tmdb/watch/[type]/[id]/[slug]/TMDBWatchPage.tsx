@@ -17,6 +17,7 @@ import TMDBMovieReviews from "./TMDBMovieReviews";
 import { AnimatePresence, motion } from "framer-motion";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import Link from "@/components/NavigationLink";
+import { formatRuntime } from "@/utils/formatRuntime";
 
 const WatchGemeni = dynamic(
   () => import("@/app/(user)/watch/[id]/[movieTitle]/WatchGemeni"),
@@ -192,7 +193,7 @@ export default function TMDBWatchPage({
             ) : (
               recommendation.duration !== 0 && (
                 <span className="text-white/50 font-medium">
-                  {recommendation.duration}m
+                  {formatRuntime(recommendation.duration)}
                 </span>
               )
             )}

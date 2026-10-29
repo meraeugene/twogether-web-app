@@ -8,6 +8,7 @@ import RecommendCardSkeleton from "./RecommendCardSkeleton";
 import { fetcher } from "@/utils/swr/fetcher";
 import ErrorMessage from "@/components/ErrorMessage";
 import { getStreamUrls } from "@/utils/getStreamUrls";
+import { formatRuntime } from "@/utils/formatRuntime";
 
 export default function RecommendStepMovieSearch({
   query,
@@ -128,7 +129,7 @@ export default function RecommendStepMovieSearch({
                       </span>
                     ) : (
                       <span className="text-amber font-medium">
-                        {item.duration || "0"}m
+                        {formatRuntime(item.duration)}
                       </span>
                     )}
                   </div>

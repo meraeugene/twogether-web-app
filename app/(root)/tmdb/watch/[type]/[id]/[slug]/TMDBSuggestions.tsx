@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { fetcher } from "@/utils/swr/fetcher";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { TMDBEnrichedResult } from "@/types/tmdb";
+import { formatRuntime } from "@/utils/formatRuntime";
 import TMDBSuggestionSkeleton from "./TMDBSuggestionSkeleton";
 import {
   buttonVariants,
@@ -159,7 +160,7 @@ export default function TMDBSuggestions({
                       </span>
                     ) : (
                       <span className="text-white/50 font-medium">
-                        {rec.duration || 0}m
+                        {formatRuntime(rec.duration)}
                       </span>
                     )}
                   </div>

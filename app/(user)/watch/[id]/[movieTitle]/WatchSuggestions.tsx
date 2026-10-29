@@ -4,6 +4,7 @@ import { Recommendation } from "@/types/recommendation";
 import { FaPlay } from "react-icons/fa";
 import { getSlugFromTitle } from "@/utils/ai-recommend/getSlugFromTitle";
 import { VisualHeartRating } from "@/components/VisualHeartRating";
+import { formatRuntime } from "@/utils/formatRuntime";
 
 export default function WatchSuggestions({
   suggestions,
@@ -76,7 +77,7 @@ export default function WatchSuggestions({
                   </span>
                 ) : (
                   <span className="text-white/50 font-medium">
-                    {rec.duration || "0"}m
+                    {formatRuntime(rec.duration)}
                   </span>
                 )}
               </div>

@@ -27,6 +27,7 @@ import { TRAILER_PREVIEW_OPEN_EVENT } from "@/constants/trailerPreview";
 import TrailerPreviewPlayer from "./TrailerPreviewPlayer";
 import MovieTitle from "./MovieTitle";
 import { loadYouTubeIframeApi } from "@/utils/youtubeIframeApi";
+import { formatRuntime } from "@/utils/formatRuntime";
 
 function FilmCard({
   item,
@@ -213,9 +214,7 @@ function FilmCard({
   const runtimeLabel =
     previewItem.type === "movie"
       ? previewItem.duration
-        ? previewItem.duration >= 60
-          ? `${Math.floor(previewItem.duration / 60)}h ${previewItem.duration % 60}m`
-          : `${previewItem.duration}m`
+        ? formatRuntime(previewItem.duration)
         : null
       : tvMetaLabel;
 
@@ -627,7 +626,7 @@ function FilmCard({
                     ) : (
                       typeof item.duration === "number" && item.duration > 0 && (
                         <span className="text-white/50 font-medium">
-                          {item.duration}m
+                          {formatRuntime(item.duration)}
                         </span>
                       )
                     )}

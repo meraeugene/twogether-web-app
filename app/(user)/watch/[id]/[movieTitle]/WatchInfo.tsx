@@ -12,6 +12,7 @@ import { omit } from "@/utils/ai-recommend/omit";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import RecommendModal from "@/components/RecommendModal";
+import { formatRuntime } from "@/utils/formatRuntime";
 
 export default function WatchInfo({
   recommendation,
@@ -131,7 +132,7 @@ export default function WatchInfo({
           </span>
         ) : (
           <span className="text-white/50 font-medium">
-            {recommendation.duration || 0}m
+            {formatRuntime(recommendation.duration)}
           </span>
         )}
 

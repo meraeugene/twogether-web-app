@@ -15,6 +15,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 import ChronoSkeleton from "./ChronoSkeleton";
 import ChronoConnector from "./ChronoConnector";
 import styles from "./chrono.module.css";
+import { formatRuntime } from "@/utils/formatRuntime";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -292,7 +293,7 @@ export default function ChronologicalClient() {
                                   <span className="text-white/35">|</span>
                                 )}
                                 {movie.duration && (
-                                  <span>{movie.duration} min</span>
+                                  <span>{formatRuntime(movie.duration)}</span>
                                 )}
                               </div>
                             )}

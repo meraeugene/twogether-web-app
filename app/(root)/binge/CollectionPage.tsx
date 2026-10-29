@@ -12,12 +12,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 import FilmCard from "@/components/FilmCard";
 import CollectionSkeleton from "@/components/CollectionSkeleton";
 import { adaptTMDBToRecommendation } from "@/utils/adaptTMDBToRecommendation";
-
-function formatRuntime(minutes: number) {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  return `${hours}h ${remainingMinutes.toString().padStart(2, "0")}m`;
-}
+import { formatRuntime } from "@/utils/formatRuntime";
 
 function CollectionRow({
   collection,
