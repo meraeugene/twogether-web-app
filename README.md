@@ -85,7 +85,7 @@ Runs the production build locally.
 npm run lint
 ```
 
-Runs the Next.js lint check.
+Runs ESLint on project source files, excluding generated build and service-worker files.
 
 ```bash
 npx tsc --noEmit

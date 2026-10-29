@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 const REVIEWS_CACHE_SECONDS = 300; // 5 minutes
 
 export const GET = async (
-  req: Request,
+  _req: Request,
   { params }: { params: Promise<{ id: number }> }
 ) => {
   try {
