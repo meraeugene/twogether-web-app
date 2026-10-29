@@ -31,13 +31,13 @@ export function getStreamUrls(tmdbId: string | number, type: StreamType) {
     // `https://vidlink.pro/movie/${tmdbId}`,
     // `https://cinesrc.st/embed/movie/${tmdbId}`,
 
-    //`https://vidrock.ru/movie/${tmdbId}`,
+    // `https://vidrock.ru/movie/${tmdbId}`,
 
     // too many ads
-    // `https://player.vidzee.wtf/embed/movie/${tmdbId}`,
+    `https://player.vidzee.wtf/embed/movie/${tmdbId}`,
 
     // not working temp
-    // `https://vidsrc.to/embed/movie/${tmdbId}`,
+    `https://vidsrc.to/embed/movie/${tmdbId}`,
     // `https://vidsrc-embed.ru/embed/movie/${tmdbId}`,
     // `https://www.vidking.net/embed/movie/${tmdbId}`,
   ];
