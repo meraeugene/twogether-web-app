@@ -24,7 +24,7 @@ export function getStreamUrls(tmdbId: string | number, type: StreamType) {
 
   return [
     // `https://zxcstream.xyz/player/movie/${tmdbId}`,
-    `https://111movies.net/movie/${tmdbId}`,
+    // `https://111movies.net/movie/${tmdbId}`,
     `https://streamimdb.ru/embed/movie/${tmdbId}`,
     `https://player.videasy.net/movie/${tmdbId}`,
 
