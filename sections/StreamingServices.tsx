@@ -143,7 +143,7 @@ export default function StreamingServices() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-14 sm:py-20 md:py-28 lg:py-32 bg-[#020202] overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_900px]"
+      className="relative py-14 sm:py-20 md:py-28 lg:py-32 bg-[#020202] overflow-hidden"
     >
       {/* Ambilight */}
       <div className="absolute inset-0 z-0 flex items-center justify-center">
@@ -153,7 +153,7 @@ export default function StreamingServices() {
             scale: powerOn ? 1.2 : 0.8,
           }}
           transition={{ duration: 1 }}
-          className="w-[80%] h-[50%] bg-red-500/10 blur-[150px] rounded-full"
+          className="w-[80%] h-[50%] soft-glow [--glow-color:rgba(251,44,54,0.1)]"
         />
       </div>
 
@@ -277,7 +277,7 @@ export default function StreamingServices() {
                       <span className="absolute inset-0 rounded-full bg-red-500/25 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
                       <span className="relative inline-flex w-full overflow-hidden rounded-full p-[1px] transition-all duration-300 md:w-auto">
                         <span className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0%,transparent_70%,#fb2c36_85%,transparent_100%)]" />
-                        <span className="relative flex w-full items-center justify-center gap-3 rounded-full border border-white/5 bg-black/60 px-5 py-2.5 text-white backdrop-blur-2xl sm:px-6 sm:py-3 md:w-auto">
+                        <span className="relative flex w-full items-center justify-center gap-3 rounded-full border border-white/5 bg-[#0b0b0b]/95 px-5 py-2.5 text-white sm:px-6 sm:py-3 md:w-auto">
                           <Play
                             size={18}
                             fill="currentColor"

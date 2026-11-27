@@ -37,7 +37,7 @@ export default function TwogetherHero() {
     <div className="relative min-h-screen w-full bg-[#030303] flex flex-col items-center justify-center overflow-hidden font-sans selection:bg-red-500/30">
       {/* BACKGROUND */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-75 md:w-175 md:h-100 xl:w-250 xl:h-150 bg-red-900/10 blur-[160px] rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-75 md:w-175 md:h-100 xl:w-250 xl:h-150 soft-glow [--glow-color:rgba(130,24,26,0.1)]" />
       </div>
 
       {/* FLOATING UI */}
@@ -75,7 +75,7 @@ export default function TwogetherHero() {
 
             {/* USER */}
             {el.type === "user" && (
-              <div className="flex items-center gap-3 p-2 pr-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+              <div className="flex items-center gap-3 p-2 pr-4 rounded-full bg-white/[0.07] border border-white/10">
                 <Image
                   src={el.content || "/default-avatar.png"}
                   width={36}
@@ -92,7 +92,7 @@ export default function TwogetherHero() {
 
             {/* STATUS */}
             {el.type === "status" && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/5 border border-red-500/20 backdrop-blur-xl">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/[0.08] border border-red-500/20">
                 <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                 <span className="text-[10px] font-bold text-red-400 uppercase tracking-[0.15em]">
                   {el.content}
@@ -102,7 +102,7 @@ export default function TwogetherHero() {
 
             {/* BADGE */}
             {el.type === "badge" && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-500/5 border border-yellow-500/20 backdrop-blur-md">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-500/[0.08] border border-yellow-500/20">
                 <Star size={12} className="text-yellow-500 fill-yellow-500" />
                 <span className="text-yellow-500 font-black text-xs uppercase italic">
                   {el.content}

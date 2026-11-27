@@ -42,7 +42,7 @@ const FeedbackForm = () => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 opacity-[0.08] pointer-events-none bg-[radial-gradient(#fb2c36_0.8px,transparent_0.8px)] [background-size:32px_32px]" />
 
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] md:w-[700px] lg:w-[800px] h-[400px] md:h-[500px] lg:h-[600px] bg-red-600/5 blur-[180px] rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] md:w-[700px] lg:w-[800px] h-[400px] md:h-[500px] lg:h-[600px] soft-glow [--glow-color:rgba(231,0,11,0.05)]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">

@@ -33,7 +33,7 @@ export default function ResumeWatching() {
   return (
     <section className="relative overflow-hidden bg-[#030303] py-14 sm:py-20">
       <div className="absolute inset-0 z-0">
-        <div className="absolute left-1/2 top-1/2 h-64 w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500/10 blur-[140px]" />
+        <div className="absolute left-1/2 top-1/2 h-64 w-[70%] -translate-x-1/2 -translate-y-1/2 soft-glow [--glow-color:rgba(251,44,54,0.1)]" />
         <div className="absolute inset-0 opacity-[0.025] pointer-events-none bg-[radial-gradient(#fb2c36_0.9px,transparent_0.9px)] [background-size:26px_26px]" />
       </div>
 

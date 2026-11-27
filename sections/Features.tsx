@@ -13,8 +13,8 @@ const Features = () => {
       className="relative py-20 md:py-28 lg:py-32 bg-[#030303] overflow-hidden border-t border-white/5"
     >
       {/* AMBIENT DEPTH */}
-      <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-red-600/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[30%] h-[30%] bg-red-900/10 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[50%] h-[50%] soft-glow [--glow-color:rgba(231,0,11,0.05)] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[30%] h-[30%] soft-glow [--glow-color:rgba(130,24,26,0.1)] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
         {/* HEADER */}

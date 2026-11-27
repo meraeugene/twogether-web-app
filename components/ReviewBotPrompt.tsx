@@ -135,7 +135,7 @@ export default function ReviewBotPrompt() {
           >
             <div className="absolute -inset-2 rounded-[30px] bg-red-500/10 blur-2xl" />
 
-            <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-[#050505]/96 text-white shadow-[0_24px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl">
+            <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-[#050505]/96 text-white shadow-[0_24px_90px_rgba(0,0,0,0.55)]">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,44,54,0.18),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.03),transparent_35%)]" />
 
               <div className="relative flex items-start justify-between gap-4 px-4 pt-4 sm:px-6 sm:pt-6 lg:px-7">
@@ -224,7 +224,7 @@ export default function ReviewBotPrompt() {
             type="button"
             onClick={openPanel}
             aria-label="Open feedback panel"
-            className="pointer-events-auto group fixed bottom-4 right-4 z-50 h-12 w-12 cursor-pointer overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 hover:scale-[1.05] hover:border-red-400/40 hover:shadow-[0_24px_70px_rgba(220,38,38,0.16)] active:scale-[0.98] sm:h-14 sm:w-14"
+            className="pointer-events-auto group fixed bottom-4 right-4 z-50 h-12 w-12 cursor-pointer overflow-hidden rounded-full border border-white/10 bg-[#080808]/95 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] transition-all duration-300 hover:scale-[1.05] hover:border-red-400/40 hover:shadow-[0_24px_70px_rgba(220,38,38,0.16)] active:scale-[0.98] sm:h-14 sm:w-14"
           >
             <div className="relative flex h-full w-full items-center justify-center">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500/16 text-red-300 ring-1 ring-inset ring-red-400/30 transition-all duration-300 group-hover:bg-red-500/24 group-hover:text-red-200 group-hover:ring-red-300/50 sm:h-10 sm:w-10">

@@ -241,6 +241,13 @@ body {
   animation: gradient 3s ease infinite;
 }
 
+.soft-glow {
+  /* Replaces huge filter: blur() blobs. iOS Safari allocates large GPU
+     buffers for big blurs and stops painting parts of the page when it runs
+     out; a radial gradient gives the same soft glow for free. */
+  background: radial-gradient(closest-side, var(--glow-color), transparent);
+}
+
 .chrono-scroll {
   -ms-overflow-style: none;
   scrollbar-width: none;

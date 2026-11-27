@@ -48,7 +48,7 @@ const guestLinks = [
 ];
 
 const shell =
-  "bg-[#161618]/92 backdrop-blur-2xl border border-white/[0.09] " +
+  "bg-[#161618]/92 border border-white/[0.09] " +
   "shadow-[0_0_0_0.5px_rgba(255,255,255,0.04)_inset,0_16px_48px_rgba(0,0,0,0.75)]";
 
 function Tip({ label }: { label: string }) {
@@ -128,7 +128,7 @@ function DesktopDropdown({
       </button>
 
       <div
-        className={`absolute left-0 top-[calc(100%+12px)] z-[80] min-w-[200px] rounded-[18px] border border-white/[0.1] bg-[#111113]/96 p-2 shadow-[0_18px_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl transition-all duration-200 ease-out ${
+        className={`absolute left-0 top-[calc(100%+12px)] z-[80] min-w-[200px] rounded-[18px] border border-white/[0.1] bg-[#111113]/96 p-2 shadow-[0_18px_50px_rgba(0,0,0,0.5)] transition-all duration-200 ease-out ${
           open
             ? "pointer-events-auto translate-y-0 opacity-100"
             : "pointer-events-none translate-y-2 opacity-0"
@@ -187,7 +187,7 @@ function LoginButton({
     return (
       <button
         onClick={onClick}
-        className="text-lg font-semibold tracking-wide text-white/90 px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3 w-full"
+        className="text-lg font-semibold tracking-wide text-white/90 px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 transition-all flex items-center gap-3 w-full"
       >
         <GoogleIcon className="w-5 h-5 text-white/60" />
         Sign in
@@ -230,7 +230,7 @@ function MobileLink({
       <Link
         href={href}
         onClick={onClick}
-        className={`text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border backdrop-blur-xl transition-all flex items-center gap-3 ${
+        className={`text-lg font-semibold tracking-wide px-5 py-3.5 rounded-lg border transition-all flex items-center gap-3 ${
           active
             ? "bg-white text-black border-white/20"
             : "text-white/90 border-white/10 bg-white/5 hover:bg-white/20"
@@ -594,7 +594,7 @@ export function Navbar({ user }: { user: CurrentUser | null | undefined }) {
                     <button
                       onClick={logout}
                       disabled={isPending}
-                      className="text-lg font-semibold tracking-wide text-white/90 px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 backdrop-blur-xl transition-all flex items-center gap-3 w-full"
+                      className="text-lg font-semibold tracking-wide text-white/90 px-5 py-3.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/20 transition-all flex items-center gap-3 w-full"
                     >
                       {isPending ? (
                         <>

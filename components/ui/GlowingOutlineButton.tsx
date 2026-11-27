@@ -43,10 +43,10 @@ function ButtonContent({
           fullWidth && "w-full",
         )}
       >
-        <span className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0%,transparent_70%,#fb2c36_85%,transparent_100%)]" />
+        <span className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] will-change-transform bg-[conic-gradient(from_0deg,transparent_0%,transparent_70%,#fb2c36_85%,transparent_100%)]" />
         <span
           className={cn(
-            "relative flex items-center justify-center gap-2 rounded-full border border-white/5 bg-black/60 px-5 py-2.5 text-white backdrop-blur-2xl",
+            "relative flex items-center justify-center gap-2 rounded-full border border-white/5 bg-[#0b0b0b]/95 px-5 py-2.5 text-white",
             fullWidth && "w-full",
             contentClassName,
           )}
